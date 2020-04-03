@@ -110,9 +110,8 @@ React may batch multiple setState() calls into a single update for performance.
 
 Because this.props and this.state may be updated asynchronously,
 you should not rely on their values for calculating the next state
-
-// Wrong
 ```javascript
+// Wrong
 this.setState({
   counter: this.state.counter + this.props.increment,
 });
@@ -127,16 +126,15 @@ this.setState((state, props) => ({
 ------------------------------------------------------------------------------
 ## HANDLING EVENTS
 => very similar to handling events on DOM elements
-HTML ->
 ```javascript
+HTML ->
  <button onclick="handleClick()">
           Activate Lasers
         </button>
 ```
 In DOM you need to call addEventListener to add listeners to a DOM element after it is created
-
-REACT => 
 ```javascript
+REACT => 
 <button onClick={handleClick}>
           Activate Lasers
          </button>
@@ -157,7 +155,7 @@ Passing argument to event handler
   ###### 1. Controlled components -> form element whose value is controlled by React
 
   Full example =>
-
+```javascript
   class NameForm extends React.Component {
     constructor(props) {
       super(props);
@@ -188,6 +186,7 @@ Passing argument to event handler
       );
     }
   }
+```
   ###### 2. Uncontrolled components -> not contolled by react
 
 ------------------------------------------------------------------------------
@@ -198,6 +197,7 @@ Passing argument to event handler
 
 ###### => How to lift state up?
     by making a component “controlled”. Just like the DOM <input> accepts both a value and an onChange prop
+   ```javascript
     In child component - 
       <input value={temperature} onChange={this.handleChange} />
       handleChange(e) {
@@ -207,11 +207,11 @@ Passing argument to event handler
       <TemperatureInput
           temperature={celsius}
           onTemperatureChange={this.handleCelsiusChange} />
-
+```
 ------------------------------------------------------------------------------
 ## COMPOSITION VS INHERITANCE
 ###### => COMPOSITION recommended over INHERITANCE
-
+```javascript
   function SplitPane(props) {
     return (
       <div className="SplitPane">
@@ -240,6 +240,7 @@ Passing argument to event handler
         <h1> ASHISH </h1>
     );
   }
+  ```
 React elements like <Contacts /> and <Chat /> are just objects, so you can pass them as props like any other data.
 
 ------------------------------------------------------------------------------
