@@ -144,7 +144,7 @@ Arrow syntax =>  <button onClick={() => this.handleClick()}>
 ```
 In React to add event listeners =>  this.handleClick = this.handleClick.bind(this);
 Passing argument to event handler 
-=> ```javascript
+```javascript
 <button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>
 => Arrow syntax => <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
 ```
@@ -152,9 +152,9 @@ Passing argument to event handler
 ## FORMS IN REACT
 => default HTML form behaviour is available, but generally not used
 => techniques for implementing input forms
-  ###### 1. Controlled components -> form element whose value is controlled by React
+  #### 1. Controlled components -> form element whose value is controlled by React
 
-  Full example =>
+Full example
 ```javascript
   class NameForm extends React.Component {
     constructor(props) {
