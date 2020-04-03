@@ -99,7 +99,7 @@ Note: Always start component names with a capital letter.
   ```javascript
   button = <LogoutButton onClick={this.handleLogoutClick} />;
   ```
-  and can be used in render as {button}
+     and can be used in render as {button}
 ------------------------------------------------------------------------------
 ## CLASS COMPONENTS
  setting state
