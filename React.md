@@ -1,15 +1,14 @@
-------------------------------------------------------------------------------
 ## REACT?
 => A javascript library.
 => Js's most popular library on github, by facebook
 
 ------------------------------------------------------------------------------
 ## WHY REACT?
-1.flexibility
-2.popular
-3.performace - find out how?
-4.html in js and not vice versa
-5.for other frameworks need to learn their syntaxes React uses js syntax
+1. flexibility
+2. popular
+3. performace - find out how?
+4. html in js and not vice versa
+5. for other frameworks need to learn their syntaxes React uses js syntax
 
 ------------------------------------------------------------------------------
 ## ADVANTAGES?
@@ -96,8 +95,11 @@ describing what should appear on the screen.
 Note: Always start component names with a capital letter.
       All React components must act like pure functions with respect to their props.
 
-Components can be stored in js variables => button = <LogoutButton onClick={this.handleLogoutClick} />;
-and can be used in render as {button}
+  Components can be stored in js variables => 
+  ```javascript
+  button = <LogoutButton onClick={this.handleLogoutClick} />;
+  ```
+  and can be used in render as {button}
 ------------------------------------------------------------------------------
 ## CLASS COMPONENTS
 => setting state
@@ -245,6 +247,27 @@ React elements like <Contacts /> and <Chat /> are just objects, so you can pass 
 
 ------------------------------------------------------------------------------
 ## THINKING IN REACT
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
+
+#### 1. Break The UI Into A Component Hierarchy
+#### 2. Build A Static Version in React
+build a static version of your app that renders your data model **don’t use state at all**
+#### 3. Identify The Minimal (but complete) Representation Of UI State
+Figure out the absolute minimal representation of the state your application needs and compute everything else you need on-demand. For example, if you’re building a TODO list, keep an array of the TODO items around; don’t keep a separate state variable for the count. Instead, when you want to render the TODO count, take the length of the TODO items array.
+
+Ask three questions about each piece of data:
+
+1. Is it passed in from a parent via props? If so, it probably isn’t state.
+2. Does it remain unchanged over time? If so, it probably isn’t state.
+3. Can you compute it based on any other state or props in your component? If so, it isn’t state.
+
+#### 4. Identify Where Your State Should Live
+For each piece of state in your application:
+
+1. Identify every component that renders something based on that state.
+2. Find a common owner component (a single component above all the components that need the state in the hierarchy).
+3. Either the common owner or another component higher up in the hierarchy should own the state.
+4. If you can’t find a component where it makes sense to own the state, create a new component solely for holding the state and add it somewhere in the hierarchy above the common owner component.
+
+#### 5. Add Inverse Data Flow
+Now we need to pass data from bottom to top component.
+We can use the onChange event on the inputs to be notified of it.
