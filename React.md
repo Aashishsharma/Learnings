@@ -1,10 +1,10 @@
 ------------------------------------------------------------------------------
-# REACT?
+## REACT?
 => A javascript library.
 => Js's most popular library on github, by facebook
 
 ------------------------------------------------------------------------------
-# WHY REACT?
+## WHY REACT?
 1.flexibility
 2.popular
 3.performace - find out how?
@@ -12,13 +12,13 @@
 5.for other frameworks need to learn their syntaxes React uses js syntax
 
 ------------------------------------------------------------------------------
-# ADVANTAGES?
+## ADVANTAGES?
 =?
 
 ------------------------------------------------------------------------------
-# CREATING A REACT APP
+## CREATING A REACT APP
 
-npx create-react-app <app-name> || npm init react-app <app-name>
+npx create-react-app **app-name** || npm init react-app **app-name**
 Note- you must uninstall create-react-app if it was previously installed globally, and then install it and
 then run above command.
 Because create-react-app needs a template to be passed
@@ -26,11 +26,11 @@ Because create-react-app needs a template to be passed
 create-react-app needs Node >=8.10
 
 ------------------------------------------------------------------------------
-# NPX?
+## NPX?
 => A tool for executing Node packages. (npX - Execute)
 
 ------------------------------------------------------------------------------
-# ReactDOM
+## ReactDOM
 => It is a library which keeps the ideal/virtual DOM in memory and then syncs it with Real DOM
 Reconcialition
 => The process that ReactDOM does is called as Reconcialition
@@ -41,8 +41,12 @@ No, they are different. The Shadow DOM is a browser technology designed primaril
 The virtual DOM is a concept implemented by libraries in JavaScript on top of browser APIs
 
 ------------------------------------------------------------------------------
-# JSX (it is not mandatory)
-=> it is a syntax extension to JavaScript (const element = <h1>Hello, world!</h1>;) neither html nor js
+## JSX (it is not mandatory)
+=> it is a syntax extension to JavaScript 
+```javascript
+const element = <h1>Hello, world!</h1>; 
+```
+neither html nor js
 Why? Adv?
 => Instead of artificially separating technologies by putting markup and logic in separate files, 
 React separates concerns with loosely coupled units called “components” that contain both
@@ -50,43 +54,56 @@ React separates concerns with loosely coupled units called “components” that
 By default, React DOM escapes any values embedded in JSX before rendering them
 Everything is converted to a string before being rendered. This helps prevent XSS (cross-site-scripting) attacks.
 
-e.g. JSX => const element = <div tabIndex="0"></div>; const element = <img src={user.avatarUrl}></img>;
-
+e.g. JSX =>
+ ```javascript
+ const element = <div tabIndex="0"></div>;
+ const element = <img src={user.avatarUrl}></img>;
+ ```
 ------------------------------------------------------------------------------
-# REACT ELEMENTS
+## REACT ELEMENTS
 =>  smallest building blocks of React apps, they are plain objects
-e.g. => const element = <h1>Hello, world</h1>;
-
-rendering an element => const element = <h1>Hello, world</h1>;
-                        ReactDOM.render(element, document.getElementById('root'));
-
+e.g. => 
+```javascript
+const element = <h1>Hello, world</h1>;
+```
+rendering an element => 
+```javascript
+const element = <h1>Hello, world</h1>;
+    ReactDOM.render(element, document.getElementById('root'));
+```
 React elements are immutable. Once you create an element, you can’t change its children or attributes
 
 ------------------------------------------------------------------------------
-# COMPONENTS AND PROPS
+## COMPONENTS AND PROPS
 => components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements 
 describing what should appear on the screen.
 
 1. Function components
-=> function Welcome(props) {
-  return <h1>Hello, {props.name}</h1>;
-}
-
+  ```javascript
+  Function Welcome(props) {
+    return <h1>Hello, {props.name}</h1>;
+  }
+```
 2. Class components
-=> class Welcome extends React.Component {
+
+```javascript
+ class Welcome extends React.Component {
   render() {
     return <h1>Hello, {this.props.name}</h1>;
   }
 }
+```
 Note: Always start component names with a capital letter.
       All React components must act like pure functions with respect to their props.
 
 Components can be stored in js variables => button = <LogoutButton onClick={this.handleLogoutClick} />;
 and can be used in render as {button}
 ------------------------------------------------------------------------------
-# CLASS COMPONENTS
+## CLASS COMPONENTS
 => setting state
+   ```javascript
    this.setState({comment: 'Hello'});
+   ```
 The only place where you can assign this.state is the constructor.
 
 React may batch multiple setState() calls into a single update for performance.
@@ -95,6 +112,7 @@ Because this.props and this.state may be updated asynchronously,
 you should not rely on their values for calculating the next state
 
 // Wrong
+```javascript
 this.setState({
   counter: this.state.counter + this.props.increment,
 });
@@ -103,34 +121,40 @@ this.setState({
 this.setState((state, props) => ({
   counter: state.counter + props.increment
 }));
-
+```
 [Lifecycle](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
 
 ------------------------------------------------------------------------------
-# HANDLING EVENTS
+## HANDLING EVENTS
 => very similar to handling events on DOM elements
-HTML -> <button onclick="handleClick()">
+HTML ->
+```javascript
+ <button onclick="handleClick()">
           Activate Lasers
         </button>
+```
 In DOM you need to call addEventListener to add listeners to a DOM element after it is created
 
-REACT => <button onClick={handleClick}>
+REACT => 
+```javascript
+<button onClick={handleClick}>
           Activate Lasers
          </button>
 Arrow syntax =>  <button onClick={() => this.handleClick()}>
                   Click me
                  </button>
-
+```
 In React to add event listeners =>  this.handleClick = this.handleClick.bind(this);
-Passing argument to event handler
-=> <button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>
+Passing argument to event handler 
+=> ```javascript
+<button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>
 => Arrow syntax => <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
-
+```
 ------------------------------------------------------------------------------
-# FORMS IN REACT
+## FORMS IN REACT
 => default HTML form behaviour is available, but generally not used
 => techniques for implementing input forms
-  ### 1. Controlled components -> form element whose value is controlled by React
+  ###### 1. Controlled components -> form element whose value is controlled by React
 
   Full example =>
 
@@ -164,15 +188,15 @@ Passing argument to event handler
       );
     }
   }
-  ### 2. Uncontrolled components -> not contolled by react
+  ###### 2. Uncontrolled components -> not contolled by react
 
 ------------------------------------------------------------------------------
-# LIFTING STATE UP (RULES)
+## LIFTING STATE UP (RULES)
 1. use state in whichever components required
 2. if multiple components required same state, lift the state to closest parent
 3. if a value can be derieved from both state and props, it should always be props
 
-### => How to lift state up?
+###### => How to lift state up?
     by making a component “controlled”. Just like the DOM <input> accepts both a value and an onChange prop
     In child component - 
       <input value={temperature} onChange={this.handleChange} />
@@ -185,8 +209,8 @@ Passing argument to event handler
           onTemperatureChange={this.handleCelsiusChange} />
 
 ------------------------------------------------------------------------------
-# COMPOSITION VS INHERITANCE
-### => COMPOSITION recommended over INHERITANCE
+## COMPOSITION VS INHERITANCE
+###### => COMPOSITION recommended over INHERITANCE
 
   function SplitPane(props) {
     return (
@@ -219,7 +243,7 @@ Passing argument to event handler
 React elements like <Contacts /> and <Chat /> are just objects, so you can pass them as props like any other data.
 
 ------------------------------------------------------------------------------
-# THINKING IN REACT
+## THINKING IN REACT
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
