@@ -3,16 +3,12 @@
  Js's most popular library on github, by facebook
 
 ------------------------------------------------------------------------------
-## WHY REACT?
+## WHY REACT? / Advantages
 1. flexibility
 2. popular
-3. performace - find out how?
-4. html in js and not vice versa
-5. for other frameworks need to learn their syntaxes React uses js syntax
-
-------------------------------------------------------------------------------
-## ADVANTAGES?
-=?
+3. html in js and not vice versa
+4. for other frameworks need to learn their syntaxes React uses js syntax
+5. performace - using React will lead to a fast user interface without doing much work to specifically        optimize for performance and ther is a virtual DOM. Generally in js DOM operations are the costliest and React handles DOM operations (in batch at appropriate time )and not users
 
 ------------------------------------------------------------------------------
 ## CREATING A REACT APP
@@ -99,7 +95,7 @@ Note: Always start component names with a capital letter.
   ```javascript
   button = <LogoutButton onClick={this.handleLogoutClick} />;
   ```
-     and can be used in render as {button}
+    and can be used in render as {button}
 ------------------------------------------------------------------------------
 ## CLASS COMPONENTS
  setting state
