@@ -117,7 +117,7 @@ As of React 16, errors that were not caught by any error boundary will result in
 ------------------------------------------------------------------------------
 ## REFS and the DOM
 Refs provide a way to access DOM nodes or React elements created in the render method.
-In the typical React dataflow, props are the only way that parent components interact with their children. To modify a child, you re-render it with new props. However, there are a few cases where you need to imperatively modify a child outside of the typical dataflow.
+In the typical React dataflow, props are the only way that parent components interact with their children. To modify a child, you re-render it with new props. However, there are a few cases where you need to imperatively modify a child outside of the typical dataflow e.g. Managing focus, text selection, or media playback.
 
 Avoid using refs for anything that can be done declaratively.
 
@@ -372,20 +372,251 @@ function onRenderCallback(
   // Aggregate or log render timings...
 }
 ```
+
+## 4. Use keys
+Inserting an element at the beginning has worse performance. For example, converting between these two trees works poorly
+```javascript
+<ul>
+  <li>Duke</li>
+  <li>Villanova</li>
+</ul>
+
+<ul>
+  <li>Connecticut</li>
+  <li>Duke</li>
+  <li>Villanova</li>
+</ul>
+```
+React will mutate every child instead of realizing it can keep the **Duke** and **Villanova** subtrees intact. This inefficiency can be a problem.
+
+In order to solve this issue, React supports a key attribute. When children have keys, React uses the key to match children in the original tree with children in the subsequent tree.
+```javascript
+<ul>
+  <li key="2015">Duke</li>
+  <li key="2016">Villanova</li>
+</ul>
+
+<ul>
+  <li key="2014">Connecticut</li>
+  <li key="2015">Duke</li>
+  <li key="2016">Villanova</li>
+</ul>
+```
+Keys should be stable, predictable, and unique. Unstable keys (like those produced by Math.random()) will cause problems
+
+
+
 ------------------------------------------------------------------------------
 ## Portals
 Portals provide a first-class way to render children into a DOM node that exists outside the DOM hierarchy of the parent component.
 ```javascript
 ReactDOM.createPortal(child, container)
 
-//The first argument (child) is any renderable React child, such as an element, string, or fragment. The second argument (container) is a DOM element.
+//The first argument (child) is any renderable React child, such as an element, string, or fragment.
+//The second argument (container) is a DOM element.
 ```
 
 #### Usage
 A typical use case for portals is when a parent component has an overflow: hidden or z-index style, but you need the child to visually “break out” of its container. For example, dialogs, hovercards, and tooltips.
 
 ------------------------------------------------------------------------------
+## Render Props
+The term “render prop” refers to a technique for sharing code between React components using a prop whose value is a function.
+
+A component with a render prop takes a function that returns a React element and calls it instead of implementing its own render logic.
+```javascript
+<DataProvider render={data => (
+  <h1>Hello {data.target}</h1>
+)}/>
+```
+#### Use Render Props for Cross-Cutting Concerns
+For example, the following component tracks the mouse position in a web app:
+```javascript
+class MouseTracker extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.state = { x: 0, y: 0 };
+  }
+
+  handleMouseMove(event) {
+    this.setState({
+      x: event.clientX,
+      y: event.clientY
+    });
+  }
+
+  render() {
+    return (
+      <div style={{ height: '100vh' }} onMouseMove={this.handleMouseMove}>
+        <h1>Move the mouse around!</h1>
+        {/* ...but how do we render something other than a <p>? */}
+        <p>The current mouse position is ({this.state.x}, {this.state.y})</p>
+      </div>
+    );
+  }
+}
+
+// it's parent component
+<MouseTracker />
+
+// if we want to use same component functionality but that component should render something else.
+// for e.g. above, instead of rendering <p> other component wants to render <div>
+// this is not achievable by calling <MouseTracker> component multiple times
+// we can use render props instead
+```
+
+Using Render props
+```javascript
+class MouseTracker extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.state = { x: 0, y: 0 };
+  }
+
+  handleMouseMove(event) {
+    this.setState({
+      x: event.clientX,
+      y: event.clientY
+    });
+  }
+
+  render() {
+    return (
+      <div style={{ height: '100vh' }} onMouseMove={this.handleMouseMove}>
+        <h1>Move the mouse around!</h1>
+        {/*
+          Instead of providing a static representation of what <Mouse> renders,
+          use the `render` prop to dynamically determine what to render.
+        */}
+        {this.props.render(this.state)}
+ 
+      </div>
+    );
+  }
+}
+
+// it's parent component
+<MouseTracker render={(mouse) => (
+         <div>The current mouse position is ({mouse.x}, {mouse.y})</div>
+        )}/>
+
+// Check if the code is working
+```
+------------------------------------------------------------------------------
+## Static Type Checking
+Static type checkers like Flow and TypeScript identify certain types of problems before you even run your code. They can also improve developer workflow by adding features like auto-completion. For this reason, we recommend using Flow or TypeScript instead of PropTypes for larger code bases.
+
+Typescript/Flow can be added to react app
+**npx create-react-app my-app --template typescript**
 
 ------------------------------------------------------------------------------
+## Strict Mode
+StrictMode is a tool for highlighting potential problems in an application. Like Fragment, StrictMode does not render any visible UI. It activates additional checks and warnings for its descendants.
+
+You can enable strict mode for any part of your application. For example:
+```javascript
+import React from 'react';
+
+function ExampleApplication() {
+  return (
+    <div>
+      <Header />
+      <React.StrictMode>
+        <div>
+          <ComponentOne />
+          <ComponentTwo />
+        </div>
+      </React.StrictMode>
+      <Footer />
+    </div>
+  );
+}
+```
+StrictMode currently helps with:
+
+1. Identifying components with unsafe lifecycles - certain legacy lifecycle methods are unsafe for use in async React applications
+2. Warning about legacy string ref API usage
+3. Warning about deprecated findDOMNode usage
+4. Detecting unexpected side effects **
+5. Detecting legacy context API
 
 ------------------------------------------------------------------------------
+## Proptypes
+React has some built-in typechecking abilities i.e, proptypes.
+Use them for small projects, got big projects, use Flow or Typescript
+```javascript
+import PropTypes from 'prop-types';
+
+class Greeting extends React.Component {
+  render() {
+    return (
+      <h1>Hello, {this.props.name}</h1>
+    );
+  }
+}
+
+Greeting.propTypes = {
+  name: PropTypes.string
+};
+
+// if type of name is not string, warning will be shown on console.
+
+//few more validators
+optionalArray: PropTypes.array,
+optionalBool: PropTypes.bool,
+optionalFunc: PropTypes.func,
+optionalNumber: PropTypes.number,
+optionalObject: PropTypes.object,
+optionalString: PropTypes.string,
+optionalSymbol: PropTypes.symbol,
+
+// custom proptypes can also be created
+// default values can also be passed to props
+Greeting.defaultProps = {
+  name: 'Stranger'
+};
+```
+
+------------------------------------------------------------------------------
+## Uncontrolled components
+When form data is handled by the DOM itself, and not by React
+
+instead of writing an event handler for every state update, you can use a ref to get form values from the DOM
+```javascript
+class NameForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.input = React.createRef();
+  }
+
+  handleSubmit(event) {
+    alert('A name was submitted: ' + this.input.current.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name:
+          <input type="text" ref={this.input} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+
+// if you forgot, below is the controlled component
+<input value={someValue} onChange={handleChange} />
+```
+You can also make a controlled component as uncontrolled by removing event handler and adding ref. (in above code, I have made input tag both controlled and uncontrolled)
+But this is not recommended.
+File input tag is always uncontrolled component, as only DOM (user) can control it's value.
+
+------------------------------------------------------------------------------
+## Web Components
+Nai aata kuch :P

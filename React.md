@@ -28,8 +28,21 @@ create-react-app needs Node >=8.10
 ## ReactDOM
  It is a library which keeps the ideal/virtual DOM in memory and then syncs it with Real DOM
 Reconcialition
- The process that ReactDOM does is called as Reconcialition
-[How Reconcialition works internally?](https://reactjs.org/docs/reconciliation.html)
+The process that ReactDOM does is called as Reconcialition
+#### How Reconcialition works internally?
+###### Using the Diffing Algorithm
+When diffing two trees, React first compares the two root elements. The behavior is different depending on the types of the root elements.
+
+1. Elements Of Different Types
+Whenever the root elements have different types, React will tear down the old tree and build the new tree from scratch.
+
+When tearing down a tree, old DOM nodes are destroyed. Component instances receive componentWillUnmount(). When building up a new tree, new DOM nodes are inserted into the DOM. Component instances receive componentWillMount() and then componentDidMount(). Any state associated with the old tree is lost.
+
+2. DOM Elements Of The Same Type
+React looks at the attributes of both, keeps the same underlying DOM node, and only updates the changed attributes.
+
+3. Component Elements Of The Same Type
+When a component updates, the instance stays the same, so that state is maintained across renders. React updates the props of the underlying component instance to match the new element, and calls componentWillReceiveProps() and componentWillUpdate() on the underlying instance.
 
 Is the Shadow DOM the same as the Virtual DOM?
 No, they are different. The Shadow DOM is a browser technology designed primarily for scoping variables and CSS in web components.
