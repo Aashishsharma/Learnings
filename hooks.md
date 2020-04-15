@@ -181,4 +181,4 @@ This is what Render props and HOCs would do.
 ------------------------------------------------------------------------------
 ## FAQs
 1. Do Hooks cover all use cases for classes?
-There are no Hook equivalents to the uncommon getSnapshotBeforeUpdate, getDerivedStateFromError and componentDidCatch lifecycles yet, but would be added soon.
+ There are no Hook equivalents to the uncommon getSnapshotBeforeUpdate, getDerivedStateFromError and componentDidCatch lifecycles yet, but would be added soon.
