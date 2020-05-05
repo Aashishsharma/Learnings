@@ -1,4 +1,4 @@
-## HOOKS
+﻿## HOOKS
 Let you use state and other React features without writing a class. They are a function.
 
 ## Problem with classes / Why Hooks?
@@ -182,3 +182,13 @@ This is what Render props and HOCs would do.
 ## FAQs
 1. Do Hooks cover all use cases for classes?
  There are no Hook equivalents to the uncommon getSnapshotBeforeUpdate, getDerivedStateFromError and componentDidCatch lifecycles yet, but would be added soon.
+
+2. State vs Props
+  - Similarities
+    1. Both props and state are plain JS objects
+    2. Both props and state changes trigger a render update
+  - Differences
+    1. State is mutable, props are not
+    2. Component cannot change it's props, state can be changed
+  - Which to use when
+    If a Component needs to alter one of its attributes at some point in time, that attribute should be part of its state, otherwise it should just be a prop for that Component.
