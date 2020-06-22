@@ -1,4 +1,5 @@
 ## Javascript event loop. 
+[Javascript event loop](https://www.youtube.com/watch?v=8aGhZQkoFbQ)
 Javascript event loop elements are  
 1. Javascript Runtime (heap and stack)
 2. Web Apis (DOM APIs, AJAX (n/w requests), setTimeout)
@@ -80,7 +81,7 @@ fs.readFile('demo.txt', (err, data) => {
  })
 
 // so now you know where the err and data params are coming from
-// second arg to readFile is a callback fn, and when readfile does it's thing, ti calls our callback with the args, which contains file data
+// second arg to readFile is a callback fn, and when readfile does it's thing, it calls our callback with the args, which contains file data
 // usually err is passed as the frst argument in the callback function
 ```
 2. JS in asynchronous and thus, you can pass the callbacks to ensure those are executed once the async code is run
@@ -138,6 +139,104 @@ Summary
 3. Use function hoisting to your advantage to move functions 'below the fold'
 
 #### Promises
+A promise is an object that may produce a single value some time in the future: either a resolved value, or a reason that it’s not resolved (e.g., a network error occurred). A promise may be in one of 3 possible states: fulfilled, rejected, or pending.
+
+3 possible states:
+1. Fulfilled: onFulfilled() will be called (e.g., resolve() was called)
+2. Rejected: onRejected() will be called (e.g., reject() was called)
+3. Pending: not yet fulfilled or rejected  
+4. Settled: promise is either fulfilled or rejected
+
+E.g.
+```javascript
+   function add_positivenos_async(n1, n2) {
+      let p = new Promise(function (resolve, reject) {
+         if (n1 >= 0 && n2 >= 0) {
+            //do some complex time consuming work
+            resolve(n1 + n2)
+         }
+         else
+            reject('NOT_Postive_Number_Passed')
+      })
+      return p;
+   }
+
+   add_positivenos_async(10,20)
+   .then(function(result){
+      console.log("first result",result)
+      return add_positivenos_async(result,result)
+   }).then(function(result){
+   console.log("second result",result)
+      return add_positivenos_async(result,result)
+   }).then(function(result){
+      console.log("third result",result)
+   })
+
+   console.log('end')
+
+//O/p
+//end
+//first result 30
+//second result 60
+//third result 120
+```
+
+###### Promise methods
+1. Promise.all()
+Syntax-> Promise.all(iterable);  
+Wait for all promises to be resolved, or for any to be rejected.
+E.g. 
+```javascript
+function add_positivenos_async(n1, n2) {
+      let p = new Promise(function (resolve, reject) {
+         if (n1 >= 0 && n2 >= 0) {
+            //do some complex time consuming work
+            resolve(n1 + n2)
+         }
+         else
+            reject('NOT_Postive_Number_Passed')
+      })
+
+      return p;
+   }
+   //Promise.all(iterable)
+
+Promise.all([add_positivenos_async(10,20),add_positivenos_async(30,40),add_positivenos_async(50,60)])
+   .then(function(resolveValue){
+      console.log(resolveValue[0])
+      console.log(resolveValue[1])
+      console.log(resolveValue[2])
+      console.log('all add operations done')
+   })
+   .catch(function(err){
+      console.log('Error',err)
+   })
+   console.log('end')
+```
+2. Promise.allSettled()
+Syntax-> Promise.allSettled(iterable);  
+Wait until all promises have settled (each may resolve or reject)  
+
+Promise.all() vs Promise.allSettled()
+1. Promise.all() rejects as soon as a promise within the iterable object rejected.
+2. Promise.allSettled() resolves regardless of rejected promise(s) within the iterable object.  
+
+3. Promise.race()
+Syntax-> Promise.race(iterable);  
+Wait until any of the promises is resolved or rejected.
+If the returned promise resolves, it is resolved with the value of the first promise in the iterable that resolved.
+If it rejects, it is rejected with the reason from the first promise that was rejected. 
+
+4. Promise.any()
+Syntax-> Promise.any(iterable);  
+
+Promise.any() resolves with the first promise to fulfil, even if a promise rejects first. This is in contrast to Promise.race(), which resolves or rejects with the first promise to settle.  
+
+Promise.race() vs Promise.any()
+Promise.race() -> retruns 1st promise that is settled (resolved/rejected)  
+Promise.any() -> returns 1st promise that is fulfilled (resolved), even if earlier promises are rejected, it would return the 1st one that is fulfilled (resolved)  
+
+When a .then() lacks the appropriate function, processing simply continues to the next link of the chain.   Therefore, a chain can safely omit every handleRejection until the final .catch().  Similarly, .catch() is really just a .then() without a slot for handleFulfilled.
 
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
@@ -151,7 +250,5 @@ Summary
 
 
 TODO-
-callback
-promises
 array methods
 ES6
