@@ -501,8 +501,8 @@ let family = marry({
   name: "Ann"
 });
 // resulting memory structure
-![alt text](memorystructure.png "Title")
 ```
+![alt text](memorystructure.png "Title")
 
 ------------------------------------------------------------------------------
 
