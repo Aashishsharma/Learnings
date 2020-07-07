@@ -502,7 +502,7 @@ let family = marry({
 });
 // resulting memory structure
 ```
-![alt text](memorystructure.png "Title")
+![alt text](memorystructure.PNG "Title")
 
 ------------------------------------------------------------------------------
 
