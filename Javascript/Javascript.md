@@ -80,6 +80,39 @@ Modern JavaScript supports “classes” and “modules” – advanced language
 ------------------------------------------------------------------------------
 #### Let, var, const
 
+###### let ve var
+1. let has a bloc scope, var ha no block scope, Variables, declared with var, are either function-wide or global.
+2. “var” tolerates redeclarations
+```javascript
+let user;
+let user; // SyntaxError: 'user' has already been declared
+
+var user = "Pete";
+var user = "John"; // this "var" does nothing (already declared)
+// ...it doesn't trigger an error
+alert(user); // John
+```
+3. let and var are hoisted, but you cannot access let before the actual declaration is evaluated at runtime, but you can access var
+```javascript
+console.log(typeof name); // undefined
+var name = "John";
+
+console.log(typeof name); // ReferenceError
+let name = "John";
+```
+
+##### IIFE Immediately invoked function expression
+```javascript
+(function() {
+  var foo = "bar";
+  console.log(foo);
+})();
+```
+**use of IIFE**
+As in the past there was only var, and it has no block-level visibility, programmers invented a way to emulate it. 
+Local variables declared using the var keyword are scoped to the enclosing function. If no such function exists, the variables will be created as global variables instead, thus polluting the global scope. To prevent this, we can use an IIFE to create a function wrapper for local variables  
+nowadays there’s no reason to use IIFE.
+
 When the value of a constant is known prior to execution, name it with capital letters, when value is calculated during execution, use camelcase
 
 ```javascript
@@ -102,8 +135,8 @@ Programming languages that allow such things, are called “dynamically typed”
 2. **bigint** is for integer numbers of arbitrary length. A BigInt value is created by appending n to the end of an integer
 3. **string** for strings. A string may have zero or more characters, there’s no separate single-character type.
 4. **boolean** for true/false.
-5. **null** for unknown values – a standalone type that has a single value null.
-6. **undefined** for unassigned values – a standalone type that has a single value undefined.
+5. **null** for unknown values – a standalone type that has a single value null. Null as an assignment value. So you can assign the value null to any variable which basically means it’s blank.
+6. **undefined** for unassigned values – a standalone type that has a single value undefined. Undefined is a variable that has been declared but not assigned a value.
 7. **object** for more complex data structures.
 8. **symbol** for unique identifiers.
 
@@ -251,6 +284,10 @@ let sum = (a, b) => {  // the curly brace opens a multiline function
 
 alert( sum(1, 2) ); // 3
 ```
+
+#### Arrow functions have no “this”
+If we reference this from such a function, it’s taken from the outer “normal” function.  
+
 
 ------------------------------------------------------------------------------
 ## Hoisting
@@ -465,6 +502,51 @@ alert(clone.sizes.width); // 51, see the result from the other one
 
 // to solve this use  _.cloneDeep(obj) from the JavaScript library lodash.
 ```
+#### this in objects
+```javascript
+// these objects do the same
+user = {
+  sayHi: function() {
+    alert("Hello");
+  }
+};
+// method shorthand looks better, right?
+user = {
+  sayHi() { // same as "sayHi: function()"
+    alert("Hello");
+  }
+};
+```
+
+#### constructor functions
+1. Constructor functions or, briefly, constructors, are regular functions, but there’s a common agreement to name them with capital letter first.
+2. Constructor functions should only be called using new. Such a call implies a creation of empty this at the start and returning the populated one at the end.
+```javascript
+function User(name) {
+  // this = {};  (implicitly)
+
+  // add properties to this
+  this.name = name;
+  this.isAdmin = false;
+
+  // return this;  (implicitly)
+}
+let user = new User("Jack")
+
+// Inside a function, we can check whether it was called with new or without it, using a special new.target property.
+function User() {
+  alert(new.target);
+}
+// without "new":
+User(); // undefined
+// with "new":
+new User(); // function User { ... }
+
+// we can omit parentheses after new, if it has no arguments:
+let user = new User; // <-- no parentheses
+// same as
+let user = new User();
+```
 
 #### Garbage collection
 The main concept of memory management in JavaScript is reachability.
@@ -503,8 +585,27 @@ let family = marry({
 // resulting memory structure
 ```
 ![alt text](memorystructure.PNG "Title")
+```javascript
+delete family.father;
+delete family.mother.husband;
+// Outgoing references do not matter. Only incoming ones can make an object reachable. So, John is now unreachable and will be removed from the memory with all its data that also became unaccessible
+```
+Idle-time collection – the garbage collector tries to run only while the CPU is idle, to reduce the possible effect on the execution.
 
 ------------------------------------------------------------------------------
+## Data types
+1. Premitive - hold only one value
+2. obj - real life entity + actions (functions)
+
+If premitives hold only 1 value then how is this possible
+```javascript
+let str = "Hello";
+alert( str.toUpperCase() ); // HELLO
+// how does string has a method?
+```
+1. The string str is a primitive. So in the moment of accessing its property, a special object is created that knows the value of the string, and has useful methods, like toUpperCase().
+2. That method runs and returns a new string (shown by alert).
+3. The special object is destroyed, leaving the primitive str alone
 
 
 ------------------------------------------------------------------------------
@@ -718,7 +819,7 @@ Promise.race() vs Promise.any()
 Promise.race() -> retruns 1st promise that is settled (resolved/rejected)  
 Promise.any() -> returns 1st promise that is fulfilled (resolved), even if earlier promises are rejected, it would return the 1st one that is fulfilled (resolved)  
 
-When a .then() lacks the appropriate function, processing simply continues to the next link of the chain.   Therefore, a chain can safely omit every handleRejection until the final .catch().  Similarly, .catch() is really just a .then() without a slot for handleFulfilled.
+When a .then() lacks the appropriate function, processing simply continues to the next link of the chain.  Therefore, a chain can safely omit every handleRejection until the final .catch(). Similarly, .catch() is really just a .then() without a slot for handleFulfilled.
 
 ------------------------------------------------------------------------------
 #### Async/Await
@@ -778,6 +879,9 @@ let user = await response.json();
 
 
 TODO-
+this in js kyle simson
+symbol type
+obj. to premitive conversion
 array methods
 ES6
 IIFE
