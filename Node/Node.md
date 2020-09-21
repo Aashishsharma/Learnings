@@ -164,3 +164,57 @@ setTimeout(fn, 0) callbacks are placed in Timer Queue and will be called after I
 ------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
+##Child process
+to scale node app, using multiple processes is the only option
+use the cores that are provided by operating system
+os modules - os.cpu().lrnght gives is no. of cores in the operating system
+
+child process module - inbuild module in node - this module enables us to use os functionality by running system command inside child process
+1. spwan() - creates new process - can run shell commands
+2. exec() - same as spawn but opens new shell and o/p is stored in buffer
+3. execfile() - same as exec but runs a shell file instead of opening shell and executing command
+4. fork() - similar to spawn, it creates new process, and establishes the communication (using event emitters) between parent and child node process
+on parent - const forked - childprocess.fork('name')
+to send msg to child - forked.send(msg)
+to recieve msg from child - forked.on('message', function(msg) {})
+
+on child - 
+process.send(msg
+process.on('message', function(msg) {})
+e.g. let's say we have an endpoint and that endpoint does a complex computation whivh takes lot of time, in this case if another endpoint req, is made beofre the task is complete, it will go in queue, instead use fork, spawn new process and let that process execute long task, and in main will not be blocked and next request can be consumed
+Note - you can only fork the no. of processes as much as cpu cores are present in the operating system
+
+##cluster module - buil-in module - enable load balancing where os has more than cpu cores
+#### using cluster module to load balance server
+**standard code everytime**
+```javascript
+const cluster = require('cluster');
+const os = require('os');
+  if(cluster.isMaster) {
+    // master cluster - when frst time this file is run it is master
+  const cpus = os.cpus().length;
+  for(let i=0; i<cpusl i++) {
+    cluster.fork();
+  } else {
+    // worker cluster
+    require('./server.js') 
+    // server.js is the file where http/express server is started and endpoints are defined
+    // no. of request this server can handle per second increases based on no. of cores
+  }
+}
+
+// to handle restart and process crash
+if(cluster.isMaster) {
+    // master cluster - when frst time this file is run it is master
+  const cpus = os.cpus().length;
+  for(let i=0; i<cpusl i++) {
+    cluster.fork();
+  } 
+  cluster.on('exit') // create another fork
+
+  else {
+```
+**problem with cluster**
+1. caching becomes difficult as each worker process has different memory
+2. managing user authentication sessions - // use sticky load balancers to solve this
+what it does if a uer is authenicated in a wroker process and that workers memory has session, then sticky load balancer will send the request to same worker is request comes from the same user

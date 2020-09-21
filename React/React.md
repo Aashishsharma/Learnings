@@ -9,6 +9,8 @@
 3. html in js and not vice versa
 4. for other frameworks need to learn their syntaxes React uses js syntax
 5. performace - using React will lead to a fast user interface without doing much work to specifically        optimize for performance and ther is a virtual DOM. Generally in js DOM operations are the costliest and React handles DOM operations (in batch at appropriate time )and not users
+6. It has one-way binding, so debugging is easy
+7. separation of concerns
 
 ------------------------------------------------------------------------------
 ## CREATING A REACT APP
@@ -65,7 +67,8 @@ Everything is converted to a string before being rendered. This helps prevent XS
 e.g. JSX 
  ```javascript
  const element = <div tabIndex="0"></div>;
- const element = <img src={user.avatarUrl}></img>;
+ const element = <img src={user.avatarUrl} />;
+
  ```
 ------------------------------------------------------------------------------
 ## REACT ELEMENTS

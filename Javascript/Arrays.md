@@ -449,7 +449,6 @@ function process(obj) {
 
     cache.set(obj, result);
   }
-
   return cache.get(obj);
 }
 // 📁 main.js
