@@ -321,22 +321,173 @@ Idle-time collection – the garbage collector tries to run only while the CPU i
 If premitives hold only 1 value then how is this possible
 ```javascript
 let str = "Hello";
-alert( str.toUpperCase() ); // HELLO
+alert(str.toUpperCase()); // HELLO
 // how does string has a method?
 ```
 1. The string str is a primitive. So in the moment of accessing its property, a special object is created that knows the value of the string, and has useful methods, like toUpperCase().
 2. That method runs and returns a new string (shown by alert).
 3. The special object is destroyed, leaving the primitive str alone
 
+------------------------------------------------------------------------------
+## Modules
+A module is just a file. One script is one module. As simple as that.
+```javascript
+//import export
+// 📁 sayHi.js
+export function sayHi(user) {
+  alert(`Hello, ${user}!`);
+}
 
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
+import {sayHi} from './sayHi.js';
+alert(sayHi); // function...
+sayHi('John'); // Hello, John!
+
+//more export examples
+// 1. Export before declarations
+// export an array
+export let months = ['Jan', 'Feb', 'Mar','Apr', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+// export a constant
+export const MODULES_BECAME_STANDARD_YEAR = 2015;
+// export a class
+export class User {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+// 2. Export apart from declarations
+// 📁 say.js
+function sayHi(user) {
+  alert(`Hello, ${user}!`);
+}
+function sayBye(user) {
+  alert(`Bye, ${user}!`);
+}
+export {sayHi, sayBye}; // a list of exported variables
+
+// 3. export as
+export {sayHi as hi, sayBye as bye};
+import * as say from './say.js';
+
+// 4. Export default
+// In practice, there are mainly two kinds of modules.
+// 1. Modules that contain a library, pack of functions, like say.js above.
+// 2. Modules that declare a single entity, e.g. a module user.js exports only class User.
+// Mostly, the second approach is preferred, so that every “thing” resides in its own module.
+//Modules provide a special export default
+// 📁 user.js
+// with default name can be skopped
+export default class User { // just add "default"
+  constructor(name) {
+    this.name = name;
+  }
+}
+// and then import it without curly braces
+// 📁 main.js
+// in imoport nay name can be given, but always give the name as class name
+// as multiple devs can give diff. name and cause confustion
+import User from './user.js'; // not {User}, just User
+
+new User('John');
+// there can only be one export default per module
+// we can use default with named exports (see above) as well 
+
+//Named export                                 Default export
+//export class User {...}                      export default class User {...}
+//import {User} from ...                       import User from ...
+
+**Dynamic imports**
+// using The import() expression
+// The import(module) expression loads the module and returns a promise that resolves into a module object that contains all its exports. It can be called from any place in the code.
+// We can use it dynamically in any place of the code, for instance:
+let modulePath = prompt("Which module to load?");
+import(modulePath)
+  .then(obj => <module object>)
+  .catch(err => <loading error, e.g. if no such module>)
+//using await
+let obj = await import('./say.js');
+let say = obj.default;
+// or, in one line: let {default: say} = await import('./say.js');
+say();
+```
+
+
+
+1. Modules always use strict, by default. 
+2. Top-level variables and functions from a module are not seen in other scripts.
+3. If the same module is imported into multiple other places, its code is executed only the first time
+```javascript
+// 📁 alert.js
+alert("Module is evaluated!");
+// 📁 1.js
+import `./alert.js`; // Module is evaluated!
+// 📁 2.js
+import `./alert.js`; // (shows nothing)
+```
+4. When a module exports an object:
+```javascript
+// 📁 admin.js
+export let admin = {
+  name: "John"
+};
+// If this module is imported from multiple files, the module is only evaluated the first time, admin object is created, and then passed to all further importers.
+// All importers get exactly the one and only admin object:
+
+// 📁 1.js
+import {admin} from './admin.js';
+admin.name = "Pete";
+// 📁 2.js
+import {admin} from './admin.js';
+alert(admin.name); // Pete
+// Both 1.js and 2.js imported the same obje
+```
+the module is executed only once. Exports are generated, and then they are shared between importers, so if something changes the admin object, other modules will see that.
+5. Module scripts are deferred
+same effect as defer attribute  
+1. downloading external module scripts doesn’t block HTML processing, they load in parallel with other resources
+2. module scripts wait until the HTML document is fully ready (even if they are tiny and load faster than HTML), and then run.
+3. relative order of scripts is maintained: scripts that go first in the document, execute first.
+```java
+<script type="module">
+  alert(typeof button); // object: the script can 'see' the button below
+  // as modules are deferred, the script runs after the whole page is loaded
+</script>
+Compare to regular script below:
+<script>
+  alert(typeof button); // Error: button is undefined, the script can't see elements below
+  // regular scripts run immediately, before the rest of the page is processed
+</script>
+<button id="button">Button</button>
+// the second script actually runs before the first! So we’ll see undefined first, and then object
+```
+4. External scripts that have type="module" - they run only once even if included multiple times on a page and they require cors headers for security purpose i.e, the remote server must supply a header Access-Control-Allow-Origin allowing the fetch.
+6. Async
+```javascript
+// all dependencies are fetched (analytics.js), and the script runs
+// doesn't wait for the document or other <script> tags to get loaded
+<script async type="module">
+  import {counter} from './analytics.js';
+  counter.count();
+  </script>
+```
+
+
+##### defer and async
+When the browser loads HTML and comes across a <script>...</script> tag, it can’t continue building the DOM. It must execute the script right now. The same happens for external scripts <script src="..."></script>: the browser must wait until the script downloads, execute it, and only after process the rest of the page.
+
+1. defer
+The defer attribute tells the browser not to wait for the script. Instead, the browser will continue to process the HTML, build DOM. The script loads “in the background”, and then runs when the DOM is fully built. 
+In other words
+1. Scripts with defer never block the page.
+2. Scripts with defer always execute when the DOM is ready (but before DOMContentLoaded event). 
+3. Deferred scripts keep their relative order, just like regular scripts.
+4. The defer attribute is only for external scripts. The defer attribute is ignored if the script tag has no src.
+
+2. async
+The async attribute means that a script is completely independent.  
+async scripts load in the background and run when ready. The DOM and other scripts don’t wait for them, and they don’t wait for anything. A fully independent script that runs when loaded.  
+In case of defer, even if script is downloaded in background, it is not executed unitll the DOM is loaded, but in async, as soon as script is downloaded, it starts the execution, even if DOM content aren't fully loaded.
+
 ------------------------------------------------------------------------------
 ## Callbacks, promises and async-await
 #### Callbacks
@@ -555,15 +706,11 @@ The word “async” before a function means one simple thing: a function always
 async function f() {
   return 1;
 }
-
 f().then(alert); // 1
-
 //We could explicitly return a promise, which would be the same
-
 async function f() {
   return Promise.resolve(1);
 }
-
 f().then(alert); // 1
 ```
 
@@ -593,20 +740,7 @@ let user = await response.json();
 })();
 ```
 ------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-------------------------------------------------------------------------------
-
-
-
 
 TODO-
-this in js kyle simson
-symbol type
-obj. to premitive conversion
-array methods
 ES6
-IIFE
 Automated testing with mocha = jsinfo
