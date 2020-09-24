@@ -609,3 +609,78 @@ alert(height); // 200
 alert(item1);  // Cake
 alert(item2);  // Donut
 ```
+
+## Iterables
+Iterable objects is a generalization of arrays. That’s a concept that allows us to make any object useable in a for..of loop.  
+If an object isn’t technically an array, but represents a collection (list, set) of something, then for..of is a great syntax to loop over it  
+```javascript
+let range = {
+  from: 1,
+  to: 5
+};
+
+// We want the for..of to work:
+// for(let num of range) ... num=1,2,3,4,5
+// then use iterable
+
+// iterable
+let range = {
+  from: 1,
+  to: 5
+};
+// 1. call to for..of initially calls this
+range[Symbol.iterator] = function() {
+  // ...it returns the iterator object:
+  // 2. Onward, for..of works only with this iterator, asking it for next values
+  return {
+    current: this.from,
+    last: this.to,
+    // 3. next() is called on each iteration by the for..of loop
+    next() {
+      // 4. it should return the value as an object {done:.., value :...}
+      if (this.current <= this.last) {
+        return { done: false, value: this.current++ };
+      } else {
+        return { done: true };
+      }
+    }
+  };
+};
+// now it works!
+for (let num of range) {
+  alert(num); // 1, then 2, 3, 4, 5
+}
+```
+There’s a universal method Array.from that takes an iterable or array-like value and makes a “real” Array from it. Then we can call array methods on it.
+
+#### Async iterables
+1. Use Symbol.asyncIterator instead of Symbol.iterator.
+2. The next() method should return a promise (to be fulfilled with the next value).
+3. The async keyword handles it, we can simply make async next().
+4. To iterate over such an object, we should use a for await (let item of iterable) loop
+```javascript
+let range = {
+  from: 1,
+  to: 5,
+  [Symbol.asyncIterator]() { // (1)
+    return {
+      current: this.from,
+      last: this.to,
+      async next() { // (2)
+        // note: we can use "await" inside the async next:
+        await new Promise(resolve => setTimeout(resolve, 1000)); // (3)
+        if (this.current <= this.last) {
+          return { done: false, value: this.current++ };
+        } else {
+          return { done: true };
+        }
+      }
+    };
+  }
+};
+(async () => {
+  for await (let value of range) { // (4)
+    alert(value); // 1,2,3,4,5
+  }
+})()
+```

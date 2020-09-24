@@ -483,7 +483,7 @@ In other words
 3. Deferred scripts keep their relative order, just like regular scripts.
 4. The defer attribute is only for external scripts. The defer attribute is ignored if the script tag has no src.
 
-2. async
+2. async  
 The async attribute means that a script is completely independent.  
 async scripts load in the background and run when ready. The DOM and other scripts don’t wait for them, and they don’t wait for anything. A fully independent script that runs when loaded.  
 In case of defer, even if script is downloaded in background, it is not executed unitll the DOM is loaded, but in async, as soon as script is downloaded, it starts the execution, even if DOM content aren't fully loaded.
@@ -741,6 +741,63 @@ let user = await response.json();
 ```
 ------------------------------------------------------------------------------
 
+## Cookies
+1. Cookies are small strings of data that are stored directly in the browser. 
+2. Cookies are usually set by a web-server using response Set-Cookie HTTP-header. Then the browser automatically adds them to (almost) every request to the same domain using Cookie HTTP-header.
+3. Mostly used for authentication
+4. We can also access cookies from the browser, using document.cookie property.
+5. document.cookie = "user=John"; to write a cookie in broowser
+6. should not exceed 4KB. So we can’t store anything huge in a cookie.
+7. The total number of cookies per domain is limited to around 20+, the exact limit depends on a browser.
+
+e.g. cookie - document.cookie = "user=John; path=/; expires=Tue, 19 Jan 2038 03:14:07 GMT" 
+#### Cookie options (The options are listed after key=value, delimited by ;)
+1. Path
+The url path prefix, the cookie will be accessible for pages under that path. Must be absolute. By default, it’s the current path.
+If a cookie is set with path=/admin, it’s visible at pages /admin and /admin/something, but not at /home or /adminpage.
+Usually, we should set path to the root: path=/ to make the cookie accessible from all website pages.
+2. domain
+By default, a cookie is accessible only at the domain that set it. So, if the cookie was set by site.com, we won’t get it other.com. Not even accissible to subdomain.
+3. expires, max-age
+If not present, cookie expires when the browser is closed
+4. secure
+The cookie should be transferred only over HTTPS. By default, if we set a cookie at http://site.com, then it also appears at https://site.com and vice versa.
+5. httpOnly
+The web-server uses Set-Cookie header to set a cookie. And it may set the httpOnly option.  
+This option forbids any JavaScript access to the cookie. We can’t see such cookie or manipulate it using document.cookie.  
+That’s used as a precaution measure, to protect from certain attacks when a hacker injects his own JavaScript code into a page and waits for a user to visit that page. That shouldn’t be possible at all, a hacker should not be able to inject their code into our site, but there may be bugs that let hackers do it.
+
+## LocalStorage, sessionStorage (Web storage objects)
+##### LocalStorage
+1. Unlike cookies, web storage objects are not sent to server with each request
+2. Can store upto 2 MB data
+3. Also unlike cookies, the server can’t manipulate storage objects via HTTP headers. Everything’s done in JavaScript.
+4. The storage is bound to the origin (domain/protocol/port triplet). That is, different protocols or subdomains infer different storage objects, they can’t access data from each other.
+5. Both storage objects provide same methods and properties:
+```javascript
+setItem(key, value) – store key/value pair.
+getItem(key) – get the value by key.
+removeItem(key) – remove the key with its value.
+clear() – delete everything.
+key(index) – get the key on a given position.
+length – the number of stored items.
+
+// store in browser
+localStorage.setItem('test', 1);
+// get from browser
+alert( localStorage.getItem('test') ); // 1
+```
+We only have to be on the same origin (domain/port/protocol), the url path can be different.
+The localStorage is shared between all windows with the same origin, so if we set the data in one window, the change becomes visible in another one.
+
+##### Sessionstorage
+1. Properties and methods are the same as local storage, but it’s much more limited
+2. The sessionStorage exists only within the current browser tab.
+Another tab with the same page will have a different storage.  
+sessionStorage.setItem('test', 1);  
+sessionStorage.getItem('test')
+
+**Webstorage objects can be used to autosave a form field**
 TODO-
 ES6
 Automated testing with mocha = jsinfo

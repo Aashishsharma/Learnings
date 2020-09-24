@@ -376,6 +376,188 @@ group.showList();
 **Can’t be called with new**  
 **They also don’t have super**
 
+------------------------------------------------------------------------------
+## Currying
+Currying is an advanced technique of working with functions.  
+Currying is a transformation of functions that translates a function from callable as f(a, b, c) into callable as f(a)(b)(c).
+Currying doesn’t call a function. It just transforms it.
+```javascript
+function curry(f) { // curry(f) does the currying transform
+  return function(a) {
+    return function(b) {
+      return f(a, b);
+    };
+  };
+}
+// usage
+function sum(a, b) {
+  return a + b;
+}
+let curriedSum = curry(sum);
+alert( curriedSum(1)(2) ); // 3
+// The result of curry(func) is a wrapper function(a).
+// When it is called like curriedSum(1), the argument is saved in the Lexical Environment, and a new wrapper is returned function(b).
+// Then this wrapper is called with 2 as an argument, and it passes the call to the original sum.
+
+// _.curry from lodash library, return a wrapper that allows a function to be called both normally and partially:
+function sum(a, b) {
+  return a + b;
+}
+let curriedSum = _.curry(sum); // using _.curry from lodash library
+alert( curriedSum(1, 2) ); // 3, still callable normally
+alert( curriedSum(1)(2) ); // 3, called partially
+```
+
+When can it be used?
+```javascript
+// For instance, we have the logging function log(date, importance, message) that formats and outputs the information.
+function log(date, importance, message) {
+  alert(`[${date.getHours()}:${date.getMinutes()}] [${importance}] ${message}`);
+}
+// Let’s curry it!
+log = _.curry(log);
+// After that log works normally:
+log(new Date(), "DEBUG", "some debug"); // log(a, b, c)
+// But also works in the curried form:
+log(new Date())("DEBUG")("some debug"); // log(a)(b)(c)
+// Now we can easily make a convenience function for current logs:
+// logNow will be the partial of log with fixed first argument
+let logNow = log(new Date());
+// use it
+logNow("INFO", "message"); // [HH:mm] INFO message
+/// can be used in another way
+let debugNow = logNow("DEBUG");
+debugNow("message"); // [HH:mm] DEBUG message
+```
+curry is not same as default parameters in a function, as default value can have only one value.  
+close to partial functions but not exactly same
+
+------------------------------------------------------------------------------
+## Generators
+Regular functions return only one, single value (or nothing).
+Generators can return (“yield”) multiple values, one after another, on-demand. 
+
+They can be used with iterables, allowing to create data streams with ease.
+To create a generator, we need a special syntax construct: function*, so-called “generator function”.
+```javascript
+function* generateSequence() {
+  yield 1;
+  yield 2;
+  return 3;
+}
+// "generator function" creates "generator object"
+let generator = generateSequence();
+alert(generator); // [object Generator]
+```
+Generator functions behave differently from regular ones. When such function is called, it doesn’t run its code. Instead it returns a special object, called "generator object"
+The main method of a generator is next().
+The result of next() is always an object with two properties:
+1. value: the yielded value.
+2. done: true if the function code has finished, otherwise false.
+```javascript
+function* generateSequence() {
+  yield 1;
+  yield 2;
+  return 3;
+}
+let generator = generateSequence();
+let one = generator.next();
+alert(JSON.stringify(one)); // {value: 1, done: false}
+// when the execution reaches the return statement then done: true
+```
+
+#### Generators are iterable
+```javascript
+function* generateSequence() {
+  yield 1;
+  yield 2;
+  return 3; // to alert 3 as well, we would need to ues yield instead of return, in case of for..of loop
+}
+let generator = generateSequence();
+for(let value of generator) {
+  alert(value); // 1, then 2
+}
+// the example above shows 1, then 2, and that’s all. It doesn’t show 3
+```
+
+#### Using generators for iterables
+```javascript
+let range = {
+  from: 1,
+  to: 5,
+  *[Symbol.iterator]() { // a shorthand for [Symbol.iterator]: function*()
+    for(let value = this.from; value <= this.to; value++) {
+      yield value;
+    }
+  }
+};
+alert( [...range] ); // 1,2,3,4,5
+```
+yield is a two-way street: it not only returns the result to the outside, but also can pass the value inside the generator.
+```javascript
+function* gen() {
+  let ask1 = yield "2 + 2 = ?";
+  alert(ask1); // 4
+  let ask2 = yield "3 * 3 = ?"
+  alert(ask2); // 9
+}
+let generator = gen();
+alert( generator.next().value ); // "2 + 2 = ?"
+alert( generator.next(4).value ); // "3 * 3 = ?"
+alert( generator.next(9).done ); // true
+```
+explaination
+1. The first .next() starts the execution… It reaches the first yield.
+2. The result is returned to the outer code.
+3. The second .next(4) passes 4 back to the generator as the result of the first yield, and resumes the execution.
+4. It reaches the second yield, that becomes the result of the generator call.
+5. The third next(9) passes 9 into the generator as the result of the second yield and resumes the execution that reaches the end of the function, so done: true.
+
+generator.throw
+```javascript
+function* gen() {
+  try {
+    let result = yield "2 + 2 = ?"; // (1)
+    alert("The execution does not reach here, because the exception is thrown above");
+  } catch(e) {
+    alert(e); // shows the error
+  }
+}
+let generator = gen();
+let question = generator.next().value;
+generator.throw(new Error("The answer is not found in my database")); // (2)
+```
+
+### Real-life example: paginated data for async generators
+There are many online services that deliver paginated data. For instance, when we need a list of users, a request returns a pre-defined count (e.g. 100 users) – “one page”, and provides a URL to the next page. This pattern is very common.
+```javascript
+// implement async generator
+async function* fetchCommits(repo) {
+  let url = `https://api.github.com/repos/${repo}/commits`;
+  while (url) {
+    const response = await fetch(url, { // (1)
+      headers: {'User-Agent': 'Our script'}, // github needs any user-agent header
+    });
+    const body = await response.json(); // (2) response is JSON (array of commits)
+    // (3) the URL of the next page is in the headers, extract it
+    let nextPage = response.headers.get('Link').match(/<(.*?)>; rel="next"/);
+    nextPage = nextPage?.[1];
+    url = nextPage;
+    for(let commit of body) { // (4) yield commits one by one, until the page ends
+      yield commit;
+    }
+  }
+}
+//call the generator
+for await (let commit of fetchCommits("username/repository")) {
+  // process commit
+}
+//while url is not null, generator will keep on generating commits
+// do next for of iteration will get next paginated commits
+```
+In web-development we often meet streams of data, when it flows chunk-by-chunk. For instance, downloading or uploading a big file.
+We can use async generators to process such data
+
 
 To-do
 ploymorphism
