@@ -268,6 +268,44 @@ var abc = function(defaultValue = 0) { //FYI -> adding default parameter in a fu
 ```
 
 ------------------------------------------------------------------------------
+## Closure
+- **Defination**
+Closure is created when a child function keep the environment of the parent scope even after the parent function has already executed
+```javascript
+function foo(outer_arg) { 
+    function inner(inner_arg) { 
+        return outer_arg + inner_arg; 
+    } 
+    return inner; 
+} 
+var get_func_inner = foo(5); 
+console.log(get_func_inner(4)); //outputs 9
+console.log(get_func_inner(3)); //outputs 8
+```
+We can access the variable outer_arg (value 5) which is defined in function foo() through function inner() as the later preserves the scope chain of enclosing function at the time of execution of enclosing function i.e. the inner function knows the value of outer_arg through it’s scope chain.
+This is closure in action that is inner function can have access to the outer function variables as well as all the global variables.
+```javascript
+// another example
+function outer()  
+{ 
+    var arr = []; 
+    var i; 
+    for (i = 0; i < 4; i++)  
+    { 
+        // storing anonymus function 
+        arr[i] = function () { return i; } 
+    }  
+    // returning the array. 
+    return arr; 
+}
+var get_arr = outer(); 
+console.log(get_arr[0]());  // 4
+console.log(get_arr[1]());  // 4
+console.log(get_arr[2]());  // 4
+console.log(get_arr[3]());  // 4
+// due to closure
+```
+------------------------------------------------------------------------------
 
 #### Garbage collection
 The main concept of memory management in JavaScript is reachability.
