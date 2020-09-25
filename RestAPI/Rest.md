@@ -99,7 +99,8 @@ Which versioning strategy to be used?
 3. Depends on the requirement 
 
 ------------------------------------------------------------------------------
-## Locking down the API
+## API and Security
+
 
 ------------------------------------------------------------------------------
 ###### FYI status codes
