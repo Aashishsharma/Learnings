@@ -60,7 +60,6 @@ alert("There will be an error")
 // The error in the no-semicolon variant occurs because JavaScript does not assume a semicolon before square brackets [...]
 ```
 
-------------------------------------------------------------------------------
 #### The modern mode, "use strict"
 
 ```javascript

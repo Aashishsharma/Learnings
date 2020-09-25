@@ -25,3 +25,34 @@ REST allows you to use a layered system architecture where you deploy the APIs o
 
 #### 6. Code on demand (optional)
 Most of the time, you will be sending the static representations of resources in the form of XML or JSON. But when you need to, you are free to return executable code to support a part of your application, e.g., clients may call your API to get a UI widget rendering code. It is permitted.
+
+------------------------------------------------------------------------------
+## Designing APIs
+#### 1. URIs
+1. They are the path to your resource (https://example.com/books)
+2. Nouns are preferred and mostly plurals (use /books instead of /getBook)
+3. Not necessary that URI resource should be an Entity in the system. Like book is an entity, so all the details of book shouldn't come in single URS like - https://example.com/books, it can be broken down as https://example.com/books which provides meta-data of all books and then https://example.com/books/book-nameorid
+4. Not necessary that individual resoruce URI should have a primary key like book-id in above case, every resource should be unique, so oprimary keys can be used, but in case applicable use name for readibility.
+5. Query strings - used for non-resource properties - (https://example.com/books?sort=name, https://example.com/books?page=1, https://example.com/books?format=json (Note: content type should be sent on headers and not in query params)) use for searching, sorting, response format.
+6. URIs should include api keyword (https://example.com/api/books or https://api.example.com/books), use former one when you website and API are hosted on same server, or else use later one, but use it.
+
+#### 2. Verbs
+1. GET - retrieve a resource
+2. POST - Add a new resource
+3. PUT - Update an existing resource, requires whole resource to be sent in the body
+4. PATCH - same as PUT, i.e, update existing resource by sending part of resource
+5. DELETE - remove existing resource 
+
+###### Method not allowed
+e.g. https://example.com/books - (all above verbs can be used except DELETE, it should throw an error, individual resource item should be deleted instead of the colection, for PUT - it is called as batch update, as PUT also generally needs ID)  
+https://example.com/books/123 - (all above verbs can be used except POST, it should throw an error, POST is applied to collection URI, as item 123 is already created, you cannot use POST for this API)
+
+**Idempotecy**
+Apart from POST, all other verbs mentioned above must be idempotent. i.e, every time exact same request is made, you should get exact same response. Like GET, PUT once, updated, even if there are no updated, same response should be sent, instead os sending a response no update found and gicing status code of 400 (Bad request), status code should be 200.  
+In case of POST, it is not idempotent, like once POST is done, response - new resource created with resource details, again if same request is passed, response - resource already exists. so it is not idempotent
+
+#### 3. Association
+e.g. use URL like https://api.example.com/books/123/content.  
+for nested associations use search qyery param
+
+#### 4. Paging
