@@ -56,3 +56,16 @@ e.g. use URL like https://api.example.com/books/123/content.
 for nested associations use search qyery param
 
 #### 4. Paging
+1. Lists should support paging
+2. Query string are generally used for paging - https://api.example.com/books?page=1&page_size=25
+3. response body should include - (total results, link to next and previous pages, and then actual result)
+
+#### 5. Error handling
+Proper error message for public APIs, for secure APIs no description is necessary. Also for most common error like 404, only status code is enough, description not necessary
+
+###### FYI status codes
+1. 100-199 - informational
+2. 200-299 - success
+3. 300-399 - redirection
+4. 400-499 - client errors
+5. 500-599 - server errors
