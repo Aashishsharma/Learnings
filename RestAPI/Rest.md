@@ -63,9 +63,48 @@ for nested associations use search qyery param
 #### 5. Error handling
 Proper error message for public APIs, for secure APIs no description is necessary. Also for most common error like 404, only status code is enough, description not necessary
 
+#### 6. Caching
+Usually, it is done at both server and client side. Rest guidelins suggests to implement caching at client side by sedning cachine details in resposne header
+1. Use Entity Tags (Etags) in response header.  
+It is a vesrion number which identifies version of the resource.  
+While making a get client can use **If-None-Match: "Etag value"** (sent by server in response headers), so if not matched then make a GET request or use cache.  
+For Put and DELETE, use **If-Match: "Etag value"**, so if client has same cached data, then only update, if it has stale data then fail this request (the failure response would be 412 - precondition failed), so that client can get the latest resource, and then do PUT/DELETE
+
+#### 7. Functional APIs
+If need to so operation at server side  
+1. /api/calculateTax
+2. /api/rebootServer  
+Should rarely be used. OPTION/GET verb can be used in this case
+
+------------------------------------------------------------------------------
+## API versioning (support old and new version)
+Versioning Strategy
+1. URI versioning  
+e.g. https://example.com/api/v2/books, right after api keyword or https://api.example.com/v2/books  
+Clients need to change URI
+2. Query String versioning
+e.g. https://example.com/api//books?v=2.0  
+we can set default version value
+3. Versioning with Headers
+e.g. add header in the request - **X-Version: 2.0**  
+e.g. use accept header - **Accept: application/json; version=2.0**
+4. Versioning with content type
+e.g. - **Content-Type: application/vnd.yourapp.camp.v1+json**
+**Accept: application/vnd.yourapp.camp.v1+json**  
+Powerful way as it can version payload as well as API call itself.  
+
+Which versioning strategy to be used?  
+1. Query string/URI versioning - for simple APIs
+2. More publicly used API - versioning with content type
+3. Depends on the requirement 
+
+------------------------------------------------------------------------------
+## Locking down the API
+
+------------------------------------------------------------------------------
 ###### FYI status codes
 1. 100-199 - informational
 2. 200-299 - success
 3. 300-399 - redirection
 4. 400-499 - client errors
-5. 500-599 - server errors
+5. 500-599 - server errors 
