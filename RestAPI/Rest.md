@@ -100,6 +100,18 @@ Which versioning strategy to be used?
 
 ------------------------------------------------------------------------------
 ## API and Security
+1. CORS - only limited to browsers - headers - (Access-Control-Request-Method, Access-Control-Allow-Origin)
+
+#### Authentication types for API
+1. Cookies  
+Easy, less secure, not used in bankng apps
+2. Basic Auth  
+Send user credentials in Query parameters or in headers. Not secured unless SSL is eanbled
+3. Token based auth  
+Client send credentials, then server returns token, every next request sends roken and server validates and the request is performed. Generally expires after 20-25 mins. JWT is most common token based auth
+4. OAuth  
+Use trusted 3rd party to identify, Server never gets credentials  
+**How it works**  
 
 
 ------------------------------------------------------------------------------
