@@ -39,6 +39,12 @@ readline.on(`line`, name => {
 });
 //each Node.js module as a self-contained function like the following one
 // this is hidden and present by default in each module
+// so even if you define a global variable in a module, it is not
+// accessible outside it, because it is still inside the hidden wrapper function
+// then how to set a variable to global object
+// use global.variableName
+// global obj is similar to window obj.in browser
+// this is now available in any node module (don't use global variables)
 
 ```
 #### 1. Require
@@ -77,7 +83,8 @@ If you set a property on exports, like exports.a = 9;, that will set module.expo
 
 If you assign anything to module.exports, exports is not no longer a reference to it, and exports loses all its power.
 
-So module.exports always wins.
+So module.exports always wins.  
+When you are exporting obj, use exports, when exporting a function use module.export
 
 #### 3. Imports
 This is yet experimental (ES6)
@@ -162,31 +169,205 @@ setImmediate callbacks are placed in Check Queue, which are processed after I/O 
 setTimeout(fn, 0) callbacks are placed in Timer Queue and will be called after I/O callbacks as well as Check Queue callbacks. As event loop, process the timer queue first in each iteration, so which one will be executed first depends on which phase event loop is.
 
 ------------------------------------------------------------------------------
+## Working with Event Emitters
+1. It is an in-built module that establishes communication between objects in node
+2. Many node in-built modules inherit from event emitters  
+Concept - Emitter objects emit named events that cause listeners to be called  
+emitter object have two main features 1. emit events and registering listeners
+```javascript
+// 5 steps
+const EventEmitter = require('events'); // 1. import
+const logger extends EventEmitter // 2. extend
+const logger = new logger() // 3. init
+logger.emit('event', data); // 4. emit events
+logger.on('event', listenerFunc(data)); // 5. register listeners
+// event emitters a=can be sync and async
+```
+
+1. same as callbacks, but they trigger multiple listeners at once. this can also be achieved in callback but with more logic in the callback function  
+2. Use EventEmitters for applications to allow multiple external plugins to build functionality on top of the application's core.    
+
 
 ------------------------------------------------------------------------------
-##Child process
+## Working with streams
+It is a collection of data that might not br available all at once and don't have to fit in memory.  
+```javascript
+//e.g. serving file from a server
+const fs = require('fs')
+const http = require('http').createServer();
+server.on('request', (req, res) => {
+  // fs.readFile('./big.file', (err, data) => {
+  //   if (err) throw err;
+  //     res.end(data);
+  // })
+  const src = fs.createReadStream('./big.file');
+  src.pipe(res);
+});
+server.listen(8000);
+```
+Commented code is normal code, i.e, read file and send response, uncommented code is using streams.  
+1. If the file is in GB and node does not have that much memory, commented code will throw memory error
+2. Both fs and res can be converted into streams and thus, no matter how big the file is, data is sent in streams so chunk of data is stored in memory, so it never goes out of memory.
+
+#### Types of Streams
+1. Readable  
+e.g. fs.createReadStream()
+2. Writable  
+e.g. fx.createWriteStream();
+3. Duplex  
+e.g. Socket(), both read and write can be done on these streams
+4. Transform  
+Duplex stream that can be used to transfrom/modify the data  
+  
+Streams can be used with 1. event emmitters, 2. methods like pipe.
+All streams are instances of Event Emmitters, events are used to read/wrire data to a stream.  
+mostly used -> src.pipe(dist), dist is the writable stream, src is a readable stream, or they can be duplex streams  
+If we are using pipe method, ther is no need of event emmitters
+
+Pipe multiple streams -> a.pipe(b).pipe(c).pipe(d), where b and c are duplex streams  
+  
+If using event emmitters, events are as follows  
+1. for readable -> data, end, error, close
+2. for writable -> drain  finish, error, close
+  
+if using pipe functions
+1. for readable -> pipe(), unpipe(), read(), resume()
+2. for writable -> write(), end()
+
+```javascript
+// using stream (built-in node module) to create streams
+// create writable stream
+const {Writable} = require('stream');
+// create writable obj, usin new
+const outStream = new Writable({
+  // default method available
+  write(chunk, encoding, callback) {
+    console.log(chunk.toString());
+    callback();
+  }
+});
+process.stdin.pipe(outStream);
+
+// create readable stream
+const {Readable} = require('stream');
+const readStream = new Readable({
+  // default method available
+  read(size) {
+    this.push(String.fromCharCode(this.currentCHarCode++));
+    if(this.currentCHarCode > 90)
+      this.push(null) //indicate the end of stream
+    }
+});
+readStream.currentCHarCode = 65;
+readStream.pipe(process.stdout);
+
+//create Duplex stream
+// it need to implemet both read and write functions
+const {Duplex} = require('stream');
+// create writable obj, usin new
+const inoutStream = new Duplex({
+  // default method available
+  write(chunk, encoding, callback) {
+    console.log(chunk.toString());
+    callback();
+  }
+  read(size) {
+    this.push(String.fromCharCode(this.currentCHarCode++));
+    if(this.currentCHarCode > 90)
+      this.push(null) //indicate the end of stream
+    }
+});
+inoutStream.currentCHarCode = 65;
+process.stdin.pipe(inoutStream).pipe(process.stdout);
+
+
+//create transform stream
+// just transform method needs to be implemented
+const {Transform} = require('stream');
+// create writable obj, usin new
+const transStream = new Transform({
+  // default method available
+  transform(chunk, encoding, callback) {
+    this.push(chunk.toString().toUpperCase())
+    callback();
+  }
+});
+process.stdin.pipe(transStream).pipe(process.stdout);
+``` 
+
+------------------------------------------------------------------------------
+## Scaling node.js apps
+### Child process
 to scale node app, using multiple processes is the only option
 use the cores that are provided by operating system
 os modules - os.cpu().lrnght gives is no. of cores in the operating system
 
-child process module - inbuild module in node - this module enables us to use os functionality by running system command inside child process
+child process module - inbuild module in node - this module enables us to use os functionality by running system command inside child process  
+4 ways to create a child process
 1. spwan() - creates new process - can run shell commands
 2. exec() - same as spawn but opens new shell and o/p is stored in buffer
 3. execfile() - same as exec but runs a shell file instead of opening shell and executing command
-4. fork() - similar to spawn, it creates new process, and establishes the communication (using event emitters) between parent and child node process
-on parent - const forked - childprocess.fork('name')
-to send msg to child - forked.send(msg)
-to recieve msg from child - forked.on('message', function(msg) {})
+4. fork() - similar to spawn, it creates new process, and establishes the communication (using event emitters) between 
+```javascript
+// e.g. using spaen
+const {spawn} = require('child_process');
+// in spawn we pass shell.cmd commands
+const child = spawn('dir');
+// optional array of arguments is passed as
+// second parameter if the command has arguments
+// here child is an instance of event emmitters
+// so we can emit events on child obj above
+child.on('exit', (code, signal) => {
+  console.log('CHild process exited with code', code)
+});
+child.stdout.on('data', (data) => {
+  console.log(data);
+})
+// other events available - disconnect, error, message, close
+// stdio objects avaialble - child.stdin, child.stdout
+// close event occurs when the stdio on child is closed
+// exit when the child process done the execution
 
-on child - 
-process.send(msg
-process.on('message', function(msg) {})
+//e.g. 2 using exec
+// frst arg in exec is the exact command we pass in shell
+const {exec} = require('child_process');
+exec('npm --version', (err, stdout, stderr) => {
+  if(err)return error;
+  console.log('output ', stdout);
+  // output is stored in stdout variable
+});
+
+//use spawn when o/p of command is big, as we can use streams
+//use ecec if o/p is small, as data is stored in buffer
+
+//e.g. 3 fork
+// parent.js
+const {fork} = require('child_process');
+const forked = fork('child.js');
+forked.on('message', (msg) => {
+  console.log('Message from child', msg);
+});
+forked.send({hello: 'world'});
+
+// child.js
+process.on('message', (msg) => {
+  console.log('Message from parent', msg)l
+})
+let counter = 0;
+setInterval(() => {
+  process.send({counter: counter++});
+},1000);
+// on child - 
+// process.send(msg)
+// process.on('message', function(msg) {})
+```
 e.g. let's say we have an endpoint and that endpoint does a complex computation whivh takes lot of time, in this case if another endpoint req, is made beofre the task is complete, it will go in queue, instead use fork, spawn new process and let that process execute long task, and in main will not be blocked and next request can be consumed
 Note - you can only fork the no. of processes as much as cpu cores are present in the operating system
 
 ##cluster module - buil-in module - enable load balancing where os has more than cpu cores
 #### using cluster module to load balance server
 **standard code everytime**
+CLuster module behind the scenes uses child_process module's fork api
 ```javascript
 const cluster = require('cluster');
 const os = require('os');
@@ -202,7 +383,6 @@ const os = require('os');
     // no. of request this server can handle per second increases based on no. of cores
   }
 }
-
 // to handle restart and process crash
 if(cluster.isMaster) {
     // master cluster - when frst time this file is run it is master
@@ -211,7 +391,6 @@ if(cluster.isMaster) {
     cluster.fork();
   } 
   cluster.on('exit') // create another fork
-
   else {
 ```
 **problem with cluster**
