@@ -187,7 +187,6 @@ logger.on('event', listenerFunc(data)); // 5. register listeners
 1. same as callbacks, but they trigger multiple listeners at once. this can also be achieved in callback but with more logic in the callback function  
 2. Use EventEmitters for applications to allow multiple external plugins to build functionality on top of the application's core.    
 
-
 ------------------------------------------------------------------------------
 ## Working with streams
 It is a collection of data that might not br available all at once and don't have to fit in memory.  
@@ -313,6 +312,8 @@ child process module - inbuild module in node - this module enables us to use os
 const {spawn} = require('child_process');
 // in spawn we pass shell.cmd commands
 const child = spawn('dir');
+// for windows use
+const child = spawn('dir', {shell: true})
 // optional array of arguments is passed as
 // second parameter if the command has arguments
 // here child is an instance of event emmitters

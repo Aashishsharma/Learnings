@@ -239,7 +239,7 @@ alert(result); // 15
 // if inital value is omitted, then 1st item in array becomes initial, in above e.g. o/p would be same
 //The method arr.reduceRight does the same, but goes from right to left.
 ```
-
+filter, map, reduce and othere methods are also called as higher order array methods
 #### 5.Array.isArray
 Arrays are objects in JS
 so
