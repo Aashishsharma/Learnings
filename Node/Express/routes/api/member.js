@@ -27,6 +27,7 @@ router.get('/:id', (req, res) => {
     }
 });
 
+// add new member
 router.post('/', (req, res) => {
     const newMember = {
         id: req.body.id,
@@ -41,6 +42,34 @@ router.post('/', (req, res) => {
     }
     members.push(newMember);
     res.json({msg: `New member ${newMember} added`});
+});
+
+// update existing member
+router.put('/:id', (req, res) => {
+    const found = members.some(currentItem => currentItem.id === parseInt(req.params.id));
+    const updMamber = req.body;
+
+    if(found) {
+        const singleMember = members.find(currentItem => currentItem.id === parseInt(req.params.id));
+        singleMember.id = updMember.id ? updMamber.id : singleMember.id;
+        singleMember.name = updMember.name ? updMamber.name : singleMember.name;
+
+        res.json({ msg: 'Member updated', singleMember});
+    } else {
+        res.status(400).json({ msg: `Member ${req.params.id} not found`});
+    }
+});
+
+// delete existing member
+router.delete('/:id', (req, res) => {
+    const found = members.some(currentItem => currentItem.id === parseInt(req.params.id));
+
+    if(found) {
+        const remainingMembers = members.filter(currentItem => currentItem.id !== parseInt(req.params.id));
+        res.json({msg: 'member deleted', members: singleMember});
+    } else {
+        res.status(400).json({ msg: `Member ${req.params.id} not found`});
+    }
 });
 
 module.exports = router;
