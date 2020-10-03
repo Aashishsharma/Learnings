@@ -67,9 +67,9 @@ app.use(compression())
 2. Using Node’s cluster module
 3. Set NODE_ENV to “production”
 Setting NODE_ENV to “production” makes Express:
-1. Cache view templates.
-2. Cache CSS files generated from CSS extensions.
-3. Generate less verbose error messages.  
+a. Cache view templates.  
+b. Cache CSS files generated from CSS extensions.  
+c. Generate less verbose error messages.  
 Add this in env variable  
 or  
 Make a .env file in your app root, then require('dotenv').config() and read the values  
