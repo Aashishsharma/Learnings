@@ -2,6 +2,7 @@
 const express = require('express');
 const app = new express();
 const path = require('path');
+const exphbs = require('express-handlebars');
 const logger = require('./middleware/logger');
 
 //use body parser to ready request body, otherwise it will not work
@@ -25,6 +26,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 // this is the initialization of the middleware
 app.use(logger);
 
+// use handlebars middleware
+// use this as a view if not using react
+// when templating engines are used like handlebars/pug
+// then we are creating a complete server side web app, no need of json apis in this case
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
+app.get('/handlebars', (req, res) => {
+    res.render('index', {
+        title: 'Members App',
+        arrayExample: [
+            {
+                id: 123,
+                name: 'Ahish'
+            },
+            {
+                id: 456,
+                name: 'Temp'
+            }
+        ]
+    });
+})
 // using router
 app.use('/api/members', require('./routes/api/member'));
 
