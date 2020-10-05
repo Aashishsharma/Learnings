@@ -398,3 +398,5 @@ if(cluster.isMaster) {
 1. caching becomes difficult as each worker process has different memory
 2. managing user authentication sessions - // use sticky load balancers to solve this
 what it does if a uer is authenicated in a wroker process and that workers memory has session, then sticky load balancer will send the request to same worker is request comes from the same user
+
+**module.exports vs export**
