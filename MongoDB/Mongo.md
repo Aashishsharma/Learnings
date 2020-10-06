@@ -182,7 +182,117 @@ db.posts.find({views: {$gt: 50}})
 // similarly we have $lt and $lte 
 ```
 
-#### Indexing in MongoDB
-1. What is an index
-
 #### Data Modelling
+
+#### Indexing in MongoDB
+Indexes support the efficient execution of queries in MongoDB. Without indexes, MongoDB must perform a collection scan, i.e. scan every document in a collection, to select those documents that match the query statement. If an appropriate index exists for a query, MongoDB can use the index to limit the number of documents it must inspect. MongoDB automatically creates a unique index on the **_id** field.  
+Index defination  
+Indexes are special data structures that store a small portion of the collection’s data set in an easy to traverse form.  
+
+**How performance improves after indexing?**  
+**Due to binary search instead of liner search** - Creating an index on a field in a table creates another data structure which holds the field value, and a pointer to the record it relates to. This index structure is then sorted, allowing Binary Searches to be performed on it.  
+
+Drawbacks -  
+1. Each index requires at least 8 kB of data space (in MongoDB).
+2. Adding an index has some negative performance impact for write operations. For collections with high write-to-read ratio, indexes are expensive since each insert must also update any indexes.
+```javascript
+// creating an index
+collection.createIndex( { <key and index type specification> }, function(err, result) {
+   console.log(result);
+   callback(result);
+}
+
+//The following example creates a single key descending index on the name field:
+collection.createIndex( { name : -1 }, function(err, result) {
+   console.log(result);
+   callback(result);
+}
+```
+The default name for an index is the concatenation of the indexed keys and each key’s direction in the index  
+E.g. an index created on { item : 1, quantity: -1 } has the name item_1_quantity_-1
+```javascript
+//named index
+db.products.createIndex(
+  { item: 1, quantity: -1 } ,
+  { name: "query for inventory" }
+)
+
+// drop an index
+db.collection.dropIndex(indexName)
+```
+
+###### Index types
+1. Single Field
+index on single field  
+2. Compound Index
+on multiple fields  
+The order of fields listed in a compound index has significance. For instance, if a compound index consists of { userid: 1, score: -1 }, the index sorts first by userid and then, within each userid value, sorts by score.  
+db.products.createIndex({"item": 1, "stock": 1})  
+3. Multikey Index
+If you index a field that holds an array value, MongoDB creates separate index entries for every element of the array.  
+same syntax, as asingle filed, just the field should be of type array.
+4. Text indexes
+MongoDB provides a text index type that supports searching for string content in a collection  
+db.reviews.createIndex( { comments: "text" } )  
+```javascript
+db.reviews.createIndex( { comments: "text" } ) 
+// create a text index on the fields subject and comments:
+db.reviews.createIndex(
+   {
+     subject: "text",
+     comments: "text"
+   }
+ )
+```
+Text vs single filed index  
+Text indexes allow you to search for words inside texts  
+single field create index for entire collection for that field
+5. Hashed index
+To support hash based sharding, MongoDB provides a hashed index type, which indexes the hash of the value of a field.  
+```javascript
+db.collection.createIndex( { _id: "hashed" } )
+
+db.collection.createIndex( { "fieldA" : 1, "fieldB" : "hashed", "fieldC" : -1 } )
+```
+
+###### Index properties
+1. Unique Indexes - A unique index ensures that the indexed fields do not store duplicate values
+```javascript
+db.collection.createIndex( <key and index type specification>, { unique: true } )
+```
+MongoDB cannot create a unique index on the specified index field(s) if the collection already contains data that would violate the unique constraint for the index.  
+
+2. Partial Indexes -  
+Partial indexes only index the documents in a collection that meet a specified filter expression. By indexing a subset of the documents in a collection, partial indexes have lower storage requirements and reduced performance costs for index creation and maintenance.
+```javascript
+db.restaurants.createIndex(
+   { cuisine: 1, name: 1 },
+   { partialFilterExpression: { rating: { $gt: 5 } } }
+)
+```
+You can specify a partialFilterExpression option for all MongoDB index types.  
+3. Sparse Indexes
+Sparse indexes only contain entries for documents that have the indexed field, even if the index field contains a null value  
+The index skips over any document that is missing the indexed field. The index is “sparse” because it does not include all documents of a collection.   
+db.addresses.createIndex( { "xmpp_id": 1 }, { sparse: true } )  
+
+###### Indexing strategy
+The best indexes for your application must take a number of factors into account  
+1. including the kinds of queries you expect  
+2. the ratio of reads to writes  
+3. the amount of free memory on your system.
+
+**Create Indexes to Support Your Queries**  
+Create a Single-Key Index if All Queries Use the Same, Single Key  
+Create Compound Indexes to Support Several Different Queries  
+
+**Ensure Indexes Fit in RAM**  
+For the fastest processing, ensure that your indexes fit entirely in RAM so that the system can avoid reading the index from disk.  
+To check the size of your indexes, use the db.collection.totalIndexSize() helper, which returns data in bytes  
+
+**Create Queries that Ensure Selectivity**  
+EXAMPLE
+Suppose you have a field called status where the possible values are new and processed. If you add an index on status you’ve created a low-selectivity index. The index will be of little help in locating records.
+A better strategy, depending on your queries, would be to create a compound index that includes the low-selectivity field and another field. For example, you could create a compound index on status and created_at.
+
+#### Sharding

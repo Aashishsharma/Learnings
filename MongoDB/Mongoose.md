@@ -229,4 +229,4 @@ schema.post('remove', function(doc) {
 ```
 When to use?  
 1. complex validation
-2. removing dependent documents (removing a user removes all his blogposts)
+2. removing dependent documents (removing a user removes all his blogposts), using this foreign key constraint can be applied, same as RDBMS,but again the difference is it would be at application level and RDBMS have this constraints at DB level (implicit)
