@@ -219,8 +219,13 @@ b. Bucket pattern
 ![alt text](bucketpattern.PNG "Title")
 E.g. thermostat - imagine you want to store the temperature of all the rooms in the buliding per hour  
 In this case data would be huge and the documents in the collections would be many if we create a new row for each reading  
-what can be done is each document can contain an array of readings (see image), and when array size is 200, create a new document.  
+what can be done is each THERMOSTAT document can contain an array of readings (see image), and when array size is 200, create a new document.  
 What has happened in this case is a single document's size has increased a lot, but no. of documents per collection has reduced. Thus index size is reduces, as no. of documents is reduced and read query becomes more efficient.  
+c. The computed pattern  
+Avoid computing while doing aggregates  
+Let say we want to calculate avg. rating of a product, in normal scenario we will have product name, rating object with rated date, rating comment, and rating. To calculate avg. rating, we will have to scan all documents, and find total and do the math. Insetead we can have 2 new fields, total and sum of ratings, and every time new row is added, this fields are incremented.  
+There are many other patterns  
+You can use multiple patterns for a single data model  
 
 #### Indexing in MongoDB
 Indexes support the efficient execution of queries in MongoDB. Without indexes, MongoDB must perform a collection scan, i.e. scan every document in a collection, to select those documents that match the query statement. If an appropriate index exists for a query, MongoDB can use the index to limit the number of documents it must inspect. MongoDB automatically creates a unique index on the **_id** field.  
