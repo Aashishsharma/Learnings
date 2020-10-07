@@ -183,6 +183,41 @@ db.posts.find({views: {$gt: 50}})
 ```
 
 #### Data Modelling
+When designing data models, always consider the application usage of the data (i.e. queries, updates, and processing of the data) as well as the inherent structure of the data itself.  
+**RDBMS VS NoSQL**  
+in RDBMS, first data model is created, then app is developed and then improvement in app and data design.  
+In NoSQL, first app id developed, then model is created (at application level), and then imporvement in model and app.  
+
+###### Data modelling steps
+![alt text](Datamodelling1.PNG "Title")
+1. Evaluate application workload  
+See what current and predicted scenarios are and identify the data size and list of operations (read, write) ranked by importance  
+2. Map out entities and their relationship (Collection relationship diagram)  
+figure out relationsships  
+![alt text](Datamodelling2.PNG "Title")  
+Embedding vs linking  
+a. Embedding (Denormalize data)  
+Embedded documents capture relationships between data by storing related data in a single document structure. MongoDB documents make it possible to embed document structures in a field or array within a document.  
+Use -  
+embedding provides better performance for read operations, as well as the ability to request and retrieve related data in a single database operation.  
+
+b. linking (Normalized data)  
+store the relationships between data by including links or references from one document to another. Applications can resolve these references to access the related data.  
+Use -  
+when embedding would result in duplication of data but would not provide sufficient read performance advantages to outweigh the implications of the duplication.  
+to represent more complex many-to-many relationships.  
+
+**Also it vastly depends on what queries you would be firing more**
+![alt text](Datamodelling3.PNG "Title")  
+If all articles query is fired for majority of time then use embed method  
+If articles and users query is fired equally, link users to article instead of embedding  
+
+3. Finalize data model for each collection - Apply relevant design patterns
+a. Schema versioning pattern  
+A schema is created, app is developed, later based on requirement, new schema os created (new version), older one is still there and applcation can quaery both schemas, by passing schema version. Eventually old schema version is removed  
+b. Bucket pattern  
+![alt text](bucketpattern.PNG "Title")
+
 
 #### Indexing in MongoDB
 Indexes support the efficient execution of queries in MongoDB. Without indexes, MongoDB must perform a collection scan, i.e. scan every document in a collection, to select those documents that match the query statement. If an appropriate index exists for a query, MongoDB can use the index to limit the number of documents it must inspect. MongoDB automatically creates a unique index on the **_id** field.  
@@ -295,4 +330,4 @@ EXAMPLE
 Suppose you have a field called status where the possible values are new and processed. If you add an index on status you’ve created a low-selectivity index. The index will be of little help in locating records.
 A better strategy, depending on your queries, would be to create a compound index that includes the low-selectivity field and another field. For example, you could create a compound index on status and created_at.
 
-#### Sharding
+### Sharding
