@@ -212,12 +212,15 @@ to represent more complex many-to-many relationships.
 If all articles query is fired for majority of time then use embed method  
 If articles and users query is fired equally, link users to article instead of embedding  
 
-3. Finalize data model for each collection - Apply relevant design patterns
+3. Finalize data model for each collection - Apply relevant design patterns  
 a. Schema versioning pattern  
 A schema is created, app is developed, later based on requirement, new schema os created (new version), older one is still there and applcation can quaery both schemas, by passing schema version. Eventually old schema version is removed  
 b. Bucket pattern  
 ![alt text](bucketpattern.PNG "Title")
-
+E.g. thermostat - imagine you want to store the temperature of all the rooms in the buliding per hour  
+In this case data would be huge and the documents in the collections would be many if we create a new row for each reading  
+what can be done is each document can contain an array of readings (see image), and when array size is 200, create a new document.  
+What has happened in this case is a single document's size has increased a lot, but no. of documents per collection has reduced. Thus index size is reduces, as no. of documents is reduced and read query becomes more efficient.  
 
 #### Indexing in MongoDB
 Indexes support the efficient execution of queries in MongoDB. Without indexes, MongoDB must perform a collection scan, i.e. scan every document in a collection, to select those documents that match the query statement. If an appropriate index exists for a query, MongoDB can use the index to limit the number of documents it must inspect. MongoDB automatically creates a unique index on the **_id** field.  
