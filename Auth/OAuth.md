@@ -18,7 +18,7 @@ Get user name and password from web form, and valiadte it against DB. Not recomm
 9. Back (secured server to server communication) channel and front (less secure e.g. browser to server communication) channel
 
 #### Flow
-![alt text](oauthflow.PNG "Title")  
+![alt text](PNG/oauthflow.PNG "Title")  
 In back channel, the authorization grant is passed to auth serveer along with a secret to get access key. So we get auth grant and then we make a request to access key for secruity since auth grant code is visible in the browser  
 So how do we get a secret?  
 There are other flows as well (The above flow is OAuth code flow)  

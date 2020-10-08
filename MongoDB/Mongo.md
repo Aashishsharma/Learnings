@@ -189,12 +189,12 @@ in RDBMS, first data model is created, then app is developed and then improvemen
 In NoSQL, first app id developed, then model is created (at application level), and then imporvement in model and app.  
 
 ###### Data modelling steps
-![alt text](Datamodelling1.PNG "Title")
+![alt text](PNG/Datamodelling1.PNG "Title")
 1. Evaluate application workload  
 See what current and predicted scenarios are and identify the data size and list of operations (read, write) ranked by importance  
 2. Map out entities and their relationship (Collection relationship diagram)  
 figure out relationsships  
-![alt text](Datamodelling2.PNG "Title")  
+![alt text](PNG/Datamodelling2.PNG "Title")  
 Embedding vs linking  
 a. Embedding (Denormalize data)  
 Embedded documents capture relationships between data by storing related data in a single document structure. MongoDB documents make it possible to embed document structures in a field or array within a document.  
@@ -208,7 +208,7 @@ when embedding would result in duplication of data but would not provide suffici
 to represent more complex many-to-many relationships.  
 
 **Also it vastly depends on what queries you would be firing more**
-![alt text](Datamodelling3.PNG "Title")  
+![alt text](PNG/Datamodelling3.PNG "Title")  
 If all articles query is fired for majority of time then use embed method  
 If articles and users query is fired equally, link users to article instead of embedding  
 
@@ -217,7 +217,7 @@ a. Schema versioning pattern
 A schema is created, app is developed, later based on requirement, new schema is created (new version), older one is still there and applcation can quaery both schemas, by passing schema version. Eventually old schema version is removed  
 Here schema version is stored in each document like v1,v2  
 b. Bucket pattern  
-![alt text](bucketpattern.PNG "Title")
+![alt text](PNG/bucketpattern.PNG "Title")
 E.g. thermostat - imagine you want to store the temperature of all the rooms in the buliding per hour  
 In this case data would be huge and the documents in the collections would be many if we create a new row for each reading  
 what can be done is each THERMOSTAT document can contain an array of readings (see image), and when array size is 200, create a new document.  

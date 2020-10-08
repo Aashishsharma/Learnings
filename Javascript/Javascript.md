@@ -342,7 +342,7 @@ let family = marry({
 });
 // resulting memory structure
 ```
-![alt text](memorystructure.PNG "Title")
+![alt text](PNG/memorystructure.PNG "Title")
 ```javascript
 delete family.father;
 delete family.mother.husband;
