@@ -212,9 +212,10 @@ to represent more complex many-to-many relationships.
 If all articles query is fired for majority of time then use embed method  
 If articles and users query is fired equally, link users to article instead of embedding  
 
-3. Finalize data model for each collection - Apply relevant design patterns  
+3. Finalize data model for each collection - Apply relevant **schema design patterns**  
 a. Schema versioning pattern  
-A schema is created, app is developed, later based on requirement, new schema os created (new version), older one is still there and applcation can quaery both schemas, by passing schema version. Eventually old schema version is removed  
+A schema is created, app is developed, later based on requirement, new schema is created (new version), older one is still there and applcation can quaery both schemas, by passing schema version. Eventually old schema version is removed  
+Here schema version is stored in each document like v1,v2  
 b. Bucket pattern  
 ![alt text](bucketpattern.PNG "Title")
 E.g. thermostat - imagine you want to store the temperature of all the rooms in the buliding per hour  
@@ -338,4 +339,38 @@ EXAMPLE
 Suppose you have a field called status where the possible values are new and processed. If you add an index on status you’ve created a low-selectivity index. The index will be of little help in locating records.
 A better strategy, depending on your queries, would be to create a compound index that includes the low-selectivity field and another field. For example, you could create a compound index on status and created_at.
 
-### Sharding
+### Sharding (Horizontal partioning)
+Sharding is a process of distributing data across multiple servers for storage. In replica, same data is stored.  
+Use when
+1. Data storage exceeds the storage of single mongo instance
+2. when active working set exceeds maximum available RAM
+3. when read/write operations are going to be increased in future  
+
+**Horizontal vs vertival partioning**  
+in vertical, data is partioned in columns, in horizontal, data is partioned in rows based on the shard key  
+
+**What is a shard**  
+MongoD instace which holds part of the entire application data.  
+When connected to a shard, you can see only fraction of a data.  
+Data is not organized in any particluar order in a shard.  
+There is no gurantee that 2 contigious data chunk will reside on a particular shard  
+
+**What is a shard key?**  
+When deploying sharding, you need to choose a key from a collection and split data using that key's value  
+This filed should exists on every document in the collection  
+
+**Choosing shard key**
+1. Must contain high range of values. SHould not have only 1 or 2 unique values
+2. High degree of randomness
+
+**Techniques**  
+1. Range based sharding  
+Each shard gets data based on the range of shard key. For e.g., there are 10 shards and shard key is userID, shard 0 gets data for users 0 to 10 and so on. Thus user's with close userIDs are available in same shard.  
+Distribution can be uneven in case you want to log time which continually increase and at some point, only the last shard will need to get all data, thus optimimum sharding won't be possible in this case.  
+2. Hash based sharding  
+MongoDB first calculates the hash of the (sharded) field's value, and then creates chunk based on those hashes. In this case user's with close userID's may not resign in the same shard.  
+Data is evenly distributed.  
+Range queries on shard keys are inefficient  
+
+**Problems**  
+1. Joins are expensive
