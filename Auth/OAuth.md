@@ -28,11 +28,11 @@ In case of OpenID connect, only technical difference is
 1. In scope we pass openid along with the profile
 2. Auth server provides Token ID along with the access token to identify the who the user is  
 
-**when you clik on signup**
-![alt text](signup.PNG "Title")  
-![alt text](callback.PNG "Title")  
-![alt text](gettoken.PNG "Title")  
-![alt text](response.PNG "Title")   
+**when you clik on signup**  
+![alt text](PNG/signup.PNG "Title")  
+![alt text](PNG/callback.PNG "Title")  
+![alt text](PNG/gettoken.PNG "Title")  
+![alt text](PNG/response.PNG "Title")   
 
 #### Problem with OAuth
 It was build for delegated authorization and not for authentication.  
