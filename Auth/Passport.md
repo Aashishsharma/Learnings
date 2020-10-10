@@ -68,6 +68,8 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
+// seraillze user is called whenever we get response fomr auth servers (google/fb)
+// desearilize is called when we try to access user data availavle in re.user after login
 // so to ge user data
 app.get('/profile',
   require('connect-ensure-login').ensureLoggedIn(),
@@ -88,16 +90,17 @@ app.get('endpoint of your application',
   });
 ```
 
-#### 5. Working example
+#### 5. Working example for google and fb
 ```javascript
 var express = require('express');
 var passport = require('passport');
 var Strategy = require('passport-facebook').Strategy;
+// for google var Strategy = require('passport-google-oauth20').Strategy;
 passport.use(new Strategy({
-    clientID: '340945577355128',
-    clientSecret: '2c5fdbaecb4540e6f533fbc324923977',
+    clientID: '340945577355128', // for google '1016009036096-g38b9jfrnop0mq90j0t3c9iqqj50qjl9.apps.googleusercontent.com',
+    clientSecret: '2c5fdbaecb4540e6f533fbc324923977', // for google - 'Ix3TWvnRrSVLmy1P-DTB5in5'
     callbackURL: '/return',
-  //  profileFields: ['id', 'displayName', 'photos', 'email']
+  // for FB profileFields: ['id', 'displayName', 'photos', 'email']
   },
   function(accessToken, refreshToken, profile, cb) {
     console.log('Profile ', profile)
@@ -128,13 +131,16 @@ app.get('/login',
   function(req, res){
     res.render('login');
   });
-app.get('/login/facebook',
-  passport.authenticate('facebook'));
+// api ednpoint can be anything
+app.get('/login/facebook', passport.authenticate('facebook'));
+// for google - app.get('/login/google', passport.authenticate('google', { scope: ['profile'] }));
 app.get('/return', 
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
     res.redirect('/profile');
   });
+// for google in above endpoint - facebook would be replaced by google
+// and we are done
 app.get('/profile',
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
