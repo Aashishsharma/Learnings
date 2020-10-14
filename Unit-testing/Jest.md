@@ -321,3 +321,75 @@ describe('insert', () => {
   });
 });
 ```
+
+## Snapshot testing
+A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
+npm i --save-dev react-test-renderer
+```javascript
+// e.g. 
+import React from 'react';
+import renderer from 'react-test-renderer';
+import Link from '../Link.react';
+it('renders correctly', () => {
+  const tree = renderer
+    .create(<Link page="http://www.facebook.com">Facebook</Link>)
+    .toJSON();
+  expect(tree).toMatchSnapshot();
+});
+/// The first time this test is run, 
+// Jest creates a snapshot file that looks like this:
+exports[`renders correctly 1`] = `
+<a
+  className="normal"
+  href="http://www.facebook.com"
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
+>
+  Facebook
+</a>`;
+```
+The snapshot artifact should be committed alongside code changes, and reviewed as part of your code review process  
+To update snapshots - jest --updateSnapshot or jest -u  
+Failed snapshots can also be updated interactively in watch mode (--watch):  
+From here you can choose to update that snapshot or skip to the next:  
+
+**property matchers**  
+Often there are fields in the object you want to snapshot which are generated (like IDs and Dates). If you try to snapshot these objects, they will force the snapshot to fail on every run:
+```javascript
+it('will fail every time', () => {
+  const user = {
+    createdAt: new Date(),
+    id: Math.floor(Math.random() * 20),
+    name: 'LeBron James',
+  };
+  expect(user).toMatchSnapshot();
+})
+//solution - use matchers
+//matchers are checked before the snapshot is written or tested,
+//and then saved to the snapshot file instead of the received value:
+it('will check the matchers and pass', () => {
+  const user = {
+    createdAt: new Date(),
+    id: Math.floor(Math.random() * 20),
+    name: 'LeBron James',
+  };
+  expect(user).toMatchSnapshot({
+    createdAt: expect.any(Date),
+    id: expect.any(Number),
+  });
+});
+//Any given value that is not a matcher will be
+//checked exactly and saved to the snapshot:
+```
+
+#### When to use snapshot testing
+1. Snapshot tests are a complement for conventional tests not a replacement  
+In normal unit test, app's functionality is verified, in snapshots only UI is verified. So use both unit testing and snapshot testing. (consider snapshot as UI testing)  
+
+#### Snapshot vs visual regression testing
+Visual regression testing tools take screenshots of web pages and compare the resulting images pixel by pixel.  
+With Snapshot testing values are serialized, stored within text files, and compared using a diff algorithm.  
+**Jest adv. over regression**
+1. No flakiness and fast  
+Because tests are run in a command line runner instead of a real browser, the test runner doesn't have to wait for builds, spawn browsers, load a page and drive the UI to get a component. Also diff. browsers will render UI in different way, then we have to use docker. (in case od BakstopJS)
+
