@@ -184,7 +184,7 @@ div.sticky {
 ```
 All postion type should have top, right, bottom, left parameters, or at lest one of them  
 
-#### Specificty rules
+#### Specificty
 1. Specificity is the means by which browsers decide which CSS property values are the most relevant to an element and, therefore, will be applied.  
 2. It helps us understand why some styles are not being applied to an element when we think they should  
 3. It's so easy to just slap an !important value on your CSS styles, but this causes your CSS to quickly spiral out of control  
@@ -212,6 +212,38 @@ CSS 3 introduces Media Queries
 
 Media queries in CSS3 extended the CSS2 media types idea: Instead of looking for a type of device, they look at the capability of the device such as width  and height, orientation and resolution  
 
+```css
+//syntax
+@media not|only mediatype and (expressions) {
+  CSS-Code;
+}
+
+mediatype can be screen, print (while printing this style would be applied), speech, all (default)
+
+e.g. 1 - it will execute when screen size is less than 500px
+@media screen and (max-width: 500px) {
+	body {
+		color: red;
+	}
+} 
+screen & and words can be omitted fomr above as all is default
+
+e.g. 2
+@media (orientation: landscape) {
+	body {
+		color: blue;
+	}
+}
+use landscape/portrait
+
+e.g. combinations
+@media (orientation: portrait) and (max-width: 500px) {
+	body {
+		color: red
+	}
+}
+// to use or -  replace and with ,
+```
 
  
 
