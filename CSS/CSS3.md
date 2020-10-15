@@ -243,6 +243,13 @@ e.g. combinations
 	}
 }
 // to use or -  replace and with ,
+
+// tu use between
+@media screen and (max-width: 500px) and (min-width: 400px){
+	body {
+		color: red;
+	}
+} 
 ```
 
  
