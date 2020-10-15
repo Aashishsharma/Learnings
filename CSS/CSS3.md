@@ -1,7 +1,8 @@
 ## CSS
-**Diff between CSS2 and CSS3**  
+**Diff between CSS2 and CSS3**
+1. CSS3 introduces media queries 
 
-## CSS3
+## CSS2 and CSS3
 Importing css in a css, possible only in css3  
 @import "heading.css"  
 1. To style 2 tags at one time
@@ -75,8 +76,82 @@ p[sitelink] {
 	color: white;
 }
 ```
+12. combinators
+```css
+1. Descendant combinator
+// The following example selects all <p> elements inside <div> elements:  
+ div p {
+  background-color: yellow;
+}
 
-#### pseudo elements
+2. Child combinator
+// The following example selects all <p> elements that are children of a <div> element:
+div > p {
+  background-color: yellow;
+}
+// here diff. between descendent selector is that it will not style a p tag if it is not a DIRECT child
+
+3. Adjacent sibling combinator
+// The following example selects all <p> elements that are placed immediately after <div> elements:
+div + p {
+  background-color: yellow;
+}
+
+4. General sibling combinator
+// The following example selects all <p> elements that are siblings of <div> elements: 
+// they have same parent
+div ~ p {
+  background-color: yellow;
+}
+```
+
+#### pseudo classes and elements
+1. Pseudo element  
+A CSS pseudo-element is used to style specified parts of an element.  
+```css
+// syntax
+selector::pseudo-element {
+  property: value;
+}
+
+// The following example formats the first line of the text in all <p> elements:
+p::first-line {
+  color: #ff0000;
+  font-variant: small-caps;
+}
+//similarly we have
+div/p::first-letter
+::before - used to insert some content before the content of an element
+h1::before {
+  content: url(smiley.gif);
+}
+
+::after - used to insert some content after the content of an element
+
+//multiple combinations
+p.intro::first-letter
+```
+2. Pseudo classes
+A pseudo-class is used to define a special state of an element.
+```css
+//syntax
+selector:pseudo-class {
+  property: value;
+}
+
+a:link {
+	color: red
+}
+
+//similarly
+visited
+hover
+active
+// above are for a, div tags
+
+// for input tags we have
+checked, enabled, focus, invalid
+```
 
 
 **Block vs Inline elements**
@@ -114,7 +189,9 @@ All postion type should have top, right, bottom, left parameters, or at lest one
 2. It helps us understand why some styles are not being applied to an element when we think they should  
 3. It's so easy to just slap an !important value on your CSS styles, but this causes your CSS to quickly spiral out of control  
 4. When two or more styles target a particular element, the style with the highest specificity is the one that gets applied.  
-5. 
+
+**Calculate specificity**  
+![alt text](PNG/specificity.PNG "Title") 
 
 #### CSS naming conventions
 **Use BEM (Block-Element-Modifier) standard**  
@@ -130,4 +207,13 @@ e.g. - disabled, highlighted, checked, fixed, size big, color yellow
 notice when to use - and _ and how many times
 
 #### Media queries
+The @media rule, introduced in CSS2, made it possible to define different style rules for different media types (like for computer screen, tv, mobile).  
+CSS 3 introduces Media Queries  
+
+Media queries in CSS3 extended the CSS2 media types idea: Instead of looking for a type of device, they look at the capability of the device such as width  and height, orientation and resolution  
+
+
+ 
+
+
 #### CSS animations
