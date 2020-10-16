@@ -252,7 +252,58 @@ e.g. combinations
 } 
 ```
 
- 
-
-
 #### CSS animations
+The animation is created by gradually changing from one set of CSS styles to another.  
+
+Specify when the style change will happen in percent, or with the keywords "from" and "to", which is the same as 0% and 100%. 0% is the beginning of the animation, 100% is when the animation is complete
+
+1. Keyframes  
+Keyframes are used to achieve animation  
+```css
+//syntax + e.g.
+// need to add animation-name in the element which you want to animate
+.class-name {
+	animation-name: name;
+	animation-duration : 4s;
+	animation-iteration-count: 2/infinite;
+	animation-delay: 2s;
+	animation-timing-function: ease-in/ease-out/ease-in-out;
+	animation-fill-mode: forwards; // end animation in the last position // nydefault, elements go to their initial state once animation is complete
+}
+@keyframe name {
+	0% {background-color: white; left 0px; top:0px;}
+	25% {background-color: red; left 300px; top:0px;}
+	50% {background-color: green; left 300px; top:300px;}
+	75% {background-color: blue; left 0px; top:300px;}
+	100% {background-color: white; left 0px; top:0px;}
+
+}
+```
+2. Transitions  
+CSS transitions allows you to change property values smoothly, over a given duration.  
+User actions are required for transitions to work  
+```css
+//syntax + e.g.
+.class-name {
+	background: white;
+	transistion-property: background, border-radius or all (to include all avaliable properties);
+	transistion-duration: 4s, 2s;
+	transition-delay: 2s;
+	transistion-timing-function: ease-in/ease-out;
+	transform;
+}
+//when to transition/ user activity
+.class-name:hover {
+	background: red;
+	border-radius: 50%;
+	transform: rotateY(180deg);
+}
+// when user hovers, background of element will change from white to red (in 4s), and will turn to circle (in 2s)
+// some available transition properties
+background-color
+backgroung -position
+opacity
+z-index
+width, height
+top, right, bottom, left
+```
