@@ -1,6 +1,7 @@
 ## CSS
 **Diff between CSS2 and CSS3**
 1. CSS3 introduces media queries 
+2. 
 
 ## CSS2 and CSS3
 Importing css in a css, possible only in css3  
