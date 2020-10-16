@@ -20,10 +20,27 @@ npm install socket.io
 // with express
 const app = require('express')();
 const server = require('http').createServer(app);
-const options = { /* ... */ }; // options is optional
 const io = require('socket.io').listen(server);
-io.on('connection', socket => { /* ... */ });
-server.listen(3000);
+var users = [];
+var connections=  [];
+io.sockets.on('connection', socket => { 
+  connection.push(socket);
+  console.log('total socket connections ', connections.length);
+
+  //disconnect
+  socket.on('dicsonnect', data => {
+  	// remove socket from the connections array
+  	connections.splice(connections.indexOf(socket), 1);
+	console.log('total socket connections ', connections.length);
+  })
+
+  //send message
+  // see client send/recieve below
+  socket.on('send message', data => {
+  	io.sockets.emit('new message', {msg: data});
+  })
+});
+server.listen(8080);
 ```
 3. Rooms
 Are arbitrary channels that sockets can join and leave.  
@@ -42,7 +59,7 @@ socket.on('disconnect', () => {
 ```
 
 #### 2. Client side
-1. Installation and Initialization
+1. Installation and Initialization  
 By default, the Socket.IO server exposes a client bundle at /socket.io/socket.io.js  
 So no need of external library
 ```javascript
@@ -54,7 +71,12 @@ So no need of external library
 You can also disbale config option in server to not expose client bundle as above  
 In this case you will have to use external library on the client side
 
-2. Initialization
+2. Send/Receive data
 ```javascript
-
+// see server send/recieve above
+socket.emit('send message', "Dummy Data");
+socket.on('new message', (data) => {
+	console.log('Message ', data);
+})
 ```
+By doing this, socket connection is eastablised and you can verify this in two different tabs by connecting 2 clients
