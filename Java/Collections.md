@@ -268,3 +268,36 @@ Classes which implement the List Interface
 #### 1. ArrayList
 It provides us with dynamic arrays in Java. Though, it may be slower than standard arrays but can be helpful in programs where lots of manipulation in the array is needed.  
 In Java, "normal" arrays are fixed-size. You have to give them a size and can't expand them or contract them. To change the size, you have to make a new array and copy the data you want - which is inefficient and a pain for you.  
+```java
+import java.util.*; 
+public class GFG { 
+    public static void main(String args[]) 
+    { 
+        ArrayList<String> al = new ArrayList<>(); 
+        al.add("Geeks"); 
+        al.add("Geeks"); 
+        al.add(1, "For"); 
+        System.out.println("Initial ArrayList " + al); 
+        al.remove(1); 
+        System.out.println("After the Index Removal " + al); 
+        al.remove("Geeks"); 
+        System.out.println("After the Object Removal " + al);
+        Iterator<String> iter  = al.iterator(); 
+        while (iter.hasNext()) { 
+            System.out.print(iter.next() + " "); 
+        }
+    } 
+} 
+//Initial ArrayList [Geeks, For, Geeks]
+//After the Index Removal [Geeks, Geeks]
+//After the Object Removal [Geeks]
+// Geeks
+```
+
+#### 2. Vector
+1. Vector implements a dynamic array that means it can grow or shrink as required. Like an array, it contains components that can be accessed using an integer index
+2. They are very similar to ArrayList but Vector is synchronized and has some legacy method that the collection framework does not contain.  
+3. As it is synchronized, it gives a poor performance in adding, searching, delete and update of its elements.  
+Implementation code - see ArrayList, replace ArrayList with Vector name  
+
+#### 3. Stack
