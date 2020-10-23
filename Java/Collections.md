@@ -104,4 +104,154 @@ public class SetExample
 ```
 
 Classes which implement the Set interface in Java Collections
+1. HashSet
+2. LinkedHashSet
+3. TreeSet
+
 #### 1. HashSet
+1. Implements Set Interface.
+2. The underlying data structure for HashSet is Hashtable.
+3. As it implements the Set Interface, duplicate values are not allowed.
+4. Objects that you insert in HashSet are not guaranteed to be inserted in the same order. Objects are inserted based on their hash code.
+5. NULL elements are allowed in HashSet.
+```java
+import java.util.*; 
+class GFG{  
+    public static void main(String[] args) 
+    { 
+        Set<String> h = new HashSet<String>(); 
+        h.add("India"); 
+        h.add("Australia"); 
+        h.add("South Africa"); 
+        h.add("India"); 
+        System.out.println(h); 
+        h.remove("Australia"); 
+        System.out.println("Set after removing " + "Australia:" + h); 
+        System.out.println("Iterating over set:"); 
+        Iterator<String> i = h.iterator(); 
+        while (i.hasNext()) 
+            System.out.println(i.next()); 
+    } 
+}
+// o/p
+// [South Africa, Australia, India]
+// Set after removing Australia:[South Africa, India]
+// Iterating over set:
+// South Africa
+// India
+```
+Load Factor: The load factor is a measure of how full the HashSet is allowed to get before its capacity is automatically increased.  
+**Load Factor = (No.of.Stored.elements.in.table)/(Size.of.Hash.Table)**  
+If internal capacity is 16 and the load factor is 0.75 then the number of buckets will automatically get increased when the table has 12 elements in it.  
+**Effect on performance:**  
+A load factor of 0.75 provides very effective performance with respect to time and space complexity. If we increase the load factor value more than that then memory overhead will be reduced (because it will decrease internal rebuilding operation) but, it will affect the add and search operation in the hashtable.
+```java
+HashSet<E> hs = new HashSet<E>(int initialCapacity, float loadFactor);
+```
+Time Complexity of HashSet Operations: The underlying data structure for HashSet is hashtable. So amortize (average or usual case) time complexity for add, remove and look-up (contains method) operation of HashSet takes O(1) time.  
+
+#### 2. LinkedHashSet
+The LinkedHashSet is an ordered version of HashSet that maintains a doubly-linked List across all elements.  
+When cycling through LinkedHashSet using an iterator, the elements will be returned in the order in which they were inserted.  
+1. Contains unique elements only like HashSet. It extends the HashSet class and implements the Set interface.
+2. Maintains insertion order.  
+```java
+LinkedHashSet<E> hs = new LinkedHashSet<E>(int capacity, int fillRatio)
+```
+When the number of elements exceeds the capacity of the hash set is multiplied with the fill ratio thus expanding the capacity of the LinkedHashSet.  
+```java
+// Java Program to illustrate the LinkedHashSet 
+import java.util.LinkedHashSet;  
+  
+public class LinkedHashSetExample  
+{   
+    public static void main(String[] args)  
+    {   
+        LinkedHashSet<String> linkedset =  new LinkedHashSet<String>();    
+        linkedset.add("A");   
+        linkedset.add("B");   
+        linkedset.add("C");   
+        linkedset.add("D");  
+        // This will not add new element as A already exists  
+        linkedset.add("A");  
+        linkedset.add("E");   
+        System.out.println("Size of LinkedHashSet = " + linkedset.size());   
+        System.out.println("Original LinkedHashSet:" + linkedset);   
+        System.out.println("Removing D from LinkedHashSet: " + linkedset.remove("D"));   
+        System.out.println("Trying to Remove Z which is not "+ "present: " + linkedset.remove("Z"));   
+        System.out.println("Checking if A is present=" + linkedset.contains("A")); 
+        System.out.println("Updated LinkedHashSet: " + linkedset);   
+    	Iterator itr = hs.iterator(); 
+        while (itr.hasNext()) 
+            System.out.print(itr.next() + ", "); 
+        System.out.println(); 
+    }   
+}
+// Size of LinkedHashSet=5
+// Original LinkedHashSet:[A, B, C, D, E]
+// Removing D from LinkedHashSet: true
+// Trying to Remove Z which is not present: false
+// Checking if A is present=true
+// Updated LinkedHashSet: [A, B, C, E]
+// A, B, C, E
+```
+
+#### 3. TreeSet
+TreeSet provides an implementation of the SortedSet Interface and SortedSet extends Set Interface. It behaves like simple set with the exception that it stores elements in sorted format  
+1. TreeSet uses tree data structure for storage.
+2. Objects are stored in sorted, ascending order. But we can iterate in descending order using method 
+3. TreeSet.descendingIterator().
+4. Access and retrieval times are very fast which make TreeSet an excellent choice for storage of large volume of data in sorted format.  
+```java
+import java.util.Iterator; 
+import java.util.TreeSet; 
+public class TreeSetExample 
+{ 
+    public static void main(String[] args) 
+    { 
+        TreeSet<Integer> ts = new TreeSet<Integer>(); 
+        ts.add(10); 
+        ts.add(61); 
+        ts.add(87); 
+        ts.add(39); 
+        Iterator<Integer> iterator = ts.iterator(); 
+        System.out.print("Tree set data: "); 
+        // note that 87 being largest element, appears in 
+        // the last. 
+        while (iterator.hasNext()) 
+            System.out.print(iterator.next() + " "); 
+        System.out.println(); 
+        // to check if treeset is empty or not. 
+        if (ts.isEmpty()) 
+            System.out.print("Tree Set is empty."); 
+        else
+            System.out.println("Tree Set size: " + ts.size()); 
+        // To get the smallest element from the set 
+        System.out.println("First data: " + ts.first()); 
+        // To get the largest value from set 
+        System.out.println("Last data: " + ts.last()); 
+          // remove 61 from set. 
+        if (ts.remove(61)) 
+            System.out.println("Data is removed from tree set"); 
+        else
+            System.out.println("Data doesn't exist!"); 
+          // Remove all 
+        ts.clear(); 
+        if (ts.isEmpty()) 
+            System.out.print("Tree Set is empty."); 
+        else
+            System.out.println("Tree Set size: " + ts.size()); 
+    } 
+} 
+// o/p
+// Tree set data: 10 39 61 87 
+// Tree Set size: 4
+// First data: 10
+// Last data: 87
+// Data is removed from tree set
+// Tree Set is empty.
+```
+TreeSet is basically an implementation of a self-balancing binary search tree like a Red-Black Tree. Therefore operations like add, remove, and search take O(log(N)) time.  
+However, operations like printing N elements in the sorted order takes O(N) time.
+
+## 4. List
