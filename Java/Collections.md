@@ -301,3 +301,59 @@ public class GFG {
 Implementation code - see ArrayList, replace ArrayList with Vector name  
 
 #### 3. Stack
+Stack class that models and implements a Stack data structure. The class is based on the basic principle of last-in-first-out. In addition to the basic push and pop operations, the class provides three more functions of empty, search, and peek. The class can also be said to extend Vector and treats the class as a stack with the five mentioned functions  
+```java
+import java.io.*; 
+import java.util.*; 
+class StackDemo { 
+    public static void main(String[] args) 
+    { 
+        Stack<String> stack1 = new Stack<String>(); 
+        stack1.push(4); 
+        stack1.push("All"); 
+        stack1.push("Geeks");
+        // Displaying the Stack 
+        System.out.println("Initial Stack: " + stack); 
+        // Fetching top element of the Stack 
+        // this does not remove top element
+        System.out.println("The element at the top of the"+ " stack is: " + stack.peek());
+        // Removing elements using pop() method 
+        System.out.println("Popped element: "+ stack.pop());
+```
+Please note that the Stack class in Java is a legacy class and inherits from Vector in Java. It is a thread-safe class and hence involves overhead when we do not need thread safety. It is recommended to use ArrayDeque for stack implementation as it is more efficient in a single-threaded environment.  
+
+#### 4. Linkedlist
+1. Implementation of the LinkedList data structure which is a linear data structure
+2. elements are not stored in contiguous locations and every element is a separate object with a data part and address part. 
+3. The elements are linked using pointers and addresses. 
+4. In case of insertions and deletions, they are preferred over the arrays. 
+5. It also has few disadvantages like the nodes cannot be accessed directly instead we need to start from the head and follow through the link to reach to a node we wish to access.
+```java
+import java.util.*; 
+public class Test { 
+    public static void main(String args[]) 
+    { 
+        LinkedList<String> ll = new LinkedList<String>(); 
+        ll.add("A"); 
+        ll.add("B"); 
+        ll.addLast("C"); 
+        ll.addFirst("D"); 
+        ll.add(2, "E"); 
+        System.out.println(ll);   
+        ll.remove("B"); 
+        ll.remove(3); 
+        ll.removeFirst(); 
+        ll.removeLast(); 
+        System.out.println(ll); 
+        Iterator<String> iter  = ll.iterator(); 
+        while (iter.hasNext()) { 
+            System.out.print(iter.next() + " "); 
+        }
+    } 
+} 
+//o/p
+//[D, A, E, B, C]
+//[A]
+// A
+```
+Find doubly Linked list class in Java
