@@ -255,3 +255,16 @@ TreeSet is basically an implementation of a self-balancing binary search tree li
 However, operations like printing N elements in the sorted order takes O(N) time.
 
 ## 4. List
+The List interface provides a way to store the ordered collection.  
+Since List preserves the insertion order, it allows positional access and insertion of elements  
+
+Classes which implement the List Interface
+1. ArrayList
+2. Vector
+3. Stack
+4. LinkedList
+4. 
+
+#### 1. ArrayList
+It provides us with dynamic arrays in Java. Though, it may be slower than standard arrays but can be helpful in programs where lots of manipulation in the array is needed.  
+In Java, "normal" arrays are fixed-size. You have to give them a size and can't expand them or contract them. To change the size, you have to make a new array and copy the data you want - which is inefficient and a pain for you.  
