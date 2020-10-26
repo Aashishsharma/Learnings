@@ -357,3 +357,267 @@ public class Test {
 // A
 ```
 Find doubly Linked list class in Java
+
+#### 5. Queues
+**1. Priority queue**  
+A PriorityQueue is used when the objects are supposed to be processed based on the priority.  
+1. PriorityQueue doesn’t permit null.
+2. We can’t create PriorityQueue of Objects that are non-comparable
+3. The head of this queue is the least element with respect to the specified ordering. If multiple elements are tied for least value, the head is one of those elements — ties are broken arbitrarily.
+4. It provides O(log(n)) time for add and poll methods.
+```java
+// Creates a PriorityQueue with the specified initial capacity 
+// that orders its elements according to the specified comparator.
+PriorityQueue<E> pq = PriorityQueue(int initialCapacity, Comparator<E> comparator);
+
+import java.util.*; 
+class PriorityQueueDemo { 
+    public static void main(String args[]) 
+    { 
+        PriorityQueue<Integer> pQueue = new PriorityQueue<Integer>(); 
+        pQueue.add(10); 
+        pQueue.add(20); 
+        pQueue.add(15); 
+        // Printing the top element of PriorityQueue 
+        System.out.println(pQueue.peek()); 
+        // Printing the top element and removing it 
+        // from the PriorityQueue container 
+        System.out.println(pQueue.poll());   
+        // Printing the top element again 
+        System.out.println(pQueue.peek());
+        Iterator iterator = pQueue.iterator(); 
+        while (iterator.hasNext()) { 
+            System.out.print(iterator.next() + " "); 
+        } 
+    } 
+}
+// o/p
+//10
+//10
+//15
+//15 20
+```
+**2. Deqeue**  
+The Deque interface present in java.util package is a subtype of the queue interface. The Deque is related to the double-ended queue that supports addition or removal of elements from either end of the data structure. It can either be used as a queue(first-in-first-out/FIFO) or as a stack(last-in-first-out/LIFO). Deque is the acronym for double ended queue.  
+```java
+import java.util.*; 
+public class ArrayDequeDemo { 
+    public static void main(String[] args) 
+    { 
+        Deque<String> dq  = new ArrayDeque<String>(); 
+        dq.add("For"); 
+        dq.addFirst("Geeks"); 
+        dq.addLast("Geeks");  
+        System.out.println(dq); 
+    } 
+}
+//o/p
+//Geeks For Geeks
+import java.util.*; 
+public class DequeExample { 
+    public static void main(String[] args) 
+    { 
+        Deque<String> deque = new LinkedList<String>(); 
+        // We can add elements to the queue 
+        // in various ways 
+        // Add at the last 
+        deque.add("Element 1 (Tail)"); 
+        // Add at the first 
+        deque.addFirst("Element 2 (Head)"); 
+        // Add at the last 
+        deque.addLast("Element 3 (Tail)"); 
+        // Add at the first 
+        deque.push("Element 4 (Head)"); 
+        // Add at the last 
+        deque.offer("Element 5 (Tail)"); 
+        // Add at the first 
+        deque.offerFirst("Element 6 (Head)"); 
+        System.out.println(deque + "\n"); 
+        // We can remove the first element 
+        // or the last element. 
+        deque.removeFirst(); 
+        deque.removeLast(); 
+        System.out.println("Deque after removing "+ "first and last: "+ deque); 
+        for (Iterator itr = dq.iterator(); itr.hasNext();) { 
+          //  System.out.print(itr.next() + " "); 
+        } 
+    } 
+} 
+//[Element 6 (Head), Element 4 (Head), Element 2 (Head), 
+//Element 1 (Tail), Element 3 (Tail), Element 5 (Tail)]
+//Deque after removing first and last: 
+//[Element 4 (Head), Element 2 (Head), Element 1 (Tail), Element 3 (Tail)]
+```
+
+## 5. Map
+It represents a mapping between a key and a value. The Map interface is not a subtype of the Collection interface. Therefore it behaves a bit differently from the rest of the collection types. A map contains unique keys  
+1. A Map cannot contain duplicate keys and each key can map to at most one value. Some implementations allow null key and null value like the HashMap and LinkedHashMap, but some do not like the TreeMap.
+2. The order of a map depends on the specific implementations. For example, TreeMap and LinkedHashMap have predictable order, while HashMap does not.  
+Maps are perfect to use for key-value association mapping such as dictionaries. The maps are used to perform lookups by keys or when someone wants to retrieve and update elements by keys.  
+**When to use**  
+1. A map of error codes and their descriptions.
+2. A map of zip codes and cities.
+3. A map of managers and employees
+```java
+
+```
+
+**Classes which implement the Map interface**  
+1. HashMap
+2. LinkedHashMap
+3. TreeMap
+
+#### 1. HashMap
+1. HashMap doesn’t allow duplicate keys but allows duplicate values. 
+2. HashMap allows null key also but only once and multiple null values.
+3. This class makes no guarantees as to the order of the map; in particular, it does not guarantee that the order will remain constant over time. It is roughly similar to HashTable but is unsynchronized.
+4.  HashMap is known as HashMap because it uses a technique called Hashing. Hashing is a technique of converting a large String to small String that represents the same String. A shorter value helps in indexing and faster searches. HashSet also uses HashMap internally.
+**Performance of HashMap depends on 2 parameters:**  
+1. Initial Capacity - It is the capacity of HashMap at the time of its creation (It is the number of buckets a HashMap can hold when the HashMap is instantiated). In java, it is 2^4=16 initially, meaning it can hold 16 key-value pairs.  
+2. Load Factor -  It is the percent value of the capacity after which the capacity of Hashmap is to be increased  
+From Java 8 onward, Java has started using Self Balancing BST instead of linked list for chaining. The advantage of self balancing bst is, we get worst case (when every key maps to same slot) search time as O(Log n).
+```java
+import java.util.HashMap; 
+public class GFG { 
+    public static void main(String[] args) 
+    { 
+        // Create an empty hash map 
+        HashMap<String, Integer> map = new HashMap<>(); 
+        // Add elements to the map 
+        map.put("vishal", 10); 
+        map.put("sachin", 30); 
+        map.put("vaibhav", 20); 
+        // Print size and content 
+        System.out.println("Size of map is:- "+ map.size()); 
+        System.out.println(map); 
+        // Check if a key is present and if 
+        // present, print value 
+        if (map.containsKey("vishal")) { 
+            Integer a = map.get("vishal"); 
+            System.out.println("value for key" + " \"vishal\" is:- " + a); 
+        }
+         for (Map.Entry<String, Integer> e : map.entrySet()) 
+            System.out.println(e.getKey() + " " + e.getValue()); 
+    } 
+} 
+// Size of map is:- 3
+// {vaibhav=20, vishal=10, sachin=30}
+// value for key "vishal" is:- 10
+//vaibhav 20
+//vishal 10
+//sachin 30
+```
+Complexity: get/put/containsKey() operations are O(1) in average case but we can’t guarantee that since it all depends on how much time does it take to compute the hash.  
+
+#### 2. LinkedHashMap
+The LinkedHashMap is just like HashMap with an additional feature of maintaining an order of elements inserted into it.  
+1. It contains only unique elements.
+2. It may have one null key and multiple null values.
+3. It is non-synchronized.  
+```java
+import java.util.*; 
+class UpdatingLinkedHashMap { 
+    public static void main(String args[]) 
+    { 
+        LinkedHashMap<Integer, String> hm = new LinkedHashMap<Integer, String>(); 
+        // Insert mappings using put() method 
+        hm.put(3, "Geeks"); 
+        hm.put(2, "Geeks"); 
+        hm.put(1, "Geeks"); 
+        // print mappings to the console 
+        System.out.println("Initial map : " + hm); 
+        // Update the value with key 2 
+        hm.put(2, "For");  
+        // print the updated map 
+        System.out.println("Updated Map : " + hm); 
+        // Remove the mapping with Key 4 
+        hm.remove(1);
+        System.out.println("Updated Map : " + hm);
+        for (Map.Entry<Integer, String> mapElement : hm.entrySet()) { 
+            Integer key = mapElement.getKey(); 
+            String value = mapElement.getValue(); 
+            System.out.println(key + " : " + value); 
+        } 
+    } 
+}
+//o/p
+//Initial map : {3=Geeks, 2=Geeks, 1=Geeks}
+//Updated Map : {3=Geeks, 2=For, 1=Geeks}
+//Updated Map : {3=Geeks, 2=For}
+//3 : Geeks
+//2 : For
+```
+
+#### 3. TreeMap
+The map is sorted according to the natural ordering of its keys, or by a Comparator provided at map creation time, depending on which constructor is used.  
+```java
+import java.util.*; 
+class GFG { 
+    public static void main(String args[]) 
+    { 
+        TreeMap<Integer, String> tm = new TreeMap<Integer, String>(); 
+        tm.put(3, "Geeks"); 
+        tm.put(2, "Geeks"); 
+        tm.put(1, "Geeks"); 
+        System.out.println(tm); 
+        tm.put(2, "For"); 
+        tm.remove(3); 
+        System.out.println(tm); 
+         for (Map.Entry mapElement : tm.entrySet()) { 
+            int key = (int)mapElement.getKey(); 
+            // Finding the value 
+            String value = (String)mapElement.getValue(); 
+            System.out.println(key + " : "+ value); 
+        }
+    } 
+} 
+//o/p
+//{1=Geeks, 2=Geeks, 3=Geeks}
+//{1=Geeks, 2=For}
+//1 : Geeks
+//2 : For
+```
+
+```java
+// Java program to demonstrate 
+// an example of TreeMap using 
+// a comparator constructor 
+  
+import java.util.*; 
+import java.util.concurrent.*; 
+// A class to represent a student. 
+class Student { 
+    int rollno; 
+    String name, address; 
+    public Student(int rollno, String name, String address) {
+        this.rollno = rollno; 
+        this.name = name; 
+        this.address = address; 
+    } 
+    public String toString()   { 
+        return this.rollno + " "+ this.name + " "+ this.address; 
+    } 
+} 
+// Comparator implementattion 
+class Sortbyroll implements Comparator<Student> { 
+    // Used for sorting in ascending order of 
+    // roll number 
+    public int compare(Student a, Student b) { 
+        return a.rollno - b.rollno; 
+    } 
+}
+public class TreeMapImplementation { 
+    static void Example2ndConstructor() {
+        TreeMap<Student, Integer> tree_map = new TreeMap<Student, Integer>(new Sortbyroll()); 
+        // Mapping string values to int keys 
+        tree_map.put(new Student(111, "bbbb", "london"), 2); 
+        tree_map.put(new Student(131, "aaaa", "nyc"), 3); 
+        tree_map.put(new Student(121, "cccc", "jaipur"), 1); 
+        // Displaying the TreeMap 
+        System.out.println("TreeMap: " + tree_map); 
+    } 
+    public static void main(String[] args) { 
+    System.out.println("TreeMap using "+ "TreeMap(Comparator)"+ " constructor:\n");Example2ndConstructor(); 
+    } 
+} 
+```
