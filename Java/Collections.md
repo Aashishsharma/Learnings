@@ -629,4 +629,4 @@ public class TreeMapImplementation {
        System.out.println(e);
 ```
 1. If we have to modify collection, we can use Iterator.
-2. While using nested for loops it is better to use for-each loop, consider the below code for better understanding.
+2. While using nested for loops it is better to use for-each loop.
