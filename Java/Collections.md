@@ -162,11 +162,8 @@ When the number of elements exceeds the capacity of the hash set is multiplied w
 ```java
 // Java Program to illustrate the LinkedHashSet 
 import java.util.LinkedHashSet;  
-  
-public class LinkedHashSetExample  
-{   
-    public static void main(String[] args)  
-    {   
+public class LinkedHashSetExample {   
+    public static void main(String[] args) {   
         LinkedHashSet<String> linkedset =  new LinkedHashSet<String>();    
         linkedset.add("A");   
         linkedset.add("B");   
@@ -177,7 +174,7 @@ public class LinkedHashSetExample
         linkedset.add("E");   
         System.out.println("Size of LinkedHashSet = " + linkedset.size());   
         System.out.println("Original LinkedHashSet:" + linkedset);   
-        System.out.println("Removing D from LinkedHashSet: " + linkedset.remove("D"));   
+        System.out.println("Removing D from LinkedHashSet: " +linkedset.remove("D"));
         System.out.println("Trying to Remove Z which is not "+ "present: " + linkedset.remove("Z"));   
         System.out.println("Checking if A is present=" + linkedset.contains("A")); 
         System.out.println("Updated LinkedHashSet: " + linkedset);   
@@ -205,10 +202,8 @@ TreeSet provides an implementation of the SortedSet Interface and SortedSet exte
 ```java
 import java.util.Iterator; 
 import java.util.TreeSet; 
-public class TreeSetExample 
-{ 
-    public static void main(String[] args) 
-    { 
+public class TreeSetExample { 
+    public static void main(String[] args) { 
         TreeSet<Integer> ts = new TreeSet<Integer>(); 
         ts.add(10); 
         ts.add(61); 
@@ -621,3 +616,17 @@ public class TreeMapImplementation {
     } 
 } 
 ```
+
+**Iterators vs forEach loop**
+```java
+//syntaxes
+   // Iterating over collection 'c' using terator
+   for (Iterator i = c.iterator(); i.hasNext(); ) 
+       System.out.println(i.next())
+
+   // Iterating over collection 'c' using for-each 
+   for (Element e: c)
+       System.out.println(e);
+```
+1. If we have to modify collection, we can use Iterator.
+2. While using nested for loops it is better to use for-each loop, consider the below code for better understanding.
