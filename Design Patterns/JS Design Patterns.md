@@ -419,3 +419,35 @@ tim.send("John, are you ok?", john)
 ```
 
 ##### 9. Visitor pattern
+The Visitor pattern allows you to add or define new functionality to an object without changing the code for that object. The new logic resides in a external object or function called the 'visitor'.  
+Visitors are useful when you are trying to extend the functionality of a library or framework. If the object you want to extend provides some kind of 'accept' method that accepts a visitor object/function, you can grant the visitor object access to the receiving object's internal properties. The visitor can then modify the behavior of the receiving object. This pattern allows you to provide an easy way for clients to implement future extensions to that object.  
+```javascript
+function Employee(name, salary) {
+  this.name = name
+  this.salary = salary
+}
+Employee.prototype = {
+  getSalary: function() {
+    return this.salary
+  },
+  setSalary: function(sal) {
+    this.salary = sal
+  },
+  accept: function(visitorFunction) {
+    visitorFunction(this)
+  }
+}
+/////////////////////////////////////////////
+const devsage = new Employee("DevSage", 10000)
+console.log(devsage.getSalary()) 
+//this is where we extend emp.getSalary method
+//without touching that object directly
+function ExtraSalary(emp) {
+  emp.setSalary(emp.getSalary() * 2)
+}
+devsage.accept(ExtraSalary)
+console.log(devsage.getSalary())
+// o/p 
+//1000
+//2000
+```
