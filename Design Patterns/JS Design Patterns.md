@@ -284,7 +284,7 @@ The Iterator design pattern solves this problem by separating the collection of 
 It allows you to define your own rules while treaversing the collections of the object.  
 For code, see iterators in JS  
 
-##### 5. Observer Design Pattern
+##### 6. Observer Design Pattern
 The Observer pattern is a design pattern that offers a subscription model in which objects (known as 'observers') can subscribe to an event (known as a 'subject') and get notified when the event occurs (or when the subject sends a signal). This pattern is the cornerstone of event driven programming.  
 Used in event handling systems  
 ```javascript
@@ -320,3 +320,102 @@ subject.fire()
 subject.unsubscribe(Observer1)
 subject.fire()
 ```
+**Observer vs Pub/Sub pattern**  
+The Observer pattern requires that the observer (or object) wishing to receive topic notifications must subscribe this interest to the object firing the event (the subject).  
+The Publish/Subscribe pattern however uses a topic/event channel which sits between the objects wishing to receive notifications (subscribers) and the object firing the event (the publisher). This event system allows code to define application specific events which can pass custom arguments containing values needed by the subscriber. The idea here is to avoid dependencies between the subscriber and publisher.  
+
+##### 7. Proxy Pattern
+What is a proxy object?  
+A proxy object is an object that acts as an interface (or placeholder) for something else. The proxy could be an interface to anything: an API, a network connection, a large object in memory, or some other resource that is expensive or impossible to duplicate.  
+A proxy is a 'stand-in' object that is used to access the 'real' object behind the scenes. In the proxy, extra functionality can be provided, for example caching when operations on the real object are resource intensive
+```javascript
+//proxy allows to add additional functionalities, like caching
+// External API Service
+function CryptocurrencyAPI() {
+  this.getValue = function(coin) {
+    console.log("Calling External API...")
+    switch(coin) {
+      case "Bitcoin":
+        return "$8,500"
+      case "Litecoin":
+        return "$50"
+      case "Ethereum":
+        return "$175"
+       default:
+        return "NA"
+    }
+  }
+}
+//we can use this but for 100 calls to this function
+//we will have to make 100 api calls
+const api = new CryptocurrencyAPI()
+console.log("----------Without Proxy----------")
+console.log(api.getValue("Bitcoin"))
+console.log(api.getValue("Litecoin"))
+console.log(api.getValue("Ethereum"))
+console.log(api.getValue("Bitcoin"))
+console.log(api.getValue("Litecoin"))
+console.log(api.getValue("Ethereum"))
+function CryptocurrencyProxy() {
+  this.api = new CryptocurrencyAPI()
+  this.cache = {}
+  this.getValue = function(coin) {
+    if(this.cache[coin] == null) {
+      this.cache[coin] = this.api.getValue(coin)
+    }
+    return this.cache[coin]
+  }
+}
+//instead we use proxy, so api response is cached
+//and api call is not made everytime
+console.log("----------With Proxy----------")
+const proxy = new CryptocurrencyProxy()
+console.log(proxy.getValue("Bitcoin"))
+console.log(proxy.getValue("Litecoin"))
+console.log(proxy.getValue("Ethereum"))
+console.log(proxy.getValue("Bitcoin"))
+console.log(proxy.getValue("Litecoin"))
+console.log(proxy.getValue("Ethereum"))
+```
+
+##### 8. Mediator pattern
+The Mediator pattern provides central authority over a group of objects by controlling how these objects interact with each other. The "central" object is known as the 'mediator'. The mediator pattern is useful in scenarios where every object needs to be aware of any state change in any other object in the group.  
+```javascript
+//chat room application
+function Member(name) {
+  this.name = name
+  this.chatroom = null
+}
+Member.prototype = {
+  send: function(message, toMember) {
+    this.chatroom.send(message, this, toMember)
+  },
+  receive: function(message, fromMember) {
+    console.log(`${fromMember.name} to ${this.name}: ${message}`)
+  }
+}
+function Chatroom() {
+  this.members = {}
+}
+Chatroom.prototype = {
+  addMember: function(member) {
+    this.members[member.name] = member
+    member.chatroom = this
+  },
+  send: function(message, fromMember, toMember) {
+    toMember.receive(message, fromMember)
+  }
+}
+const chat = new Chatroom()
+const bob = new Member("Bob")
+const john = new Member("John")
+const tim = new Member("Tim")
+chat.addMember(bob)
+chat.addMember(john)
+chat.addMember(tim)
+bob.send("Hey, John", john)  // Bob to John Hey, John
+john.send("What's up, Bob", bob)
+tim.send("John, are you ok?", john)
+```
+
+##### 9. Visitor pattern
