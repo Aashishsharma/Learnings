@@ -281,3 +281,42 @@ console.log("USPS: " + shipping.calculate(pkg))
 ##### 5. Iterator Design Pattern
 The Iterator pattern is a pattern that allows you to effectively loop over a collection of objects. A common programming task is to traverse and manipulate a collection of objects. These collections may be stored as an array or perhaps something more complex, such as a tree or graph structure. In addition, you may need to access the items in the collection in a certain order, such as, front to back, back to front, depth first (as in tree searches), skip evenly numbered objects, etc.  
 The Iterator design pattern solves this problem by separating the collection of objects from the traversal of these objects by implementing a specialized 'iterator'!  
+It allows you to define your own rules while treaversing the collections of the object.  
+For code, see iterators in JS  
+
+##### 5. Observer Design Pattern
+The Observer pattern is a design pattern that offers a subscription model in which objects (known as 'observers') can subscribe to an event (known as a 'subject') and get notified when the event occurs (or when the subject sends a signal). This pattern is the cornerstone of event driven programming.  
+Used in event handling systems  
+```javascript
+function Subject() {
+  this.observers = [] // array of observer functions
+}
+Subject.prototype = {
+  subscribe: function(fn) {
+    this.observers.push(fn)
+  },
+  unsubscribe: function(fnToRemove) {
+    this.observers = this.observers.filter( fn => {
+      if(fn != fnToRemove)
+        return fn
+    })
+  },
+  fire: function() {
+    this.observers.forEach( fn => {
+      fn.call()
+    })
+  }
+}
+const subject = new Subject()
+function Observer1() {
+  console.log("Observer 1 Firing!")
+}
+function Observer2() {
+  console.log("Observer 2 Firing!")
+}
+subject.subscribe(Observer1)
+subject.subscribe(Observer2)
+subject.fire() 
+subject.unsubscribe(Observer1)
+subject.fire()
+```
