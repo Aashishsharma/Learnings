@@ -222,7 +222,24 @@ console.log(singleton === singleton2) // true
 ```
 
 ##### 4. Strategy Design Pattern
-The Strategy pattern is a behavioral design pattern that enables you to define a group (or family) of closely-related algorithms (known as strategies). The strategy pattern allows you to swap strategies in and out for each other as needed at runtime.  
+**The duck problem**
+![alt text](PNG/strategy.PNG "Title")  
+In inheritance code sharing is done only top to down. But horizontal code sharing (2 subclasses having same method, but different than the parent), Inheritance fails.  
+In the above design, we have used interface but then if there are 100 types if ducks, then we will have to create 100 types of functions (fly and quack), even if 50 classes have exact same method.  
+**Solution**  
+Separating what changes from what stays the same  
+We know that fly() and quack() are the parts of the Duck class that vary across ducks.  
+To separate these behaviors from the Duck class, we’ll pull both methods out of the Duck class and create a new set of classes to represent each behavior.  
+![alt text](PNG/strategy2.PNG "Title")  
+![alt text](PNG/strategy3.PNG "Title")  
+HAS-A can be better than IS-A  
+**Implementation of above design**  
+![alt text](PNG/strategy4.PNG "Title")  
+![alt text](PNG/strategy5.PNG "Title")  
+
+**Definition**  
+The Strategy Pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable. Strategy lets the algorithm vary independently from clients that use it.  
+From definition, you should now understand when to apply this design pattern  
 ```javascript
 //use case - companies fedex, ups & usps have different shipping calculations
 // to calculate shiiping cost of the package
@@ -251,7 +268,6 @@ const pkg = { from: "Alabama", to: "Georgia", weight: 1.56 } // Dummy package
 //in normal scenario we would have done this
 fedex.calculate();
 usps.calculate(); ups.calculate(); // all wrong
-
 // instead do this
 // this is a strategry pattern
 // pass objs at runtime and call that obj's calculate method
@@ -287,6 +303,11 @@ For code, see iterators in JS
 ##### 6. Observer Design Pattern
 The Observer pattern is a design pattern that offers a subscription model in which objects (known as 'observers') can subscribe to an event (known as a 'subject') and get notified when the event occurs (or when the subject sends a signal). This pattern is the cornerstone of event driven programming.  
 Used in event handling systems  
+Can be used in chat apps  
+**Observer pattern**  
+![alt text](PNG/observer.PNG "Title")  
+It's implementation
+![alt text](PNG/observer2.PNG "Title")  
 ```javascript
 function Subject() {
   this.observers = [] // array of observer functions
