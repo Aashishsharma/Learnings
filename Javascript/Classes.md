@@ -1,3 +1,11 @@
+## Index
+1. Class
+2. Getter setter
+3. Inheritance
+4. Static methods
+5. Private, protected properties and methods
+6. Mixins
+
 ## Class
 Template for creating objects, providing initial values for state (member variables) and implementations of behavior (member functions or methods)  
 In JavaScript, a class is a kind of function.
