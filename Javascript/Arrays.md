@@ -1,3 +1,12 @@
+## Index
+1. Arrays
+2. Array methods
+3. Higher order array methods
+4. Map and Set
+5. WeakMap and WeakSet
+6. Destructuring assignment
+7. Iterables
+
 #### Arrays
 In JS Array is an object.  
 But what makes arrays really special is their internal representation. The engine tries to store its elements in the contiguous memory area, one after another

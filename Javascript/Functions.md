@@ -1,3 +1,16 @@
+## Index
+1. Functions (their properties)
+2. This in functions (loosing this anf func.bind())
+3. Function as a value (callback)
+4. Named function expression
+5. New function syntax
+6. Constructor functions
+7. Decorators
+8. func.call, func.apply and partial func
+9. Arrow functions
+10. Currying
+11. Generators
+
 ## Functions
 A function in JavaScript is a value.  
 Every value in JavaScript has a type. What type is a function?
@@ -53,7 +66,8 @@ alert( `Called ${sayHi.counter} times` ); // Called 2 times
 ```
 4. **this** property
 when used inside a function this‘s value will change depending on 
-1. how that function is defined
+1. how that function is defined (arrow, no arrow or constructor function)  
+arrow has no this, constructor functions this works as normal java this, for no arrow, depends on how ot is invoked
 2. how it is invoked and
     1. Function invocation
     ```javascript

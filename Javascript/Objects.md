@@ -1,3 +1,10 @@
+## Index
+1. Objects
+2. Obj copy and references
+3. Property descriptors
+4. Property getters and setters
+5. Prototypal inheritance (changing natie prototypes)
+
 ## Objects
 Used to store keyed collections of various data and more complex entities  
 ```javascript

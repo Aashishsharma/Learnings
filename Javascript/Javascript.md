@@ -1,6 +1,23 @@
 ## Javascript
 Javascript is dynamically typed
 
+## Index
+1. Event Loop
+2. automatic semicolon insertion
+3. use strict
+4. let var const
+5. IIFE
+6. Data types
+7. Alert, Confirm, Prompt
+8. Type conversion
+9. Nullish coalesing operator
+10. Hoisting 
+11. Closure
+12. Garbage collection
+13. Module, defer, async
+14. Callback, promises, async await
+15. Cookies, localstorage, session storage
+
 ## Javascript event loop. 
 [Javascript event loop](https://www.youtube.com/watch?v=8aGhZQkoFbQ)
 Javascript event loop elements are  
