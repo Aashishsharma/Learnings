@@ -1,4 +1,21 @@
+## Index
+1. Code splitting and lazy loading
+2. Context
+3. Error boundaries
+4. Refs and Doms
+5. Fragment
+6. HOC
+7. Performance optimization
+8. Portals
+9. Render Props
+10. Static type checking and Strict mode
+11. Proptypes
+12. Uncontrolled compomnents
+13. React Router
+
 ## CODE SPLITTING
+Bundling is great, but as your app grows, your bundle will grow too.  
+So we use code splitting  
 The best way to introduce code-splitting into your app is through the dynamic import() syntax.
 ```javascript
 import { add } from './math';
@@ -6,6 +23,7 @@ import { add } from './math';
 console.log(add(16, 26));
 ```
 #### Lazy loading
+With Code splitting, the bundle can be split to smaller chunks where the most important chunk can be loaded first and then every other secondary one lazily loaded.  
 ```javascript
 import React, { Suspense } from 'react';
 
@@ -21,6 +39,7 @@ function MyComponent() {
   );
 }
 ```
+
 ------------------------------------------------------------------------------
 ## CONTEXT
 Context provides a way to pass data through the component tree without having to pass props down manually at every level.
@@ -64,10 +83,11 @@ class ThemedButton extends React.Component {
 }
 ```
 If you only want to avoid passing some props through many levels, component composition is often a simpler solution than context.
-Common examples where using context might be simpler than the alternatives include managing the current locale, theme, or a data cache
+Common examples where using context might be simpler than the alternatives include managing the current locale, theme, or a data cache  
+Apply it sparingly because it makes component reuse more difficult.
 
 ------------------------------------------------------------------------------
-## ERRRO BOUNDARIES
+## ERROR BOUNDARIES
 Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.
 
 Error boundaries do not catch errors for:

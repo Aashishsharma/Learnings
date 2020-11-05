@@ -1,4 +1,12 @@
-﻿## HOOKS
+﻿## Index
+1. Hooks, why hooks
+2. State hook
+3. Effect hook
+4. Rules of hooks
+5. Custom hooks
+6. State vs props 
+
+## HOOKS
 Let you use state and other React features without writing a class. They are a function.
 
 ## Problem with classes / Why Hooks?

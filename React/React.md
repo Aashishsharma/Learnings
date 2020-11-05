@@ -1,3 +1,14 @@
+## Index
+1. React, why, creating app, npx
+2. ReactDOM
+3. JSX
+4. React elements and components and props
+5. Handling events
+6. Forms in React
+7. Lifting state up
+8. Composition over inheritance
+9. Thinking in React
+
 ## REACT?
  A javascript library.
  Js's most popular library on github, by facebook
@@ -8,9 +19,10 @@
 2. popular
 3. html in js and not vice versa
 4. for other frameworks need to learn their syntaxes React uses js syntax
-5. performace - using React will lead to a fast user interface without doing much work to specifically        optimize for performance and ther is a virtual DOM. Generally in js DOM operations are the costliest and React handles DOM operations (in batch at appropriate time )and not users
+5. performace - using React will lead to a fast user interface without doing much work to specifically optimize for performance and ther is a virtual DOM. Generally in js DOM operations are the costliest and React handles DOM operations (in batch at appropriate time )and not users
 6. It has one-way binding, so debugging is easy
 7. separation of concerns
+8. inversion of control
 
 ------------------------------------------------------------------------------
 ## CREATING A REACT APP
