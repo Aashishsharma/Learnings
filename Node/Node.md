@@ -1,3 +1,12 @@
+## Index
+1. Node, why node
+2. Read/write from stdio
+3. Node.js modules, require, import, export
+4. Event loop
+5. Event emitters
+6. Streams
+7. Scaling node js app
+
 ## Node.js
 Node.js is an open-source and cross-platform JavaScript runtime environment.
 Runs the V8 JavaScript engine, the core of Google Chrome, outside of the browser

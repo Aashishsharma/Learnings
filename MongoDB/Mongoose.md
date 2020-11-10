@@ -1,3 +1,13 @@
+## Index
+1. Mongoose
+2. Define Schemas
+3. Create Model
+4. Construct document
+5. Connect to DB
+6. CRUD operations
+7. Validation
+8. Middleware
+
 ## Mongoose
 It is mongodb object document modeling (ODM) for node.js  
 Object Document Mapper (ODM) is used to map objects with a Document Database like MongoDB  

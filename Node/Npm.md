@@ -1,3 +1,10 @@
+## Index
+1. Npm
+2. Packages and modules
+3. Publishing packages
+4. Package.json
+5. Package-lock.json
+
 ## NPM
 It's a way to reuse others code and share your code with the dev community.
 Node package manager. Now other packages can also be stored in the registery

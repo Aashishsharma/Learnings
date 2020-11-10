@@ -332,6 +332,10 @@ same as func.call, The only syntax difference between call and apply is that cal
 func.call(context, ...args); // pass an array as list with spread syntax
 func.apply(context, args);   // is same as using call
 ```
+
+**bind vs call/apply**  
+Use .bind() when you want that function to later be called with a certain context, useful in events. Use .call() or .apply() when you want to invoke the function immediately, and modify the context.
+
 #### partial function
 partial function – we create a new function by fixing some parameters of the existing one  
 extension of bind  

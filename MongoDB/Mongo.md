@@ -1,6 +1,12 @@
 ## MongoDB
 It is document based NoSQL DB
 
+## Index
+1. CRUD
+2. Data Modelling 
+3. Indexing
+4. Sharding
+
 ## Commands
 1. show dbs - shows list of all DBs (if a DB doesnot have any collection, then it is not listed)
 2. use dbname - shell will be connected to dbname, if dbname does not exists, it will create new db and switch to that db
@@ -133,6 +139,13 @@ db.posts.update({title: 'new post'}, {$rename: {likes: 'views'}})
 ```javascript
 db.posts.remove({title: 'new post'})
 
+// AND OR NOT in where clause
+db.inventory.find( {
+    $and: [
+        { $or: [ { qty: { $lt : 10 } }, { qty : { $gt: 50 } } ] },
+        { $or: [ { sale: true }, { price : { $lt : 5 } } ] }
+    ]
+} )
 ```
 Note - everywhere is where clasue we have used title, but mostly **_id** attribute should be used in where clause
 It is similar to primary key from relational DB  
