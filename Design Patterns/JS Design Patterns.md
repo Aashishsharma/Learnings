@@ -149,11 +149,19 @@ In JavaScript, there are several options for implementing modules. These include
 5. ECMAScript Harmony modules
 
 ##### 3. Factory Pattern
-Factory is an obj that creates another object  
+The Factory Method Pattern defines an interface for creating an object, but lets subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.  
 **We can create obj. on the fly, so why this is needed?**  
 So that we can handle all the obj. creations at a centralized location  
 The factory pattern is a creational design pattern that uses factory methods to create objects — rather than by calling a constructor.  
 This is particularly useful if the object creation process is relatively complex, e.g. if it strongly depends on dynamic factors or application configuration  
+
+![alt text](PNG/without-factory.PNG "Title")  
+![alt text](PNG/factory.PNG "Title")  
+So if we want to create obj. which we don't know before hand, this can be used.  
+Real scenario, consider space game, you have so many asteriods that you need to destroy in the game.  
+All asteriods are randomly coming in the game, and as level increases, more complex asteroids.  
+We can creste Asteriod Factory which will handle all this
+
 ```javascript
 function Developer(name) {
   this.name = name
@@ -197,8 +205,13 @@ employees.forEach( emp => {
 3. When we're working with many small objects or components that share the same properties
 
 ##### 3. Singleton Pattern
-If we need to have only one instance of a class.  
+The Singleton Pattern ensures a class has only one instance, and provides a global point of access to it.  
 E.g. a country would have only 1 PM , so only 1 object needs to be created for PM class  
+Many people argue this pattern shouldn't be used, because we need to create that instance of the class as global, so any code accessing it only refers to the same object always. And we don't want globals  
+In Java -  
+**Using private constructor and static method**  
+![alt text](PNG/singleton.PNG "Title")  
+In JS -  
 To implement use IIFE and in that IIFE call the constructor of the class whose instance you want to limit  
 ```javascript
 //usecase - many processes but just one process manager
