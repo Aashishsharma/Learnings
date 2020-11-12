@@ -41,6 +41,7 @@ Behavioral patterns focus on improving or streamlining the communication between
 3. Observer
 4. Visitor
 5. Strategy
+
 ##### 1. Constructor pattern
 **Object Creation**  
 The three common ways to create new objects in JavaScript are as follows:  
@@ -344,6 +345,19 @@ subject.fire()
 **Observer vs Pub/Sub pattern**  
 The Observer pattern requires that the observer (or object) wishing to receive topic notifications must subscribe this interest to the object firing the event (the subject).  
 The Publish/Subscribe pattern however uses a topic/event channel which sits between the objects wishing to receive notifications (subscribers) and the object firing the event (the publisher). This event system allows code to define application specific events which can pass custom arguments containing values needed by the subscriber. The idea here is to avoid dependencies between the subscriber and publisher.  
+
+##### 7. Decorator pattern
+The Decorator Pattern attaches additional responsibilities to an object dynamically. Decorators provide a flexible alternative to subclassing for extending functionality.  
+**Coffee problem**  
+![alt text](PNG/decorator-problem.PNG "Title")  
+**Decorator pattern**  
+![alt text](PNG/decorator.PNG "Title")  
+![alt text](PNG/decorator2.PNG "Title")  
+**UML**  
+![alt text](PNG/decorator-uml.PNG "Title")  
+**Implementation**  
+![alt text](PNG/decorator-impl.PNG "Title")  
+
 
 ##### 7. Proxy Pattern
 What is a proxy object?  
