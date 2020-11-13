@@ -385,9 +385,11 @@ here, watch/end movie implementation is same as the one shown in facade-problem
 
 
 ##### 7. Proxy Pattern
+The Proxy Pattern provides a surrogate or placeholder for another object to control access to it.  
 What is a proxy object?  
 A proxy object is an object that acts as an interface (or placeholder) for something else. The proxy could be an interface to anything: an API, a network connection, a large object in memory, or some other resource that is expensive or impossible to duplicate.  
-A proxy is a 'stand-in' object that is used to access the 'real' object behind the scenes. In the proxy, extra functionality can be provided, for example caching when operations on the real object are resource intensive
+A proxy is a 'stand-in' object that is used to access the 'real' object behind the scenes. In the proxy, extra functionality can be provided, for example caching when operations on the real object are resource intensive.  
+![alt text](PNG/proxy.PNG "Title")  
 ```javascript
 //proxy allows to add additional functionalities, like caching
 // External API Service
