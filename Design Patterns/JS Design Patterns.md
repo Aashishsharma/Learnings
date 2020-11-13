@@ -370,6 +370,18 @@ The Decorator Pattern attaches additional responsibilities to an object dynamica
 ![alt text](PNG/decorator-uml.PNG "Title")  
 **Implementation**  
 ![alt text](PNG/decorator-impl.PNG "Title")  
+Here decorator pattern maynot be the best usecae, but if cost function differs greatly in in't impl, then decorator pattern is more suitable.
+
+##### 8. Facade pattern
+The Facade Pattern provides a unifi ed interface to a set of interfaces in a subsytem. Facade defi nes a higherlevel interface that makes the subsystem easier to use.    
+![alt text](PNG/facade.PNG "Title")  
+**TV problem**  
+![alt text](PNG/facade-problem.PNG "Title")  
+**solution**  
+![alt text](PNG/facade-solution.PNG "Title")  
+**Implementation**  
+![alt text](PNG/facade-impl.PNG "Title")  
+here, watch/end movie implementation is same as the one shown in facade-problem 
 
 
 ##### 7. Proxy Pattern
