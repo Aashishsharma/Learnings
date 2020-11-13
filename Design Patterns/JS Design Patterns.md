@@ -372,9 +372,10 @@ The Decorator Pattern attaches additional responsibilities to an object dynamica
 ![alt text](PNG/decorator-impl.PNG "Title")  
 Here decorator pattern maynot be the best usecae, but if cost function differs greatly in in't impl, then decorator pattern is more suitable.
 
-##### 8. Facade pattern
-The Facade Pattern provides a unifi ed interface to a set of interfaces in a subsytem. Facade defi nes a higherlevel interface that makes the subsystem easier to use.    
+##### 8. Facade (the front of a building) pattern
+The Facade Pattern provides a unified interface to a set of interfaces in a subsytem. Facade defines a higherlevel interface that makes the subsystem easier to use.    
 ![alt text](PNG/facade.PNG "Title")  
+Here and everywhere else client refers to some other piece of code
 **TV problem**  
 ![alt text](PNG/facade-problem.PNG "Title")  
 **solution**  
@@ -439,6 +440,15 @@ console.log(proxy.getValue("Bitcoin"))
 console.log(proxy.getValue("Litecoin"))
 console.log(proxy.getValue("Ethereum"))
 ```
+
+##### 8. Adapter pattern
+The Adapter Pattern converts the interface of a class into another interface the clients expect. Adapter lets classes work together that couldn’t otherwise because of incompatible interfaces.  
+This is used when clients want to call a sepcific method (in this case request) with a particular signature, but the actual method has a different signature  
+![alt text](PNG/adapter-uml.PNG "Title")  
+![alt text](PNG/adapter-impl.PNG "Title")  
+**Use case**  
+You have created a external library (used by many clients) which has a method meth(a,b), now you want to depricate this
+method and now want the users to use new signature meth(b,a), here you can create an adapter, so that you son't replace the method all at once, some clients can still use the older signature via adapter
 
 ##### 8. Mediator pattern
 The Mediator pattern provides central authority over a group of objects by controlling how these objects interact with each other. The "central" object is known as the 'mediator'. The mediator pattern is useful in scenarios where every object needs to be aware of any state change in any other object in the group.  
