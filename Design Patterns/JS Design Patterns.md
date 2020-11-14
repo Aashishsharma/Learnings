@@ -308,10 +308,17 @@ console.log("USPS: " + shipping.calculate(pkg))
 // but here shipping function would still be of same size
 ```
 
-##### 5. Iterator Design Pattern
-The Iterator pattern is a pattern that allows you to effectively loop over a collection of objects. A common programming task is to traverse and manipulate a collection of objects. These collections may be stored as an array or perhaps something more complex, such as a tree or graph structure. In addition, you may need to access the items in the collection in a certain order, such as, front to back, back to front, depth first (as in tree searches), skip evenly numbered objects, etc.  
+##### 5. Iterator Design Pattern  
+The Iterator Pattern provides a way to access the elements of an aggregate object sequentially without exposing its underlying representation.  
+E.g. Java collections have iterator.  
+In java the Iterator can iterate through any collection (LinkedList, Tree, Set), and it does not matter to the iterator which DS it is iterating. This is a iterator pattern  
+
+![alt text](PNG/iterator-uml.PNG "Title")  
+Here Aggregate means anything that is iterable.  
+And for eash DS, we have a different concreteAggregate and concereteIterator.  
+
+In addition, you may need to access the items in the collection in a certain order, such as, front to back, back to front, depth first (as in tree searches), skip evenly numbered objects, etc.  
 The Iterator design pattern solves this problem by separating the collection of objects from the traversal of these objects by implementing a specialized 'iterator'!  
-It allows you to define your own rules while treaversing the collections of the object.  
 For code, see iterators in JS  
 
 ##### 6. Observer Design Pattern
