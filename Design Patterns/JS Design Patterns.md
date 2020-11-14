@@ -16,31 +16,7 @@ Creational design patterns focus on handling object creation mechanisms where ob
 **Patterns falling in this category**  
 1. Constructor
 2. Factory
-3. Abstract
-4. Prototype
-5. Singleton 
-6. Builder  
-
-### 2. Structural Design Patterns
-Structural patterns are concerned with object composition and typically identify simple ways to realize relationships between different objects. They help ensure that when one part of a system changes, the entire structure of the system doesn't need to do the same.  
-Patterns that fall under this category include: Decorator, Facade, Flyweight, Adapter and Proxy.
-
-**Patterns falling in this category**  
-1. Decorator
-2. Facade
-3. Flyweight
-4. Adapter
-5. Proxy
-
-### 3. Behavioral Design Patterns
-Behavioral patterns focus on improving or streamlining the communication between disparate objects in a system.
-
-**Patterns falling in this category**  
-1. Iterator
-2. Mediator
-3. Observer
-4. Visitor
-5. Strategy
+3. Singleton 
 
 ##### 1. Constructor pattern
 **Object Creation**  
@@ -139,16 +115,8 @@ var mondeo = new Car( "Ford Mondeo", 2010, 5000 );
 console.log( civic.toString() );
 console.log( mondeo.toString() );
 ```
-##### 2. Module Pattern
-Helps in keeping the units of code for a project both cleanly separated and organized.  
-In JavaScript, there are several options for implementing modules. These include:  
-1. The Module pattern
-2. Object literal notation
-3. AMD modules
-4. CommonJS modules
-5. ECMAScript Harmony modules
 
-##### 3. Factory Pattern
+##### 2. Factory Pattern
 The Factory Method Pattern defines an interface for creating an object, but lets subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.  
 **We can create obj. on the fly, so why this is needed?**  
 So that we can handle all the obj. creations at a centralized location  
@@ -235,7 +203,116 @@ const singleton2 = Singleton.getProcessManager()
 console.log(singleton === singleton2) // true
 ```
 
-##### 4. Strategy Design Pattern
+### 2. Structural Design Patterns
+Structural patterns are concerned with object composition and typically identify simple ways to realize relationships between different objects. They help ensure that when one part of a system changes, the entire structure of the system doesn't need to do the same.  
+Patterns that fall under this category include: Decorator, Facade, Flyweight, Adapter and Proxy.
+
+**Patterns falling in this category**  
+1. Decorator
+2. Facade
+3. Proxy
+4. Adapter
+
+##### 1. Decorator pattern
+The Decorator Pattern attaches additional responsibilities to an object dynamically. Decorators provide a flexible alternative to subclassing for extending functionality.  
+**Coffee problem**  
+![alt text](PNG/decorator-problem.PNG "Title")  
+**Decorator pattern**  
+![alt text](PNG/decorator.PNG "Title")  
+![alt text](PNG/decorator2.PNG "Title")  
+**UML**  
+![alt text](PNG/decorator-uml.PNG "Title")  
+**Implementation**  
+![alt text](PNG/decorator-impl.PNG "Title")  
+Here decorator pattern maynot be the best usecae, but if cost function differs greatly in in't impl, then decorator pattern is more suitable.
+
+##### 2. Facade (the front of a building) pattern
+The Facade Pattern provides a unified interface to a set of interfaces in a subsytem. Facade defines a higherlevel interface that makes the subsystem easier to use.    
+![alt text](PNG/facade.PNG "Title")  
+Here and everywhere else client refers to some other piece of code
+**TV problem**  
+![alt text](PNG/facade-problem.PNG "Title")  
+**solution**  
+![alt text](PNG/facade-solution.PNG "Title")  
+**Implementation**  
+![alt text](PNG/facade-impl.PNG "Title")  
+here, watch/end movie implementation is same as the one shown in facade-problem 
+
+##### 3. Proxy Pattern
+The Proxy Pattern provides a surrogate or placeholder for another object to control access to it.  
+What is a proxy object?  
+A proxy object is an object that acts as an interface (or placeholder) for something else. The proxy could be an interface to anything: an API, a network connection, a large object in memory, or some other resource that is expensive or impossible to duplicate.  
+A proxy is a 'stand-in' object that is used to access the 'real' object behind the scenes. In the proxy, extra functionality can be provided, for example caching when operations on the real object are resource intensive.  
+![alt text](PNG/proxy.PNG "Title")  
+```javascript
+//proxy allows to add additional functionalities, like caching
+// External API Service
+function CryptocurrencyAPI() {
+  this.getValue = function(coin) {
+    console.log("Calling External API...")
+    switch(coin) {
+      case "Bitcoin":
+        return "$8,500"
+      case "Litecoin":
+        return "$50"
+      case "Ethereum":
+        return "$175"
+       default:
+        return "NA"
+    }
+  }
+}
+//we can use this but for 100 calls to this function
+//we will have to make 100 api calls
+const api = new CryptocurrencyAPI()
+console.log("----------Without Proxy----------")
+console.log(api.getValue("Bitcoin"))
+console.log(api.getValue("Litecoin"))
+console.log(api.getValue("Ethereum"))
+console.log(api.getValue("Bitcoin"))
+console.log(api.getValue("Litecoin"))
+console.log(api.getValue("Ethereum"))
+function CryptocurrencyProxy() {
+  this.api = new CryptocurrencyAPI()
+  this.cache = {}
+  this.getValue = function(coin) {
+    if(this.cache[coin] == null) {
+      this.cache[coin] = this.api.getValue(coin)
+    }
+    return this.cache[coin]
+  }
+}
+//instead we use proxy, so api response is cached
+//and api call is not made everytime
+console.log("----------With Proxy----------")
+const proxy = new CryptocurrencyProxy()
+console.log(proxy.getValue("Bitcoin"))
+console.log(proxy.getValue("Litecoin"))
+console.log(proxy.getValue("Ethereum"))
+console.log(proxy.getValue("Bitcoin"))
+console.log(proxy.getValue("Litecoin"))
+console.log(proxy.getValue("Ethereum"))
+```
+
+##### 4. Adapter pattern
+The Adapter Pattern converts the interface of a class into another interface the clients expect. Adapter lets classes work together that couldn’t otherwise because of incompatible interfaces.  
+This is used when clients want to call a sepcific method (in this case request) with a particular signature, but the actual method has a different signature  
+![alt text](PNG/adapter-uml.PNG "Title")  
+![alt text](PNG/adapter-impl.PNG "Title")  
+**Use case**  
+You have created a external library (used by many clients) which has a method meth(a,b), now you want to depricate this
+method and now want the users to use new signature meth(b,a), here you can create an adapter, so that you son't replace the method all at once, some clients can still use the older signature via adapter
+
+
+### 3. Behavioral Design Patterns
+Behavioral patterns focus on improving or streamlining the communication between disparate objects in a system.
+
+**Patterns falling in this category**  
+1. Strategy
+2. Observer
+3. Iterator
+
+##### 1. Strategy Design Pattern
 **The duck problem**
 ![alt text](PNG/strategy.PNG "Title")  
 In inheritance code sharing is done only top to down. But horizontal code sharing (2 subclasses having same method, but different than the parent), Inheritance fails.  
@@ -308,20 +385,20 @@ console.log("USPS: " + shipping.calculate(pkg))
 // but here shipping function would still be of same size
 ```
 
-##### 5. Iterator Design Pattern  
+##### 2. Iterator Design Pattern  
 The Iterator Pattern provides a way to access the elements of an aggregate object sequentially without exposing its underlying representation.  
 E.g. Java collections have iterator.  
 In java the Iterator can iterate through any collection (LinkedList, Tree, Set), and it does not matter to the iterator which DS it is iterating. This is a iterator pattern  
 
+In addition, you may need to access the items in the collection in a certain order, such as, front to back, back to front, depth first (as in tree searches), skip evenly numbered objects, etc.  
+The Iterator design pattern solves this problem by separating the collection of objects from the traversal of these objects by implementing a specialized 'iterator'!  
+
 ![alt text](PNG/iterator-uml.PNG "Title")  
 Here Aggregate means anything that is iterable.  
 And for eash DS, we have a different concreteAggregate and concereteIterator.  
-
-In addition, you may need to access the items in the collection in a certain order, such as, front to back, back to front, depth first (as in tree searches), skip evenly numbered objects, etc.  
-The Iterator design pattern solves this problem by separating the collection of objects from the traversal of these objects by implementing a specialized 'iterator'!  
 For code, see iterators in JS  
 
-##### 6. Observer Design Pattern
+##### 3. Observer Design Pattern
 The Observer pattern is a design pattern that offers a subscription model in which objects (known as 'observers') can subscribe to an event (known as a 'subject') and get notified when the event occurs (or when the subject sends a signal). This pattern is the cornerstone of event driven programming.  
 Used in event handling systems  
 Can be used in chat apps  
@@ -366,167 +443,3 @@ subject.fire()
 The Observer pattern requires that the observer (or object) wishing to receive topic notifications must subscribe this interest to the object firing the event (the subject).  
 The Publish/Subscribe pattern however uses a topic/event channel which sits between the objects wishing to receive notifications (subscribers) and the object firing the event (the publisher). This event system allows code to define application specific events which can pass custom arguments containing values needed by the subscriber. The idea here is to avoid dependencies between the subscriber and publisher.  
 
-##### 7. Decorator pattern
-The Decorator Pattern attaches additional responsibilities to an object dynamically. Decorators provide a flexible alternative to subclassing for extending functionality.  
-**Coffee problem**  
-![alt text](PNG/decorator-problem.PNG "Title")  
-**Decorator pattern**  
-![alt text](PNG/decorator.PNG "Title")  
-![alt text](PNG/decorator2.PNG "Title")  
-**UML**  
-![alt text](PNG/decorator-uml.PNG "Title")  
-**Implementation**  
-![alt text](PNG/decorator-impl.PNG "Title")  
-Here decorator pattern maynot be the best usecae, but if cost function differs greatly in in't impl, then decorator pattern is more suitable.
-
-##### 8. Facade (the front of a building) pattern
-The Facade Pattern provides a unified interface to a set of interfaces in a subsytem. Facade defines a higherlevel interface that makes the subsystem easier to use.    
-![alt text](PNG/facade.PNG "Title")  
-Here and everywhere else client refers to some other piece of code
-**TV problem**  
-![alt text](PNG/facade-problem.PNG "Title")  
-**solution**  
-![alt text](PNG/facade-solution.PNG "Title")  
-**Implementation**  
-![alt text](PNG/facade-impl.PNG "Title")  
-here, watch/end movie implementation is same as the one shown in facade-problem 
-
-
-##### 7. Proxy Pattern
-The Proxy Pattern provides a surrogate or placeholder for another object to control access to it.  
-What is a proxy object?  
-A proxy object is an object that acts as an interface (or placeholder) for something else. The proxy could be an interface to anything: an API, a network connection, a large object in memory, or some other resource that is expensive or impossible to duplicate.  
-A proxy is a 'stand-in' object that is used to access the 'real' object behind the scenes. In the proxy, extra functionality can be provided, for example caching when operations on the real object are resource intensive.  
-![alt text](PNG/proxy.PNG "Title")  
-```javascript
-//proxy allows to add additional functionalities, like caching
-// External API Service
-function CryptocurrencyAPI() {
-  this.getValue = function(coin) {
-    console.log("Calling External API...")
-    switch(coin) {
-      case "Bitcoin":
-        return "$8,500"
-      case "Litecoin":
-        return "$50"
-      case "Ethereum":
-        return "$175"
-       default:
-        return "NA"
-    }
-  }
-}
-//we can use this but for 100 calls to this function
-//we will have to make 100 api calls
-const api = new CryptocurrencyAPI()
-console.log("----------Without Proxy----------")
-console.log(api.getValue("Bitcoin"))
-console.log(api.getValue("Litecoin"))
-console.log(api.getValue("Ethereum"))
-console.log(api.getValue("Bitcoin"))
-console.log(api.getValue("Litecoin"))
-console.log(api.getValue("Ethereum"))
-function CryptocurrencyProxy() {
-  this.api = new CryptocurrencyAPI()
-  this.cache = {}
-  this.getValue = function(coin) {
-    if(this.cache[coin] == null) {
-      this.cache[coin] = this.api.getValue(coin)
-    }
-    return this.cache[coin]
-  }
-}
-//instead we use proxy, so api response is cached
-//and api call is not made everytime
-console.log("----------With Proxy----------")
-const proxy = new CryptocurrencyProxy()
-console.log(proxy.getValue("Bitcoin"))
-console.log(proxy.getValue("Litecoin"))
-console.log(proxy.getValue("Ethereum"))
-console.log(proxy.getValue("Bitcoin"))
-console.log(proxy.getValue("Litecoin"))
-console.log(proxy.getValue("Ethereum"))
-```
-
-##### 8. Adapter pattern
-The Adapter Pattern converts the interface of a class into another interface the clients expect. Adapter lets classes work together that couldn’t otherwise because of incompatible interfaces.  
-This is used when clients want to call a sepcific method (in this case request) with a particular signature, but the actual method has a different signature  
-![alt text](PNG/adapter-uml.PNG "Title")  
-![alt text](PNG/adapter-impl.PNG "Title")  
-**Use case**  
-You have created a external library (used by many clients) which has a method meth(a,b), now you want to depricate this
-method and now want the users to use new signature meth(b,a), here you can create an adapter, so that you son't replace the method all at once, some clients can still use the older signature via adapter
-
-##### 8. Mediator pattern
-The Mediator pattern provides central authority over a group of objects by controlling how these objects interact with each other. The "central" object is known as the 'mediator'. The mediator pattern is useful in scenarios where every object needs to be aware of any state change in any other object in the group.  
-```javascript
-//chat room application
-function Member(name) {
-  this.name = name
-  this.chatroom = null
-}
-Member.prototype = {
-  send: function(message, toMember) {
-    this.chatroom.send(message, this, toMember)
-  },
-  receive: function(message, fromMember) {
-    console.log(`${fromMember.name} to ${this.name}: ${message}`)
-  }
-}
-function Chatroom() {
-  this.members = {}
-}
-Chatroom.prototype = {
-  addMember: function(member) {
-    this.members[member.name] = member
-    member.chatroom = this
-  },
-  send: function(message, fromMember, toMember) {
-    toMember.receive(message, fromMember)
-  }
-}
-const chat = new Chatroom()
-const bob = new Member("Bob")
-const john = new Member("John")
-const tim = new Member("Tim")
-chat.addMember(bob)
-chat.addMember(john)
-chat.addMember(tim)
-bob.send("Hey, John", john)  // Bob to John Hey, John
-john.send("What's up, Bob", bob)
-tim.send("John, are you ok?", john)
-```
-
-##### 9. Visitor pattern
-The Visitor pattern allows you to add or define new functionality to an object without changing the code for that object. The new logic resides in a external object or function called the 'visitor'.  
-Visitors are useful when you are trying to extend the functionality of a library or framework. If the object you want to extend provides some kind of 'accept' method that accepts a visitor object/function, you can grant the visitor object access to the receiving object's internal properties. The visitor can then modify the behavior of the receiving object. This pattern allows you to provide an easy way for clients to implement future extensions to that object.  
-```javascript
-function Employee(name, salary) {
-  this.name = name
-  this.salary = salary
-}
-Employee.prototype = {
-  getSalary: function() {
-    return this.salary
-  },
-  setSalary: function(sal) {
-    this.salary = sal
-  },
-  accept: function(visitorFunction) {
-    visitorFunction(this)
-  }
-}
-/////////////////////////////////////////////
-const devsage = new Employee("DevSage", 10000)
-console.log(devsage.getSalary()) 
-//this is where we extend emp.getSalary method
-//without touching that object directly
-function ExtraSalary(emp) {
-  emp.setSalary(emp.getSalary() * 2)
-}
-devsage.accept(ExtraSalary)
-console.log(devsage.getSalary())
-// o/p 
-//1000
-//2000
-```
