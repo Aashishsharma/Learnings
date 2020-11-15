@@ -5,6 +5,7 @@
 4. Static methods
 5. Private, protected properties and methods
 6. Mixins
+7. ES6 features
 
 ## Class
 Template for creating objects, providing initial values for state (member variables) and implementations of behavior (member functions or methods)  
@@ -217,3 +218,39 @@ Object.assign(User.prototype, sayHiMixin);
 new User("Dude").sayHi(); // Hello Dude!
 //There’s no inheritance, but a simple method copying. So User may inherit from another class and also include the mixin to “mix-in” the additional methods
 ```
+
+### ES6 features
+1. Arrow functions
+2. Classes
+3. Let const
+4. Tepmplate String
+5. Destructuring
+6. Rest, Spread and default parameters
+The rest parameter syntax allows us to represent an indefinite number of arguments as an array.  
+Rest parameter must be the last argument.  
+The arguments object is not a real array, while rest parameters are Array instances, meaning methods like sort, map, forEach or pop can be applied on it directly;  
+```javascript
+function f(a, b, ...theArgs) {
+  // ...
+}
+```  
+Spread syntax (...) allows an iterable such as an array expression or string to be expanded in places where zero or more arguments (for function calls) or elements (for array literals) are expected  
+A better way to concatenate arrays  
+```javascript
+myFunction(...iterableObj);
+
+let arr1 = [0, 1, 2];
+let arr2 = [3, 4, 5]; 
+//  Append all items from arr2 onto arr1
+arr1 = arr1.concat(arr2);
+
+let arr1 = [0, 1, 2];
+let arr2 = [3, 4, 5];
+arr1 = [...arr1, ...arr2]; 
+//  arr1 is now [0, 1, 2, 3, 4, 5]
+// if we de arr2 = [1,2, arr1] we get nested array
+```
+7. Iterators
+8. Generators
+9. Modules
+10. map + set + weakmap + weakset

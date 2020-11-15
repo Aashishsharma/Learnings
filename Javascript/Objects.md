@@ -7,21 +7,106 @@
 
 ## Objects
 Used to store keyed collections of various data and more complex entities  
+Different ways of creating an object  
+The three common ways to create new objects in JavaScript are as follows:  
 ```javascript
-let user = new Object(); // "object constructor" syntax
-let user = {};  // "object literal" syntax
-
-let user = {     // an object
-  name: "John",  // by key "name" store value "John"
-  age: 30        // by key "age" store value 30
+// Each of the following options will create a new empty object:
+1. var newObject = {};
+2. var newObject = Object.create( Object.prototype );
+//e.g.
+var test = {
+  val: 1,
+  func: function() {
+    return this.val;
+  }
 };
+var testA = Object.create(test);
+testA.val = 2;
+console.log(test.func()); // 1
+console.log(testA.func()); // 2
 
-// get property values of the object: using dot notation
-alert( user.name ); // John
-alert( user.age ); // 30
+3. var newObject = new Object();
+//Where the "Object" constructor in the final example
+// creates an object wrapper for a specific value, or
+// where no value is passed, it will create an empty object and return it
 
-// adding new property
-user.isAdmin = true;
+//2 vs 3
+//Very simply said, new X is Object.create(X.prototype) 
+//with additionally running the constructor function. 
+//(And giving the constructor the chance to return the
+// actual object that should be the result of the 
+//expression instead of this.) That’s it. :)
+
+````
+
+**Accessing obj. values (4 ways)**  
+```javascript
+// ECMAScript 3 compatible approaches
+// 1. Dot syntax
+// Set properties
+newObject.someKey = "Hello World"; 
+// Get properties
+var value = newObject.someKey;
+
+// 2. Square bracket syntax
+// Set properties
+newObject["someKey"] = "Hello World"; 
+// Get properties
+var value = newObject["someKey"];
+ 
+// ECMAScript 5 only compatible approaches
+// 3. Object.defineProperty
+// Set properties
+Object.defineProperty( newObject, "someKey", {
+    value: "for more control of the property's behavior",
+    writable: true,
+    enumerable: true,
+    configurable: true
+});
+// If the above feels a little difficult to read, a short-hand could
+// be written as follows:
+var defineProp = function ( obj, key, value ){
+  var config = {
+    value: value,
+    writable: true,
+    enumerable: true,
+    configurable: true
+  };
+  Object.defineProperty( obj, key, config );
+};
+// To use, we then create a new empty "person" object
+var person = Object.create( Object.prototype );
+// Populate the object with properties
+defineProp( person, "car", "Delorean" );
+defineProp( person, "dateOfBirth", "1981" );
+defineProp( person, "hasBeard", false );
+console.log(person);
+// Outputs: Object {car: "Delorean", dateOfBirth: "1981", hasBeard: false}
+ 
+// 4. Object.defineProperties
+// Set properties
+Object.defineProperties( newObject, {
+  "someKey": {
+    value: "Hello World",
+    writable: true
+  },
+  "anotherKey": {
+    value: "Foo bar",
+    writable: false
+  }
+});
+// Getting properties for 3. and 4. can be done using any of the
+// options in 1. and 2.
+
+// Usage:
+// Create a race car driver that inherits from the person object
+var driver = Object.create( person );
+// Set some properties for the driver
+defineProp(driver, "topSpeed", "100mph");
+// Get an inherited property (1981)
+console.log( driver.dateOfBirth );
+```  
+```javascript
 
 // deleting existing property
 delete user.age;

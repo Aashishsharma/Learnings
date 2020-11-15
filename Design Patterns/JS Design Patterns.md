@@ -21,15 +21,7 @@ Creational design patterns focus on handling object creation mechanisms where ob
 ##### 1. Constructor pattern
 **Object Creation**  
 The three common ways to create new objects in JavaScript are as follows:  
-```javascript
-// Each of the following options will create a new empty object:
-var newObject = {};
-var newObject = Object.create( Object.prototype );
-var newObject = new Object();
-//Where the "Object" constructor in the final example
-// creates an object wrapper for a specific value, or
-// where no value is passed, it will create an empty object and return it
-```
+
 **Accessing obj. values (4 ways)**  
 ```javascript
 // ECMAScript 3 compatible approaches
@@ -389,6 +381,7 @@ console.log("USPS: " + shipping.calculate(pkg))
 The Iterator Pattern provides a way to access the elements of an aggregate object sequentially without exposing its underlying representation.  
 E.g. Java collections have iterator.  
 In java the Iterator can iterate through any collection (LinkedList, Tree, Set), and it does not matter to the iterator which DS it is iterating. This is a iterator pattern  
+So in your app if you want to iterate over collection of objs, and each collection has different types of objects and you want to use a single iteration  
 
 In addition, you may need to access the items in the collection in a certain order, such as, front to back, back to front, depth first (as in tree searches), skip evenly numbered objects, etc.  
 The Iterator design pattern solves this problem by separating the collection of objects from the traversal of these objects by implementing a specialized 'iterator'!  
