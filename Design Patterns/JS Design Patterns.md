@@ -1,6 +1,7 @@
 ## JS Design Patterns
 A pattern is a reusable solution that can be applied to commonly occurring problems in software design  
 It is a blueprint/template that you can use and modify to solve your particular problem  
+It gives developers a common vocabulary to communicate  
 
 **Why to use?**  
 1. Reusing patterns assists in preventing minor issues that can cause major problems in the application development process
@@ -23,72 +24,7 @@ Creational design patterns focus on handling object creation mechanisms where ob
 The three common ways to create new objects in JavaScript are as follows:  
 
 **Accessing obj. values (4 ways)**  
-```javascript
-// ECMAScript 3 compatible approaches
-// 1. Dot syntax
-// Set properties
-newObject.someKey = "Hello World"; 
-// Get properties
-var value = newObject.someKey;
 
-// 2. Square bracket syntax
-// Set properties
-newObject["someKey"] = "Hello World"; 
-// Get properties
-var value = newObject["someKey"];
- 
-// ECMAScript 5 only compatible approaches
-// 3. Object.defineProperty
-// Set properties
-Object.defineProperty( newObject, "someKey", {
-    value: "for more control of the property's behavior",
-    writable: true,
-    enumerable: true,
-    configurable: true
-});
-// If the above feels a little difficult to read, a short-hand could
-// be written as follows:
-var defineProp = function ( obj, key, value ){
-  var config = {
-    value: value,
-    writable: true,
-    enumerable: true,
-    configurable: true
-  };
-  Object.defineProperty( obj, key, config );
-};
-// To use, we then create a new empty "person" object
-var person = Object.create( Object.prototype );
-// Populate the object with properties
-defineProp( person, "car", "Delorean" );
-defineProp( person, "dateOfBirth", "1981" );
-defineProp( person, "hasBeard", false );
-console.log(person);
-// Outputs: Object {car: "Delorean", dateOfBirth: "1981", hasBeard: false}
- 
-// 4. Object.defineProperties
-// Set properties
-Object.defineProperties( newObject, {
-  "someKey": {
-    value: "Hello World",
-    writable: true
-  },
-  "anotherKey": {
-    value: "Foo bar",
-    writable: false
-  }
-});
-// Getting properties for 3. and 4. can be done using any of the
-// options in 1. and 2.
-
-// Usage:
-// Create a race car driver that inherits from the person object
-var driver = Object.create( person );
-// Set some properties for the driver
-defineProp(driver, "topSpeed", "100mph");
-// Get an inherited property (1981)
-console.log( driver.dateOfBirth );
-```  
 **Constructors with prototypes**  
 ```javascript
 function Car( model, year, miles ) {
