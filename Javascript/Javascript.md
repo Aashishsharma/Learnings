@@ -1,5 +1,9 @@
 ## Javascript
-Javascript is dynamically typed
+Javascript is  
+1. Dynamically typed: same variable can be assigned to multiple datatypes
+2. Interpreted: It is an interpreted language. Instructions are executed directly.
+3. Object-oriented: It is an object-oriented language.
+4. Scripting Language: is a programming language for a special run-time environment (in case of JS it is the browser) that automates the execution of tasks  
 
 ## Index
 1. Event Loop
@@ -97,7 +101,7 @@ Modern JavaScript supports “classes” and “modules” – advanced language
 #### Let, var, const
 
 ###### let ve var
-1. let has a bloc scope, var ha no block scope, Variables, declared with var, are either function-wide or global.
+1. let has a block scope, var ha no block scope, Variables, declared with var, are either function-wide or global.
 2. “var” tolerates redeclarations
 ```javascript
 let user;
@@ -108,7 +112,7 @@ var user = "John"; // this "var" does nothing (already declared)
 // ...it doesn't trigger an error
 alert(user); // John
 ```
-3. let and var are hoisted, but you cannot access let before the actual declaration is evaluated at runtime, but you can access var
+3. var is hoisted but not let
 ```javascript
 console.log(typeof name); // undefined
 var name = "John";
@@ -321,6 +325,22 @@ console.log(get_arr[2]());  // 4
 console.log(get_arr[3]());  // 4
 // due to closure
 ```
+**Use case**  
+To create private functions/variables  
+```javascript
+a = (function () {
+    var privatefunction = function () {
+        alert('hello');
+    }
+    return {
+        publicfunction : function () {
+            privatefunction();
+        }
+    }
+})();
+```  
+As you can see there, a is now an object, with a method publicfunction ( a.publicfunction() ) which calls privatefunction, which only exists inside the closure. You can NOT call privatefunction directly (i.e. a.privatefunction() ), just publicfunction()
+
 ------------------------------------------------------------------------------
 
 #### Garbage collection

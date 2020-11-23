@@ -363,7 +363,7 @@ shouldComponentUpdate(nextProps, nextState) {
 ```
 In most cases, instead of writing shouldComponentUpdate() by hand, you can inherit from React.PureComponent. It is equivalent to implementing shouldComponentUpdate() with a shallow comparison of current and previous props and state.
 
-## 3. Use Profiler API
+#### 3. Use Profiler API
 The Profiler measures how often a React application renders and what the “cost” of rendering is. Its purpose is to help identify parts of an application that are slow and may benefit from optimizations such as memoization.
 Profiling adds some additional overhead, so it is disabled in the production build.
 
@@ -393,7 +393,7 @@ function onRenderCallback(
 }
 ```
 
-## 4. Use keys
+#### 4. Use keys
 Inserting an element at the beginning has worse performance. For example, converting between these two trees works poorly
 ```javascript
 <ul>
@@ -424,6 +424,12 @@ In order to solve this issue, React supports a key attribute. When children have
 ```
 Keys should be stable, predictable, and unique. Unstable keys (like those produced by Math.random()) will cause problems
 
+#### 5. React.PureComponent
+React.PureComponent is similar to React.Component. The difference between them is that React.Component doesn’t implement shouldComponentUpdate(), but React.PureComponent implements it with a shallow prop and state comparison.  
+React.PureComponent’s shouldComponentUpdate() only shallowly compares the objects. If these contain complex data structures, it may produce false-negatives for deeper differences.  
+
+#### 6. Using React memo
+In computing, memoization or memoisation is an optimization technique used primarily to speed up computer programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again.  
 
 
 ------------------------------------------------------------------------------
