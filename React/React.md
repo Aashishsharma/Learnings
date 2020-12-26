@@ -1,13 +1,13 @@
 ## Index
-1. React, why, creating app, npx
-2. ReactDOM
-3. JSX
-4. React elements and components and props
-5. Handling events
-6. Forms in React
-7. Lifting state up
-8. Composition over inheritance
-9. Thinking in React
+1. React, why, creating app, npx - (6)
+2. ReactDOM - reconcialitation, diffing algo
+3. JSX - (2)
+4. React elements and components and props - functional/class - lifecycle
+5. Handling events - similar to html/js
+6. Forms in React - controlled/uncontrolled
+7. Lifting state up - by making a component controlled
+8. Composition over inheritance - Strategy design pattern
+9. Thinking in React - (5)
 
 ## REACT?
  A javascript library.

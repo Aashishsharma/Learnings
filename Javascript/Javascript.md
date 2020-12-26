@@ -6,20 +6,20 @@ Javascript is
 4. Scripting Language: is a programming language for a special run-time environment (in case of JS it is the browser) that automates the execution of tasks  
 
 ## Index
-1. Event Loop
+1. Event Loop - (4)
 2. automatic semicolon insertion
-3. use strict
-4. let var const
-5. IIFE
-6. Data types
+3. use strict - no var declare, still executes in non-strict, classes modules already include strict mode
+4. let var const - (3)
+5. IIFE - to not pollute gloval env
+6. Data types - (8)
 7. Alert, Confirm, Prompt
-8. Type conversion
-9. Nullish coalesing operator
-10. Hoisting 
-11. Closure
+8. Type conversion - + to string others (/,*,-) to number
+9. Nullish coalesing operator - ?? - first non-null/non-undefined
+10. Hoisting - only declaration/var/fun declare not initialization/let/fun express 
+11. Closure - child fun accessing parent's lexical env. - to create private fun - with IIFE
 12. Garbage collection
 13. Module, defer, async
-14. Callback, promises, async await
+14. Callback, promises, async await - callback - libraries(filter example)
 15. Cookies, localstorage, session storage
 
 ## Javascript event loop. 

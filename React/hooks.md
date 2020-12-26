@@ -1,9 +1,9 @@
 ﻿## Index
-1. Hooks, why hooks
+1. Hooks, why hooks - (2)
 2. State hook
 3. Effect hook
-4. Rules of hooks
-5. Custom hooks
+4. Rules of hooks - (2)
+5. Custom hooks - for using STATEFUL logic
 6. State vs props 
 
 ## HOOKS

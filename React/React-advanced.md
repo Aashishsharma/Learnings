@@ -1,17 +1,17 @@
 ## Index
 1. Code splitting and lazy loading
-2. Context
-3. Error boundaries
-4. Refs and Doms
+2. Context - managing theme, locale, data cache
+3. Error boundaries - 
+4. Refs and Doms - alternate way to alter child component apart from props (managing focus / uncontrolled elements) 
 5. Fragment
-6. HOC
-7. Performance optimization
-8. Portals
-9. Render Props
-10. Static type checking and Strict mode
-11. Proptypes
-12. Uncontrolled compomnents
-13. React Router
+6. HOC - reuse logic, takes and returns a component, not part of the React API,they are a pattern that emerges from React’s compositional nature. (e.g. logging, security, commentpost/blogpost, loading UI for all components)
+7. Performance optimization - keys, profilier-api, shouldcompupdate/pure-coponent, React.memo
+8. Portals - render child outside of parent (tooltips)
+9. Render Props - reuse code - props passed to child are functions which retrun react elem/component
+10. Static type checking and Strict mode - typescript or flow, use TS template while npx create
+11. Proptypes - basic prope types checking
+12. Uncontrolled compomnents - use refs
+13. React Router - link(to), route(path/component), switch(route), browser-route for historys
 
 ## CODE SPLITTING
 Bundling is great, but as your app grows, your bundle will grow too.  
@@ -217,100 +217,77 @@ e.g. logging, security
 
  e.g. use
 ```javascript
-class CommentList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.state = {
-      // "DataSource" is some global data source
-      comments: DataSource.getComments()
-    };
+//syntax
+import React from 'react';
+// Take in a component as argument WrappedComponent
+const higherOrderComponent = (WrappedComponent) => {
+// And return another component
+  class HOC extends React.Component {
+    render() {
+      return <WrappedComponent />;
+    }
   }
+  return HOC;
+};
 
+```
+Loading UI for all components
+```javascript
+//List.js
+import React from 'react';
+const List = (props) => {
+  const { repos } = props;
+  if (!repos) return null;
+  if (!repos.length) return <p>No repos, sorry</p>;
+  return (
+    <ul>
+      {repos.map((repo) => {
+        return <li key={repo.id}>{repo.full_name}</li>;
+      })}
+    </ul>
+  );
+};
+export default List;
+
+
+///withdLoading.js
+import React from 'react';
+function WithLoading(Component) {
+  return function WihLoadingComponent({ isLoading, ...props }) {
+    if (!isLoading) return <Component {...props} />;
+    return <p>Hold on, fetching data might take some time.</p>;
+  };
+}
+export default WithLoading;
+
+//App.js
+import React from 'react';
+import List from './components/List.js';
+import WithLoading from './components/withLoading.js';
+const ListWithLoading = WithLoading(List);
+class App extends React.Component {
+  state = {
+    loading: false,
+    repos: null,
+  };
   componentDidMount() {
-    // Subscribe to changes
-    DataSource.addChangeListener(this.handleChange);
+    this.setState({ loading: true });
+    fetch(`https://api.github.com/users/hacktivist123/repos`)
+      .then((json) => json.json())
+      .then((repos) => {
+        this.setState({ loading: false, repos: repos });
+      });
   }
-
-  componentWillUnmount() {
-    // Clean up listener
-    DataSource.removeChangeListener(this.handleChange);
-  }
-
-  handleChange() {
-    // Update component state whenever the data source changes
-    this.setState({
-      comments: DataSource.getComments()
-    });
-  }
-
   render() {
     return (
-      <div>
-        {this.state.comments.map((comment) => (
-          <Comment comment={comment} key={comment.id} />
-        ))}
-      </div>
+      <ListWithLoading
+        isLoading={this.state.loading}
+        repos={this.state.repos}
+      />
     );
   }
 }
-```
-Imagine we have exactly same component 'blogpost' with same pattern, just the datasorce is different, But much of their implementation is the same:
-
-1. On mount, add a change listener to DataSource.
-2. Inside the listener, call setState whenever the data source changes.
-3. On unmount, remove the change listener.
-
-You can imagine that in a large app, this same pattern of subscribing to DataSource and calling setState will occur over and over again. We want an abstraction that allows us to define this logic in a single place and share it across many components. This is where higher-order components excel.
-
-We can write a function that creates components, like CommentList and BlogPost, that subscribe to DataSource. The function will accept as one of its arguments a child component that receives the subscribed data as a prop. Let’s call the function withSubscription
-
-```javascript
-const CommentListWithSubscription = withSubscription(
-  CommentList,
-  (DataSource) => DataSource.getComments()
-);
-
-const BlogPostWithSubscription = withSubscription(
-  BlogPost,
-  (DataSource) => DataSource.getBlogPost()
-);
-
-
-// This function takes a component...
-function withSubscription(WrappedComponent, selectData) {
-  // ...and returns another component...
-  return class extends React.Component {
-    constructor(props) {
-      super(props);
-      this.handleChange = this.handleChange.bind(this);
-      this.state = {
-        data: selectData(DataSource)
-      };
-    }
-
-    componentDidMount() {
-      // ... that takes care of the subscription...
-      DataSource.addChangeListener(this.handleChange);
-    }
-
-    componentWillUnmount() {
-      DataSource.removeChangeListener(this.handleChange);
-    }
-
-    handleChange() {
-      this.setState({
-        data: selectData(DataSource)
-      });
-    }
-
-    render() {
-      // ... and renders the wrapped component with the fresh data!
-      // Notice that we pass through any additional props
-      return <WrappedComponent data={this.state.data} {...this.props} />;
-    }
-  };
-}
+export default App;
 ```
 A HOC is a pure function with zero side-effects.
 
@@ -425,12 +402,59 @@ In order to solve this issue, React supports a key attribute. When children have
 Keys should be stable, predictable, and unique. Unstable keys (like those produced by Math.random()) will cause problems
 
 #### 5. React.PureComponent
-React.PureComponent is similar to React.Component. The difference between them is that React.Component doesn’t implement shouldComponentUpdate(), but React.PureComponent implements it with a shallow prop and state comparison.  
-React.PureComponent’s shouldComponentUpdate() only shallowly compares the objects. If these contain complex data structures, it may produce false-negatives for deeper differences.  
+Pure Components in React are the components which do not re-renders when the value of state and props has been updated with the same values.  
+Takes care of “shouldComponentUpdate” implicitly  
+State and Props are Shallow Compared, so use wisely  
+```javascript
+class Component extends React.PureComponent {
+  constructor() {
+    super();
+    this.state = {
+      counter: 0
+    }
+    // The value of Counter is updated to same value during continues interval
+    setInterval(() => {
+      this.setState({
+        counter: 0
+      });
+    }, 1000);
+  }
+  render() { 
+    // This function wont be re-rendered in case when the new state is same as previous
+    return <b>Counter Value: {this.state.counter}</b>
+  }
+}
+```
 
 #### 6. Using React memo
+similar to pure components, memo is HOC  
 In computing, memoization or memoisation is an optimization technique used primarily to speed up computer programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again.  
+```javascript
+class App extends React.Component {
+  names = ["Peter", "Bruce", "Clark"];
+  state = { name: "Anonymous" };
+  componentDidMount() {
+    setInterval(() => {
+      const name = this.generateName();
+      this.setState({ name });
+    }, 1000);
+  }
+  generateName = () =>
+    this.names[Math.floor(Math.random() * this.names.length)];
+  render() {
+    return <View name="Sam" />;
+  }
+}
 
+//view.js
+const View = (props) => `Hi, I'm ${props.name}`;
+```
+Here the problem is every second, the render is called aand every second View component is aslo re-rendered even if the props are hardcoded for View componente
+```javascript
+//use memo
+import { memo } from 'React';
+const View = memo((props) => `Hi, I'm ${props.name}`);
+```
 
 ------------------------------------------------------------------------------
 ## Portals
