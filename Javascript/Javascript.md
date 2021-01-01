@@ -5,7 +5,7 @@
 4. use strict - no var declare, still executes in non-strict, classes modules already include strict mode
 5. let var const - block/hoisting/redeclaration
 6. IIFE - to not pollute gloval env
-7. Data types - (8), null (can be assigned) vs undefined (if not assigned), use of symbol
+7. Data types - (8), null (can be assigned) vs undefined (if not assigned), use of symbol (using shared lib's obj)
 8. Alert, Confirm, Prompt
 9. Type conversion - + to string others (/,*,-) to number/NAN, Strict equality, different types are converted to numbers by the equality operator ==
 10. Nullish coalesing operator - ?? - || returns the first truthy value. ?? returns the first defined value.
