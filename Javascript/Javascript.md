@@ -1,3 +1,21 @@
+## Index
+1. Javascript - (dynamic, oo, scripting), compiled/interpreted(hoisting, let error, JIT)
+2. Event Loop - runtime(heap, stack), web/dom apis, event queue, ES6 job queue
+3. automatic semicolon insertion
+4. use strict - no var declare, still executes in non-strict, classes modules already include strict mode
+5. let var const - block/hoisting/redeclaration
+6. IIFE - to not pollute gloval env
+7. Data types - (8), null (can be assigned) vs undefined (if not assigned), use of symbol
+8. Alert, Confirm, Prompt
+9. Type conversion - + to string others (/,*,-) to number/NAN, Strict equality, different types are converted to numbers by the equality operator ==
+10. Nullish coalesing operator - ?? - || returns the first truthy value. ?? returns the first defined value.
+11. Hoisting - only declaration/var/fun declare not initialization/let/fun express 
+12. Closure - child fun accessing parent's lexical env. - to create private fun - with IIFE
+13. Garbage collection - remove from memory if not reachable
+14. Module, defer, async - (**export** (4 - before/after decl (named), as, (when?(util/class))default(only 1, can be combined with named)) (**import** - named - {}, default without {}, for dynamic -  import()) - same module imported into multiple other places, its code is executed only the first time
+15. Callback, promises, async await - callback(hell-remove) - libraries(filter example, readfile), (Promise.all (run concurrenntly), race, any), (await- syntax diff)
+16. Cookies, localstorage, session storage - (cookie - (auth, <4KB, 20/domain), options-(path, max-age, secure, http-only)), (loclstorage - (<2MB, server can't manipulate, same within multiple windows(!websession)) - auto-form-fill)
+
 ## Javascript
 Javascript is  
 1. Dynamically typed: same variable can be assigned to multiple datatypes
@@ -9,24 +27,6 @@ Javascript is
 1. compilers use parsers, JS code is also parsed, that's why hoisting works. If it was not parsed, then how can we call before it's definition (hositing) 
 2. declaring 2 let variables with same name gives error immediately, if it was interpreted, then error would have thorwn at the line where the second let was declared 
 3. It uses JIT compilers where only the part of code is compiled. If else block is not executed, it is not compiled
-
-## Index
-1. Event Loop - (4)
-2. automatic semicolon insertion
-3. use strict - no var declare, still executes in non-strict, classes modules already include strict mode
-4. let var const - (3)
-5. IIFE - to not pollute gloval env
-6. Data types - (8)
-7. Alert, Confirm, Prompt
-8. Type conversion - + to string others (/,*,-) to number
-9. Nullish coalesing operator - ?? - first non-null/non-undefined
-10. Hoisting - only declaration/var/fun declare not initialization/let/fun express 
-11. Closure - child fun accessing parent's lexical env. - to create private fun - with IIFE
-12. Garbage collection
-13. Module, defer, async
-14. Callback, promises, async await - callback - libraries(filter example)
-15. Cookies, localstorage, session storage
-16. Browser events
 
 ## Javascript event loop. 
 [Javascript event loop](https://www.youtube.com/watch?v=8aGhZQkoFbQ)
@@ -41,9 +41,7 @@ It's a way to execute the result of an **async function** as soon as possible, r
 Promises that resolve before the current function ends will be executed right after the current function.  
 ```javascript
 const bar = () => console.log('bar')
-
 const baz = () => console.log('baz')
-
 const foo = () => {
   console.log('foo')
   setTimeout(bar, 0)
@@ -52,9 +50,7 @@ const foo = () => {
   ).then(resolve => console.log(resolve))
   baz()
 }
-
 foo()
-
 //output in ES6         // output before ES6
 // foo                   // foo
 // baz                   // baz
@@ -403,21 +399,6 @@ delete family.mother.husband;
 Idle-time collection – the garbage collector tries to run only while the CPU is idle, to reduce the possible effect on the execution.
 
 ------------------------------------------------------------------------------
-## Data types
-1. Premitive - hold only one value
-2. obj - real life entity + actions (functions)
-
-If premitives hold only 1 value then how is this possible
-```javascript
-let str = "Hello";
-alert(str.toUpperCase()); // HELLO
-// how does string has a method?
-```
-1. The string str is a primitive. So in the moment of accessing its property, a special object is created that knows the value of the string, and has useful methods, like toUpperCase().
-2. That method runs and returns a new string (shown by alert).
-3. The special object is destroyed, leaving the primitive str alone
-
-------------------------------------------------------------------------------
 ## Modules
 A module is just a file. One script is one module. As simple as that.
 ```javascript
@@ -426,7 +407,6 @@ A module is just a file. One script is one module. As simple as that.
 export function sayHi(user) {
   alert(`Hello, ${user}!`);
 }
-
 import {sayHi} from './sayHi.js';
 alert(sayHi); // function...
 sayHi('John'); // Hello, John!
@@ -500,11 +480,8 @@ let say = obj.default;
 say();
 ```
 
-
-
-1. Modules always use strict, by default. 
-2. Top-level variables and functions from a module are not seen in other scripts.
-3. If the same module is imported into multiple other places, its code is executed only the first time
+1. Top-level variables and functions from a module are not seen in other scripts.
+2. If the same module is imported into multiple other places, its code is executed only the first time
 ```javascript
 // 📁 alert.js
 alert("Module is evaluated!");
@@ -530,9 +507,9 @@ import {admin} from './admin.js';
 alert(admin.name); // Pete
 // Both 1.js and 2.js imported the same obje
 ```
-the module is executed only once. Exports are generated, and then they are shared between importers, so if something changes the admin object, other modules will see that.
-5. Module scripts are deferred
-same effect as defer attribute  
+the module is executed only once. Exports are generated, and then they are shared between importers, so if something changes the admin object, other modules will see that.  
+
+**Module scripts are deferred same effect as defer attribute**  
 1. downloading external module scripts doesn’t block HTML processing, they load in parallel with other resources
 2. module scripts wait until the HTML document is fully ready (even if they are tiny and load faster than HTML), and then run.
 3. relative order of scripts is maintained: scripts that go first in the document, execute first.
@@ -559,20 +536,6 @@ Compare to regular script below:
   counter.count();
   </script>
 ```
-
-
-##### defer and async
-When the browser loads HTML and comes across a <script>...</script> tag, it can’t continue building the DOM. It must execute the script right now. The same happens for external scripts <script src="..."></script>: the browser must wait until the script downloads, execute it, and only after process the rest of the page.
-
-**defer**
-1. Scripts with defer never block the page.
-2. Scripts with defer always execute when the DOM is ready (but before DOMContentLoaded event). 
-3. Deferred scripts keep their relative order, just like regular scripts.
-4. The defer attribute is only for external scripts. The defer attribute is ignored if the script tag has no src.
-
-**async**  
-The async attribute means that a script is completely independent.  
-async scripts load in the background and run when ready. The DOM and other scripts don’t wait for them, and they don’t wait for anything. A fully independent script that runs when loaded.  
 
 ------------------------------------------------------------------------------
 ## Callbacks, promises and async-await
@@ -772,10 +735,6 @@ If it rejects, it is rejected with the reason from the first promise that was re
 Syntax-> Promise.any(iterable);  
 
 Promise.any() resolves with the first promise to fulfil, even if a promise rejects first. This is in contrast to Promise.race(), which resolves or rejects with the first promise to settle.  
-
-Promise.race() vs Promise.any()
-Promise.race() -> retruns 1st promise that is settled (resolved/rejected)  
-Promise.any() -> returns 1st promise that is fulfilled (resolved), even if earlier promises are rejected, it would return the 1st one that is fulfilled (resolved)  
 
 When a .then() lacks the appropriate function, processing simply continues to the next link of the chain.  Therefore, a chain can safely omit every handleRejection until the final .catch(). Similarly, .catch() is really just a .then() without a slot for handleFulfilled.
 
