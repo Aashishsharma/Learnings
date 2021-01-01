@@ -14,7 +14,7 @@
 13. **Garbage collection** - remove from memory if not reachable
 14. **Module, defer, async** - (**export** (4 - before/after decl (named), as, (when?(util/class))default(only 1, can be combined with named)) (**import** - named - {}, default without {}, for dynamic -  import()) - same module imported into multiple other places, its code is executed only the first time
 15. **Callback, promises, async await** - callback(hell-remove) - libraries(filter example, readfile), (Promise.all (run concurrenntly), race, any), (await- syntax diff)
-16. **Cookies, localstorage, session storage** - (cookie - (doc.cookie, auth, <4KB, 20/domain), options-(path, max-age, secure, http-only)), (loclstorage - (getItem()/setItem() <2MB, server can't manipulate, same within multiple windows(!websession)) - auto-form-fill)
+16. **Cookies, localstorage, session storage** - (cookie - (doc.cookie, auth, <4KB, 20/domain), options-(path, max-age, secure, http-only)), (loclstorage - (getItem/setItem <2MB, server can't manipulate, same within multiple windows(!websession)) - autoform-fill)
 
 ## Javascript
 Javascript is  
