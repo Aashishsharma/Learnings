@@ -114,7 +114,7 @@ To catch an event on the capturing phase, we need to set the handler capture opt
 ```javascript
 elem.addEventListener(event, handler, {capture: true})
 ```
-![alt text](PNG/bubbling.PNG "Title")  
+![alt text](PNG/capturing.PNG "Title")  
 When capture is set to true, all event-handlers having capturing set to true are executed starting from the outermost parent to the target element where the event happened in above case on a <td>, and then bubbling happens in reverse order  
 **Summary**  
 1. When an event happens – the most nested element where it happens gets labeled as the “target element” (event.target).
