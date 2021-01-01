@@ -1,9 +1,14 @@
 ## Javascript
 Javascript is  
 1. Dynamically typed: same variable can be assigned to multiple datatypes
-2. Interpreted: It is an interpreted language. Instructions are executed directly.
-3. Object-oriented: It is an object-oriented language.
-4. Scripting Language: is a programming language for a special run-time environment (in case of JS it is the browser) that automates the execution of tasks  
+2. Object-oriented: It is an object-oriented language.
+3. Scripting Language: is a programming language for a special run-time environment (in case of JS it is the browser) that automates the execution of tasks  
+
+**compiled or interpreted**  
+**more of a Compiled language:** - proof  
+1. compilers use parsers, JS code is also parsed, that's why hoisting works. If it was not parsed, then how can we call before it's definition (hositing) 
+2. declaring 2 let variables with same name gives error immediately, if it was interpreted, then error would have thorwn at the line where the second let was declared 
+3. It uses JIT compilers where only the part of code is compiled. If else block is not executed, it is not compiled
 
 ## Index
 1. Event Loop - (4)
@@ -21,6 +26,7 @@ Javascript is
 13. Module, defer, async
 14. Callback, promises, async await - callback - libraries(filter example)
 15. Cookies, localstorage, session storage
+16. Browser events
 
 ## Javascript event loop. 
 [Javascript event loop](https://www.youtube.com/watch?v=8aGhZQkoFbQ)
@@ -63,12 +69,6 @@ The old HTML standard, HTML4, required a script to have a type. Usually it was t
 #### Automatic semicolon insertion
 A semicolon may be omitted in most cases when a line break exists.  
 JavaScript interprets the line break as an “implicit” semicolon. This is called an automatic semicolon insertion.
-
-In most cases, a newline implies a semicolon. But “in most cases” does not mean “always”!
-
-There are cases when a newline does not mean a semicolon. For example:
-alert(1  
-+2)  
 
 But there are situations where JavaScript “fails” to assume a semicolon where it is really needed.
 
@@ -158,7 +158,22 @@ Programming languages that allow such things, are called “dynamically typed”
 5. **null** for unknown values – a standalone type that has a single value null. Null as an assignment value. So you can assign the value null to any variable which basically means it’s blank.
 6. **undefined** for unassigned values – a standalone type that has a single value undefined. Undefined is a variable that has been declared but not assigned a value.
 7. **object** for more complex data structures.
-8. **symbol** for unique identifiers.
+8. **symbol** for unique identifiers.  
+A “symbol” represents a unique identifier.  
+```javascript
+//syntax
+let id = Symbol();
+
+let user = { // belongs to another code
+  name: "John"
+};
+let id = Symbol("id");
+user[id] = 1;
+alert( user[id] ); // we can access the data using the symbol as the key
+```
+What’s the benefit of using Symbol("id") over a string "id"?  
+As user objects belongs to another code, and that code also works with them, we shouldn’t just add any fields to it. That’s unsafe. But a symbol cannot be accessed accidentally, the third-party code probably won’t even see it, so it’s probably all right to do.  
+Also, imagine that another script wants to have its own identifier inside user, for its own purposes. That may be another JavaScript library, so that the scripts are completely unaware of each other.  
 
 The typeof operator allows us to see which type is stored in a variable.  
 typeof x or typeof(x)  
@@ -549,18 +564,15 @@ Compare to regular script below:
 ##### defer and async
 When the browser loads HTML and comes across a <script>...</script> tag, it can’t continue building the DOM. It must execute the script right now. The same happens for external scripts <script src="..."></script>: the browser must wait until the script downloads, execute it, and only after process the rest of the page.
 
-1. defer
-The defer attribute tells the browser not to wait for the script. Instead, the browser will continue to process the HTML, build DOM. The script loads “in the background”, and then runs when the DOM is fully built. 
-In other words
+**defer**
 1. Scripts with defer never block the page.
 2. Scripts with defer always execute when the DOM is ready (but before DOMContentLoaded event). 
 3. Deferred scripts keep their relative order, just like regular scripts.
 4. The defer attribute is only for external scripts. The defer attribute is ignored if the script tag has no src.
 
-2. async  
+**async**  
 The async attribute means that a script is completely independent.  
 async scripts load in the background and run when ready. The DOM and other scripts don’t wait for them, and they don’t wait for anything. A fully independent script that runs when loaded.  
-In case of defer, even if script is downloaded in background, it is not executed unitll the DOM is loaded, but in async, as soon as script is downloaded, it starts the execution, even if DOM content aren't fully loaded.
 
 ------------------------------------------------------------------------------
 ## Callbacks, promises and async-await
@@ -770,8 +782,20 @@ When a .then() lacks the appropriate function, processing simply continues to th
 **Promisification**  
 It’s the conversion of a function that accepts a callback into a function that returns a promise.
 
+**Running promises concurrently**  
+JS does not run promises in parallel, it runs them concurrently since it's a single threaded event loop architecture  
+```javascript
+// concurrently
+await Promise.all(items.map(async item => { await fetchItem(item) }))
+// sequentially
+for (let i = 0; i < items.length; i++) {
+    await fetchItem(items[i])
+}
+```
+
 ------------------------------------------------------------------------------
 #### Async/Await
+No differency if compared with promises  
 ##### Async
 There’s a special syntax to work with promises in a more comfortable fashion, called “async/await”. It’s surprisingly easy to understand and use.  
 The word “async” before a function means one simple thing: a function always returns a promise.  If returned value is not a promise object, then it is converted to promise and then returned
@@ -870,8 +894,3 @@ The localStorage is shared between all windows with the same origin, so if we se
 Another tab with the same page will have a different storage.  
 sessionStorage.setItem('test', 1);  
 sessionStorage.getItem('test')
-
-**Webstorage objects can be used to autosave a form field**
-TODO-
-ES6
-Automated testing with mocha = jsinfo

@@ -207,6 +207,45 @@ e.g. - disabled, highlighted, checked, fixed, size big, color yellow
 **block-name__elem-name_mod-name_mod-val**  
 notice when to use - and _ and how many times
 
+#### Flex-box
+Is a one-dimensional layout model where as css-grid layout is 2 dimensional  
+The main axis is defined by flex-direction, which has four possible values:  
+1. row
+2. row-reverse
+3. column
+4. column-reverse
+
+.box {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap; //no-wrap default
+}  
+
+**flex sizes property**  
+1. flex-grow: How much of the positive free space does this item get?
+2. flex-shrink: How much negative free space can be removed from this item?
+3. flex-basis: What is the size of the item before growing and shrinking happens?  
+
+ The following code would set the flex-grow property to 2, flex-shrink to 1 and flex-basis to auto.  
+.item {
+  flex: 2 1 auto;
+}  
+
+1. The flex-basis property  
+The flex-basis property specifies the initial size of the flex item before any space distribution happens. The initial value for this property is auto.  
+![alt text](PNG/flex1.PNG "Title")  
+
+2. The flex-grow property  
+The flex-grow property specifies the flex grow **factor (width increases by this factor)**, which determines how much the flex item will grow **Relative** to the rest of the flex items in the flex container when the positive free space is distributed. **it is a ratio**  
+![alt text](PNG/flex2.PNG "Title")  
+flex-basis + flex-grow
+![alt text](PNG/flex3.PNG "Title")  
+
+3. The flex-shrink property  
+The flex-shrink property specifies the flex shrink factor, which determines how much the flex item will shrink relative to the rest of the flex items in the flex container when negative free space is distributed.  
+![alt text](PNG/flex4.PNG "Title")  
+flex-shrink + flex-grow works differently  
+
 #### Media queries
 The @media rule, introduced in CSS2, made it possible to define different style rules for different media types (like for computer screen, tv, mobile).  
 CSS 3 introduces Media Queries  

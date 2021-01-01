@@ -1,7 +1,7 @@
 ## REST
 1. REST stands for Representational State Transfer.
 2. It is an architecture style for designing loosely coupled applications over HTTP
-3. It is rescouce based
+3. It is rescouce based, resource same as objs in OOP
 
 ### 6 Architectural Constraints
 #### 1. Uniform interface

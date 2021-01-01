@@ -574,7 +574,18 @@ for await (let commit of fetchCommits("username/repository")) {
 // do next for of iteration will get next paginated commits
 ```
 In web-development we often meet streams of data, when it flows chunk-by-chunk. For instance, downloading or uploading a big file.
-We can use async generators to process such data
+We can use async generators to process such data, but they don't improve performance. Us them wgile creatinf a library so that consumers can easily consume using for of loop  
+Another usecase  
+Infinitely Repeating Array
+```javascript
+function * idCreator() {
+  let i = 0;
+  while (true) yield i++;
+}
+const ids = idCreator();
+console.log(ids.next().value); // 0
+console.log(ids.next().value); // 1
+```
 
 
 To-do
