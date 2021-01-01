@@ -1,20 +1,20 @@
 ## Index
-1. Javascript - (dynamic, oo, scripting), compiled/interpreted(hoisting, let error, JIT)
-2. Event Loop - runtime(heap, stack), web/dom apis, event queue, ES6 job queue
-3. automatic semicolon insertion
-4. use strict - no var declare, still executes in non-strict, classes modules already include strict mode
-5. let var const - block/hoisting/redeclaration
-6. IIFE - to not pollute gloval env, now, no need due to let
-7. Data types - (8), null (can be assigned) vs undefined (if not assigned), use of symbol (using shared lib's obj)
-8. Alert, Confirm, Prompt
-9. Type conversion - + to string others (/,*,-) to number/NAN, Strict equality, different types are converted to numbers by the equality operator ==
-10. Nullish coalesing operator - ?? - || returns the first truthy value. ?? returns the first defined value.
-11. Hoisting - only declaration/var/fun declare not initialization/let/fun express 
-12. Closure - child fun accessing parent's lexical env. - to create private fun - with IIFE
-13. Garbage collection - remove from memory if not reachable
-14. Module, defer, async - (**export** (4 - before/after decl (named), as, (when?(util/class))default(only 1, can be combined with named)) (**import** - named - {}, default without {}, for dynamic -  import()) - same module imported into multiple other places, its code is executed only the first time
-15. Callback, promises, async await - callback(hell-remove) - libraries(filter example, readfile), (Promise.all (run concurrenntly), race, any), (await- syntax diff)
-16. Cookies, localstorage, session storage - (cookie - (doc.cookie, auth, <4KB, 20/domain), options-(path, max-age, secure, http-only)), (loclstorage - (getItem()/setItem() <2MB, server can't manipulate, same within multiple windows(!websession)) - auto-form-fill)
+1. **Javascript** - (dynamic, oo, scripting), compiled/interpreted(hoisting, let error, JIT)
+2. **Event Loop** - runtime(heap, stack), web/dom apis, event queue, ES6 job queue
+3. **automatic semicolon insertion**
+4. **use strict** - no var declare, still executes in non-strict, classes modules already include strict mode
+5. **let var const** - block/hoisting/redeclaration
+6. **IIFE** - (fun(){})() to not pollute gloval env, now, no need due to let
+7. **Data types** - (8), null (can be assigned) vs undefined (if not assigned), use of symbol (using shared lib's obj)
+8. **Alert, Confirm, Prompt**
+9. **Type conversion** - + to string others (/,*,-) to number/NAN, Strict equality, different types are converted to numbers by the equality operator ==
+10. **Nullish coalesing operator** - ?? - || returns the first truthy value. ?? returns the first defined value.
+11. **Hoisting** - only declaration/var/fun declare not initialization/let/fun express 
+12. **Closure** - child fun accessing parent's lexical env. - to create private fun - with IIFE
+13. **Garbage collection** - remove from memory if not reachable
+14. **Module, defer, async** - (**export** (4 - before/after decl (named), as, (when?(util/class))default(only 1, can be combined with named)) (**import** - named - {}, default without {}, for dynamic -  import()) - same module imported into multiple other places, its code is executed only the first time
+15. **Callback, promises, async await** - callback(hell-remove) - libraries(filter example, readfile), (Promise.all (run concurrenntly), race, any), (await- syntax diff)
+16. **Cookies, localstorage, session storage** - (cookie - (doc.cookie, auth, <4KB, 20/domain), options-(path, max-age, secure, http-only)), (loclstorage - (getItem()/setItem() <2MB, server can't manipulate, same within multiple windows(!websession)) - auto-form-fill)
 
 ## Javascript
 Javascript is  
