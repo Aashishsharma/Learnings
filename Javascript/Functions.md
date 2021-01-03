@@ -1,20 +1,18 @@
 ## Index
-1. Functions (their properties)
-2. This in functions (loosing this anf func.bind())
-3. Function as a value (callback)
-4. Named function expression
-5. New function syntax
-6. Constructor functions
-7. Decorators
-8. func.call, func.apply and partial func
-9. Arrow functions
-10. Currying
-11. Generators
+1. **Functions** - like objs bt typeof - func, properties-(name, length for polymorphism, custom like static, this)
+2. **This in functions** - this behavior - arrow/constructor/normal-func - no/like-java/based-on-invocation, invoke - (method - like java, func-invocation - this porints to global), loosing this - method-invoke to func-invoke (set-timeout e.g), bind - to not loose this (boundFunc = func.bind(context))
+3. **Function as a value (callback)** - Like objects they can be assigned to variables, passed to other functions and returned from functions.
+4. **Named function expression** - let sayHi = function func(){}, usecase - not visible outside of the function
+5. **New function syntax** - let func = new Function ([arg1, ...argN], functionBody) - function is created literally from a string, no lexical scoping, can access only global variables, usecase - executable code sent by server
+6. **Constructor functions** - create an empty this at the start and return the populated one at the end
+7. **Decorators** - takes a function and alters its behavior, caching e.g.- (slow = cachingDecorator(slow), call - slow(1), cache result in a Map), takes and returns func, The idea is that we can call cachingDecorator for any function, and it will return the caching wrapper
+8. **call, apply and partial func** - func.call(context, Nargs), func.apply(context, args[]), use bind when context is know before hand else use call/apply, partial - func = func.bind(context, [Nargs]) - use - send(from(fixed), to, text)
+9. **Arrow functions** - 3 variations, no this, no new, no super
+10. **Currying** - f(a,b,c) to f(a)(b)(c), function (x) {return function (y){return function (z){return x+y+z}}}, logNow('Info', 'message') - similar to partial func (diff - partial func returns the result right away, curry doesn't)
+11. **Generators** - return/yield multiple values, function* gen(){yield 1, yield N} let g = gen(), JSON.stringify(g.next()), are iterable (available in for of), yield is a two-way street, usecase - paginated data with async generators (no performance gain, just elegant), generate 1..N infinite numbers 
 
 ## Functions
 A function in JavaScript is a value.  
-Every value in JavaScript has a type. What type is a function?
-In JavaScript, functions are objects.  
 Functions, in JavaScript, are essentially objects. Like objects they can be assigned to variables, passed to other functions and returned from functions.  
 As functions are objs, thay have properties
 1. **name** property
@@ -24,7 +22,7 @@ function sayHi() {
 }
 alert(sayHi.name); // sayHi
 ```
-2. **lenght** property
+2. **length** property
 ```javascript
 function f1(a) {}
 function f2(a, b) {}
@@ -157,21 +155,6 @@ ask(
   function() { alert("You canceled the execution."); }
 );
 ```
-### Function declaration is hoised and not function expression
-```javascript
-// function declaration
-abc(); // ouptput abc
-function abc() {
-  console.log('abc');
-}
-
-// function expression
-abc(); // error
-var abc = function(defaultValue = 0) { //FYI -> adding default parameter in a function
-  console.log('abc');
-}
-```
-use function declarations when you want to create a function on the global scope and make it available throughout your code. Use function expressions to limit where the function is available, keep your global scope light, and maintain clean syntax.
 
 ### Named function expression
 ```javascript
