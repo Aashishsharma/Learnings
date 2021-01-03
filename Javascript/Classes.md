@@ -1,11 +1,10 @@
 ## Index
-1. Class
-2. Getter setter
-3. Inheritance
-4. Static methods
-5. Private, protected properties and methods
-6. Mixins
-7. ES6 features
+1. **Class** - template for creating objects, typeof func, member defined don't require let/const where as in func/objs let.cont required while declaring (should use new className())
+2. **Inheritance** - class Child extends Parent, method overriding - same as Java, constructors should call super
+3. **Static methods** - static abc, static func, belong to the class, not to obj
+4. **Private, protected properties and methods** - using get/set memberName() {}, member must use underscore
+5. **Mixins** - multiple inheriatce not available, hence used, create tempMixin obj, and add all required methods, then - Object.assign(User.prototype, tempMixin)
+6. **ES6 features** - (=>, let/const, template String, destructuring, rest, spread, iterators, generators, modules, map/set, weakmap, weakset)
 
 ## Class
 Template for creating objects, providing initial values for state (member variables) and implementations of behavior (member functions or methods)  
