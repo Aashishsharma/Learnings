@@ -1,9 +1,9 @@
 ## Index
-1. Objects
-2. Obj copy and references
-3. Property descriptors
-4. Property getters and setters
-5. Prototypal inheritance (changing natie prototypes)
+1. **Objects** - creation-({}, .create(), new()(diff-constructor is run)), assignValues - (., [], Object.defineProperty, delete, in operator, key order(num/asc, string/insert))
+2. **Obj copy and references** -  objs. stored by reference, use.create() to avoid reference
+3. **Property descriptors** - {writable, enumerable, configurable}, Object.defineProperty(obj, propertyName, descriptor), Object.getOwnPropertyDescriptor(obj, key) 
+4. **Property getters and setters** - get/set methods for encapsulation, get/set e.g. - remove age and add b'day field without breaking existing clients
+5. **Prototypal inheritance** -  (changing natie prototypes) - hidden _proto_ property, obj.hasOwnProperty(key) in for in loop, change native prorotypes - String.prototype.show = function(){} usecase - polyfilling, instead of proto use - Object.create(proto, [descriptors])
 
 ## Objects
 Used to store keyed collections of various data and more complex entities  
@@ -273,21 +273,7 @@ alert(clone.sizes.width); // 51, see the result from the other one
 
 // to solve this use  _.cloneDeep(obj) from the JavaScript library lodash.
 ```
-#### this in objects
-```javascript
-// these objects do the same
-user = {
-  sayHi: function() {
-    alert("Hello");
-  }
-};
-// method shorthand looks better, right?
-user = {
-  sayHi() { // same as "sayHi: function()"
-    alert("Hello");
-  }
-};
-```
+
 #### Property descriptors
 Object properties, besides a value, have three special attributes (so-called “flags”):
 
