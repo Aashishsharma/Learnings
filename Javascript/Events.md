@@ -1,4 +1,4 @@
-##Index
+## Index
 1. **Browser events** - An event is a signal that something has happened. All DOM nodes generate signals. Mouse (click, contextmenu(rt-clck), mouseup/down/move), Keyboard(keyup/down), other (submit, focus, DOMContentLoaded, transitioned)
 2. **Event Handlers** - function thay runs when event occurs, Only one event handler can be added, 3 ways to add evnt listner (HTML attribute: onclick="...", elem.onclick = function, evnt listener(preferred since multiple can be added))
 3. **Event listeners** - multiple evnt listners can be added, elem.add/removeEventListener(event, handler, [options]) options(once(T/F - rm once trigerred)/capture(T/F - bubbling)/passive(T/F - T-no call to preventDefault()))
