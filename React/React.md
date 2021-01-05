@@ -1,13 +1,13 @@
 ## Index
-1. React, why, creating app, npx - (6)
-2. ReactDOM - reconcialitation, diffing algo
-3. JSX - (2)
-4. React elements and components and props - functional/class - lifecycle
-5. Handling events - similar to html/js
-6. Forms in React - controlled/uncontrolled
-7. Lifting state up - by making a component controlled
-8. Composition over inheritance - Strategy design pattern
-9. Thinking in React - (5)
+1. **React** - JS lib by FB, why - (flexi, popular, performance(reconciliation), one-way-databinding, separation odf concerns(JSX), inversion of control) creating app- npx(tool to exec node packages) create-react-app **app-name**
+2. **ReactDOM** - lib that does reconcialitation - (map virtual dom to real), diffing algo (compare root elem, if DOM elem of diff. type, rebuild entire tree, else - only update attributes, components of same type - instance remain same)
+3. **JSX** - syntax extension to JS, separation of concerns (ui+business logic in same code), prevents cross site scripting (XSS)
+4. **React elements, components and props** - accept props & return react elem, FUNCTIONAL(normal fun, return R.elem)/CLASS(extend R.comp, render(return), this.setState((state, prop) => ({cnt: state.cnt+prop.cnt})) - lifecycle
+5. **Handling events** - similar to DOM, (value={}, onClick={}), to add evnt listener - this.handleClick = this.handleClick.bind(this);
+6. **Forms in React** - controlled(where value attribute can be added)/uncontrolled(can't be added)
+7. **Lifting state up** - by making a component controlled (in child, value, onChange(parent-funcall), in parent - funcall as props)
+8. **Composition over inheritance** - pass other components as props, Strategy design pattern
+9. **Thinking in React** - (1. draw component hierarchy 2. build static version 3. identify min. state required 4. identify where state should live 5. add inverse data flow)
 
 ## REACT?
  A javascript library.
