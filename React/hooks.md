@@ -1,10 +1,10 @@
 ﻿## Index
-1. Hooks, why hooks - (3)
-2. State hook
-3. Effect hook
-4. Rules of hooks - (2)
-5. Custom hooks - for reusing STATEFUL logic
-6. State vs props 
+1. **Hooks** why- (hard to use stateful logic in classes, classes don't menify very well and make hot reloding unreliable, unrelated logic in lifecycle methods)
+2. **State hook** - [count, setCount] = useState(0), setCount((prev.state)-> {})
+3. **Effect hook** - useEffect(()=>{},[]), ([]-didMount, [somevar]-didUpdate, return fun()-willUnMount()), multiple Effects to Separate Concerns
+4. **Rules of hooks** - 1. Only Call Hooks at the Top Level, not even in if/loop(react updates depend on ordering), Only Call Hooks from React Functions 
+5. **Custom hooks** - for reusing STATEFUL logic (code that uses state is shared), in case of normal functions, only logic can be reused, but not stateful logic, change in state varaible inside custom hooks, re-renders components using that hook 
+6. **State vs props** -  
 
 ## HOOKS
 Let you use state and other React features without writing a class. They are a function.
