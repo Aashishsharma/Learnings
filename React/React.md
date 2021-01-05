@@ -4,7 +4,7 @@
 3. **JSX** - syntax extension to JS, separation of concerns (ui+business logic in same code), prevents cross site scripting (XSS)
 4. **React elements, components and props** - accept props & return react elem, FUNCTIONAL(normal fun, return R.elem)/CLASS(extend R.comp, render(return), this.setState((state, prop) => ({cnt: state.cnt+prop.cnt})) - lifecycle
 5. **Handling events** - similar to DOM, (value={}, onClick={}), to add evnt listener - this.handleClick = this.handleClick.bind(this);
-6. **Forms in React** - controlled(where value attribute can be added)/uncontrolled(can't be added)
+6. **Forms in React** - controlled(where value attribute can be added)/uncontrolled(can't be added, use refs)
 7. **Lifting state up** - by making a component controlled (in child, value, onChange(parent-funcall), in parent - funcall as props)
 8. **Composition over inheritance** - pass other components as props, Strategy design pattern
 9. **Thinking in React** - (1. draw component hierarchy 2. build static version 3. identify min. state required 4. identify where state should live 5. add inverse data flow)
