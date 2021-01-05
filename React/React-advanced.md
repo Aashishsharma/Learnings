@@ -1,7 +1,7 @@
 ## Index
 1. **Code splitting & lazy loading** - CS via dynamic import (import {add} from './math'), LL (loaded at last {suspens} from React, React.lazy(() => import('./comp'))), <Suspense fallback={react elem}><Comp></Sus>
 2. **Context** - pass props b/w child(let c = React.createContext('light'), <c.Provider value="dark">, using theme - {this.comtext}), managing theme/locale/cache, makes component reuse more difficult
-3. **Error boundaries** - getDerivedStateFromError() + componentDidCatch(), donot catch errors in(envt handlers, server side rendering)
+3. **Error boundaries** - getDerivedStateFromError()+componentDidCatch(), donot catch errors in(envt handlers, server side rendering)
 4. **Refs and Doms** - another way to alter child component apart from props, (myRef = React.createRef(), accessing {this.myref}) (managing focus/uncontrolled elements) 
 5. **Fragment** - <></>, return multiple elems from single component, less dom nodes created
 6. **HOC** - reuse logic, takes and returns a component, not part of the React API,but pattern that emerges from React’s compositional nature. (for cross cutting concerns, e.g. logging/security, commentpost/blogpost, loading UI for all components), (ListWithLoading = WithLoading(List)(checkcode), <ListWithLoading isLoading={this.state.loading} repos={this.state.repos}/>)
