@@ -7,7 +7,7 @@
 6. **HOC** - reuse logic, takes and returns a component, not part of the React API,but pattern that emerges from React’s compositional nature. (for cross cutting concerns, e.g. logging/security, commentpost/blogpost, loading UI for all components), (ListWithLoading = WithLoading(List)(checkcode), <ListWithLoading isLoading={this.state.loading} repos={this.state.repos}/>)
 7. **Performance optimization** - keys, profilier-api, shouldcompupdate/pure-coponent(shallow state comparison), React.memo
 8. **Portals** - ReactDOM.createPortal(child, container), render child outside of parent (tooltips)
-9. **Render Props** - reuse code - props are functions which retrun react elem/component, <Comp render={data=>(<H1>Hello {data.nm}</H1>)}/>, in child inside render - {props.render(state)}
+9. **Render Props** - reuse code - props are functions which retrun react elem/component, <Comp render={data=>(<p>Hello {data.nm}</p>)}/>, in child inside render - {props.render(state)}
 10. **Static type checking and Strict mode** - typescript or flow, use TS template while npx create, <React.StrictMode></>
 11. **Proptypes** - basic prop types checking - (import PropTypes from 'prop-types', comp.propTypes = {name: PropTypes.string})
 12. **Uncontrolled compomnents** - use refs
