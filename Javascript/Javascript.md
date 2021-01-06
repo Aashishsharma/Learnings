@@ -12,8 +12,8 @@
 11. **Hoisting** - only declaration/var/fun declare not initialization/let/fun express 
 12. **Closure** - child fun accessing parent's lexical env. - to create private fun - with IIFE
 13. **Garbage collection** - remove from memory if not reachable
-14. **Module, defer, async** - (**export** (4 - before/after decl (named), as, (when?(util/class))default(only 1, can be combined with named)) (**import** - named - {}, default without {}, for dynamic -  import()) - same module imported into multiple other places, its code is executed only the first time
-15. **Callback, promises, async await** - callback(hell-remove) - libraries(filter example, readfile), (Promise.all (run concurrenntly), race, any), (await- syntax diff)
+14. **Module, defer, async** - (**export** (4 - before/after decl (named), as, (when?(util/class))default(only 1, can be combined with named)) (**import** - named - {}, default without {}, for dynamic -  import()) - same module imported into multiple other places, its code is executed only the first time, defer(dwnld async, exec after DOMContentLoaded), async(dwnld.exec - async)
+15. **Callback, promises, async await** - callback(hell-remove) - libraries(filter example, readfile), (Promise.all (run concurrenntly), race - 1st resolve/reject, any - 1st fulfilled), Promise- (return nre Prom((res, rej)->{res()/rej()}))(await- syntax diff)
 16. **Cookies, localstorage, session storage** - (cookie - (doc.cookie, auth, <4KB, 20/domain), options-(path, max-age, secure, http-only)), (loclstorage - (getItem/setItem <2MB, server can't manipulate, same within multiple windows(!websession)) - autoform-fill)
 
 ## Javascript
