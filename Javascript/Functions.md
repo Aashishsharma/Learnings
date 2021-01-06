@@ -1,11 +1,11 @@
 ## Index
-1. **Functions** - like objs bt typeof - func, properties-(name, length for polymorphism, custom like static, this)
+1. **Functions** - like objs bt typeof - func, properties-(name, length for polymorphism, custom(fun.proprName) like static, this)
 2. **This in functions** - this behavior - arrow/constructor/normal-func - no/like-java/based-on-invocation, invoke - (method - like java, func-invocation - this porints to global), loosing this - method-invoke to func-invoke (set-timeout e.g), bind - to not loose this (boundFunc = func.bind(context))
-3. **Function as a value (callback)** - Like objects they can be assigned to variables, passed to other functions and returned from functions.
+3. **Function as a value (callback)** - Like objects, can be assigned to variables, passed to other funcs and returned from functions.
 4. **Named function expression** - let sayHi = function func(){}, usecase - not visible outside of the function
 5. **New function syntax** - let func = new Function ([arg1, ...argN], functionBody) - function is created literally from a string, no lexical scoping, can access only global variables, usecase - executable code sent by server
 6. **Constructor functions** - create an empty this at the start and return the populated one at the end
-7. **Decorators** - takes a function and alters its behavior, caching e.g.- (slow = cachingDecorator(slow), call - slow(1), cache result in a Map), takes and returns func, The idea is that we can call cachingDecorator for any function, and it will return the caching wrapper
+7. **Decorators** - takes a function and alters its behavior, caching e.g.- (slow = cachingDecorator(slow), call - slow(1), cache result in a Map), takes and returns func, cachingdec declares Map and *then* returns func include (Map.has(slow-parma), return amp.get(x), else call actual func(x)), The idea is that we can call cachingDecorator for any function, and it will return the caching wrapper, 
 8. **call, apply and partial func** - func.call(context, Nargs), func.apply(context, args[]), use bind when context is know before hand else use call/apply, partial - func = func.bind(context, [Nargs]) - use - send(from(fixed), to, text)
 9. **Arrow functions** - 3 variations, no this, no new, no super
 10. **Currying** - f(a,b,c) to f(a)(b)(c), function (x) {return function (y){return function (z){return x+y+z}}}, logNow('Info', 'message') - similar to partial func (diff - partial func returns the result right away, curry doesn't)
