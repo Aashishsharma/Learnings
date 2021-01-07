@@ -1,3 +1,16 @@
+## Index
+1. **SASS** - css extension lnag/pre-processor, extension .scss(new) & .sass(indented), use .scss
+2. **Variables** - $primary-color: #333; body {color: $primary-color}
+3. **Nesting** - nav {ul {a} li}, in css - nav ul {}, nav li{}, nav ul a {}
+4. **partials and modules** - separate css file, for modularity, should stat with underscore(_base,scss), and then @use 'base'; css @import vs @use (import - muultiple n/w calls for import, @use after compile becomes 1 css)   
+5. **Mixins** - @mixin transform($property){css/scss code}, then .box {@include transform($width));}, similar to macros in C
+6. **Functions** - @function pow($base, $exponent){return $result} Functions return value, mixins replace entire body 
+7. **Extend/Inheritance** - %message-shared {css/scss body}, .success {@extend %message-shared; + it's own css body} 
+8. **Operators** - .container {width: 300px / 960px * 100%;}
+9. **Conditionals** - @if $direction == up {css/scss code} @else if $direction == up {css/scss code}
+10. **Loops** - @for $i from 1 through 3 {css/scss code}, @while $value > $base {css/scss code}
+11. **Using SASS** - npm i --save-dev sass, VS code plugin, create a css and scss folder, sass input.scss output.css, sass --watch app/sass:public/stylesheets
+
 ## SASS (Syntactically Awesome Style Sheets)
  CSS extension language/ It is a CSS preprocrssor  
  Sass is a stylesheet language that’s compiled to CSS. It allows you to use variables, nested rules, mixins, functions, and more  
@@ -26,7 +39,7 @@ Syntax is similar to css
 ```
 2. Indented syntax
 extension - .sass  
-it was original syntax, ninw use above one
+it was original syntax, new use above one
 
 #### SASS Features
 ##### 1. Variables
