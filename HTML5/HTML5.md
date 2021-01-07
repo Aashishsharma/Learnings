@@ -1,3 +1,13 @@
+## Index
+1. **HTML5** - old(doctype req. reference to DTD), now (<'!DOCTYPE html'>), no type in script (<'script src/rel/href'>)
+2. **New tags** - in body - (header, nav, article, section, aside, footer)
+3. **New input types** - (datetime, number, email, url, required, placeholder)
+4. **Canvas** - to draw graphics using JavaScript
+5. **Audio/Video** - <'audio/video' src = ".mp3/4" width/height - 200px>
+6. **Geolocation** - navigator.geolocation.getCurrentPosition(showLocation, errorHandler), showLocation( position ) {position.coords.latitude/longitude)
+7. **Drag n drop APIs** 
+8. **WebPush** - navigator.serviceWorker.register('/service-worker.js')
+
 ## HTML5
 ### New things
 #### 1. OLD vs new Doc Type
