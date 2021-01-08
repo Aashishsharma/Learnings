@@ -1,3 +1,14 @@
+## Index
+1. **Express** - fast, unopinionated, web framework for Node.js, why (5) - (easy, can do server-side rendering + API, light n fast, full control to req, res, middleware), nodemon for dev
+2. **Middleware** - executed after client req, and before cb func which handles req, have access to req n res, inbuilt _ 3rd party available (app.use(express.json())), custom middleware - (app.use(logger)), logger.js - (let logger=(req,res,next) => {next()})
+3. **Handlebars** - templating engine (others pug, ejs), require('express-handlebars'), app.engine('handlebars',exphbs({defaultLayout:'main'})), use res.render('filename', obj-tobe-passed-to-ui), create views/layouts/main.handlebar and add {{{body}}}, and in views/filenm.hndlbr add {{obj-tobe-passed-to-ui.key}}, #each, #if
+4. **Routes** -  in index.js - app.use('/api/mem', require('./routes/api/mem')), in mem.js (require express, let router = express.Router(), router.get/post/etc). then export router), if router.use(middleware), then this iddleware is specific to this api route, for query param (router.get('/') - req.query.nm), for /api/mem/123 (router.get(':id'), parseInt(req.param.id))
+5. **Security** - app.use(helmet()) - (it sets security-related HTTP response headers), csrf - for cross site req. forgery (attck that forces users to execute unwanted actions) - req. csrf, let csrfProtect = csrf({cookie:true}), app.use(cookieParser()), app.use(csrfProtect)
+6. **Performance** - gzip - (decrease the size of the response body), comp = require('compression'), app.use(comp()), use cluster module, set NODE_ENV to prod - (caches view templates, css/js. less verbose error msg)
+7. **Error handling** - custom middleware - app.use(function (err, req, res, next) {consolelog(err), res.status(500).send('something broke')}
+8. **Express init** - require('express'), app = new express(); send types - (res.send(html), res.render(filenm), res.json(), res.sendFile('path-to-static-file'))
+9. **Folder structure** - root directory - (middleware, models, public, routes/api, views/client, index.js. pckg.json)
+
 ## Express
 It is fast, unopniated (vary basic at it's core, gives full control on how you want to develope), **web framework for Nodejs**
 
