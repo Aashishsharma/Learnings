@@ -1,9 +1,10 @@
 ## Index
-1. Node, why node
-2. Read/write from stdio
-3. Node.js modules, require, import, export
-4. Event loop
-5. Event emitters
+1. **Node, why node** - open-source, cross-platform, JS runtime environment, runs on chrome's V8 engine
+2. **Read/write from stdio** - readline = require('readline').createInterface({input: process.stdin,op:p.stdout}), readline.on('line', line => {});
+3. **modules, require, import/export** - each module wrapped in func(exports,require,module,__filename,__dirname){ur code; return module.exports}, so even if global var is declared in module, it is not global, use gloval.varnm (avoid it), require - commonJS pattern, import in ES6 (similar to JS import), export - (in JS export const abc, in node exports.ab), module.exports = obj/fun, import vs require - (import - selectively load data and loading is async), exports vs module.exports - (confused, used mod.exp) 
+4. **Event loop** - 7 phases and each phase has queue n heap (1. Timers - (cb of setTimeout/interval) kept in heap memory untill expires, 2. Pending cb - system related cbs (port busy), 3. Idle, 4. Poll - nearly all cbs, except timers are stores here, 2 things happen - (cbs in this phase are executed, and evnt loop will wait for some time  here, if any cbs are ready for exec in next/timer phase, evnt loop moves to nest phase), 5. setimmediate - cbs of setimmediate, 6. closing cbs - (process.exit()/socket.on('close')), 7. microtask - cbs of process.nextTick(), highest priotrity, whenver evnt loop complets it's crr, phase, cbs of these phase are executed, and then evnt loop goes back to to the phase where it left off)
+5. **process.nextTick()** - tick - when the event loop iterates over all of its phases for one time, usecase - assign event handlers after an object has been constructed but before any I/O has occurred, setImmediate vs settimeout - which runs frst? depends on current pos. of evnt loop
+5. **Event emitters** - 
 6. Streams
 7. Scaling node js app
 
