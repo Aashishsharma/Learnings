@@ -1,9 +1,10 @@
 ## Index
-1. Npm
-2. Packages and modules
-3. Publishing packages
-4. Package.json
-5. Package-lock.json
+1. **Npm** - node's pckg mngr, npm init
+2. **Packages and modules** - pckg(file/directory that contains pckg.json), scoped pckg(have namespace, @principal/pckg-nm, private pckgs are always scoped), unscoped are always public
+3. **Publishing packages** -  npm config set registry https://registry.npmjs.com/, npm publish, for private pckgs - init --scope=@my-org and shpuld have npm user account
+4. **Package.json** - (name, version, dep/dev-dep, scripts, private, engines, browsers), semver (major - (incompatible chngs, .minor(backward compatible, patch(bug-fix)), ('~' - patch, '^' minor+patch, '*' major+others, '<=', no symbol, latest) 
+
+5. **Package-lock.json** - keep track of the exact version of every package that is installed so that a product is 100% reproducible in the same way even if packages are updated by their maintainers. (1. dev commit version ~1.1.1, 2. other dev clones, does npm i, he might get version 1.1.2 (due to ~), not ideal, since exact same code is not there), thus use pckg.json, maintainers/devs can do npm update, after that again all clones will get same versions, it is a big file because it containsall dep-pcgsks version and also their transitive deps
 
 ## NPM
 It's a way to reuse others code and share your code with the dev community.
