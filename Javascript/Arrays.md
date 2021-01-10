@@ -1,7 +1,7 @@
 ## Index
 1. **Arrays** - (obj with contigious memory), each elem can be of diff type
 2. **Array methods** - (push, pop, shift, unshift, splice(index[, deleteCount, elem1, ..., elemN])) return removed
-3. **Higher order array methods** - (forEach, map, filter, find, sort)(item,index,array), reduce(fun(accum, item, index), [initial]), reduceRight(), Array.isArray-(obj/array diff)
+3. **Higher order array methods** - (forEach, map, filter, find, sort, every)(item,index,array), reduce(fun(accum, item, index), [initial]), reduceRight(), Array.isArray-(obj/array diff)
 4. **Map and Set** - **Map** - (set, get, has, delete) objvsmap - (datatype - string//any), **Set** - (set, has, delete)
 5. **WeakMap and WeakSet** - doesn’t prevent garbage-collection of key objects, keys must be objects, iteration not possible, Use - caching, storing 3rd party objs while available (obj transform - obj.fromEntries(obj.entries(obj)))
 6. **Destructuring assignment** - swap values ([guest, admin] = [admin, guest]), ...rest operator, obj destructuring
