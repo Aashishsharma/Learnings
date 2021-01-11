@@ -1,3 +1,10 @@
+## Index
+1. **Ways to Authenticate** - Form, SAML (SSO), OpenID connect (Mobile Apps), OAuth (delegated authorization)(clientid/secret)(Apigee), api keys
+2. **OAuth (Open Authorization)** - terms (resource owner, client, auth server, resource server, auth agent(temp code to get acess key), redirect url, access token, scope(auth server has list of scopes, client gets data on what the scope s defined), front/back channel)
+3. **OAuth flow** - First we register an app with OAuth provider to get client Id/secret, then steps - 1. resource owner goes to client website, 2. clicks on signin with google/fb 3. req goes to auth server, req includes (client ID, redirect uri, response type=code, scope-profile/contacts), 4. auth server asks for login and consent, 5. if success auth server redirects to redirect uri with auth code 6. in redirect uri, pass auth code(auth code, clientid/secret) to auth server and get access token (back channel, all other steps are front channel), 7. now we can get google/fb data. Because of front channel, step 6 exists for security. This is code flow (see step 3 - res-type), there are other flows, where res-type=implicit, here step 6 does not exist, usecase - where you only have frontend or SPA
+4. **OAuth problems** - was build for delegated authorization and not for authentication, you cannot always get standard user information like email, phone no. etc (to identify user). You have to build your own code to create a user's database based on the data you recieve from resource server
+5. **OpenID connect** - Extension to OAuth 2.0 which is used for authentication, flow is nearly same, differences (1. n scope we pass openid along with the profile, 2. Auth server provides Token ID along with the access token to identify the who the user is), it provides additional info like (user ID token, userinfo endoint, standart set of scopes( so that for all auth server we get same basic user info))
+
 ## Ways to Authenticate
 1. Form authentication  
 Get user name and password from web form, and valiadte it against DB. Not recommended as security and maintainance is upto us  
