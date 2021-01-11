@@ -1,3 +1,10 @@
+## Index
+1. **Passport JS** - auth middleware for Node req(express,passport,google.fb-strategy), 3 pieces for config (strategy, middleware, session(optional))
+2. **Strategies** - diff types (uname n pwd, OAuth, OpenID), passport.use(new FB/GoogleStrategy({id, secret, cb, progileFields(name,photo,email)}, fun(accessToken, refreshToken, profile, cb){return cb(null, profile), this will caal ur cb endpoint})), then app.get('cb-url', middleware, (req,res)=> login success, redirect to home)
+3. **Middleware** - to connect passwport with express, app.use(passport.initialize()), if session is used -app.use(passport.sesison())
+4. **Session** - to serialize n deserialize, session would be maintained via cookie, pp.serializeUser((user, cb)=> {cb(null, user)});, pp.deserializeUser((id, done)=>{User.find(user, (err, user)=> {done(err, user);});}); seraillze user is called whenever we get response from auth servers, desearilize is called when we try to access user data availavle in req.user after login
+5. **Authentication** - app.get('/abc',pp.authenticate('facebook',{ failureRedirect: '/login' }, (req, res)=>{}), protecting routes - app.get('/profile',require('connect-ensure-login').ensureLoggedIn(), (req, res)=>{})
+
 ## PassportJS
 Passport is authentication middleware for Node.  
 Three pieces need to be configured to use Passport for authentication:  
