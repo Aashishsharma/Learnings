@@ -1,3 +1,12 @@
+## Index
+1. **MongoDB** - document based NoSQL DB
+2. **DB commands**-show dbs, use dbname, show collections, db.dropDataBase(), db.createCollection('nm'), db(give curr DB), exit
+3. **CRUD** - 1. Insert(db.collectionNM.insert(JSONObj), or insertMany(jsonarray)), 2. Read(db.collectionNM.find({}), .find.sort({title: 1/-1}), where clause- .find({category:news}).count(10)/limit(2)/sort(), .find.forEach((doc)=>{}, db.posts.find({views: {$gt: 50}})), findOne({category:news})), 3. Update(db.collectionNM.update({whereclause},{data-to-be-updated},{upsert: true}), uspert - if T - then if whereclause not matched, create new doc, update requires all the fileds to be passed in 2nd param, even if it is not getting updated, otherwise it will get removed, to avoid in 2nd param use $set operator - {$set:{data-to-update}}, other operators $inc, $rename), 4. Delete(db.posts.remove({title: 'new post'})), 5. AND/OR operators - (db.inventory.find({$and: [{$or:[{qty:{$lt:10}},{qty:{$gt:50}}]},{$or:[{sale:true},{price:{$lt:5}}]}]})), use $elemMatch for nested docs
+4. **Data Modelling** - 4 steps, 1. Eavlaute app workload(identigy critical operations(read/write) and rank them in piority), 2. Design Collection-Relation-Diagram, 3. FInalize on Embedding vs Linking(based on imp. queries), diff(denormalized/fast-read-write/duplicated-data vs normalized/slow-read/write/no-duplicate), 4. apply schema design pattern
+5. **Schema design pattern** - 1. Versioning pattern(when req. changed, new schema is created(new version), older still there), 2. Bucket pattern (thermostat e.g, instead of each reading as a separate doc, add a cap(200 readings as array in one doc), so less docs, less memeory for indexing, db.iot.update({"sensor": "reading", "valCount":{"$lt":200}}, {$push:{"reading": {"v": value, "t":time}}, "$inc":{"valcount":1}},{upsert:true})), 3. Compute pattern - save avg/total etc in db is frequently required
+6. **Indexing** - 
+7. **Sharding** - 
+
 ## MongoDB
 It is document based NoSQL DB
 
