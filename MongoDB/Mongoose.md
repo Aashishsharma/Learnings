@@ -1,12 +1,12 @@
 ## Index
-1. Mongoose
-2. Define Schemas
-3. Create Model
-4. Construct document
-5. Connect to DB
-6. CRUD operations
-7. Validation
-8. Middleware
+1. **Mongoose** - object document modeling(ODM-used to map objects with a Document Database like MongoDB) for node.js
+2. **Define Schemas** - schema maps to collection (new Schema({author: String,hidden: Boolean})), types(String/Number/Date/Buffer/Boolean/ObjectId/Array/Map) 
+3. **Create Model** - to use schea we need model - (mongoose.model(modelNm, schema), in collection s is added), doc=new Model(), doc.save() 
+4. **Construct document** -ab = mongoose.model('ab', urSchema); small = new abc({size:'small'});small.save((err)=> {}}); or, for inserting large batches of documents - abc.insertMany([{size:'small'}], (err)=> {}); 
+5. **Connect to DB** - try block - await mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser:true});
+6. **CRUD operations** - (1. Read -Person=mongoose.model('Person', urSchema);Person.findOne({'name':'ab',age:{$gte:18 }}, 'nm age', (err, per)=>{log(per.nm)}, Person.find({}), 2. create- let p = new Person({nm:'foo',age:21}); p.save(), 3. update - Model.update/updateMany(query({age:{$gt 18}}),{$set:{nm: 'jason'}}, options(upsert),(err, es)=>{}); 4. delete - person.deleteOne/Many({name: 'Eddard' },(err)=>{});)
+7. **Validation** - is a middleware defined in schematype, to run manually-doc.validate(cb), new Schema({nm:{type:String,required: true}}), others-(min,max), custom validators(add validate:{func(param){based on param return T/F}, {message:err-msg})
+8. **Middleware** - pre/post hooks, called at schema level, schema.pre('save',(next)=>{// do stuff next();}, others -(.post('validate/remove/save'))); usecase - complex validation, foreign key constraints - (removing a user removes all his blogposts), again FK constraints is at app level rather than at schema level
 
 ## Mongoose
 It is mongodb object document modeling (ODM) for node.js  
