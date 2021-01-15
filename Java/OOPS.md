@@ -1,14 +1,15 @@
+## Index
+1. **OOPS** - languages that uses objects in programming, The main aim of OOP is to bind together the data and the functions that operate on them
+2. **Polymorphism** - same method name, diff. signature, (1.overloading, 2. overriding(same nm n signature) for runtime polymorphism)
+3. **Inheritance** - vertical code sharing (single, multilevel, hierarchical. multiple(through interfaces), hybrid)
+4. **Encapsulation** - data hiding, sequence-(default,private,protected,public) - (1. same class -(Y/Y/Y/Y), 2. Same pckg subclass or no subclass - (Y/N/Y/Y), 3. diff pckg subclass-(N/N/Y/Y), 4. diff pckg no subclass-(N/N/N/Y))
+5. **Abstraction** - Only the essential details are displayed to the user,  achieved by interfaces and abstract classes
+6. **Class** - (6) - concrete, abstract(can't instatiate), final(can't extend), pojo(contains only private variables and setter and getter methods), static(are nested classes - becomes static member of enclosing class), inner(declared within class)
+7. **Object**
+
 ## OOPS
 Object-Oriented Programming or OOPs refers to languages that uses objects in programming.  
 The main aim of OOP is to bind together the data and the functions that operate on them so that no other part of the code can access this data except that function.  
-
-## OOPs Concepts:
-1. Polymorphism
-2. Inheritance
-3. Encapsulation
-4. Abstraction
-5. Class
-6. Object
 
 ### 1. Polymorphism
 same method name, diff. signature
