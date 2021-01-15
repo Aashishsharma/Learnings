@@ -1,3 +1,11 @@
+## Index
+1. **Collections** - DS is how the data is represented inside the storage in memory. A collection is how it can be accessed. why(consistent API, Reduces programming effort, Increases program speed and quality)
+2. **Iterators** - to retrieve elements one by one, (Iterator itr = al.iterator(), while (itr.hasNext()){int i=(Integer)itr.next()}, Iterator vs forEach - (iterator - to modify collection, foreach- nested for loops)
+3. **Set** - no duplicate, unordered collection, (union, intersect, diff), Set<Integer> a = new HashSet<Integer>();
+(1. HashSet O(1) - underlying DS(Hashtable), HashSet<E> hs = new HashSet<E>(int initialCapacity, float loadFactor); unordered, 2. LinkedHashSet - maintains insertion order, 3. TreeSet O(log(N))- underlytin DS(tree), sorted in asc by default, use when data volume is large)
+4. **List** - ordered collection(insertion order), (1. ArrayList (dynamic arrays) - slower than standard arrays but can be helpful in programs where lots of manipulation in the array is needed, 2. Vector - same as ArrayList, but is synchronized hence poor performance in add/remove, 3. Stack - legacy class and inherits from Vector in Java, use ArrayDeque for stack implementation 4. LinkedList - elems not stored in contiguous locations, preferred over arrays in case of insert/delete, but not while searching, 5. Queues - (1. Priority Queue O(log(n)) - PriorityQueue Objs should be comparable, 2. Dequeue - double neded queue, use as stack))
+5. **Map** - key(unique)-val, not subtype of collection interface, (1. HashMap O(1)- no order, HashMap<E> hs = new HashMap<E>(int initialCapacity, float loadFactor), 2. LinkedHashMap - insertion order 3. TreeMap - sorted(natural ordering of its keys, or by a Comparator) - TreeMap<Student, Integer> tm = new TreeMap<Student, Integer>(new Sortbyroll()), class Sortbyroll implements Comparator<Student> {public int compare(Student a, Student b){}})
+
 ## Collections
 A Collection is a group of individual objects represented as a single unit.  
 
@@ -15,11 +23,9 @@ It is a universal iterator as we can apply it to any Collection object. By using
 // Here "c" is any Collection object. itr is of
 // type Iterator interface and refers to "c"
 Iterator itr = c.iterator();
-
 //e.g.
 import java.util.ArrayList; 
 import java.util.Iterator; 
-  
 public class Test 
 { 
     public static void main(String[] args) 
