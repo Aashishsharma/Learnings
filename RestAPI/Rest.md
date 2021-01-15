@@ -1,3 +1,10 @@
+## Index
+1. **Rest** - Representational State Transfer, architecture style for designing loosely coupled applications over HTTP, It is rescouce based, resource same as objs in OOP
+2. **Architectural constraints** - 6 - (1. uniform interface(with 1 uri, other data can be fetched, resource shouldn't be too large(use HATEOS)) 2. client server - both can evolve separately, client should only know resource uris 3. Sataeless -  The server will not store anything about the latest HTTP request that client made, 4. Cacheable 5. Layerd system - e.g. - deploy the APIs on server A, and store data on server B and authenticate requests in Server C, client shouldn't care, 6. code on demand(optional) - server can return executable code to support a part of your application)
+3. **Designing APIs** (5) - nouns preferred, use api keyword(api.p.com or p.com/api/), break entities(create association), query string for non resources properties(?page=1&Limit=100), add method not allowed
+4. **Verbs** - GET, POST(add, apart from this, all methods must be idempotent), PUT(update, entire resource needs to be sent), PATCH(update-send part of resource), DELETE, OPTIONS(returns info about API (methods/content type)), HEAD(same as get but doesn't return res body, returns info about resource(version/length/type))
+5. ****
+
 ## REST
 1. REST stands for Representational State Transfer.
 2. It is an architecture style for designing loosely coupled applications over HTTP
