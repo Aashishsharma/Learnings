@@ -5,6 +5,7 @@
 4. **Verbs** - GET, POST(add, apart from this, all methods must be idempotent), PUT(update, entire resource needs to be sent), PATCH(update-send part of resource), DELETE, OPTIONS(returns info about API (methods/content type)), HEAD(same as get but doesn't return res body, returns info about resource(version/length/type))
 5. **Caching** - both server/client can do, REST suggests to do at client side, Use Entity Tags (Etags) in response header(GET - client can use If-None-Match: "Etag value" then make call otherwise cache, PUT/DELETE - If-Match: "Etag value" then update otherwise stale data, don't update, send-412 - precondition failed)
 6. **Versioning** - (4) support both old and new version (1. uri versioning - /v1 or /v2, use for simple APIS, 2. Quert string - ?v=1.0 or ?v=2.0, for simple APIs, 3. with Headers - client- X-Version:2.0, server- Accept:application/json; version=2.0, for complex APIs, 4. with content-type - client- Content-Type: application/vnd.yourapp.camp.v1+json, server accept:same, use if API is used more publicly, powerful(can version payload as well as API call))
+7. **Security** - (5) - 1. CORS, 2. Cookies(easy, less secure), 3. Basic auth(not secure unless SSL enabled), 4. Token based auth(clientid/secret is sent, then token then actual code), 5. OAuth(server never gets credentials), FYI status codes(100-info, 200-success, 300-redirect, 400-client error, 500-server error)	
 
 ## REST
 1. REST stands for Representational State Transfer.
