@@ -1,5 +1,5 @@
 ## Index
-1. **Objects** - creation-({}, .create(), new()(diff-constructor is run)), assignValues - (., [], Object.defineProperty, delete, in operator, key order(num/asc, string/insert))
+1. **Objects** - creation-({}, .create(Object.prototype), new()(diff-constructor is run)), assignValues - (., [], Object.defineProperty, delete, in operator, key order(num/asc, string/insert))
 2. **Obj copy and references** -  objs. stored by reference, use.create() to avoid reference
 3. **Property descriptors** - {writable, enumerable, configurable}, Object.defineProperty(obj, propertyName, descriptor), Object.getOwnPropertyDescriptor(obj, key) 
 4. **Property getters and setters** - get/set methods for encapsulation, get/set e.g. - remove age and add b'day field without breaking existing clients

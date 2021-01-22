@@ -1,3 +1,10 @@
+## Index
+1. **Mocha** - Arrange-Act-Assert(AAA), JS unit test framework running on Node.js and browser, npm i mocha chai sinon --save-dev, By default mocha looks for test folder and in pkg.json "test": "mocha", app = require('../app');  res = app.add(a+b);assert.equal(res, exp);
+2. **Hooks** - before(runs once before the first test in this block), beforeEach(runs before each test in this block), after/afterEach, describe.only()/skip(), --parallel flag(to run tests parallely, limitation - no guarantee the order in which test files will run)
+3. **Chai** - assertion library, expect & should, expect(2).to.equal(2), type-check-(expect('foo').to.be.a('string')) 
+.toInclude(), to.Exist(), **Assert** - .equal(actual, expected, [message]), assert.equal(3, '3', 'success'), .strictEqual(), .notEqual/strictEq(), .fail(), .isAbove(), .isAtLeast(), .isBelow(), isArray()
+4. **Sinon** - Standalone test spies, stubs and mocks for JavaScript, TestDoubles(replace anything that is external (like network reqeust, db call, settimeouts)), 3 TestDoubles(1. Spies- record info of func call like-(no. of times it is called, args, return, exception thrown), let cbspy = sinon.spy(); functoSpy(cbspy), expect(cbspy).to.have.been.called.once, 2. Stubs - spies + replace/change behaviour(return val) of the target function, var post = sinon.stub(axios, 'post') 3. Mocks - setting up fake expectations, useful if you need to stub more than one function from a single object)
+
 ## Mocha
 Mocha is a JavaScript unit test framework running on Node.js and in the browser.  
 **install**  
