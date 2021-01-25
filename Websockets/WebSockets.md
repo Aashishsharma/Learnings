@@ -1,8 +1,9 @@
 ## Index
 1. **WebSockets** - computer communications protocol, full-duplex communication channels over a single TCP connection
 2. **Socket.io** - JS library for realtime web apps, enables bi-directional communication between web clients and servers, consist of 2 parts (server n client), working - (frst web socket connection, if faised then HTTP long polling), websocket client can't connect to socket.io server and vice versa
-3. **Server side** - npm i socket.io, server = require('http').createServer(expressapp); io = require('socket.io').listen(server); io.sockets.on('connection', socket =>{socket.on('msg', data => {}, socket.on(disconnect));
+3. **Server side** - npm i socket.io, server = require('http').createServer(expressapp); io = require('socket.io').listen(server); io.sockets.on('connection', socket =>{socket.on('msg', data => {}, socket.on(disconnect)); server.listen(8080);
 4. **Client side** - include - ("/socket.io/socket.io.js"), const socket = io.connect();, socket.emit('newmsg', "Dummy Data"); socket.on('msg',(data)=>{})
+5. **Rooms** -  io.on('connection', socket => {socket.join(roomID)}, io.to(roomID).emit('event'), socket.on('disconnect', () => {socket.leave(roomID);}););
 
 ## WebSockets
 WebSocket is a computer communications protocol, providing full-duplex communication channels over a single TCP connection
