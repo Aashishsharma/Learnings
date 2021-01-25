@@ -5,8 +5,9 @@
 4. **Decorator** - attaches additional responsibilities to an object dynamically, avoids subclass explosion, coffee problem, is a comp n has an abstract comp (class caramel extends AddonDecorator {(abstract cls)Beverage b; constructor(Beverage b){this.b=b}; int cost(){return this.b.cost()+2}), Bev b = new Caramel(new Expresso())
 5. **Facade** - the front of a building, provides a unified interface to a set of interfaces in a subsytem, watching a movie (HomeTheaterFacade = new HTF(amp, dvd, screen, light); HTF.watchMovie(), .endMovie())
 6. **Proxy** - provides a placeholder for another object to control access to it, is a comp n has a concrete comp, usecase - caching - (func xAPIProxy(this.xapi=new xapi(), this.cache={}, this.getVal=func(abc){if not in cache return this.cache[abc] = this.api.getVal(abc) else return this.cache[abc]})), proxAPI = new xAPIProxy(), proxAPI.getVal(1)
-7. **Adapter**
-8. **Strategy** - 
+7. **Adapter** - converts the interface of a class into another interface the clients expect, 
+8. **Strategy** - duck problem, composition over inheritance (horizontal code share), The Strategy Pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable. Strategy lets the algorithm vary independently from clients that use it. Main abstract class having lot of subclasses, flyable n quackable, moved to separate interface, all types of fly/quack now subclass of flyable n quackable n instance of fly/quack in the main abstract class, now in all subclass constructor do (quackbehavior = new SubtypeofQuackablenFlyable)
+9. **Observer** - observers can subscribe to event/subject & get notified when signal occurs. use in chat apps. (IObservabe{add/remove(IObserver io), notify()}, IObserver{update()}, WetStation impls IObserveable{add/rem{this.obs.add/rem}, notify(foreach observer - ob.notify())}, phoneDisp impls IObserver{constructor{this.WetStation=wetstation}, update(){this.wetStation.getTemp()}}
 
 ## JS Design Patterns
 A pattern is a reusable solution that can be applied to commonly occurring problems in software design  
