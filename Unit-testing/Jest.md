@@ -1,4 +1,13 @@
 ## Jest
+1. **Jest** - Testing JS framework and works with node, react, angular, mocha specific to node, features(0 config, snapshots, isolated n fast, code coverage inbuilt(--coverage)), start-(1. npm i jest, "test": "jest", 2. jest --inti 3. test('1+1=2',()=>{expect(sum(1,2).toBe(3))})
+2. **Matchers** - expect(funcUnderTest).(toBe(), notToBe(), toEqual()/match/contain/throw, toBeNull/undefined/falsy/GreaterThan/LessThan)
+3. **Testing async code** - test('',()=>{return fetchData().then(data =>{expect(data).toBe('ABC')})}), return imp, **using await** - test('',async ()=>{data = await fetchData();expect(data).toBe('ABC');})
+4. **Setup and Teardown** - beforeEach(() => {}, beforeAll, after, use in/outside of describe
+5. **Mocking** - 2 ways, 1. create mock func - (mockCB = jest.fn(x=>42+x), expect(mockCB.mock.calls.length).toBe(1)), 2. Mocking modules - (jest.mock('axios');val = axios.get.mockResolvedValue(resp); expect(expVal).toEq(val))
+6. **Snapshot testing** - renders UI comp, takes a snapshot, compares it to a reference snapshot file, test fails if snapshots don't match(either update test/snapshot), npm i --save-dev react-test-renderer (import React, import renderer from 'react-test-renderer'; it('renders correctly', () => {const tree = renderer.create(<Link page="http://www.facebook.com">Facebook</Link>).toJSON();expect(tree).toMatchSnapshot();});), code review of snapshots, jest --updateSnapshot, jest --watch(ineractively update snapshot), **property matchers** - when comp renders dynamic val - renders Math.random() - (expect(tree).toMatchSnapshot({createdAt: expect.any(Date),id: expect.any(Number),});)
+7. **Snapshot vs visual regression(backstop)** - sanpshot - only UI is verified, values are serialized, stored within text files, and compared using a diff algorithm.,  for logic do normal unit testing (above 1-5), visual regression - take screenshots of web pages and compare the resulting images pixel by pixel. Jest ADV - no flakiness n fast, visual regression requires real browser n diff browser render UI differently(use docker), in snapshot tests is run in cli
+ 
+## Jest
 Is a testing javascript framework and works with rpojects like node, react, angular (Mocha is specific to Node)  
 It is simple to use  
 **Features**
