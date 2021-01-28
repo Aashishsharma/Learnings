@@ -1,12 +1,8 @@
 ## SOLID Principles
-**Why?**  
-Solid Design principles encourage us to create more maintainable, understandable, and flexible software. Consequently, as our applications grow in size, we can reduce their complexity and save ourselves a lot of headaches further down the road!  
+1. **Why?**  - let's us to write more maintainable, understandable, and flexible software  
+2. **Single resposibility** - This principle states that a class should only have one responsibility. It should only have one reason to change, this reason for change should not change, e.g, if a PrintBook class changes only when display needs to be changed, then any other change in the application shouldn't result in changing this class
+3. **Open/closed** - open for extension, closed for modification never re-write (existing)code, del old code n write new code, no re-write then no bugs, achieved by constructor-injection, instead of instatntiating objs in a main class, pass objs in constructor, so new req, new class obj is passed, so no-rewrite, old obj removed new added. similar to strategy pattern
+4. **Liskov's substitution** - subclass should be substitutable for the baseclass at any given point of time. so **preconditions** - (same/weaker e.g, subclass method inherited from baseclass must accept all parameters from BClass + more if required, thus if Bclass is replaced by SClass, code would not break since no req. args for BClass is missing), **postcondition** - (same/stronger - SClass must return same/subset of values returned by BClass, if additional values are returned or is SClass throws more generic exception then BClass, then BClass can't be replaced by SClass, since the new exception isn't handeled in the code where BClass is replaced via SClass), if BClass can't be replaced by SClass, maybe inheritance is not required
+5. **Interface segregation** -  Better to have too many small interfaces then to having to few large interfaces, benifit(results to composition over inheritance n decoupling), the ideas is to not force a class implementing interface to implement a method which it doesn't need, (e.g, Animal interface {eat,sleep,move}, but there is some fish which doesn't sleep, so we are forcing that fish class to implement sleep, not good, instaed break Animal interface into multiple interfaces, and split eat/sleep/move methods)
+6. **Dependency inversion** - 
 
-1. Single Responsibility
-2. Open/Closed
-3. Liskov Substitution
-4. Interface Segregation
-5. Dependency Inversion
-
-### 1. Single resposibility
-This principle states that a class should only have one responsibility. Furthermore, it should only have one reason to change.  
