@@ -73,7 +73,7 @@ class MySet {
     // this method will test if the set is a subset of a different set
     subset = function(otherSet) {
       const firstSet = this.values();
-      // every fun returns true if all elems of the array pass the test
+      // every fun -> returns true if all elems of the array pass the test
       // i.e, if all elems of firstSet return true for the inner fun, then every returns true
       // if even single elem fails the test, every returns false
       return firstSet.every(function(value) {

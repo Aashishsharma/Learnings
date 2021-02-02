@@ -3,11 +3,9 @@
 // left child: i * 2
 // right child: i * 2 + 1
 // parent: i / 2
-
 let MinHeap = function() {
-	
 	let heap = [null];
-	
+	// insert elem at last then do re-heap
 	this.insert = function(num) {
 		heap.push(num);
 		if (heap.length > 2) {
@@ -24,8 +22,7 @@ let MinHeap = function() {
 			};
 		};
 	};
-	
-	// set last elem to root then to re-heap
+	// set last elem to root then do re-heap
 	this.remove = function() {
 		let smallest = heap[1];
 		if (heap.length > 2) {

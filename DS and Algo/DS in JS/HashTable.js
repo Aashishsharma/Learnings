@@ -1,5 +1,4 @@
 /* Hash Table */
-
 var hash = (string, max) => {
   var hash = 0;
   for (var i = 0; i < string.length; i++) {
@@ -7,16 +6,12 @@ var hash = (string, max) => {
   }
   return hash % max;
 };
-
 let HashTable = function() {
-
   let storage = [];
   const storageLimit = 14;
-  
   this.print = function() {
     console.log(storage)
   }
-
   this.add = function(key, value) {
     var index = hash(key, storageLimit);
     if (storage[index] === undefined) {
@@ -36,7 +31,6 @@ let HashTable = function() {
       }
     }
   };
-
   this.remove = function(key) {
     var index = hash(key, storageLimit);
     if (storage[index].length === 1 && storage[index][0][0] === key) {
@@ -49,7 +43,6 @@ let HashTable = function() {
       }
     }
   };
-
   this.lookup = function(key) {
     var index = hash(key, storageLimit);
     if (storage[index] === undefined) {
@@ -64,9 +57,7 @@ let HashTable = function() {
   };
 
 };
-
 console.log(hash('quincy', 10))
-
 let ht = new HashTable();
 ht.add('beau', 'person');
 ht.add('fido', 'dog');
