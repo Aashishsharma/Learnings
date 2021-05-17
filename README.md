@@ -1,2 +1,2 @@
 # Learnings
-my personal learnngs
+my personal learnngs.
