@@ -1,8 +1,8 @@
 ## Docker (container runtime)
 
 #### Docker vs VM
-**Levels in machine** - Hardware -> Kernel -> Applications
-**Docker** - Virtualization at application level, hence small in size, fast start/stop 
+**Levels in machine** - Hardware -> Kernel -> Applications  
+**Docker** - Virtualization at application level, hence small in size, fast start/stop  
 **VM** - at app + kernel level, large size in GBs, slow start/stop
 
 #### Containers  
