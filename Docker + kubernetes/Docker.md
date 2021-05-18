@@ -7,7 +7,11 @@
 
 #### Images
 1. It is an actual package
-2. Artifact that can be moved around (class in terms of java)\
+2. Artifact that can be moved around (class in terms of java)
+
+**Commands**  
+1. ```docker images```
+2. ```docker image rm <img-name>```
 
 #### Containers  
 **Namespaces + own filesystem + controlgroups (CGroups)**
@@ -18,6 +22,7 @@
 1. Start container from image - ```docker run <image-name>``` -p for port, -d for detached
 2. List all running containers - ```docker ps``` add -a to list running + stopped containers
 3. Stop the container - ```docker stop <container-id>```
-4. start container not from image - ```docker start <container-id>```  
+4. start container not from image - ```docker start <container-id>``` 
+5. remove container - ```docker container rm <container-id>```
 Docker allows multiple apps with diff versions simultaneously like 2 diff ver of redis can be run, here redis is opened to just one port (6379), so this is possible because of -p hostport:containerport, no issues as long as host port is always diff
 
