@@ -40,3 +40,12 @@ Run multiple services in one go, simpler, better than running docker commands in
 services means name of the container  
 in docker-compose network is automatically created  
 ```docker-compose -f <yaml-file-name> up/down```
+
+#### Dockerfile - Blueprint for building images
+```
+From node:14(latest default)
+ENV key=val - preferred to set this in docker-compose
+RUN <any linux command> - runs while buliding image
+COPY . .
+CMD ["node", "server.js"] - runs when staring the container
+
