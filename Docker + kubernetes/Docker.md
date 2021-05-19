@@ -65,5 +65,12 @@ Container restarted data lost so need vloumes
 **3 Types** -  
 1. Host volumes - ```docker run -v host-dir:container-dir```  
 2. Anonymosy volumes - ```docker run -v container-dir``` host-dir = /var/lib/docker/volumes/hash/_data  
-3. Named values (preferred) - ```docker run -v name:container-dir``` host-dir - same as above
-![alt text](PNG/volumes.PNG "Title")
+3. Named values (preferred) - ```docker run -v name:container-dir``` host-dir - same as above  
+**Note - the contianer-dir defres for each DB**  
+1. For myslq - /var/lib/mysql
+2. For mongo - /data/db
+3. For postgres - /var/lib/postgres/data  
+
+in docoker-compose ->
+![alt text](PNG/volumes.PNG "Title")  
+also under volumes section add driver:local
