@@ -35,4 +35,8 @@ Allow different contianer to talk to each other
 1. ```docker network create <network-name>```
 
 #### Docker compose
-Run multiple services in one go, simpler, better thsn running docker commands individually
+Run multiple services in one go, simpler, better than running docker commands individually  
+![alt text](PNG/docker-compose.PNG "Title")  
+services means name of the container  
+in docker-compose network is automatically created  
+```docker-compose -f <yaml-file-name> up/down```
