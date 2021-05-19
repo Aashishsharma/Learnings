@@ -12,6 +12,10 @@
 **Commands**  
 1. ```docker images```
 2. ```docker image rm <img-name>```
+3. ```docker tag <existing-image:version> to new-ecr-domain-image:version```  
+this creates new image and adds the tag so that this image can be pushed to any other container registry like ECR and then push
+4. ```docker push <image-name:version>``` also first do docker login
+
 
 #### Containers  
 **Namespaces + own filesystem + controlgroups (CGroups)**
@@ -19,7 +23,7 @@
 2. Running instance of an image (obj. in terms of java)
 
 **COMMANDS**
-1. Start **new** container from image - ```docker run <image-name>``` -p for port, -d for detached, --name, --net for network, -e for env. vars
+1. Start **new** container from image - ```docker run <image-name>``` -p for port, -d for detached, --name, --net for network, -e for env. vars, -v(volumes) host-dir:contianer-dir
 2. List all running containers - ```docker ps``` add -a to list running + stopped containers
 3. Stop the container - ```docker stop <container-id>```
 4. start **existing** container not from image - ```docker start <container-id>``` 
@@ -54,3 +58,12 @@ CMD ["node", "server.js"] - runs when staring the container
 **Building image**
 ```docker build -t <image-name:version> .``` . or path to Dockerfile  
 create all images from Dockerfile and then create your app at once using docker-compose
+
+#### Docker volumes - to persist data in docker
+Container restarted data lost so need vloumes  
+**Internal working** - a directory from virtual filesystem (container) is mounted to the host file system  
+**3 Types** -  
+1. Host volumes - ```docker run -v host-dir:container-dir```  
+2. Anonymosy volumes - ```docker run -v container-dir``` host-dir = /var/lib/docker/volumes/hash/_data  
+3. Named values (preferred) - ```docker run -v name:container-dir``` host-dir - same as above
+![alt text](PNG/volumes.PNG "Title")
