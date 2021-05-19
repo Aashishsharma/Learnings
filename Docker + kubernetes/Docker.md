@@ -41,11 +41,15 @@ services means name of the container
 in docker-compose network is automatically created  
 ```docker-compose -f <yaml-file-name> up/down```
 
-#### Dockerfile - Blueprint for building images
+#### Dockerfile(exact name) - Blueprint for building images
+add \ for a command to be multiline
 ```
 From node:14(latest default)
+WORKDIT /app - makes this current directory for the container
 ENV key=val - preferred to set this in docker-compose
 RUN <any linux command> - runs while buliding image
 COPY . .
 CMD ["node", "server.js"] - runs when staring the container
-
+```
+**Building image**
+```docker build -t <image-name:version> .``` . or path to Dockerfile
