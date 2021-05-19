@@ -25,7 +25,7 @@
 4. start **existing** container not from image - ```docker start <container-id>``` 
 5. remove container - ```docker container rm <container-id>```
 6. logs ```docker logs <container-id>```
-7. logs - imp for debugging- ```docker exec -it <container-id> /bin/bash```  
+7. logs - imp for debugging- ```docker exec -it <container-id> /bin/bash or /bin/sh```  just to env to see all env. vars that are set
 
 Docker allows multiple apps with diff versions simultaneously like 2 diff ver of redis can be run, here redis is opened to just one port (6379), so this is possible because of -p hostport:containerport, no issues as long as host port is always diff
 
@@ -52,4 +52,5 @@ COPY . .
 CMD ["node", "server.js"] - runs when staring the container
 ```
 **Building image**
-```docker build -t <image-name:version> .``` . or path to Dockerfile
+```docker build -t <image-name:version> .``` . or path to Dockerfile  
+create all images from Dockerfile and then create your app at once using docker-compose
