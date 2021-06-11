@@ -35,4 +35,18 @@ d. **etcd** - (cluster brain) - key value store of a cluster state, any state ch
 7. kubectl apply/delete -f <file-name>
   
 ## K8 config.yaml files
+**3. Parts**
+1. Metadata
+2. spec - all the config of a component/kind
+3. status - we don't specify it, k8 does it internally, that's how self-healing works in k8 (using etcd)
+ 
+**Connecting components using selectors and labels (key-val pair)**  
+Metadata containes lables -labels: app: nginx  
+and spec contains selectors - selector: matchLabels: app: nginx  
+kind = deployment must know which pods are in that deployment since deploy->replicas->pods->containers  
+Hence, in kind=deploy, spec is nested and we need labels and selectors
+kind = service must know which pod/deply to connect hence use labels and selectors
+kind = service must know on which port pod is running, so it has it's own port and target(for pod) port
+
+  
 
