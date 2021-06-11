@@ -23,4 +23,16 @@
 a. **API server** - client (kubelet) interacts with this api server to deploy app in K8 cluster, also does authentication of client  
 b. **Scheduler** - intelligent (checks CPU, RAM) to decide on which node next pod needs to be scheduled, just schedules  
 c. **Controller Manager (CM)** - Detect state changes like crashing of pods, and try to recover the cluster/node state by calling scheduler  
-d. **etcd** - (cluster brain) - key value store of a cluster state, any state change like pod died/started is stored in this key-value store, CM checks this to understand cluster health, and scheduler check this key store to determine where next pod should be created  
+d. **etcd** - (cluster brain) - key value store of a cluster state, any state change like pod died/started is stored in this key-value store, CM checks this to understand cluster health, and scheduler check this key store to determine where next pod should be created 
+
+## K8 comands
+1. kubectl get node/pod/service/deployment/replicaset
+2. kubectl create deployment(this is pod, u don't create a pod but a deployment) name --image=image
+3. kubectl describe pod <pod-name>
+4. kubectl logs <pod-name>
+5. kubectl exect -it <pod-name> -- /bin/bash
+6. kubectl delete deployment <dep-nm>
+7. kubectl apply/delete -f <file-name>
+  
+## K8 config.yaml files
+
