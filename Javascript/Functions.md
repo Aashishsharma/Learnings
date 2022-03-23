@@ -81,7 +81,30 @@ arrow has no this, constructor functions this works as normal java this, for no 
     2. Method invocation
     In this case this refers to the obj. using which it is called like obj.func(), this will refer to obj.
 3. the default execution context.
-first will search in function context, then in global context
+first will search in function context, then in global context  
+
+**value for this**  
+1. IF func is a method, this belongs to obj
+2. If func is func, then this belong to global window obj
+3. Called with new - a new empty obj is created and returned
+4. Arrow func, no this 
+```javascript
+function video() {
+  title='abc'
+  tags=[1,2,3],
+  showtags() {
+    this.tags.forEach(function (tag) {
+       console.log(this.title,tag) // o/p undefined 1,2,3 since cb func inside foreach is func invocation and this then belongs to window obj, to solve use arrow func, or let context=this  above foreach and then context.title instead of this.title in foreach 
+
+}
+Hence never use arrow funcions in objects as methods -
+let abc() {
+  A=2
+abc = () =>  {
+  console.log(this.A) // ain't gonna work
+}
+}
+```
 
 ##### losing this
 ```javascript

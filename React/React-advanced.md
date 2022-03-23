@@ -199,11 +199,16 @@ render() {
 with
 <>...</>
 ```
-
+usecase render multiple <td> but react como can return only one elem, so wrap in div, but then td can't be in div so fragment  
+  
 ------------------------------------------------------------------------------
 ## Higher-Order Components
 A higher-order component (HOC) is an advanced technique in React for reusing component logic.
 A higher-order component is a function that takes a component and returns a new component.
+
+Hoc - normal comp - takes props and returns ui for that prop  
+Hoc - takes comp and props and return new comp - almost always, hooks can replace hocs   
+
 ```javascript
 const EnhancedComponent = higherOrderComponent(WrappedComponent);
 ```

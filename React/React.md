@@ -82,6 +82,9 @@ e.g. JSX
  const element = <img src={user.avatarUrl} />;
 
  ```
+
+While using jsx, React must be in scope (i.e, import React from 'react'), why, because jsx transpiles down to React.createElement(<elem_nm>, <elem_props>, <html_child>)
+ 
 ------------------------------------------------------------------------------
 ## REACT ELEMENTS
   smallest building blocks of React apps, they are plain objects

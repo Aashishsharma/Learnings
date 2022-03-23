@@ -1,99 +1,9 @@
 # Learnings
 
 
-Prototypal inheritane -
-
-
-Call apply bind
-Function borrowing - borrow a method of 1 obj and use it in another obj
-Every fun has call,apply,bind methods because of _proto_ 
-
-E.g. 
-
-Abstraction - hide details, show essentials
-
-
-‐-------------- Debouncing and throttling-----------
-Api rate limiting techniques
-1. DEBOUNCE
-Instead of calling api every single time, call only when there is a specific time gap between 2 api calls - used in input search autocomplete
-If user is typing a keyword, keyup event is called every single time, but make api call when there is a pause (say 300ms) see on flipkart website, autosuggestion changes only when you wait fir skme time after yoy type your keyword.
-Impl-
-Doc.getElembyId.addEvntList('onkeyup', debounceCall) 
-
-Let debounceCall = callApiWrapper(callSearchApi, 300) 
-
-Func callApiwrapper(fn, time) {
-let timer; //clusure helps in clearing timout of below retunred func
-return function() {
-  Let context = this;
-  let arg = arguments;
-  clearTimeout(timer)
-   setTimeout(() => {
-fn.apply(this,args)
-}, time) 
-
-}
-  
-Func callSearchApi() {
-console.log(' calling search api')
-} 
-
-THROTTLING
-Impl-
-Doc.getElembyId.addEvntList('onResize', throttleCalk) 
-
-Let throttleCall = callResizeApiWrapper(resuzeApi, 300) 
-
-Func callResizeApiwrapper(fn, time) {
-let flg = true; //clusure helps in using this val on each fncall 
-return function() {
-if(flg){
-  Let context = this;
-  let arg = arguments
-fn.apply(this,args)
-flg=false;
-   setTimeout(() => {
-flg=true // call next api only after certain interval of time
-}, time)
-} 
-
-}
-  
-Func callSearchApi() {
-console.log(' calling search api')
-} 
-
-THIS IN JS
-1. IF func is a method, this belongs to obj
-2. If func is func, then this belong to global window obj
-3. Called with new - a new empty obj is created and returned
-4. Arrow func, no this 
-
-function video() {
-  title='abc'
-  tags=[1,2,3],
-  showtags() {
-    this.tags.firEach(function (tag) {
-       console.log(context.title,tag) // o/p undefined 1,2,3 since cb func inside foreach is func invocation and this then belongs to window obj, to solve use arrow func, or let context=this imabive foreach and then context.title instead of this.title in foreach 
-
-}
-Hence never use arrow funcions in objects as methods -
-let abc() {
-  A=2
-abc = () =>  {
-  console.log(this.A) // ain't gonna work
-}
-}
-
 
 React.lazy for code splitting - dynamic import
-Fragment - usecase render multiple <td> but react como can return only one elem, so wrap in div, but then td can't be in div so fragment 
 
-Hoc - normal comp - takes props and rerurns ui for that prop
-Hoc - takes comp and props and return nes comp - almost always, hooks can replace hocs 
-
-While using jsx, React must be in scope (i.e, import React from 'react'), why, because jsx transpiles down to React.createElement(<elem_nm>, <elem_props>, <html_child>)
 
 
 

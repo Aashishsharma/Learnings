@@ -15,6 +15,7 @@
 14. **Module, defer, async** - (**export** (4 - before/after decl (named), as, (when?(util/class))default(only 1, can be combined with named)) (**import** - named - {}, default without {}, for dynamic -  import()) - same module imported into multiple other places, its code is executed only the first time, defer(dwnld async, exec after DOMContentLoaded), async(dwnld.exec - async)
 15. **Callback, promises, async await** - callback(hell-remove) - libraries(filter example, readfile), (Promise.all (run concurrenntly), race - 1st resolve/reject, any - 1st fulfilled), Promise- fun(){return new Prom((res, rej)->{res()/rej()})}(await- syntax diff)
 16. **Cookies, local/sessionstorage**-(cookie-(doc.cookie, auth, <4KB, 20/domain), options-(path, max-age, secure(https), http-only(JS can't handle))), (LS-(get/setItem <2MB, server can't manipulate, same within multiple windows(!SS))-autoformfill)
+17. **Debouncing and Throtlting** - Api rate limiting techniques
 
 ## Javascript
 Javascript is  
@@ -858,3 +859,58 @@ The localStorage is shared between all windows with the same origin, so if we se
 Another tab with the same page will have a different storage.  
 sessionStorage.setItem('test', 1);  
 sessionStorage.getItem('test')
+
+## Debouncing and Throttling
+Api rate limiting techniques  
+1. DEBOUNCE  
+Instead of calling api every single time, call only when there is a specific time gap between 2 api calls - used in input search autocomplete  
+If user is typing a keyword, keyup event is called every single time, but make api call when there is a pause (say 300ms) see on flipkart website, autosuggestion changes only when you wait fir skme time after you type your keyword.  
+```javascript
+Doc.getElembyId.addEvntList('onkeyup', debounceCall) 
+
+Let debounceCall = callApiWrapper(callSearchApi, 300) 
+
+Func callApiwrapper(fn, time) {
+let timer; //clusure helps in clearing timout of below retunred func
+return function() {
+  Let context = this;
+  let arg = arguments;
+  clearTimeout(timer)
+   setTimeout(() => {
+fn.apply(this,args)
+}, time) 
+
+}
+  
+Func callSearchApi() {
+console.log(' calling search api')
+}
+```
+
+2. THROTTLING
+```javascript
+Doc.getElembyId.addEvntList('onResize', throttleCalk) 
+
+Let throttleCall = callResizeApiWrapper(resuzeApi, 300) 
+
+Func callResizeApiwrapper(fn, time) {
+let flg = true; //clusure helps in using this val on each fncall 
+return function() {
+if(flg){
+  Let context = this;
+  let arg = arguments
+fn.apply(this,args)
+flg=false;
+   setTimeout(() => {
+flg=true // call next api only after certain interval of time
+}, time)
+} 
+
+}
+  
+Func callSearchApi() {
+console.log(' calling search api')
+} 
+```
+
+
