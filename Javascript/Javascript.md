@@ -152,7 +152,7 @@ Programming languages that allow such things, are called “dynamically typed”
 3. **string** for strings. A string may have zero or more characters, there’s no separate single-character type.
 4. **boolean** for true/false.
 5. **null** for unknown values – a standalone type that has a single value null. Null as an assignment value. So you can assign the value null to any variable which basically means it’s blank.
-6. **undefined** for unassigned values – a standalone type that has a single value undefined. Undefined is a variable that has been declared but not assigned a value.
+6. **undefined** for unassigned values – memory allocated to variable while hoisting, but no val assigned  Undefined is a variable that has been declared but not assigned a value.
 7. **object** for more complex data structures.
 8. **symbol** for unique identifiers.  
 A “symbol” represents a unique identifier.  
@@ -300,7 +300,7 @@ var abc = function(defaultValue = 0) { //FYI -> adding default parameter in a fu
 
 ------------------------------------------------------------------------------
 ## Closure
-- **Defination**
+- **Defination  (function with its lexical env)**
 Closure is created when a child function keep the environment of the parent scope even after the parent function has already executed
 ```javascript
 function foo(outer_arg) { 
@@ -337,7 +337,7 @@ console.log(get_arr[3]());  // 4
 // due to closure
 ```
 **Use case**  
-To create private functions/variables  
+1. To create private functions/variables  
 ```javascript
 a = (function () {
     var privatefunction = function () {
@@ -351,6 +351,11 @@ a = (function () {
 })();
 ```  
 As you can see there, a is now an object, with a method publicfunction ( a.publicfunction() ) which calls privatefunction, which only exists inside the closure. You can NOT call privatefunction directly (i.e. a.privatefunction() ), just publicfunction()
+
+2. Debouncung 
+3. Throttling
+
+Disadvantage of closure - memory consumption sue to variable in scope
 
 ------------------------------------------------------------------------------
 

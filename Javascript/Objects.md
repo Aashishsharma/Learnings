@@ -218,6 +218,11 @@ for (let prop in user) {
 #### Object copying, references
 One of the fundamental differences of objects vs primitives is that they are stored and copied “by reference”.
 
+To copy obj. we can use spread operator, but it will only do a shallow clone, for deep clone we can do JSON.parse(JSON.stringify(obj)), but this is expensive.
+Best way - lodash's clonedeep method
+
+```var A = _.cloneDeep(obj)```
+
 Primitive values: strings, numbers, booleans – are assigned/copied “as a whole value”.
 
 ```javascript
@@ -320,6 +325,8 @@ In the non-strict mode, no errors occur when writing to non-writable properties 
 #### Property getters and setters
 It’s accessor properties. They are essentially functions that execute on getting and setting a value, but look like regular properties to an external code. 
 These are used in object.defineproperty as well  
+
+1. **Using Objects**
 ```javascript
 //syntax
 let obj = {
@@ -370,8 +377,54 @@ alert( john.birthday ); // birthday is available
 alert( john.age );      // ...as well as the age
 ```
 
+2. **Using functions**
+```javascript
+function Circel(radius) {
+// with new keyword, new obj is created and this is assigned to it
+// radius is now prop of new obj
+  this.radius = radius;
+// abc is now private member of this func due to closure
+  let abc= 123
+// private
+  Let computeLocations = function(factor) {
+    // code
+  // public
+  this.draw = function() {
+    computeLocations(this.radius)
+    console.log('draw')
+  } 
+
+// getter for privatevmemeber abc
+Object.defineProperty(this, 'abc', {
+// get is special keyword for getter
+  get: function() {
+  return abc
+}})
+}
+let circle = new Circle(5)
+circle.computeLocations(1) // error privatebmemebet
+concole.log(circle.abc) works because of getter
+circle.abc =2 // error because private and no setter found, use set keyword for setter
+set: function(value) {
+//can do some validation
+If(value<2)
+  throw new Error('too small')
+else
+abc=value} 
+
+circle.abc=1 // throws error - too small
+circle.abc=5 // works 
+```
+
 ### Prototypal inheritance
 In JavaScript, objects have a special hidden property [[Prototype]] (as named in the specification), that is either null or references another object. That object is called “a prototype”:
+Arr, obj, fun have _proto_ property which provide access to inbuilt props and methods
+Let arr =[],
+Thus we can access arr.filter() and others
+arr._proto_ is prototype for arr and arr._proto.proto_ = any obj._proto_ = base obj. of js.
+and _proto_ = .prototype  
+This is prototyoal inheritance.  
+
 ```javascript
 let animal = {
   eats: true
