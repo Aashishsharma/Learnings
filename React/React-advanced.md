@@ -15,7 +15,7 @@
 ## CODE SPLITTING
 Bundling is great, but as your app grows, your bundle will grow too.  
 So we use code splitting  
-The best way to introduce code-splitting into your app is through the dynamic import() syntax.
+The best way to introduce code-splitting into your app is using React.lazy using dynamic import  
 ```javascript
 import {add} from './math'
 console.log(add(16, 26))
@@ -200,7 +200,7 @@ with
 <>...</>
 ```
 usecase render multiple <td> but react como can return only one elem, so wrap in div, but then td can't be in div so fragment  
-  
+
 ------------------------------------------------------------------------------
 ## Higher-Order Components
 A higher-order component (HOC) is an advanced technique in React for reusing component logic.

@@ -44,13 +44,29 @@ You can’t use Hooks inside a class componen
 1. Line 1: We import the useState Hook from React. It lets us keep local state in a function component.
 2. Line 4: Inside the Example component, we declare a new state variable by calling the useState Hook. It returns a pair of values, to which we give names. We’re calling our variable count because it holds the number of button clicks. We initialize it to zero by passing 0 as the only useState argument. The second returned item is itself a function. It lets us update the count so we’ll name it setCount.
 3. Line 9: When the user clicks, we call setCount with a new value. React will then re-render the Example component, passing the new count value to it.
-Normally, variables “disappear” when the function exits but state variables are preserved by React.
+Normally, variables “disappear” when the function exits but state variables are preserved by React.  
+Group logically making sense of all states into one state object   
+
+**Using arrays and objects as state variables**  
+Usestate for array use spread operator to update array as state 
+1. Add at end [...oldarr, newItem]  
+2. Add at start [newItem, ...oldarr]  
+3. Add in between [...oldarr.slice(0,index), newItem, oldarr.slice(index)]   
+
+Remove array elem 
+1. remove first - Use slice(1)
+2. remove last - slice(0, len-1)
+3. remove inbetween [...oldarr.slice(0, index), ...oldarr.slice(index+1)  
+
+**use previous state value** -  
+use functional form of setstate -- setCnt(cnt => cnt+1)  
 
 ------------------------------------------------------------------------------
 ## Using the Effect Hook
 The Effect Hook lets you perform side effects in function components.
 Data fetching, setting up a subscription, and manually changing the DOM in React components are all examples of side effects.
-You can think of useEffect Hook as componentDidMount, componentDidUpdate, and componentWillUnmount combined.
+You can think of useEffect Hook as componentDidMount, componentDidUpdate, and componentWillUnmount combined.  
+Func inside useeffect will run even if dom is manipulated, if second arg in useeffect func is not passed  
 ```javascript
 import React, { useState, useEffect } from 'react';
 
@@ -94,6 +110,18 @@ useEffect(() => {
 }, [count]); // Only re-run the effect if count changes
 // similar to componentShouldUpdate()
 ```
+**order of execution**  
+1. State initializations
+2. Render method
+3. UseEffect func  
+
+**Edge case**  
+```javascript
+UseEffect(()=》setinterval(setcnt(cnt+1), 1000) retutn clearinterval() , [])
+```  
+every time new function is passed in usestate, [], if cnt is missing in [], then closure for cnt is created in setinterval, since the effect is run only once, setcnt doesn't get new staye val, since useeffect func isn't running on new render, if cnt is added in [], then clear interval called everytime, ideally shoild ne called once, 
+Solve - use functional form of setstate --
+Setcnt(cnt => cnt+1)
 
 ------------------------------------------------------------------------------
 ## Rules of Hooks
@@ -150,7 +178,9 @@ Should always start with use? Not necessary but should do.
 
 #### Creating a custom hook
 functions vs custom hooks  
-custom hooks allow us to use stateful logic, in case of functions, only logic can be reused, but not stateful logic
+custom hooks allow us to use stateful logic, in case of functions, only logic can be reused, but not stateful logic  
+**What is stateful logic?**  
+
 ```javascript
 //app.js
 import React from 'react';
