@@ -335,7 +335,7 @@ for await (let item of arr) {
 
 
 ```
-1. Parallely
+2. Parallely
 ```javascript
 const fiveAsyncCalls = [1, 2, 3, 4, 5];
 
@@ -351,4 +351,3 @@ let parallel = Promise.all(fiveAsyncCalls.map((item) => {
   abc(item)
 }))
 ```
-2. One after the other

@@ -16,27 +16,38 @@
 Bundling is great, but as your app grows, your bundle will grow too.  
 So we use code splitting  
 The best way to introduce code-splitting into your app is using React.lazy using dynamic import  
-```javascript
-import {add} from './math'
-console.log(add(16, 26))
-```
+see lazy loading
 #### Lazy loading
 With Code splitting, the bundle can be split to smaller chunks where the most important chunk can be loaded first and then every other secondary one lazily loaded.  
 ```javascript
-import React, { Suspense } from 'react';
+import React, {lazy, Suspense, useEffect, useState} from "react";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
-const OtherComponent = React.lazy(() => import('./OtherComponent'));
+const Feed = lazy(() => import("./routes/Feed"));
+const Profile = lazy(() => import("./routes/Profile"));
+const Home = lazy(() => import("./routes/Home"));
+const Settings = lazy(() => import("./routes/Settings"));
 
-function MyComponent() {
-  return (
-    <div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <OtherComponent />
+<Switch>
+  <Route exact path="/"
+    render={props => (
+      <Suspense fallback={<div>Loading...<div>}>
+        <Home {...props} />
       </Suspense>
-    </div>
-  );
-}
+    )}
+  />
+   <Route
+    exact
+    path="/feed"
+    render={() => (
+      <Suspense fallback={<div>Loading...<div>}>
+        <Feed isLogged={isLogged} user={user} {...props} />
+      </Suspense>
+    )}
+  />
+</Switch>
 ```
+So when home is opened only that js is pulled from the split bundle, same case when feed is opened
 
 ------------------------------------------------------------------------------
 ## CONTEXT

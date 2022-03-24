@@ -182,45 +182,30 @@ custom hooks allow us to use stateful logic, in case of functions, only logic ca
 **What is stateful logic?**  
 
 ```javascript
-//app.js
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './styles.css';
-import Counter1 from './Counter1';
-import Counter2 from './Counter2';
-const App = () => (
-  <>
-    <Counter1 initialCount={5} incdecby = {5} />
-    <Counter2 initialCount={10} incdecby = {10}/>
-  </>
-);
-const rootElement = document.getElementById('root');
-ReactDOM.render(<App />, rootElement);
+//component using custom hook.js
+  const [val, setVal] = useLocalStorage('key', 'dumyvalue')
+  
 
 ///counter1.js
-import React from 'react';
-import { useCounter } from './useCounter';
-const Counter1 = ({ initialCount, incdecby }) => {
-  const { count, incCount, decCount } = useCounter(initialCount, incdecby);
-  return (
-    <div className="counter1">
-      <div>Count = {count}</div>
-      <button onClick={decCount}>Dec</button>
-      <button onClick={incCount}>Inc</button>
-    </div>
-  );
-};
-export default Counter1;
+import React, {useState, useEffect} from 'react';
 
-// counter2.js is exactly same, only className="counter2"
-//useCounter.js
-import { useState } from 'react';
-export const useCounter = (initialCount = 0, incdecby = 1) => {
-  const [count, setCount] = useState(initialCount);
-  const incCount = () => setCount(count + incdecby);
-  const decCount = () => setCount(count - incdecby);
-  return { count, incCount, decCount };
-};
+const setInitialVal = (key, initVal) => {
+  let val = localStorage.getItem(key)
+  if(val) return val;
+  return initVal
+}
+
+export const useReducer = (key, val) => {
+  const [val, setVal] = useState((key) => {
+    return setInitialVal(key, val)
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, val);
+  }, [value])
+
+  return [val, setVal]
+}
 ```
 one can say that if counter1.js == counter2.js then we are repeating code. The point to note is the stateful logic is now not duplicated in both the components, and render methods are supposed to have diff. jsx, that's why we use 2 diff components. If we did not use custom hook, then the counter logic would need to be added in both the components which is duplicate  
 IMP - change in count variable inside useCounter.js re-renders the components those who use useCounter, thus the value of updated counter is displayed in render of counter1.js and counter2.js. Using normal functions, this is not possible
