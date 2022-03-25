@@ -6,6 +6,7 @@ let formElemsValues = {
 }
 
 export const Home = () => {
+  // also include form validation in the custom hook
 	const [values, handleChange, handleSubmit] = useForm(formElemsValues, () => {
 	  console.log({values})
 	})
