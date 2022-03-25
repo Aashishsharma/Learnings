@@ -6,11 +6,9 @@ let formElemsValues = {
 }
 
 export const Home = () => {
-	const [values, handleChange, handleSubmit] = useForm(formElemsValues)	
-
-	const handleSubmit1 = () => {
-	  console.log('submittinh')
-	}
+	const [values, handleChange, handleSubmit] = useForm(formElemsValues, () => {
+	  console.log({values})
+	})	
 	
 	return (
 		<form onSubmit={handleSubmit} >

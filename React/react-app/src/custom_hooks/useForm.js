@@ -5,8 +5,8 @@ export const useForm = (initialState, cb) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		cb()
 		console.log('submitting form')
+		cb();
 	}
 
 	const handleChange = (e) => {
