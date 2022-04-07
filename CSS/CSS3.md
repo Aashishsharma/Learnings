@@ -141,6 +141,25 @@ h1::before {
 
 //multiple combinations
 p.intro::first-letter
+
+Target first child li in all html elements
+li:first-child {
+color:blue
+} 
+
+li:last-child
+li:nth-child(2) {
+} 
+
+li:only-child
+Above is targetted using elem selector
+
+
+Syntax for class and id selector 
+
+.classname:first-child
+#id:first-child 
+
 ```
 2. Pseudo classes
 A pseudo-class is used to define a special state of an element.
@@ -164,6 +183,55 @@ active
 checked, enabled, focus, invalid
 ```
 
+3. Attribute selector - select tags to apply style based on attributes
+img[src^="../img/"] - select all images whose src attribite starts with ../img
+^ - start with
+$ - ends with
+* - contains
+
+**Types of units in css**  
+2 categories
+1. Absoulte units and 2. Relative units 
+
+1. Absoulte
+1.px - pixel - although absolute, depend on device's px display settings 
+
+2. cm, pt- for points little pig then px, pc - 12 pts 
+
+2. Relative (for responsive design, size depends on parent's unit size)
+1. % 
+2. em - 2em - double the default font size
+3. vw(view width) and vh(view height)
+.abc {
+width: 70vw;
+height: 80vh;
+}
+set width od elem to 70 time 1% of view width, same for height 
+
+## Text and Fonts
+1. Text styling
+body{
+text-transform - uppercase/lowercase/capatilized/none
+text-decoration - underline/overline/line-through
+text-align: left, right, center, justify(each line of para would use entire width, if word not fitring in the end, more space added inbetwwen words
+} 
+
+2. Fonts
+body{
+font-weight: 100-800 // thickness of font
+font-style: italic
+font-size: 1.25em // 25% larger then standard font-size
+font-family - 3 default available, serif(edgey characters) sans-serif (opp. of serif - good readibility), monospace (each character has same width)
+Other common available - times new roman, aerial on users computer 
+
+font-family: "Times New Roman", serif - it basically says - use font family as TNR, if not available on users computer, use default as serif 
+
+External fonts -
+Fonts.google.com
+1. Add link tag to <head> before your custom css file links, or else you can use external font if they are loaded after your styles are set
+2. Add styling
+font-family: "lato", "sarabun", sans-serif
+- use font family as lato, if not available (no internet, external site down) use sarabun, if not available use sans-serif
 
 **Block vs Inline elements**
 Block elements have line break, so every block element comes to new line.  
@@ -217,44 +285,115 @@ e.g. - disabled, highlighted, checked, fixed, size big, color yellow
 **block-name__elem-name_mod-name_mod-val**  
 notice when to use - and _ and how many times
 
-#### Flex-box
+##CSS layouts
+#### 1. CSS Box Model
+![alt text](PNG/css-box-model.PNG "Title")
+Add css box model image (border, padding, margin)
+Padding - space between border and content
+Margin - soace between border and other elems
+padding/margin : 10px
+(If one arg, then top, right, bottom and left, same padding/margin applied, if 2 args- 1st arg for top-bottom, if 4 args, from top to left) 
+
+#### 2. Flex-box
 Is a one-dimensional layout model where as css-grid layout is 2 dimensional  
-The main axis is defined by flex-direction, which has four possible values:  
-1. row
-2. row-reverse
-3. column
-4. column-reverse
+(Flexible box) used to layout a page
+Alternative to box model + float and display to layout elems on a web page. 
 
-.box {
-  display: flex;
-  flex-direction: row-reverse;
-  flex-wrap: wrap; //no-wrap default
-}  
+Set dispaly:flex - to parent div/any other elem to start with flexbox 
 
-**flex sizes property**  
-1. flex-grow: How much of the positive free space does this item get?
-2. flex-shrink: How much negative free space can be removed from this item?
-3. flex-basis: What is the size of the item before growing and shrinking happens?  
+Two parts
+1. Containers
+2. Items 
 
- The following code would set the flex-grow property to 2, flex-shrink to 1 and flex-basis to auto.  
-.item {
-  flex: 2 1 auto;
-}  
+1. Containers (add wd/ht to entire container by default all items are stretched to container ht)
+.container {
+display:flex,
+flex-direction: row(defaul)/column, row-reverse, column-reverse;
+flex-wrap: nowrap(default)/ wrap (if wrap - items moved to next line if no more space available
+} 
 
-1. The flex-basis property  
-The flex-basis property specifies the initial size of the flex item before any space distribution happens. The initial value for this property is auto.  
-![alt text](PNG/flex1.PNG "Title")  
+Alligning flex items in a container
+for horizontal alignment 
+justify-content: flex-start, flex-end, center,
+space-between(all items spread out till the end of the container with equal space in between), space-around (space between + same space left at the left of 1st item and right of last item) 
 
-2. The flex-grow property  
-The flex-grow property specifies the flex grow **factor (width increases by this factor)**, which determines how much the flex item will grow **Relative** to the rest of the flex items in the flex container when the positive free space is distributed. **it is a ratio**  
-![alt text](PNG/flex2.PNG "Title")  
-flex-basis + flex-grow
-![alt text](PNG/flex3.PNG "Title")  
+For vertical alignment
+align-items : stretch(defaul, height of all items same as that of container) center - (equal space left at top and bottom), flex-start (at the top of the container, at bottom empty space, items have their own height, not streched) flex-end, baseline(all items's center will have same base, no matter the height of each elem) 
 
-3. The flex-shrink property  
-The flex-shrink property specifies the flex shrink factor, which determines how much the flex item will shrink relative to the rest of the flex items in the flex container when negative free space is distributed.  
-![alt text](PNG/flex4.PNG "Title")  
-flex-shrink + flex-grow works differently  
+Tip - to align flex items exactly at the center of div
+justify-content: center - horizontal center
+align-items:  center - vertical center 
+
+So basically
+.abc {
+display: flex, justify-content and align-items to center
+} 
+
+2. Items
+1. Order
+One imp property- style="order: 0 to n", 0- default, and all other items are placed based on order no. Useful when componetns order is dynamic from javascript, 
+Generally used with inline style, since order no needs to be diff. For eeach item, can be used in renderethod arr.map() 
+
+Why flexbox is popular as opposed to display:block with float and grid layout 
+
+Due to shrink-grow and basis - they define the responsive layout 
+
+2. ---------# flex-grow, shrink, basis------------
+(These properties are added to flex-item)
+These 3 properties decide how the extra space within the flex container is utilized 
+
+1. Flex-basis - minimum width for each item : 100px
+2. Flex-grow (default -0 - no item gets extra space)  - flex-grow:2 - this item would get twice the REMAINING SPACE as compared to other items, note thwt all other items need to jave the grow properties as well, or only this item would get the remaining space
+3. Flex-shrink- (default-1 - all items are shrinked in equal proportion when screen size is being reduced) flez-shrink:3, this item would shrink thrice as compared to other items 
+
+4. Flex - as a shorthand
+flex: 1, 1, 100px (grow, shrink, basis) 
+
+align-self: flex-start/end/center - this align individual items, as opposed to align-items (which is applied at container level)
+
+#### 3. CSS GRID
+Grid vs flexbox
+Flexbox is 1D, grid is 2D -
+Only few options on css flexbox to set height of the flex container (focuses on width),
+In grid - you can specify width and height
+However grid requires more manaul settinga for responsiveness 
+
+Which to use when (grid is for layout, flexbox is for alignment)
+Flexbox -
+1. Small design 
+2. To align items
+3. Content first design - if you don't know how your content is going to look. 
+
+Grid -
+1. Complex design
+2. If you nees gap between block elems - we can define gap between rows and cols easily in grid
+3. Layout first design- when layout us already defined 
+
+1. Container
+2. Items 
+
+1. Container (add wd/ht to entire container, by default all items are stretched to container ht)
+1. display:flex
+grid-template-columns:  50px 10 px 50px - (it would create 3 cols with 1st and 3rd cols with width of 50px, to create more cols add more args) set auto auto auto - (all cols evenly distributed) 
+
+grid-template-rows :10px 100px - (1st row height of 10px, second od 100px) auto auto - (we afe able to set height here, hence 2D) 
+
+2. justify-content: start/end/center 
+- this breaks grid-template-columns/rows, so use (space-around)
+3. align-content:   same as align-items in flex-box (space-around, start, end, center)
+4. Col and row gaps - 
+grid-column-gap: 150px (gap between columns)
+grid-row-gap: 50px
+Shorthand - grid-gap: 50px 150px (row then col) 
+
+2. Items (at item level)
+1. grid-column: 1 / 3 or 1 / span 2 start from col 1 and take up space till col 3
+2. grid-row: 1 / 3 or 1 / span 2 
+
+Shorhand - using grid-area
+.abc {
+grid-area: (row-start / col-start / row-end / col-end) e.g. 1 / 1 / 3 / 3
+
 
 #### Media queries
 The @media rule, introduced in CSS2, made it possible to define different style rules for different media types (like for computer screen, tv, mobile).  
@@ -302,58 +441,77 @@ e.g. combinations
 } 
 ```
 
-#### CSS animations
-The animation is created by gradually changing from one set of CSS styles to another.  
+#### CSS Transitions and animations
+1. Transition
+Transition is applied on the base selector, and which property to transition is applied on the pseudo selector 
 
-Specify when the style change will happen in percent, or with the keywords "from" and "to", which is the same as 0% and 100%. 0% is the beginning of the animation, 100% is when the animation is complete
+.submit-button { 
+background: blue;
+transtion: (property duration(s/ms) transition-style delay) background, padding 2s ease-in-out 100ms
+//other values
+Property(any css property, for multiple separarte using comma, for all use all)
+transition-style (ease, linear)
+} 
 
-1. Keyframes  
-Keyframes are used to achieve animation  
-```css
-//syntax + e.g.
-// need to add animation-name in the element which you want to animate
-.class-name {
-	animation-name: name;
-	animation-duration : 4s;
-	animation-iteration-count: 2/infinite;
-	animation-delay: 2s;
-	animation-timing-function: ease-in/ease-out/ease-in-out;
-	animation-fill-mode: forwards; // end animation in the last position // nydefault, elements go to their initial state once animation is complete
-}
-@keyframe name {
-	0% {background-color: white; left 0px; top:0px;}
-	25% {background-color: red; left 300px; top:0px;}
-	50% {background-color: green; left 300px; top:300px;}
-	75% {background-color: blue; left 0px; top:300px;}
-	100% {background-color: white; left 0px; top:0px;}
+then use pseudo-selector
+.submit-button:hover {
+  background: red; padding:10px
+} 
 
+//older browser require transtition properties to be prefixed
+For chrome/safari
+-webkit-transition
+For firefox
+-moz-transtion 
+
+2. Transform function
+Unlike transition ,this is applied only on base selectors, can also be allpied on pseudo selectors but is not meant for that.
+So no animation effect, transfrom functions are run on page load and not on user action 
+
+.submit-button {
+  transform: translate(50px, 100px) 50 px to right and 100 px to top, same as graph, for left and bottom us-ve vals 
+
+transfrom: rotate(+-deg)
+transfrom: scale(2.5) maked it 2.5 times bigger - makes sense to use on pseudo selectors 
+
+3. Animations
+Transition requires some event to happen like click/hover, animation - no event required, 
+For transition - it is not a function, so if same transition needs to br applied we have to catch all selectors and pseudo selectors and copy transition properties
+For animation - create one animation and same can br applied on all other selector by calling that animation 
+
+Each animation has 2 key frames (start n end) can have more stages in between 
+
+Animation is a 2 step process 
+
+Step 1. Define an animation using keyframes
+@keyframes <animation-name> {
+   from { background: red;} // starting pt
+   to {bacground : black;}
+}  
+Another way - adding steps 
+
+@keyframe red-to-black {
+  0% { color:red; transfrom: translate(0px, 0px)}
+50% {color:yellow; transfrom (10px, 10px)}
+100% {color:black;transfrom(20px, 20px)}
+} 
+
+Step 2. Use an animation
+.abc {
+//add animation name
+animation-name: red-to-black;
+// add animation properties
+1. animation-duration: 0s - default, 5s
+2. animation-timing-function: ease/linear/ease-in-out
+3. animation-delay: 2s /-2s, when -ve means 2 secs already covered in animation
+4. animation-iteration-count: 2/infinite
+5. animation-direction: normal(default - from 0% to 100%), reverse (100 to 0), alternate (forward then backword), alternate-reverse 
+
+//shorthand
+animation: (name duration timing-function delay iteration-count direction) 
+E.g.
+animation: red-to-black 5s ease 2s infinite alternate; 
+
+// for old browsers 
+-webkit-animation: red-to-black 5s ease 2s infinite alternate;
 }
-```
-2. Transitions  
-CSS transitions allows you to change property values smoothly, over a given duration.  
-User actions are required for transitions to work  
-```css
-//syntax + e.g.
-.class-name {
-	background: white;
-	transistion-property: background, border-radius or all (to include all avaliable properties);
-	transistion-duration: 4s, 2s;
-	transition-delay: 2s;
-	transistion-timing-function: ease-in/ease-out;
-	transform;
-}
-//when to transition/ user activity
-.class-name:hover {
-	background: red;
-	border-radius: 50%;
-	transform: rotateY(180deg);
-}
-// when user hovers, background of element will change from white to red (in 4s), and will turn to circle (in 2s)
-// some available transition properties
-background-color
-backgroung -position
-opacity
-z-index
-width, height
-top, right, bottom, left
-```
