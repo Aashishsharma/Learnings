@@ -114,6 +114,51 @@ arr.forEach(function(item, index, array) {
 ["Bilbo", "Gandalf", "Nazgul"].forEach((item, index, array) => {
   alert(`${item} is at index ${index} in ${array}`);
 });
+
+// drawback of forEach function
+const arr = [1,2,3]
+
+const asyncFunc = (input) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+    console.log({input})
+    resolve(input)
+  }, 2000)
+  })
+  
+}
+
+// in this code the for each loop doesn't wait until the promise is resolved, next iteration starts immediately
+arr.forEach(async(item) => {
+  console.log({item})
+  let abc = await asyncFunc(item);
+})
+
+// o/p
+{ item: 1 }
+{ item: 2 }
+{ item: 3 }
+{ input: 1 }
+{ input: 2 }
+{ input: 3 }
+
+// for loop is run one after the other, when one promise is resolved then go to the next iteration
+(async () => {
+for await (let item of arr) {
+  console.log({item})
+  let abc = await asyncFunc(item);
+}
+})();
+
+// o/p
+{ item: 1 }
+{ input: 1 }
+{ item: 2 }
+{ input: 2 }
+{ item: 3 }
+{ input: 3 }
+
+
 ```
 
 #### 3.Searching in array

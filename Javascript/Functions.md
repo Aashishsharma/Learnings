@@ -454,7 +454,21 @@ let debugNow = logNow("DEBUG");
 debugNow("message"); // [HH:mm] DEBUG message
 ```
 curry is not same as default parameters in a function, as default value can have only one value.  
-close to partial functions but not exactly same
+close to partial functions but not exactly same  
+
+Implement currying function for n arguments
+```javascript
+// currying for n args
+const curryN = (x, n=0) => {
+  return (y) => {
+  if(!y)
+    return n+x;
+  return curryN(y, n+x)
+  }
+}
+console.log(curryN(1)(2)(3)(4)(5)())
+//O/P - 15
+```
 
 ------------------------------------------------------------------------------
 ## Generators

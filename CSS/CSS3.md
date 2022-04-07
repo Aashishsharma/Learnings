@@ -283,12 +283,12 @@ e.g. - disabled, highlighted, checked, fixed, size big, color yellow
 
 **naming syntax**  
 **block-name__elem-name_mod-name_mod-val**  
-notice when to use - and _ and how many times
+notice when to use - and _ and how many times  
 
-##CSS layouts
-#### 1. CSS Box Model
-![alt text](PNG/css-box-model.PNG "Title")
-Add css box model image (border, padding, margin)
+####CSS layouts  
+
+#### 1. CSS Box Model  
+![alt text](PNG/css-box-model.PNG "Title")  
 Padding - space between border and content
 Margin - soace between border and other elems
 padding/margin : 10px
