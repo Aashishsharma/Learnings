@@ -117,6 +117,7 @@ var name = "John";
 console.log(typeof name); // ReferenceError
 let name = "John";
 ```
+Let and const are TDZ - The variable is said to be in a "temporal dead zone" (TDZ) from the start of the block until the declaration has completed.
 
 ##### IIFE Immediately invoked function expression
 ```javascript
@@ -160,6 +161,9 @@ A “symbol” represents a unique identifier.
 ```javascript
 //syntax
 let id = Symbol();
+
+//Every Symbol() call is guaranteed to return a unique Symbol.
+Symbol('foo') === Symbol('foo')  // false
 
 let user = { // belongs to another code
   name: "John"

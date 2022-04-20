@@ -13,29 +13,40 @@ The three common ways to create new objects in JavaScript are as follows:
 // Each of the following options will create a new empty object:
 1. var newObject = {};
 2. var newObject = Object.create( Object.prototype );
+// it allows you to choose the prototype object for the object you want to create, without having to define a constructor function
 //e.g.
-var test = {
-  val: 1,
-  func: function() {
-    return this.val;
+// Animal properties and method encapsulation
+const Animal = {
+  type: 'Invertebrates', // Default value of properties
+  displayType: function() {  // Method which will display type of Animal
+    console.log(this.type);
   }
 };
-var testA = Object.create(test);
-testA.val = 2;
-console.log(test.func()); // 1
-console.log(testA.func()); // 2
 
-3. var newObject = new Object();
-//Where the "Object" constructor in the final example
-// creates an object wrapper for a specific value, or
-// where no value is passed, it will create an empty object and return it
+// Create new animal type called animal1
+const animal1 = Object.create(Animal);
+animal1.displayType(); // Output: Invertebrates
 
-//2 vs 3
-//Very simply said, new X is Object.create(X.prototype) 
-//with additionally running the constructor function. 
-//(And giving the constructor the chance to return the
-// actual object that should be the result of the 
-//expression instead of this.) That’s it. :)
+// Create new animal type called fish
+const fish = Object.create(Animal);
+fish.type = 'Fishes';
+fish.displayType(); // Output: Fishes
+
+3. Using a constructor function
+//It is a 3 step process
+// 1. Define the object type by writing a constructor function
+function Car(make, model, year) {
+  this.make = make;
+  this.model = model;
+  this.year = year;
+}
+// 2. Create an instance of the object with new keyword
+const kenscar = new Car('Nissan', '300ZX', 1992);
+const vpgscar = new Car('Mazda', 'Miata', 1990);
+
+//later add new property to obj without changing the constructor function
+Car.prototype.color = null;
+car1.color = 'black';
 
 ````
 

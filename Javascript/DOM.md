@@ -1,4 +1,5 @@
 ## Index
+1. **Dom Manipulation**
 1. **Browser events** - An event is a signal that something has happened. All DOM nodes generate signals. Mouse (click, contextmenu(rt-clck), mouseup/down/move), Keyboard(keyup/down), other (submit, focus, DOMContentLoaded, transitioned)
 2. **Event Handlers** - function that runs when event occurs, Only one event handler can be added, 3 ways to add evnt listner (HTML attribute: onclick="...", elem.onclick = function, evnt listener(preferred since multiple can be added))
 3. **Event listeners** - multiple evnt listners can be added, elem.add/removeEventListener(event, handler, [options]) options(once(T/F - rm once trigerred)/capture(T/F - Capturing)/passive(T/F - T-no call to preventDefault()))
@@ -7,6 +8,85 @@
 5. **Event delegation** - bubbling + capturing, powerful event handling pattern, if we have a lot of elements handled in a similar way, then instead of assigning a handler to each of them – we put a single handler on their common ancestor, highlight/change color of a cell (in a table having 1000 cells) onClick, steps (1.Put a single handler on the container 2.In the handler – check the source element event.target, 3.If the event happened inside an element that interests us, then handle the event.), benifits (save memory, less code), drawback(cpu load - container-level handler gets called even if target elem is not of our interest)
 6. **Dispatching custom events** - event = new Event(type(helowrld,[options]), opts(bubbles T/F, cancelleable - T/F, if T -default actiion is prevented), then elem.addEvntListner('helowrld'), elem.dispatchEvnt(event), usecase - to do analytics with proper evnt names
 7. **Mutation observer**- built-in obj, observes a DOM element and fires a callback when elem changes, after React (due to state) now not used, observ = new MutationObserver(cb); observ.observe(node, conf) conf('changes to watch'(childList, subtree, attributes))
+
+## DOM (Document object model)
+Interface between JS and HTML, another API provided by the run-time (i.e, browser). Just like web-apis, setTimeouts
+
+## Dom Manipulationx
+1. Selecting elements
+```javascript
+document.querySelector('.header') // return first node elem
+const allSections = document.querySelectorAll('.section') // return all node elem
+//querySelector can use any selector (. for class, # for id, for tag - nothing)
+// but querySelector method returnd node elements which are not live (meaning if the elems are changed, we would still have old values)
+// but querySelector works on other HTML elems as well and not just on document obj (see DOM traversing)
+
+// getElements
+document.getElementById('section--1') 
+const allButtons = document.getElementsByTagName('button') // returns collection 
+// since this returns collection which is live (meaning if there is change to any elem, the allButtons obj has the updated elem obj)
+const alllinks = document.getElementsByClassName('special-link')
+```
+2. Creating and inserting elements
+```javascript
+//creating
+const message = document.creatElement('div');
+message.textContent = 'ABC'
+message.innerHTML = '<button>Test</button>'
+
+//inserting
+// prepend, append, before, after (before/after - add elem as a sibling, append/prepend - add the elem as child)
+document.getElementById('Abc').prepend(message)
+```
+3. Deleting elements
+```javascript
+document.querySelector('.removeButton').addEventListener('click', () => {
+  document.querySelector('div').remove()
+})
+```
+
+4. Manipulating Style, attributs and Classes
+```javascript
+const message = document.getElementsByClassName('message');
+
+// 1. Styles (this adds inline style)
+message.style.width = '1.2em'
+message.style.backgroundColor = 'red'
+
+const img = document.getElementsByClassName('img');
+
+// 2. Attributes
+img.src='/abc.png'
+img.alt = 'img not loaded'
+
+// 3. Data attributes - these attributes start with data
+img.dataset.<Data-attribute>
+
+// 4. Classes
+// adding new classes to elems
+img.classList.add('<new-class-name>')
+.remove()
+.toggle() // if added then remove and vice versa
+.containes()
+
+```
+5. Traversing Dom (useful when you don't know the DOM tree beforehand)
+Traversing - selecting and element based on another element
+```javascript
+const h1 = document.querySelector('h1')
+
+// 1. going downwards
+// (notice that querySelector is working on html elem and not just on document obj)
+h1.querySelectorAll('.highlight') // select all html elems (including indirect childs) inside h1 having class 'highlight'
+// for direct childrens
+h1.childNodes // returns nodes which is not live
+h1.children // returns collection which is live
+h1.first/lastElementChild
+
+// 2. going upwards
+h1.parentNode
+
+```
 
 ## Browser events 
 An event is a signal that something has happened. **All DOM nodes generate such signals**  
