@@ -6,6 +6,66 @@
 5. **Mixins** - multiple inheriatce not available, hence used, create tempMixin obj, and add all required methods, then - Object.assign(User.prototype, tempMixin)
 6. **ES6 features** - (=>, let/const, template String, destructuring, rest, spread, iterators, generators, modules, map/set, weakmap, weakset)
 
+
+## OOP without classes
+#### Using Constructor function with new keyword
+```javascript
+"use strict";
+const Person = function (firstName, birthYear) {
+  // Instance properties
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+  // Never do this because then all the objs will have their own copy of calcAge instaed use protoypal inheritance, where only 1 copy would be created
+  // this.calcAge = function () {
+  
+  console.log(2037 - this.birthYear);
+  // };
+};
+const jonas = new Person ('Jonas', 1991);
+console.log(jonas);
+// 1. New empty obj {} is created
+// 2. function is called, this = new empty obj {}
+// 3. empty obj {} linked to prototype
+// 4. function automatically return {}
+const matilda = new Person( 'Matilda', 2017);
+const jack = new Person ('Jack', 1975);
+console.log(matilda, jack);
+console.log(jonas instanceof Person); // true
+
+Person.prototype.calcAge = function () {
+  console.log(2037 - this.birthYear);
+};
+jonas. calcAge();
+matilda.calcAge();
+
+console.log(jonas.__proto__);
+console.log(jonas.__proto__ === Person.prototype); // true
+Person.prototype. species 'Homo Sapiens';
+console.log(jonas. species, matilda. species);
+console.log(jonas. hasOwn Property('firstName')); // true
+console.log(jonas.hasOwn Property( 'species')); // false
+
+```
+Above exact same code using classes
+```javascript
+// class expression
+// const PersonCl = class {}
+// class declaration
+class Personcl {
+  constructor(firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = = birthYear;
+  }
+  calcAge() {
+  console.log(2037 - this.birthYear);
+  }
+}
+
+const jessica = new Personcl('Jessica', 1996);
+console.log(jessica);
+jessica.calcAge();
+```
+Then which to use - classes or Constructor function with new keyword - based on personal preferences, classes require less code and easy
 ## Class
 Template for creating objects, providing initial values for state (member variables) and implementations of behavior (member functions or methods)  
 In JavaScript, a class is a kind of function.
@@ -88,6 +148,31 @@ alert(user.name); // John
 alert(User.prototype.name); // undefined
 ```
 
+## Inheritance using constructor functions
+```javascript
+
+const Person = function (firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+};
+
+Person.prototype.calcAge = function () {
+  console.log(2037 - this.birthYear);
+};
+
+const Student = function (firstName, birthYear, course) {
+// this is needed because if we directly call Person(), then its a function call and this would be // undefined in the parent constructor
+  Person.call(this, firstName, birthYear);
+  this.course = course;I
+};
+
+Student.prototype. introduce = function () {
+  console.log('My name is ${this.firstName} and Istudy `${this.course}`');
+};
+const mike = new Student ('Mike', 2020, 'Computer Science');
+mike.introduce();
+
+```
 ## Class inheritance
 Similar to prototyping in objects
 ```javascript
@@ -144,51 +229,37 @@ inheritance works both for regular and static methods/properties.
 But when a buil-in class (Array, Map) is inherited, in this case, it's static methods/fields are not inherited. it is an exception
 
 ### Private and protected properties and methods
-Protected fields are not implemented in JavaScript on the language level, but in practice they are very convenient, so they are emulated.  
-Protected properties are usually prefixed with an underscore _   
-for protected fields/methods use getters and setters (with some conditions, see below) both, for private only use getters
+Protected fields are implemented in JavaScript using # symbol
+
 ```javascript
-// protected waterAmount
-class CoffeeMachine {
-  _waterAmount = 0;
-  set waterAmount(value) {
-    if (value < 0) throw new Error("Negative water");
-    this._waterAmount = value;
+
+class Account {
+  // Public fields (instances)
+  locale=navigator.language;
+  // Private fields (instances)
+  #movements = [];
+  #pin;
+  constructor (owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    // Protected property
+    this.#pin = pin;
+    // this._movements = [];
+    // this.locale = navigator.language;
+    console.log(`Thanks for opening an account', owner);
   }
-  get waterAmount() {
-    return this._waterAmount;
+  // Public methods
+  // Public interface
+  getMovements () {
+  return this.#movements;
   }
-  constructor(power) {
-    this._power = power;
+  // private methods
+  #deposit(val) {
+  this.#movements.push(val);
   }
 }
-// create the coffee machine
-let coffeeMachine = new CoffeeMachine(100);
-// add water
-coffeeMachine.waterAmount = -10; // Error: Negative water
-
-//private power
-class CoffeeMachine {
-  constructor(power) {
-    this._power = power;
-  }
-  get power() {
-    return this._power;
-  }
-}
-// create the coffee machine
-let coffeeMachine = new CoffeeMachine(100);
-alert(`Power is: ${coffeeMachine.power}W`); // Power is: 100W
-coffeeMachine.power = 25; // Error (no setter)
-
-//instead of getter/setter these functions can calso be used
-setWaterAmount(value)
-getWaterAmount()
-//both are same
-
-//Privates should start with # This is a recent addition to the language. Not supported in JavaScript engines, or supported partially yet, requires polyfilling.// Private fields are not available as this[name] even in same class
+// using # sybmol, we cannot access class fields/methods outside the class since they become private members of the class 
 ```
-So in JS, getters and setters are used for protected/private access modifiers	
 
 ### Mixins
 In JavaScript we can only inherit from a single object. i.e, multiple inheritance not possible, same as java.  

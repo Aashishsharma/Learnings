@@ -352,3 +352,46 @@ let parallel = Promise.all(fiveAsyncCalls.map((item) => {
   abc(item)
 }))
 ```
+
+Interview - implement Promise.all method
+```javascript
+let createPromises = (displayval, timeout Insec) -> {
+  return new Promise((resolve) => {
+  setTimeout((0) => {
+  console.log('setTimeout ${displayval} complete ');
+  resolve('promise${displayval}')
+  }, timeout Insec*1000)
+  })
+}
+(async() => { // prom.all actual call
+  let result = await Promise.all([createPromises (1, 2), createPromises(2, 1)]); console.log((result})
+})
+const abc1 = (arrofpromises) => { // custom implementation
+  return new Promise((resolve, reject) -> {
+    let promExecutedcnt = ;
+    let returnval = []
+    arrofPromises.forEach((prom) => {
+      if(typeOf(prom) === 'object') {
+        prom.then((result) -> {
+          promExecutedcnt++;
+          returnval.push(result);
+          if(promExecutedcnt === arrofPromises.length) {
+            resolve(returnval);
+          }
+        });
+      } 
+      else
+        reject('invalid args');
+      })
+  });
+});
+
+let abc async(arrofpromises) -> {
+  return await abc1(arrofpromises);
+}
+
+(async() -> { // same call to prom.all returning same result as prom. all
+  let result - await abc((createPromises (1, 2), createPromises (2, 1)]); console.log("custo promise all return" , result)
+()
+
+```
