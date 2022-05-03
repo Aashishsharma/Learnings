@@ -103,7 +103,8 @@ Summary
 3. Use function hoisting to your advantage to move functions 'below the fold'
 
 #### Promises
-A promise is an object that may produce a single value some time in the future: either a resolved value, or a reason that it’s not resolved (e.g., a network error occurred). A promise may be in one of 3 possible states: fulfilled, rejected, or pending.
+A promise is an object that is used as a placeholder for the future result of an asynchronous operation  
+It may produce a single value some time in the future: either a resolved value, or a reason that it’s not resolved (e.g., a network error occurred). A promise may be in one of 3 possible states: fulfilled, rejected, or pending.
 
 3 possible states:
 1. Fulfilled: onFulfilled() will be called (e.g., resolve() was called)

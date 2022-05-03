@@ -12,7 +12,7 @@
 ## DOM (Document object model)
 Interface between JS and HTML, another API provided by the run-time (i.e, browser). Just like web-apis, setTimeouts
 
-## Dom Manipulationx
+## Dom Manipulation
 1. Selecting elements
 ```javascript
 document.querySelector('.header') // return first node elem
@@ -83,9 +83,35 @@ h1.childNodes // returns nodes which is not live
 h1.children // returns collection which is live
 h1.first/lastElementChild
 
-// 2. going upwards
-h1.parentNode
+// 2. going upwards (parent)
+h1.parentNode // direct parent
+h1.closest('.header').style.backgroundColor = 'red' // indirect parent closest having class header
 
+// 3. Siblings (only 2 methods available, then how to get all siblings? see below)
+h1.previousElementSibling
+h1.nextElementSibling
+
+// using only these 3 direction we can traverse enitre DOM tree 
+// get all siblings
+h1.parentNode.children
+[...h1.parentNode.children].forEach((el) => {
+  el.style.transform = 'scale(0.5)'
+})
+//reduce size of all siblings (to h1 elem with class highlight) to half 
+```
+
+## DOM lifecycle
+```javascript
+// runs when enitre Dom content is loaded, doen't wait for external links/imgs to be loaded
+document.addEventListener('DOMContentLoaded', (e) => {
+  console.log('abc ', e)
+})
+
+// runs when entire Dom is loaded alog with external links/imgs
+window.addEventListener('load')
+
+//runs before window is closed
+window.addEventListener('beforeunload')
 ```
 
 ## Browser events 
