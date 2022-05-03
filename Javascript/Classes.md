@@ -7,6 +7,8 @@
 6. **ES6 features** - (=>, let/const, template String, destructuring, rest, spread, iterators, generators, modules, map/set, weakmap, weakset)
 
 
+![alt text](PNG/class.PNG "Class overview")
+
 ## OOP without classes
 #### Using Constructor function with new keyword
 ```javascript
