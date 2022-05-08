@@ -3,7 +3,7 @@ Redux is a pattern and library for managing and updating application state, usin
 
 ## Concepts
 ### 1. Actions
-An action is a plain JavaScript object that has a type field. Analogy -  an event that describes something that happened in the application.
+An action is a plain JavaScript object that has a type field. Analogy - an event that describes something that happened in the application.
 ```javascript
 const addTodoAction = {
   type: 'todos/todoAdded',
@@ -68,3 +68,93 @@ console.log(currentValue)
 
 ## Redux app data flow
 ![alt text](PNG/redux-flow.gif "Class overview")
+
+## Steps to include Redux in a project
+### 1. Creating a redux store
+```javascript
+// app/store.js
+import { configureStore } from '@reduxjs/toolkit'
+import counterReducer from '../features/counter/counterSlice'
+
+export default configureStore({
+  reducer: {
+    counter: counterReducer
+  }
+})
+```
+Meaning of line - {counter: counterReducer} - it says that we want to have a state.counter section of our Redux state object, and that we want the counterReducer function to be in charge of deciding if and how to update the state.counter section whenever an action is dispatched.
+
+### 2. Creating sliced reducers and actions
+```javascript
+import { createSlice } from '@reduxjs/toolkit'
+export const counterSlice = createSlice({
+  name: 'counter',
+  initialState: {
+    value: 0
+  },
+  reducers: {
+    increment: state => {
+      // Redux Toolkit allows us to write "mutating" logic in reducers. It
+      // doesn't actually mutate the state because it uses the immer library,
+      // which detects changes to a "draft state" and produces a brand new
+      // immutable state based off those changes
+      state.value += 1
+    },
+    decrement: state => {
+      state.value -= 1
+    },
+    incrementByAmount: (state, action) => {
+      state.value += action.payload
+    }
+  }
+})
+export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export default counterSlice.reducer
+```
+
+### 3. Dispatch action in UI
+```javascript
+<button onClick={() => dispatch(increment())}> +
+</button>
+```
+
+### 4. Reading store data using useSelector
+```javascript
+// The function below is called a selector and allows us to select a value from
+// the state. Selectors can also be defined inline where they're used instead of
+// in the slice file. For example: `useSelector((state) => state.counter.value)`
+export const selectCount = state => state.counter.value
+
+// then read the value
+const count = useSelector(selectCount)
+```
+
+## Async logic with Thunk
+Thunk is a middleware which allow different kinds of async logic to interact with the store.
+npm install redux-thunk --save  
+```javascript
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import rootReducer from './reducers/index';
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk) 
+);
+
+//Redux Toolkit's configureStore function automatically sets up the thunk middleware by default.
+
+```
+![alt text](PNG/redux-with-thunk-flow.gif "Class overview")
+Once the thunk middleware has been added to the Redux store, it allows you to pass thunk functions directly to store.dispatch. A thunk function will always be called with (dispatch, getState) as its arguments, and you can use them inside the thunk as needed.
+```javascript
+const logAndAdd = amount => {
+  return (dispatch, getState) => {
+    const stateBefore = getState()
+    console.log(`Counter before: ${stateBefore.counter}`)
+    dispatch(incrementByAmount(amount))
+    const stateAfter = getState()
+    console.log(`Counter after: ${stateAfter.counter}`)
+  }
+}
+store.dispatch(logAndAdd(5))
+```
