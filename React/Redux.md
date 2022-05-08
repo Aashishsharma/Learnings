@@ -1,6 +1,12 @@
 ## Redux
 Redux is a pattern and library for managing and updating application state, using events called "actions"
 
+
+3 principles
+1. Maintain app state in a single obj which would be managed by Redux store
+2. The only way to change the state is to eimit an action
+3. To change the state, write pure reducer functions 
+
 ## Concepts
 ### 1. Actions
 An action is a plain JavaScript object that has a type field. Analogy - an event that describes something that happened in the application.
@@ -71,6 +77,12 @@ console.log(currentValue)
 
 ## Steps to include Redux in a project
 ### 1. Creating a redux store
+
+Redux store responsibilities
+1. Holds application state
+2. Allows access to statw via getState()
+3. Allow state to be updates via dispatch(action)
+4. Registers listeners via subscribe(cbFunc) 
 ```javascript
 // app/store.js
 import { configureStore } from '@reduxjs/toolkit'
@@ -145,16 +157,4 @@ const store = createStore(
 
 ```
 ![alt text](PNG/redux-with-thunk-flow.gif "Class overview")
-Once the thunk middleware has been added to the Redux store, it allows you to pass thunk functions directly to store.dispatch. A thunk function will always be called with (dispatch, getState) as its arguments, and you can use them inside the thunk as needed.
-```javascript
-const logAndAdd = amount => {
-  return (dispatch, getState) => {
-    const stateBefore = getState()
-    console.log(`Counter before: ${stateBefore.counter}`)
-    dispatch(incrementByAmount(amount))
-    const stateAfter = getState()
-    console.log(`Counter after: ${stateAfter.counter}`)
-  }
-}
-store.dispatch(logAndAdd(5))
-```
+Bydefault action creators can only return action objects, but Thunk provides ability for action creators to return function instaed of objects, and this retunred function can perform async tasks 

@@ -11,6 +11,13 @@ function CakeContainer (props) {
   )
 }
 
+// React-redux library also has a method called connect which connects react components with the redux store
+// The connect method requires two args which are functions
+// connect(mapStateToProps, mayDispatchToProps)
+// mapStateToProps will pass redux store as an additional field in the props that the component receives
+// mapDispatchToProps also passes the redux dispatch method as additional field in the props obj that the component receives which allows react components to call dispatch method of redux 
+
+
 const mapStateToProps = state => {
   return {
     numOfCakes: state.cake.numOfCakes

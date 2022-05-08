@@ -11,11 +11,14 @@ import UsersContainer from './components/UsersContainer'
 
 function App () {
   return (
+    /*
+    Redux can be used in any app, not just react app.
+    To connect redux with react apo, we use react-redux library, 
+    which has Provider component which we can include in our app.js in the root elem of react app
+    */
     <Provider store={store}>
       <div className='App'>
         <UsersContainer />
-        <ItemContainer cake />
-        <ItemContainer />
         <NewCakeContainer />
         <CakeContainer />
         <HooksCakeContainer />
