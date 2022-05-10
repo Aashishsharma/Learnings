@@ -41,9 +41,7 @@ You can’t use Hooks inside a class componen
 13:    );
 14:  }
 ```
-1. Line 1: We import the useState Hook from React. It lets us keep local state in a function component.
-2. Line 4: Inside the Example component, we declare a new state variable by calling the useState Hook. It returns a pair of values, to which we give names. We’re calling our variable count because it holds the number of button clicks. We initialize it to zero by passing 0 as the only useState argument. The second returned item is itself a function. It lets us update the count so we’ll name it setCount.
-3. Line 9: When the user clicks, we call setCount with a new value. React will then re-render the Example component, passing the new count value to it.
+
 Normally, variables “disappear” when the function exits but state variables are preserved by React.  
 Group logically making sense of all states into one state object   
 
@@ -60,6 +58,24 @@ Remove array elem
 
 **use previous state value** -  
 use functional form of setstate -- setCnt(cnt => cnt+1)  
+setState here is different from the class componente's setState method, classe setState method merges the state, where is in useState, stats aren't merged.  
+e.g.
+```javascript
+useObj = {
+  firstName: 'abc',
+  lastName: 'pqr'
+} 
+// in class
+this.setState({firstName: 'abc2'})
+// this methods updates the first name and also preserved the last name
+
+//in useState
+setState({firstName: 'abc2'})
+// updates firstName, but lastName is lost it will give undefined
+// instaed to this
+setState({...state, state.firstName: 'abc2'})
+``` 
+
 
 ------------------------------------------------------------------------------
 ## Using the Effect Hook
@@ -166,49 +182,10 @@ This plugin is included by default in Create React App.
 
 ------------------------------------------------------------------------------
 ## Building Your Own Hooks
-In React, we’ve had two popular ways to share stateful logic between components: render props and higher-order components.  
-**Stateful logic** -  
-The actual state data will not be shared between the components, but the code that uses state is shared
+You can of course just have functions to reuse functionality, but hooks come with the advantage of being able to ‘hook’ into things like component lifecycle and state. This makes them much more valuable in the React world than regular functions  
 
-Custom hooks allow you to create functionality that can be reused across different components. You can of course just have functions to reuse functionality, but hooks come with the advantage of being able to ‘hook’ into things like component lifecycle and state. This makes them much more valuable in the React world than regular functions  
-
-In case of Hooks, you can create a custom hook 
-A custom Hook is a JavaScript function whose name starts with ”use”.
-Should always start with use? Not necessary but should do.
-
-#### Creating a custom hook
-functions vs custom hooks  
-custom hooks allow us to use stateful logic, in case of functions, only logic can be reused, but not stateful logic  
 **What is stateful logic?**  
 
-```javascript
-//component using custom hook.js
-  const [val, setVal] = useLocalStorage('key', 'dumyvalue')
-  
-
-///counter1.js
-import React, {useState, useEffect} from 'react';
-
-const setInitialVal = (key, initVal) => {
-  let val = localStorage.getItem(key)
-  if(val) return val;
-  return initVal
-}
-
-export const useReducer = (key, val) => {
-  const [val, setVal] = useState((key) => {
-    return setInitialVal(key, val)
-  });
-
-  useEffect(() => {
-    localStorage.setItem(key, val);
-  }, [value])
-
-  return [val, setVal]
-}
-```
-one can say that if counter1.js == counter2.js then we are repeating code. The point to note is the stateful logic is now not duplicated in both the components, and render methods are supposed to have diff. jsx, that's why we use 2 diff components. If we did not use custom hook, then the counter logic would need to be added in both the components which is duplicate  
-IMP - change in count variable inside useCounter.js re-renders the components those who use useCounter, thus the value of updated counter is displayed in render of counter1.js and counter2.js. Using normal functions, this is not possible
 
 ------------------------------------------------------------------------------
 ## Other Commonly used hooks  
@@ -252,7 +229,10 @@ function ThemedButton() {
 
 2. useReducer
 An alternative to useState. Accepts a reducer of type (state, action) => newState, and returns the current state paired with a dispatch method.   
-useReducer is usually preferable to useState when you have complex state logic that involves multiple sub-values or when the next state depends on the previous one (in this case use State's hook functional form -> setState(state => state + 1)). so second useCase is not really a usecase  
+useReducer is usually preferable to useState when 
+1. you have complex state logic that 
+2. State is a complex obj, and not a plain string or a nummber
+3. your logic have related state tranistions (setLoading(false), setError(false), setData(data))
 ```javascript
 const initialState = {count: 0};
 function reducer(state, action) {
@@ -367,22 +347,94 @@ How to do
 3. useMemo
 Returns a memoized callback.  
 ```javascript
-const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+import React, { useState, useMemo } from 'react'
+function Counter() {
+  const [counterOne, setCounterOne] = useState(0)
+  const [counterTwo, setCounterTwo] = useState(0)
+  const incrementOne = () => {
+    setCounterOne(counterOne + 1)
+  }
+  const incrementTwo = () => {
+    setCounterTwo(counterTwo + 1)
+  }
+  const isEven = useMemo(() => {
+    let i = 0
+    while (i < 2000000000) i++
+    return counterOne % 2 === 0
+  }, [counterOne])
+  return (
+    <div>
+      <div>
+        <button onClick={incrementOne}>Count One - {counterOne}</button>
+        <span>{isEven ? 'Even' : 'Odd'}</span>
+      </div>
+      <div>
+        <button onClick={incrementTwo}>Count Two - {counterTwo}</button>
+      </div>
+    </div>
+  )
+}
+export default Counter
 ```  
-useMemo will only recompute the memoized value when one of the dependencies has changed.   
-You may rely on useMemo as a performance optimization, not as a semantic guarantee. In the future, React may choose to “forget” some previously memoized values and recalculate them on next render, e.g. to free memory for offscreen components. Write your code so that it still works without useMemo — and then add it to optimize performance.  
+If we don't use useMemo - 
+If we click on counter One - UI update slowly  
+If we click on counter Two - UI still updates slowly (which we don't want)
+
+If we use useMemo - 
+If we click on counter One - UI update slowly  
+If we click on counter Two - UI updates fast as expected  
+
+**Explaination if we don't use useMemo**
+1. If you click on Counter Two - state is updates
+2. State update will cause - component re-render
+3. Componet re-render - new isEven function created which is called in the render method in the span tag, hence it cause slowness
+4. If we use useMemo, the return value of the isEven function is cached and the function will only run if the counter one state is changed
+
+
+
 
 4. useCallback()
-Returns a memoized callback.  
+Returns a memoized callback.
+This is useful when passing callbacks functions to optimized child components that rely on reference equality to prevent unnecessary renders.  
+
+***Component re-renders steps**  
+1. First all the hooks / functions are run
+2. then the render method is called
+
+See below code
 ```javascript
-const memoizedCallback = useCallback(
-  () => {
-    doSomething(a, b);
-  },
-  [a, b],
-);
+function ParentComponent() {
+  const [age, setAge] = useState(25)
+  const [salary, setSalary] = useState(50000)
+
+  const incrementAge = useCallback(() => {
+    setAge(age + 1)
+  }, [age])
+
+  const incrementSalary = useCallback(() => {
+    setSalary(salary + 1000)
+  }, [salary])
+
+  return (
+    <div>
+      <Title />
+      <Count text="Age" count={age} />
+      <Button handleClick={incrementAge}>Increment Age</Button>
+      <Count text="Salary" count={salary} />
+      <Button handleClick={incrementSalary}>Increment Salary</Button>
+    </div>
+  )
+}
+export default ParentComponent
 ```
-This is useful when passing callbacks to optimized child components that rely on reference equality to prevent unnecessary renders (e.g. shouldComponentUpdate).  
+In above code if we don't use useCallback na dclick on any button below is what would hapen
+1. Button click will update the state
+2. State update would trigger a component re-render
+3. Component re-render would mean all the methods inside the component would be re-created (incrementAge/Salary)
+4. Now these methods are passed as props to child components
+5. New method means new prop and new prop to child will cause child component to re-redner, which is what we don't want, since increment age button also re-renders increment salary button component
+6. Even if we add React.memo in child components - techinciall the props have changed even if the function is same it is recreated and the older reference is lost
+7. To avoid this us useCallback
 
 **useMemo vs useCallback**
 useMemo and useCallback use memoization.  
@@ -438,21 +490,41 @@ Essentially, useRef is like a “box” that can hold a mutable value in its .cu
 ref can only be used for DOM elements  
  useRef() Hook isn’t just for DOM refs. The “ref” object is a generic container whose current property is mutable and can hold any value, similar to an instance property on a class.  
  ```javascript
- function Timer() {
-  const intervalRef = useRef();
+function HookTimer() {
+  const [timer, setTimer] = useState(0)
+  const interValRef = useRef()
   useEffect(() => {
-    const id = setInterval(() => {
-      // ...
-    });
-    intervalRef.current = id;
+    //If we don't use useRef, then setInterval would be store in the variable  
+    // like let abc = setInterval(...)
+    interValRef.current = setInterval(() => {
+      setTimer(timer => timer + 1)
+    }, 1000)
+    // here in the return function we would be able to access abc
     return () => {
-      clearInterval(intervalRef.current);
-    };
-  });
-  // ...
+      clearInterval(interValRef.current)
+    }
+  }, [])
+  return (
+    <div>
+      HookTimer - {timer} -
+      // but here in the onclick we wouldn't have been able to access abc
+      // hence useRef us used
+      // This can't be done with refs where we get ref only of dom nodes
+      <button onClick={() => clearInterval(interValRef.current)}>Clear Timer</button>
+    </div>
+  )
 }
+export default HookTimer
  ``` 
-This can't be done with refs
+
+## In smaller apps we don't need Redux we can achieve same Redux functionality using useReducer and useContext hooks
+Steps
+1. Create context variable in the most parent component
+2. Created Reducer function in the most parent component
+3. Pass the state and dispatch values in the context provider so that any child can use the state variable and can dispact the actions
+```javascript
+
+```
 
 ## FAQs
 1. Do Hooks cover all use cases for classes?
