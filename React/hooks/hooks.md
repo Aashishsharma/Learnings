@@ -561,7 +561,7 @@ export default ComponentF
 2. State vs Props
   - Similarities
     1. Both props and state are plain JS objects
-    2. State changes trigger a render update, and when parent is re-renderd the child component is also re-renderd even if the props aren't changed. SO change is props in not the reason why component is re-renderd, it is that the parent compoennt is re-renderd which causes the child component to also re-render
+    2. Both state and props changes trigger a render update
   - Differences
     1. State is mutable, props are not
     2. Component cannot change it's props, state can be changed
