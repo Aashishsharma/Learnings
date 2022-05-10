@@ -519,11 +519,60 @@ export default HookTimer
 
 ## In smaller apps we don't need Redux we can achieve same Redux functionality using useReducer and useContext hooks
 Steps
-1. Create context variable in the most parent component
-2. Created Reducer function in the most parent component
+1. Created Reducer function and the initial state, in the most parent component
+2. Create context variable in the most parent component
 3. Pass the state and dispatch values in the context provider so that any child can use the state variable and can dispact the actions
 ```javascript
+// Step 1
+const initialState = 0
+const reducer = (state, action) => {
+  switch (action) {
+    case 'increment':
+      return state + 1
+    case 'decrement':
+      return state - 1
+    case 'reset':
+      return initialState
+    default:
+      return state
+  }
+}
 
+// step 2
+export const CountContext = React.createContext()
+
+function App() {
+  const [count, dispatch] = useReducer(reducer, initialState)
+  return (
+    // step 2
+    <CountContext.Provider
+      value={{ countState: count, countDispatch: dispatch }}
+    >
+      <div className="App">
+        <ComponentA /> // includes component B which includes componentF
+        <DataFetchingTwo />
+      </div>
+    </CountContext.Provider>
+  )
+}
+export default App
+
+// component F
+// step 3 use dispatch and state in any child component
+import React, {useContext} from 'react'
+import { CountContext } from '../App';
+function ComponentF() {
+  const countContext = useContext(CountContext)
+  return (
+    <div>
+      Component F {countContext.countState}
+      <button onClick={() => countContext.countDispatch('increment')}>Increment</button>
+      <button onClick={() => countContext.countDispatch('decrement')}>Decrement</button>
+      <button onClick={() => countContext.countDispatch('reset')}>Reset</button>
+    </div>
+  )
+}
+export default ComponentF
 ```
 
 ## FAQs
