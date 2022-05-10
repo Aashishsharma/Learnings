@@ -189,7 +189,7 @@ You can of course just have functions to reuse functionality, but hooks come wit
 
 ------------------------------------------------------------------------------
 ## Other Commonly used hooks  
-1. useContext - same as context in React  
+### 1. useContext - same as context in React  
 A component calling useContext will always re-render when the context value changes. If re-rendering the component is expensive, you can optimize it by using memoization.  
 ```javascript
 const themes = {
@@ -227,7 +227,7 @@ function ThemedButton() {
 }
 ```
 
-2. useReducer
+### 2. useReducer
 An alternative to useState. Accepts a reducer of type (state, action) => newState, and returns the current state paired with a dispatch method.   
 useReducer is usually preferable to useState when 
 1. you have complex state logic that 
@@ -344,7 +344,7 @@ How to do
 
 ```
 
-3. useMemo
+### 3. useMemo
 Returns a memoized callback.  
 ```javascript
 import React, { useState, useMemo } from 'react'
@@ -391,9 +391,7 @@ If we click on counter Two - UI updates fast as expected
 4. If we use useMemo, the return value of the isEven function is cached and the function will only run if the counter one state is changed
 
 
-
-
-4. useCallback()
+### 4. useCallback()
 Returns a memoized callback.
 This is useful when passing callbacks functions to optimized child components that rely on reference equality to prevent unnecessary renders.  
 
@@ -468,7 +466,7 @@ function Parent({ ... }) {
 ```
 now function is referencially equal even if the parent is re-rendered. It will change only when value of a changes
 
-5. useRef
+### 5. useRef
 A common use case is to access a child imperatively:  
 ```javascript
 function TextInputWithFocusButton() {
@@ -517,8 +515,9 @@ function HookTimer() {
 export default HookTimer
  ``` 
 
-## In smaller apps we don't need Redux we can achieve same Redux functionality using useReducer and useContext hooks
-Steps
+### 6. useReducer + useContext
+In smaller apps we don't need Redux we can achieve same Redux functionality using useReducer and useContext hooks  
+**Steps**  
 1. Created Reducer function and the initial state, in the most parent component
 2. Create context variable in the most parent component
 3. Pass the state and dispatch values in the context provider so that any child can use the state variable and can dispact the actions
