@@ -441,34 +441,7 @@ class Component extends React.PureComponent {
 ```
 
 #### 6. Using React memo
-similar to pure components, memo is HOC  
-In computing, memoization or memoisation is an optimization technique used primarily to speed up computer programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again.  
-```javascript
-class App extends React.Component {
-  names = ["Peter", "Bruce", "Clark"];
-  state = { name: "Anonymous" };
-  componentDidMount() {
-    setInterval(() => {
-      const name = this.generateName();
-      this.setState({ name });
-    }, 1000);
-  }
-  generateName = () =>
-    this.names[Math.floor(Math.random() * this.names.length)];
-  render() {
-    return <View name="Sam" />;
-  }
-}
-
-//view.js
-const View = (props) => `Hi, I'm ${props.name}`;
-```
-Here the problem is every second, the render is called aand every second View component is aslo re-rendered even if the props are hardcoded for View componente
-```javascript
-//use memo
-import { memo } from 'React';
-const View = memo((props) => `Hi, I'm ${props.name}`);
-```
+see useCallback section in hooks
 
 ------------------------------------------------------------------------------
 ## Portals

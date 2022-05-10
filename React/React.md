@@ -309,7 +309,7 @@ Usestate for array use spread operator to update array as state
 2. Add at start [newItem, ...oldarr]  
 3. Add in between [...oldarr.slice(0,index), newItem, oldarr.slice(index)]   
 
-Remove array elem 
+Remove array elem  
 1. remove first - Use slice(1)
 2. remove last - slice(0, len-1)
 3. remove inbetween [...oldarr.slice(0, index), ...oldarr.slice(index+1) 

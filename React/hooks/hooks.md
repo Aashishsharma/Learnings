@@ -423,37 +423,28 @@ In above code if we don't use useCallback na dclick on any button below is what 
 6. Even if we add React.memo in child components - techinciall the props have changed even if the function is same it is recreated and the older reference is lost
 7. To avoid this us useCallback
 
-**useMemo vs useCallback**
+**useMemo vs useCallback vs React.memo**
 useMemo and useCallback use memoization.  
 I like to think of memoization as remembering something.  
 While both useMemo and useCallback remember something between renders until the dependancies change, the difference is just what they remember.  
 useMemo will remember the returned value from your function.  
 useCallback will remember your actual function.  
-Remembering returned value is understandable, but why remember actual function?  
-Suppose we have a PureComponent-based child <Pure /> that would re-render only once its props are changed.  
-The below code re-renders the child each time the **parent is re-rendered — because the inline function is referentially different each time:**  
+
+By default in react, when parent component is re-rendered, child component is also re-rendered, even if we don't want it to, React.memo (is a HOC) when applied to a react component will cause component re-render only when it's props are changed. So in child component
 ```javascript
-function Parent({ ... }) {
-  const [a, setA] = useState(0);
-  ... 
-  return (
-    ...
-    <Pure onChange={() => { doSomething(a); }} />
-  );
+import React from 'react'
+
+const Child = () => {
+  return <div>Child</div>
 }
-//fix
-//We can handle that with the help of useCallback:
-function Parent({ ... }) {
-  const [a, setA] = useState(0);
-  const onPureChange = useCallback(() => {doSomething(a);}, [a]);
-  ... 
-  return (
-    ...
-    <Pure onChange={onPureChange} />
-  );
-}
+
+export const memoizedChild = React.memo(Child)
+/// by default memo does a shallow comparison of props
+// it also accepts second arg which is a function for custom comparison
 ```
-now function is referencially equal even if the parent is re-rendered. It will change only when value of a changes
+
+Then why not use React.memo() for all components - Shallow comparions aren't free, they also have time complexity which might slow down the app instead of optimising it  
+So in cases when props change almost all the time, we will anyhow need to re-render, but react will do the shallow comparison every time and do a re-render which is detrimental
 
 ### 5. useRef
 A common use case is to access a child imperatively:  
@@ -570,7 +561,7 @@ export default ComponentF
 2. State vs Props
   - Similarities
     1. Both props and state are plain JS objects
-    2. Both props and state changes trigger a render update
+    2. State changes trigger a render update, and when parent is re-renderd the child component is also re-renderd even if the props aren't changed. SO change is props in not the reason why component is re-renderd, it is that the parent compoennt is re-renderd which causes the child component to also re-render
   - Differences
     1. State is mutable, props are not
     2. Component cannot change it's props, state can be changed
