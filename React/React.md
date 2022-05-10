@@ -275,6 +275,54 @@ Full example
   ```
 React elements like <Contacts /> and <Chat /> are just objects, so you can pass them as props like any other data.
 
+
+## React render phase
+(Note - while re-rendering, all the funcs inside the components are also re-created)
+React code get converted to DOM in 2 phases (Render phase and commit phase)
+### 1. On inital render 
+1. Render Phase
+  a. Start from root, goto the leaf components
+  b. for each component conver jsx into react elements using React.createElement() method
+  c. all react elems generated in step b are sent to the commit phase
+2. Commit phase
+  a. React dom package converts react elems to dom elements
+
+### 2. On re-render
+1. Render phase
+  a. Start from root, goto the leaf components
+  b. find all flagged components which needs to be re-render
+  c. for each component conver jsx into react elements using React.createElement() method
+  d. compare old react elem tree when newly generated tree and send only the elems which are different to the commit phase
+
+**<React.StrictMode> - double invokes the function component body in dev mode. Hence we always see logs printed twice in browser when concole.log is added in the func comp body**
+
+### Re-render cases
+1. If we setState same value as initial val, omponent won't re-render
+2. Same val set in setState after re-render, react will re-render that component one more time (as a saftey measure) and after that is still same val, it will not re-render 
+
+#### 1. Array and objects
+React won't re-render if we mutate arrays or objects, we need to create a new reference to array / objs and then use it in setState to cause the re-render  
+
+**Using arrays and objects as state variables**  
+Usestate for array use spread operator to update array as state 
+1. Add at end [...oldarr, newItem]  
+2. Add at start [newItem, ...oldarr]  
+3. Add in between [...oldarr.slice(0,index), newItem, oldarr.slice(index)]   
+
+Remove array elem 
+1. remove first - Use slice(1)
+2. remove last - slice(0, len-1)
+3. remove inbetween [...oldarr.slice(0, index), ...oldarr.slice(index+1) 
+
+#### 2. Parent and Child
+1. When new state in parent is different than the old state  
+Both parent and child are re-renders
+2. New state is same as old state
+parent and child don't re-render
+3. New state is same as old state after initial render (React re-render one more time as a safety measure)  
+Only parent component is re-rendered
+
+
 ------------------------------------------------------------------------------
 ## THINKING IN REACT
 

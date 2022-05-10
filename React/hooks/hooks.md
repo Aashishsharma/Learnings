@@ -45,17 +45,6 @@ You can’t use Hooks inside a class componen
 Normally, variables “disappear” when the function exits but state variables are preserved by React.  
 Group logically making sense of all states into one state object   
 
-**Using arrays and objects as state variables**  
-Usestate for array use spread operator to update array as state 
-1. Add at end [...oldarr, newItem]  
-2. Add at start [newItem, ...oldarr]  
-3. Add in between [...oldarr.slice(0,index), newItem, oldarr.slice(index)]   
-
-Remove array elem 
-1. remove first - Use slice(1)
-2. remove last - slice(0, len-1)
-3. remove inbetween [...oldarr.slice(0, index), ...oldarr.slice(index+1)  
-
 **use previous state value** -  
 use functional form of setstate -- setCnt(cnt => cnt+1)  
 setState here is different from the class componente's setState method, classe setState method merges the state, where is in useState, stats aren't merged.  
