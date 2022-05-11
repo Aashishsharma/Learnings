@@ -60,13 +60,15 @@ const abc = () {
 Do nesting in routes
 ```javascript
     <Route path='products' component={Product}>
+    	// when parent is renderd, which component to be shown by default? for that we use index 
+    	<Route index component={NewProduct}>
 		<Route path='new' component={NewProduct}>
 		<Route path='featured' component={FeaturedProduct}>
     </Route> 
     /// so to render new product the url would be /products/new
-    /// make sure to not include a forward slash in the path
+    /// make sure to not include a forward slash in the path, not including forward-slash would mean the the path is relative, if you add path='/new or /featured' the link would become localhost:300/new instead of localhost:3000/products/new
 
-    // But product component has it's own jsx and then where to render the child (new/featuredproducts) componente?
+    // But the parent component product component has it's own jsx and then where to render the child (new/featuredproducts) componente?
     // for this in the product component use Outlet
 
     import {Outlet} from 'react-router-dom'
@@ -80,4 +82,71 @@ Do nesting in routes
     	)
     }
 ```
+Common use-case for nested routes  - to have a common layout to a particular feature in the app
 
+## Dynamic routes
+When we need to load user profile component based on /users/<user-id>
+```javascript
+	<Route path='users' component={Users}>	
+		/// anything after users/ will be a userId
+		<Route path='users/:userId' component={UserProfile}>
+		// dynamic routes are evaluated at the end, first react-router would try and find the exact match
+		// so on /users/admin admin component is rendered and not userProfile comp 
+		<Route path='users/admin' component={Admin}>
+    </Route>
+
+    ///extracting userId in the userProfile component
+    import {useParams} from 'react-router-dom'
+    export const UserProfile = () => {
+    	const params = useParams()
+    	const userId = params.userId;
+    	return (
+    		<div>User {userId} details<div>
+    		)
+    }
+
+    /// using search params
+    import {useSearchParams} from 'react-router-dom'
+    export const UserProfile = () => {
+    	// similar to useState
+    	const [searchParams, setSearchParams] = useSearchParams();
+    	const showActiveUsers = searchParams.get('filter') === 'active'
+    	const userId = params.userId;
+    	return (
+    		<>
+    		<button onCLick={() => setSearchParams({filter: 'active'})}>Show only active</button>
+    		<button onCLick={() => setSearchParams()}>Show all users</button>
+    		{showActiveUsers ? 
+    			<div>Active users</div>
+    			<div>All users</div>
+    		}
+    		<>
+    		)
+    }
+```
+
+## Lazy loading using React-router
+Load only the components based on the url path, like on home page load only those components that are shown on home page. Using code splitting, we load only those js chunks based on the url path.  
+It helps initial load time of the app  
+
+Lazy loading is done using dynamix import
+```javascript
+// Step 1 - dynamically import the component
+import React from 'react'
+const LazyAbout = React.lazy(() => import('./components/About'))
+
+// About us component needs to have default export
+export default About
+// instaed of 
+export const About = () => {}
+
+// Step 2 - include that lazy component in react-router using React.Suspense
+<Route path='/about-us' element={
+	<React.Suspense fallback = 'Loading...'
+	  <LazyAbout />
+	</React.Suspense>
+	}
+/>
+
+//This remove the about us component from main.chunk.js which will imporve performance
+```
