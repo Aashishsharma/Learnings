@@ -566,4 +566,4 @@ export default ComponentF
     1. State is mutable, props are not
     2. Component cannot change it's props, state can be changed
   - Which to use when
-    If a Component needs to alter one of its attributes at some point in time, that attribute should be part of its state, otherwise it should just be a prop for that Component.
+    If a Component needs to alter one of its attributes at some point in time, that attribute should be part of its state, otherwise it should  just be a prop for that Component.
