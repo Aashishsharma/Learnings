@@ -150,3 +150,135 @@ export const About = () => {}
 
 //This remove the about us component from main.chunk.js which will imporve performance
 ```
+
+## Authentication using React router
+1. Auth.js - Idea is to create a user state and using context, the logged in user state is avaialble in all components
+```javascript
+import { useState, createContext, useContext } from 'react'
+const AuthContext = createContext(null)
+// this authprovider component is later used in app.js so that the context is available in all components
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null)
+
+  const login = user => {
+    setUser(user)
+  }
+
+  const logout = () => {
+    setUser(null)
+  }
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+/// this function would later be used in all components so that we don't have to import and use useContext in each component to get user details or for login / logout
+/// se above that when we will call useAuth function in any component, we will get access to user, login and logout as provided in the Authcontext.provider  
+export const useAuth = () => {
+  return useContext(AuthContext)
+}
+```
+2. Requireauth.js - So that any path that needs to be protected can be wrapped inside this component. You can see this wrapping done in App.js for Profile component
+```javascript
+import { Navigate, useLocation } from 'react-router-dom'
+import { useAuth } from './auth'
+
+export const RequireAuth = ({ children }) => {
+  const location = useLocation()
+  const auth = useAuth()
+  if (!auth.user) {
+    return <Navigate to='/login' state={{ path: location.pathname }} />
+  }
+  return children
+}
+```
+
+3. Profile component which is protected
+```javascript
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from './auth'
+
+export const Profile = () => {
+  const navigate = useNavigate()
+  const auth = useAuth()
+  const handleLogout = () => {
+    auth.logout()
+    navigate('/')
+  }
+  return (
+    <div>
+      Welcome {auth.user}.<button onClick={handleLogout}>Logout</button>
+    </div>
+  )
+}
+```
+4. Create login component for user to login
+```javascript
+import { useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useAuth } from './auth'
+
+export const Login = () => {
+  const [user, setUser] = useState('')
+  const navigate = useNavigate()
+  // useLocation is used so that after login, user goes back to the url he accessed
+  const location = useLocation()
+  const auth = useAuth()
+
+  const redirectPath = location.state?.path || '/'
+
+  const handleLogin = () => {
+    auth.login(user)
+    // replace : true doesn't push the url in browserrouter history stack
+    navigate(redirectPath, { replace: true })
+  }
+  return (
+    <div>
+      <label>
+        Username: <input type='text' onChange={e => setUser(e.target.value)} />
+      </label>{' '}
+      <button onClick={handleLogin}>Login</button>
+    </div>
+  )
+}
+```
+5. App.js
+```javascript
+// App.js
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+import { Home } from './components/Home'
+import { Navbar } from './components/Navbar'
+import { AuthProvider } from './components/auth'
+import { Login } from './components/Login'
+import { Profile } from './components/Profile'
+import { RequireAuth } from './components/RequireAuth'
+
+function App() {
+  return (
+  	// Wrap the app (main) component inside AutProvider HOC so that - 
+    <AuthProvider>
+      <Navbar />
+      <Routes>
+        // Public route
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Login />} />
+        // Protected route
+        <Route
+          path='/profile'
+          element={
+            <RequireAuth>
+              <Profile />
+            </RequireAuth>
+          }
+        />
+        </Routes>
+    </AuthProvider>
+  )
+}
+
+export default App
+```
