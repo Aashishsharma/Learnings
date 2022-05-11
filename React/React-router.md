@@ -36,6 +36,9 @@ import {
     <Route exact path='/about' component={About}></Route> 
     <Route exact path='/contact' component={Contact}></Route> 
 </Switch> 
+
+// handling no-match (page not found) route
+<Route path='*' component={PageNotFound}></Route>
 ```
 
 ## Navigating programmatically
@@ -52,4 +55,29 @@ const abc = () {
 	)
 }
 ``` 
+
+## Nested routes
+Do nesting in routes
+```javascript
+    <Route path='products' component={Product}>
+		<Route path='new' component={NewProduct}>
+		<Route path='featured' component={FeaturedProduct}>
+    </Route> 
+    /// so to render new product the url would be /products/new
+    /// make sure to not include a forward slash in the path
+
+    // But product component has it's own jsx and then where to render the child (new/featuredproducts) componente?
+    // for this in the product component use Outlet
+
+    import {Outlet} from 'react-router-dom'
+    const Product = () {
+    	return (
+    	// here where to render the child components?
+    	// before div or after div?
+    	<div>Product Page</div>
+    	<Outlet />
+    	/// we renderd after div
+    	)
+    }
+```
 
