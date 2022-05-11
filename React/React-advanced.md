@@ -446,11 +446,26 @@ see useCallback section in hooks
 ------------------------------------------------------------------------------
 ## Portals
 Portals provide a first-class way to render children into a DOM node that exists outside the DOM hierarchy of the parent component.
+But why do we need it?  
+E.g. If we don't want the parent components css to mess around the child components (e.g while rendering modal, tooltips), If parent component has max-width of 100px, and inside that if we have modal component, then it is not good, hence use portal.  
+Although this is renderd outside of Parent component's hierarhcy, it still act's like child, like passing props and other stuff 
 ```javascript
 ReactDOM.createPortal(child, container)
 
 //The first argument (child) is any renderable React child, such as an element, string, or fragment.
 //The second argument (container) is a DOM element.
+
+//e.g.
+import React from 'react';
+import ReactDOM from 'react-dom'
+
+export const PortalDemo = () => {
+  return ReactDOM.createPortal(
+    <h1>New portal</h1>,
+    document.getElemenById('portal-demo')
+    )
+}
+
 ```
 
 #### Usage
