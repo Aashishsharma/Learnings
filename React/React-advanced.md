@@ -236,6 +236,7 @@ import React from 'react';
 // Take in a component as argument WrappedComponent
 const higherOrderComponent = (WrappedComponent) => {
 // And return another component
+// this can be a functional component
   class HOC extends React.Component {
     render() {
       return <WrappedComponent />;
@@ -253,6 +254,10 @@ const List = (props) => {
   const { repos } = props;
   if (!repos) return null;
   if (!repos.length) return <p>No repos, sorry</p>;
+
+  /// this counter variable is coming from HOC
+  /// we can also use props.handleClick - see HOC
+  console.log('counter val from HOC ', props.counter)
   return (
     <ul>
       {repos.map((repo) => {
@@ -261,20 +266,39 @@ const List = (props) => {
     </ul>
   );
 };
-export default List;
+/// here we are wrapping list into withLoading,
+/// and to make HOC more configurable, we can pass additional paramaeters as second arg 
+export default WithLoading(List, incrementCounterBy5)
 
-
-///withdLoading.js
+///withLoading.js
 import React from 'react';
-function WithLoading(Component) {
-  return function WihLoadingComponent({ isLoading, ...props }) {
-    if (!isLoading) return <Component {...props} />;
+function WithLoading(Component, incrementCounterBy5) {
+  return function WithLoadingComponent({ isLoading, ...props }) {
+    // you can add all useState, hooks functionlaity here which would be reaused in all 
+    // components that are wrapped in HOC
+    // this is the power of HOC - sharing logic 
+    // e.g. this counter variable is now available everywhere
+    // and we don't need ot copy handleclick everywhere
+    // it would be avaialble for those components as props, just need to call it
+    const [counter, setCounter] = useState(0);
+    const handleClick = (e) => {
+      // this is where we can use those additional params 
+      setCounter(e.target.value + incrementCounterBy5)
+    }
+
+    // it is imp to pass {...props} otherwise when we call List component with props, those 
+    // would be lost in HOC and won't be available in the List component
+    // and we can pass additional props from HOC
+    if (!isLoading) return <> <p>This is HOC</p>
+      <Component {...props} counter={counter} handleclick={handleclick} />;
+    </>
+    /// this and above <p> tag is avaialble in all componnts which is reused
     return <p>Hold on, fetching data might take some time.</p>;
   };
 }
 export default WithLoading;
 
-//App.js
+///App.js
 import React from 'react';
 import List from './components/List.js';
 import WithLoading from './components/withLoading.js';
@@ -294,7 +318,7 @@ class App extends React.Component {
   }
   render() {
     return (
-      <ListWithLoading
+      <List
         isLoading={this.state.loading}
         repos={this.state.repos}
       />
@@ -468,8 +492,6 @@ export const PortalDemo = () => {
 
 ```
 
-#### Usage
-A typical use case for portals is when a parent component has an overflow: hidden or z-index style, but you need the child to visually “break out” of its container. For example, dialogs, hovercards, and tooltips.
 
 ------------------------------------------------------------------------------
 ## Render Props
