@@ -210,7 +210,7 @@ render() {
 with
 <>...</>
 ```
-usecase render multiple <td> but react como can return only one elem, so wrap in div, but then td can't be in div so fragment  
+usecase render multiple <td> but react comp can return only one elem, so wrap in div, but then td can't be in div so fragment  
 
 ------------------------------------------------------------------------------
 ## Higher-Order Components
@@ -230,6 +230,9 @@ HOCs are used for Cross-Cutting Concerns
 e.g. logging, security
 
  e.g. use
+Below example requirement - implement button and count the click, implement hover and count the hover  
+common functionality is to count - withCounter whose code would be used in both click and hover components  
+Same example is used in render props  
 ```javascript
 //syntax
 import React from 'react';
@@ -246,87 +249,66 @@ const higherOrderComponent = (WrappedComponent) => {
 };
 
 ```
-Loading UI for all components
 ```javascript
-//List.js
-import React from 'react';
-const List = (props) => {
-  const { repos } = props;
-  if (!repos) return null;
-  if (!repos.length) return <p>No repos, sorry</p>;
-
+//click
+// import withCounter
+import React from 'react'
+export const Click = (props) => {
+  return (
   /// this counter variable is coming from HOC
   /// we can also use props.handleClick - see HOC
-  console.log('counter val from HOC ', props.counter)
-  return (
-    <ul>
-      {repos.map((repo) => {
-        return <li key={repo.id}>{repo.full_name}</li>;
-      })}
-    </ul>
-  );
-};
-/// here we are wrapping list into withLoading,
+    <button onClick={props.handleChange}> Button clicked {props.count} times </button>
+    )
+}
 /// and to make HOC more configurable, we can pass additional paramaeters as second arg 
-export default WithLoading(List, incrementCounterBy5)
 
-///withLoading.js
-import React from 'react';
-function WithLoading(Component, incrementCounterBy5) {
-  return function WithLoadingComponent({ isLoading, ...props }) {
+export dedault withCounter(Click, incrementBy5)
+
+///hover
+// import withCounter
+const Hover = (props) => {
+  return (
+    <h1 onHover={props.handleChange}> H1 hovered {props.count} times </h1>
+    )
+}
+
+/// notcie secnod arg is not passed, so increment by 1 by default
+export default withCounter(Hover)
+
+/// HOC - withCounter
+import React from 'react'
+export const Click = (WrappedComponent, incrementBy = 1) => {
+  return withCounter = (props) => {
     // you can add all useState, hooks functionlaity here which would be reaused in all 
     // components that are wrapped in HOC
     // this is the power of HOC - sharing logic 
     // e.g. this counter variable is now available everywhere
     // and we don't need ot copy handleclick everywhere
     // it would be avaialble for those components as props, just need to call it
-    const [counter, setCounter] = useState(0);
-    const handleClick = (e) => {
-      // this is where we can use those additional params 
-      setCounter(e.target.value + incrementCounterBy5)
+    const [count, setCount] = useState(0)
+    const handleChange = () => {
+      // click will be incremented by 5
+      // hover will be incremented by 1
+      setCount((prevCount) => prevCount + incrementBy)
     }
 
-    // it is imp to pass {...props} otherwise when we call List component with props, those 
-    // would be lost in HOC and won't be available in the List component
-    // and we can pass additional props from HOC
-    if (!isLoading) return <> <p>This is HOC</p>
-      <Component {...props} counter={counter} handleclick={handleclick} />;
-    </>
-    /// this and above <p> tag is avaialble in all componnts which is reused
-    return <p>Hold on, fetching data might take some time.</p>;
-  };
+    return (<>
+      <div>Here we can add any reusable jsx</div>
+      /// it is imp to pass {...props} otherwise when we call wrapped component with props, those 
+      // would be lost in HOC and won't be available in the wrapped component
+      // and we can pass additional props from HOC
+      <WrappedComponent {...props} counter={count} handleChange={handleChange} />
+      </>
+    )
+  }
 }
-export default WithLoading;
 
-///App.js
-import React from 'react';
-import List from './components/List.js';
-import WithLoading from './components/withLoading.js';
-const ListWithLoading = WithLoading(List);
-class App extends React.Component {
-  state = {
-    loading: false,
-    repos: null,
-  };
-  componentDidMount() {
-    this.setState({ loading: true });
-    fetch(`https://api.github.com/users/hacktivist123/repos`)
-      .then((json) => json.json())
-      .then((repos) => {
-        this.setState({ loading: false, repos: repos });
-      });
-  }
-  render() {
-    return (
-      <List
-        isLoading={this.state.loading}
-        repos={this.state.repos}
-      />
-    );
-  }
-}
-export default App;
+/// in app.js
+<Click />
+<Hover />
+
 ```
+
 A HOC is a pure function with zero side-effects.
 
 ------------------------------------------------------------------------------
@@ -574,10 +556,52 @@ class MouseTracker extends React.Component {
 // it's parent component
 <MouseTracker render={(mouse) => (
          <div>The current mouse position is ({mouse.x}, {mouse.y})</div>
+         /// here we can render
         )}/>
 
-// Check if the code is working
+
 ```
+
+#### Another example of render props where apart from sharing jsx, we also share the logic
+```javascript
+//click
+import React from 'react'
+export const Click = (props) => {
+  return (
+    <button onClick={props.handleChange}> Button clicked {props.count} times </button>
+    )
+}
+//hover
+export const Hover = (props) => {
+  return (
+    <h1 onHover={props.handleChange}> H1 hovered {props.count} times </h1>
+    )
+}
+```
+Counter
+```javascript
+//counter
+import React, {useState} from 'react'
+export const Counter = (props) => {
+  const [count, setCount] = useState(0)
+  const handleChange = () => {
+    setCount((prevCount) => prevCount +1)
+  }
+
+  return (
+    <div>
+    {props.render(count, handleChange)}
+    </div>
+  )
+}
+```
+App.js
+```javascript
+  <Counter render={(count, handleChange) => <Click count={count} handleChange={handleChange}/>}
+  <Counter render={(count, handleChange) => <Hover count={count} handleChange={handleChange}/>}
+
+```
+
 ------------------------------------------------------------------------------
 ## Static Type Checking
 Static type checkers like Flow and TypeScript identify certain types of problems before you even run your code. They can also improve developer workflow by adding features like auto-completion. For this reason, we recommend using Flow or TypeScript instead of PropTypes for larger code bases.
