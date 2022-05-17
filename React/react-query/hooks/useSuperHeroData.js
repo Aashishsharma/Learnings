@@ -1,6 +1,10 @@
 import { useQuery, useQueryClient } from 'react-query'
 import axios from 'axios'
 
+// in the useQuery as a second arg, we are using this func as a callback
+// it automatically passes the necessary Objs to this function and we are destructuring 
+// the queryKey arr from that obj, if we don't need this, we can use arr func and call the
+// fetchSuperHero and pass the heroId instead, both are same
 const fetchSuperHero = ({ queryKey }) => {
   const heroId = queryKey[1]
   return axios.get(`http://localhost:4000/superheroes/${heroId}`)
@@ -42,5 +46,11 @@ export const useSuperHeroData = heroId => {
     // 3. refetchInterval: 2000 default (false) - for data polling, refetch the data every 2 secs
     // 4. enabled: false - by default the useQuery hook is called as soon as the component mounts, if we wan't
     // to call the query on a button click, we specify enabled: false, so the data is not fetched on comp mount
-  })// 5. onSuccess: (data) => {} / onError: (error) => {} - functions that get called onquery success / error
+    // 5. onSuccess: (data) => {} / onError: (error) => {} - functions that get called onquery success / error
+    // 6. select: (data) => {return trnasformdeData} - by defaul useQuery return all the API response in the data obj
+    // to access this data, we use data.data.map((superHero)), now if we want to just work with the name property
+    // of suoerHero Obj, we can  use this select function
+    // select: (data) => {const supHerNames = data.data.map((superHero) => superHero.name); return supHerNames}
+    // we can also filter the data above using filter method instead of map
+  })
 }

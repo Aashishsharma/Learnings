@@ -17,6 +17,9 @@ export const RQSuperHeroesPage = () => {
     console.log({ error })
   }
 
+  // not the useSuperHeroesData hook as been modified to fetch supperHeroByID
+  // hence you won't see onSuccess/error cb being used in the hook and the ftech url also includes
+  // heroId
   const { isLoading, data, isError, error, refetch } = useSuperHeroesData(
     onSuccess,
     onError
@@ -57,6 +60,7 @@ export const RQSuperHeroesPage = () => {
       {data?.data.map(hero => {
         return (
           <div key={hero.id}>
+            // queryById
             <Link to={`/rq-super-heroes/${hero.id}`}>
               {hero.id} {hero.name}
             </Link>

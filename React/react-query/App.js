@@ -39,6 +39,7 @@ function App() {
             <Route path='/super-heroes'>
               <SuperHeroesPage />
             </Route>
+            /// query by id
             <Route path='/rq-super-heroes/:heroId'>
               <RQSuperHeroPage />
             </Route>

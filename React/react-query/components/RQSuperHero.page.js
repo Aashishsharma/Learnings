@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom'
 import { useSuperHeroData } from '../hooks/useSuperHeroData'
 
 export const RQSuperHeroPage = () => {
+  // query By Id, fetch heroId from the params
   const { heroId } = useParams()
   const { isLoading, data, isError, error } = useSuperHeroData(heroId)
 

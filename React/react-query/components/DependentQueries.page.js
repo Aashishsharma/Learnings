@@ -11,7 +11,7 @@ const fetchCoursesByChannelId = channelId => {
 
 export const DependentQueriesPage = ({ email }) => {
   const { data: user } = useQuery(['user', email], () =>
-    fetchUserByEmail(email)
+    fetchUserByEmail(email) 
   )
   const channelId = user?.data?.channelId
   useQuery(['courses', channelId], () => fetchCoursesByChannelId(channelId), {
