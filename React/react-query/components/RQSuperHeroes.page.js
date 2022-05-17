@@ -17,18 +17,19 @@ export const RQSuperHeroesPage = () => {
     console.log({ error })
   }
 
-  // not the useSuperHeroesData hook as been modified to fetch supperHeroByID
-  // hence you won't see onSuccess/error cb being used in the hook and the ftech url also includes
-  // heroId
   const { isLoading, data, isError, error, refetch } = useSuperHeroesData(
     onSuccess,
     onError
   )
 
+  // useAddSuperHeroData return mutate which is a func that makes the api call
+  // here also we are using alias
   const { mutate: addHero } = useAddSuperHeroData()
 
   const handleAddHeroClick = () => {
     const hero = { name, alterEgo }
+    // this hero obj is passed in the useMutation hook's cb func
+    // see useMutation hook in the useSuperHeroesData comp
     addHero(hero)
   }
 

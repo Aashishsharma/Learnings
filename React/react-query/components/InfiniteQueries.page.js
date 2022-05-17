@@ -5,7 +5,8 @@ import axios from 'axios'
 // note - the backend api needs to be paginated
 // then we pass _limit and _page as query params to backend api call to return 
 // paginated data
-// and on click of the button we 
+// imp diff to note is useInfineQuery also saves the result from older pages
+// hence the older data is not lost when new data is loaded
 
 // we use useInfiniteQuery hook
 const fetchColors = ({ pageParam = 1 }) => {
@@ -48,6 +49,8 @@ export const InfiniteQueriesPage = () => {
   return (
     <>
       <div>
+      /// note here that useInfineQuery return data which has pages as prop instaed of data
+      // so data.pages instead of data.data
         {data?.pages.map((group, i) => {
           return (
             <Fragment key={i}>
