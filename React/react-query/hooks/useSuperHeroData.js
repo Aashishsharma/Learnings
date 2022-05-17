@@ -52,5 +52,10 @@ export const useSuperHeroData = heroId => {
     // of suoerHero Obj, we can  use this select function
     // select: (data) => {const supHerNames = data.data.map((superHero) => superHero.name); return supHerNames}
     // we can also filter the data above using filter method instead of map
+    // 7. initialData: () => {return data} - see above for e.g. (it is used for better user exp), when data is available in cache
+    // we can use it to render until the api call is executed instaed of showing loading
+    // above we use queryClient which gets the cached value from the query - super-heroes and displays hero obj from the
+    // cached results, when the super-hero/id api call returns data, the inital data is discarded and new data is rendered
+    // retuning undefined is imp if the data is not available in cache
   })
 }

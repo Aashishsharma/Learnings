@@ -2,6 +2,12 @@ import { Fragment } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import axios from 'axios'
 
+// note - the backend api needs to be paginated
+// then we pass _limit and _page as query params to backend api call to return 
+// paginated data
+// and on click of the button we 
+
+// we use useInfiniteQuery hook
 const fetchColors = ({ pageParam = 1 }) => {
   return axios.get(`http://localhost:4000/colors?_limit=2&_page=${pageParam}`)
 }
@@ -12,11 +18,16 @@ export const InfiniteQueriesPage = () => {
     isError,
     error,
     data,
+    // this is calculated based on the page length val we set in the getNextPageParam func below
     fetchNextPage,
+    // see getNextPageParam func below to understand how this val changes
     hasNextPage,
     isFetching,
     isFetchingNextPage
   } = useInfiniteQuery(['colors'], fetchColors, {
+    // lastPage is not used hence underscore
+    // here we return pages.length + 1 to move to next page
+    // if we return undefined then hasNextPage = false
     getNextPageParam: (_lastPage, pages) => {
       if (pages.length < 4) {
         return pages.length + 1

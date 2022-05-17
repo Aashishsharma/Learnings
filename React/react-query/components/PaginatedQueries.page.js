@@ -2,6 +2,12 @@ import { useState } from 'react'
 import { useQuery } from 'react-query'
 import axios from 'axios'
 
+// note - the backend api needs to be paginated
+// then we pass _limit and _page as query params to backend api call to return 
+// paginated data
+// and on click of the button we update the pageNumber
+// since page number is a state variable, the comp re-renders which calls
+// all the hooks (which interns make the new api call)
 const fetchColors = pageNumber => {
   return axios.get(`http://localhost:4000/colors?_limit=2&_page=${pageNumber}`)
 }
@@ -12,6 +18,7 @@ export const PaginatedQueriesPage = () => {
     ['colors', pageNumber],
     () => fetchColors(pageNumber),
     {
+      // reactqueyy will maintain the last fetched data instead of showing loading
       keepPreviousData: true
     }
   )
