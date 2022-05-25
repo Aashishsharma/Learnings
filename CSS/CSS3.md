@@ -372,7 +372,7 @@ Flexbox -
 #### 1. Container
 #### 2. Items 
 
-#### 1. Container properties 
+### 1. Container properties 
 Container (add wd/ht to entire container, by default all items are stretched to container ht)
 
 ##### 1. display:grid | inline-grid
@@ -381,8 +381,18 @@ Container (add wd/ht to entire container, by default all items are stretched to 
  (it would create 3 cols with 1st and 3rd cols with width of 50px, to create more cols add more args) set auto auto auto - (all cols evenly distributed)  
 We can add %, fr(fraction), px to grid template-columns/rows  
 
-grid-template-columns:  20% auto 1fr
-grid-template-columns:  repeat(5, 1fr) - create 5 cols with unit as 1fr each
+grid-template-columns:  20% auto 1fr  
+
+**useful css functions**  
+grid-template-columns:  repeat(5, 1fr) - create 5 cols with unit as 1fr each  
+grid-template-columns:  minmax(5px, 80%) - set min width of col to 5px and max to 80% of it's actual size  
+grid-template-columns:  repeat(8, minmax(10px, 1fr));
+
+**useful css units**  
+1. fr - portion of the remaining space  
+grid-template-columns: 1fr 3fr; - Means, 25% 75%, if we use % ot break when we add padding, so use fr  
+2. 
+
 
 
 ##### 3. grid-template-rows :10px 100px
@@ -426,7 +436,35 @@ justify-content: start | end | center | stretch | space-around (between + space 
 #### 11. place-content: <align-content> / <justify-content>
 Shorthand for above 2 
 
-#### 12. 
+### 2. Item properties 
+
+#### 1. grid-column-start/end, grid-row-start/end
+Different values that can be included  
+.item-a {
+  grid-column-start: 2;
+  grid-column-end: five;
+  grid-row-start: row1-start;
+  grid-row-end: 3;
+}
+
+shorthands for above (include start and end)  
+.item-c {
+  grid-column: 3 / span 2;
+  grid-row: third-line / 4;
+}
+
+#### 2. justify-self
+Aligns a grid item inside a cell (horizontally)  
+justify-self: start | end | center | stretch;  
+Note -justify-item - works for all the items inside the grid and justify-self (since it is applicable on a particular item, this style is applied to only this item) for all grid items we use justify-item
+
+#### 3. align-self
+Aligns a grid item inside a cell (horizontally)  
+align-self: start | end | center | stretch;  
+Same difference with align-items as above
+
+#### 4. place-self <align-self> / <justify-self>
+Same as place-items, but only applicable to this particular item as opposed to all items withing the gird container
 
 
 
