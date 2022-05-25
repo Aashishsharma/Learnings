@@ -414,24 +414,20 @@ shorthand for above 2
 place-item: center // centers horizontally and vertically
 
 #### 10. justify-content
+Sometimes the total size of the grid container might be less than the size of it's parent html elem, specially if the size of parent elem is set in pixels  
+This behaves same as justify-items (align horizontally), but entire grid acts like an item for the parent html elem  
+justify-content: start | end | center | stretch | space-around (between + space left on 1st and last item of the container) | space-between
 
+#### 10. align-content
+Sometimes the total size of the grid container might be less than the size of it's parent html elem, specially if the size of parent elem is set in pixels  
+This behaves same as align-items (align vertically), but entire grid acts like an item for the parent html elem  
+justify-content: start | end | center | stretch | space-around (between + space left on 1st and last item of the container) | space-between
 
+#### 11. place-content: <align-content> / <justify-content>
+Shorthand for above 2 
 
-2. justify-content: start/end/center 
-- this breaks grid-template-columns/rows, so use (space-around)
-3. align-content:   same as align-items in flex-box (space-around, start, end, center)
-4. Col and row gaps - 
-grid-column-gap: 150px (gap between columns)
-grid-row-gap: 50px
-Shorthand - grid-gap: 50px 150px (row then col) 
+#### 12. 
 
-2. Items (at item level)
-1. grid-column: 1 / 3 or 1 / span 2 start from col 1 and take up space till col 3
-2. grid-row: 1 / 3 or 1 / span 2 
-
-Shorhand - using grid-area
-.abc {
-grid-area: (row-start / col-start / row-end / col-end) e.g. 1 / 1 / 3 / 3
 
 
 #### Media queries
