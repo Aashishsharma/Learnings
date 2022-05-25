@@ -364,19 +364,58 @@ Flexbox -
 2. To align items
 3. Content first design - if you don't know how your content is going to look. 
 
-Grid -
+### Grid -
 1. Complex design
 2. If you nees gap between block elems - we can define gap between rows and cols easily in grid
 3. Layout first design- when layout us already defined 
 
-1. Container
-2. Items 
+#### 1. Container
+#### 2. Items 
 
-1. Container (add wd/ht to entire container, by default all items are stretched to container ht)
-1. display:flex
-grid-template-columns:  50px 10 px 50px - (it would create 3 cols with 1st and 3rd cols with width of 50px, to create more cols add more args) set auto auto auto - (all cols evenly distributed) 
+#### 1. Container properties 
+Container (add wd/ht to entire container, by default all items are stretched to container ht)
 
-grid-template-rows :10px 100px - (1st row height of 10px, second od 100px) auto auto - (we afe able to set height here, hence 2D) 
+##### 1. display:grid | inline-grid
+
+##### 2. grid-template-columns:  50px 10px 50px 
+ (it would create 3 cols with 1st and 3rd cols with width of 50px, to create more cols add more args) set auto auto auto - (all cols evenly distributed)  
+We can add %, fr(fraction), px to grid template-columns/rows  
+
+grid-template-columns:  20% auto 1fr
+grid-template-columns:  repeat(5, 1fr) - create 5 cols with unit as 1fr each
+
+
+##### 3. grid-template-rows :10px 100px
+(1st row height of 10px, second od 100px) auto auto - (we afe able to set height here, hence 2D) 
+
+
+##### 4. grid-template : <grid-template-rows> / <grid-template-columns>
+shorthand for cols and rows to be defined on 1 prop  
+.container {
+	grid-template: 20% auto 30% / auto 50px auto
+}
+
+#### 5. column-gap, row-gap
+column-gap: 50px
+row-gap: 10px
+
+#### 6. gap - <row-gap> <column-gap>
+shorthand  
+gap: 50px 10px
+
+#### 7. justify-items (horizontal alignments) - applies for all items inside container
+justify-items: start | end | center | stretch
+
+#### 8. align-items (verticle alignment) - appies for all
+align-items: start | end | center | stretch
+
+#### 9. place-items - <align-items> / <justify-items>
+shorthand for above 2  
+place-item: center // centers horizontally and vertically
+
+#### 10. justify-content
+
+
 
 2. justify-content: start/end/center 
 - this breaks grid-template-columns/rows, so use (space-around)
