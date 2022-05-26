@@ -8,6 +8,23 @@
 7. **Drag n drop APIs** 
 8. **WebPush** - navigator.serviceWorker.register('/service-worker.js')
 
+### First 5 lines in HTML
+1. <!DOCTYPE html>  
+let the browser know that this is an HTML5 page and should be rendered accordingly
+2. <html dir="ltr" lang="en">  
+The content is written in left to right direction. e.g. urdu had rtl  
+language = 'english'
+3. <meta charset="utf-8">
+meta tag is used to supply metadata about the document  
+(char-set) attribute tells the browser which character encoding to use  
+utf-8 allows us to use all sorts of symbols and emoji in source code
+4. <meta name="viewport" content="width=device-"... >  
+for properly sizing the webpage on small screens  
+width=device-width tells the browser to use 100% of the device’s width as the viewport so there’s no horizontal scrolling.  
+5. <meta property="og:site_name" content="Twitter">
+This tag is an Open Graph (OG) meta tag for the site name, used for SEO
+
+
 ## HTML5
 ### New things
 #### 1. OLD vs new Doc Type

@@ -391,8 +391,6 @@ grid-template-columns:  repeat(8, minmax(10px, 1fr));
 **useful css units**  
 1. fr - portion of the remaining space  
 grid-template-columns: 1fr 3fr; - Means, 25% 75%, if we use % ot break when we add padding, so use fr  
-2. 
-
 
 
 ##### 3. grid-template-rows :10px 100px
