@@ -294,31 +294,38 @@ Margin - soace between border and other elems
 padding/margin : 10px
 (If one arg, then top, right, bottom and left, same padding/margin applied, if 2 args- 1st arg for top-bottom, if 4 args, from top to left) 
 
-#### 2. Flex-box
+### 2. Flex-box
 Is a one-dimensional layout model where as css-grid layout is 2 dimensional  
 (Flexible box) used to layout a page
 Alternative to box model + float and display to layout elems on a web page. 
 
 Set dispaly:flex - to parent div/any other elem to start with flexbox 
 
-Two parts
-1. Containers
-2. Items 
+#### 1. Containers
+#### 2. Items 
 
-1. Containers (add wd/ht to entire container by default all items are stretched to container ht)
+#### 1. Containers properties
+(add wd/ht to entire container by default all items are stretched to container ht) 
+
+##### 1. Flex, and flex-wrap 
 .container {
 display:flex,
-flex-direction: row(defaul)/column, row-reverse, column-reverse;
+flex-direction: row(default)/column, row-reverse, column-reverse;
 flex-wrap: nowrap(default)/ wrap (if wrap - items moved to next line if no more space available
 } 
 
+##### 2. flex-flow (shorthand for above)
+flex-flow: column wrap
+
+##### 3. justify-content
 Alligning flex items in a container
-for horizontal alignment 
+for horizontal alignment  
 justify-content: flex-start, flex-end, center,
 space-between(all items spread out till the end of the container with equal space in between), space-around (space between + same space left at the left of 1st item and right of last item) 
 
+##### 4. align-items
 For vertical alignment
-align-items : stretch(defaul, height of all items same as that of container) center - (equal space left at top and bottom), flex-start (at the top of the container, at bottom empty space, items have their own height, not streched) flex-end, baseline(all items's center will have same base, no matter the height of each elem) 
+align-items : stretch(default, height of all items same as that of container) center - (equal space left at top and bottom), flex-start (at the top of the container, at bottom empty space, items have their own height, not streched) flex-end, baseline(all items's center will have same base, no matter the height of each elem) 
 
 Tip - to align flex items exactly at the center of div
 justify-content: center - horizontal center
@@ -329,27 +336,33 @@ So basically
 display: flex, justify-content and align-items to center
 } 
 
-2. Items
-1. Order
+##### 5. gap, row-gap, column-gap
+controls the space between flex items  
+gap: 10px // applies for both row and column
+
+
+#### 2. Items properties
+##### 1. Order
 One imp property- style="order: 0 to n", 0- default, and all other items are placed based on order no. Useful when componetns order is dynamic from javascript, 
-Generally used with inline style, since order no needs to be diff. For eeach item, can be used in renderethod arr.map() 
+Generally used with inline style, since order no needs to be diff. for each item, can be used in render method arr.map() 
 
 Why flexbox is popular as opposed to display:block with float and grid layout 
 
 Due to shrink-grow and basis - they define the responsive layout 
 
-2. ---------# flex-grow, shrink, basis------------
+##### 2. --- flex-grow, shrink, basis ---
 (These properties are added to flex-item)
 These 3 properties decide how the extra space within the flex container is utilized 
 
-1. Flex-basis - minimum width for each item : 100px
-2. Flex-grow (default -0 - no item gets extra space)  - flex-grow:2 - this item would get twice the REMAINING SPACE as compared to other items, note thwt all other items need to jave the grow properties as well, or only this item would get the remaining space
+1. Flex-basis - default size of an element before the remaining space is distributed : 100px
+2. Flex-grow (default -0 - no item gets extra space)  - flex-grow:2 - this item would get twice the REMAINING SPACE as compared to other items, note that all other items need to have the grow properties as well, or only this item would get the remaining space
 3. Flex-shrink- (default-1 - all items are shrinked in equal proportion when screen size is being reduced) flez-shrink:3, this item would shrink thrice as compared to other items 
 
 4. Flex - as a shorthand
 flex: 1, 1, 100px (grow, shrink, basis) 
 
-align-self: flex-start/end/center - this align individual items, as opposed to align-items (which is applied at container level)
+##### 3. align-self: flex-start/end/center 
+this align individual items, as opposed to align-items (which is applied at container level)
 
 #### 3. CSS GRID
 Grid vs flexbox
@@ -391,7 +404,6 @@ grid-template-columns:  repeat(8, minmax(10px, 1fr));
 **useful css units**  
 1. fr - portion of the remaining space  
 grid-template-columns: 1fr 3fr; - Means, 25% 75%, if we use % ot break when we add padding, so use fr  
-
 
 ##### 3. grid-template-rows :10px 100px
 (1st row height of 10px, second od 100px) auto auto - (we afe able to set height here, hence 2D) 
