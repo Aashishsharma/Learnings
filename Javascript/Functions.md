@@ -470,6 +470,64 @@ console.log(curryN(1)(2)(3)(4)(5)())
 //O/P - 15
 ```
 
+## Iterators
+It’s an object or pattern that allows us to traverse over a list or collection  
+Should return an object by using a next() method that contains the value and done  
+The object must define a method with ‘Symbol.iterator’ the key which returns an object. The object must define ‘next’ method which returns an object having two properties ‘value’ and ‘done’  
+
+1. Creating iterator
+```javascript
+var iterable = {
+  i: 0,
+  [Symbol.iterator]() {
+    var that = this; // instead of this we can use arrow func
+    return {
+      next() {
+        if (that.i < 5) {
+          return { value: that.i++, done: false }
+        } else {
+          return { value: undefined, done: true }
+        }
+      }
+    }
+  }
+}
+for(let value of iterable){document.write(value)}
+// O/P - 0, 1, 2, 3, 4
+```
+
+Usecase for iterators  
+```javascript
+// to convert any given obj as iterable which means we can iterate through any obj
+// using for of loop
+// in getIterableMap() we pass any obj that needs to be converted to iterable
+const getIterableMap = (map) => {
+    const keys = Object.keys(map)
+    let nextIndex = 0;
+    const iterable = {
+        ...map
+    }
+    iterable[Symbol.iterator] = () => {
+        return {
+            next: () => {
+                return nextIndex && keys.length ?
+                    { value: map[keys[nextIndex++]], done: false } :
+                    { done: true };
+            }
+        }
+    }
+    return iterable
+}
+const cakes = {
+    butter: 'Butter Cake',
+    pound: 'Pound Cake',
+    sponge: 'Sponge Cake'
+}
+for (const cake of getIterableMap(cakes)) {
+    console.log({ cake });
+}
+```
+
 ------------------------------------------------------------------------------
 ## Generators
 Regular functions return only one, single value (or nothing).
@@ -594,7 +652,7 @@ for await (let commit of fetchCommits("username/repository")) {
 // do next for of iteration will get next paginated commits
 ```
 In web-development we often meet streams of data, when it flows chunk-by-chunk. For instance, downloading or uploading a big file.
-We can use async generators to process such data, but they don't improve performance. Us them wgile creatinf a library so that consumers can easily consume using for of loop  
+We can use async generators to process such data, but they don't improve performance. Use them while creating a library so that consumers can easily consume using for of loop  
 Another usecase  
 Infinitely Repeating Array
 ```javascript
@@ -606,7 +664,3 @@ const ids = idCreator();
 console.log(ids.next().value); // 0
 console.log(ids.next().value); // 1
 ```
-
-
-To-do
-ploymorphism
