@@ -11,7 +11,48 @@
 9. **Hashing** - 1. static(only maps search leys to fixed set of buckets, if DB size grows, still this hashing maps to same set of buckets) 2. dynamic(hash func modifies dynamically (hash finc to check only i bits(LSB), so buckets = 2 raise to i, buckets full, i++) 3. consistent, (for range Queries ordered indeices are preferred)
 10. **Stored procedures** - grp of SQL statements, same as funcs in programming, syntax (create Procedure ProcNM @Gender nvarchar(10) @empCnt int output as Begin <<SQL query>>) call (Declare @cnt int Execute ProcNM 'Male' @cnt out if(@cnt is null) print 'null' else print @cnt), inbuilt procs - sp_help procedure_name, sp_depends proc_nm 
 
-## 1. 
+## 1. CREATE
+```SQL
+/* this is for sql server*/
+CREATE DATABASE record_company;
+DROP DATABASE record_company;
+
+/* to use a particular db*/
+USE record_company;
+
+CREATE TABLE bands (
+	id INT NOT NULL AUTO_INCREMENT,
+	name VARCHAR(255) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE albums (
+	id INT NOT NULL AUTO_INCREMENT,
+	name VARCHAR(255) NOT NULL,
+	release_year INT,
+	band_id INT NOT NULL,
+	PRIMARY KEY (id),
+	/*define relationship between band_id and band table*/
+	FOREIGN KEY (band_id) REFERENCES bands(id)/*create foreign key with band table(id col)*/
+	/*SQL will not allow to insert any album whose band_id doesn't exists in band table (id col)*/
+);
+
+ALTER TABLE test
+
+DROP TABLE 
+```
+
+## 2. Insert
+```SQL
+INSERT into bands (name) 
+VALUES ('Iron Maiden')
+
+/*multiple insert*/
+INSERT into bands (name) 
+VALUES ('Deuce'), ('Avenged'), ('Ankor')
+```
+
+## 3. Select
 ```SQL
 
 ```
