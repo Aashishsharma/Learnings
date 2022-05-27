@@ -168,6 +168,15 @@ WITH temporaryTable(averageValue) as
 SELECT EmployeeID,Name, Salary 
 FROM Employee, temporaryTable 
 WHERE Employee.Salary > temporaryTable.averageValue;
+
+/*Without using with -Find all the employee whose salary is more than the average salary of all employees*/
+/*self made answer try this*/
+SELECT a.EmployeeID, a.Name, a.Salary 
+FROM Employee a, Employee b
+GROUP BY b.EmployeeID
+HAVING a.salary > AVG(b.Salary) 
+
+
 ```
 
 
