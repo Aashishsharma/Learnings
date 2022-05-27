@@ -72,3 +72,29 @@ UPDATE albums
 SET release_year = 1982
 WHERE id = 1;
 ```
+
+## 5. Where clause
+```SQL
+SELECT * from albums
+WHERE name LIKE '%night%' OR band_id = 2
+
+/*OR, AND, BETWEEN (2000 AND 2019)*/
+```
+## JOINS
+```SQL
+
+/*default is inner join*/
+SELECT * from bands
+JOIN albums ON bands.id = albums.band_id
+
+/*left join*/
+/*all rows from left table, and common rows from both table*/
+
+SELECT * from bands
+LEFT JOIN albums ON bands.id = albums.band_id
+
+SELECT * from bands
+RIGHT JOIN albums ON bands.id = albums.band_id
+
+/*all joins, it's better to have the ON condition*/
+```
