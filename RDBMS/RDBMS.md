@@ -99,7 +99,7 @@ RIGHT JOIN albums ON bands.id = albums.band_id;
 /*all joins, it's better to have the ON condition*/
 ```
 
-## Aggregate functions
+## Aggregate, group by and having
 ```SQL
 SELECT AVG(release_year) FROM albums;
 
@@ -123,7 +123,6 @@ GROUP BY b.id;
 /*SQL query execution - 
 1. Get data (FROM, JOIN)
 The FROM clause, and subsequent JOINs are first executed to determine the total working set of data that is being queried. This includes subqueries in this clause
-
 2. Filter the rows (Where)
 3. Group rows (Group by)
 The remaining rows after the WHERE constraints are applied are then grouped based on common values in the column specified in the GROUP BY clause. As a result of the grouping, there will only be as many rows as there are unique values in that column.
@@ -132,4 +131,13 @@ the constraints in the HAVING clause are then applied to the grouped rows, disca
 5. Return the expression (Select then distinct)
 6. Order and Paging (Order by & Limit / offset)
 */
+
+/*having*/
+/*having - same as where, but where is executed before group by and having after group by*/
+/*find no. of albums for each band having no of albums = 1*/
+SELECT b.name AS band_name, COUNT(a.id) AS num_albums
+FROM bands AS band_id
+LEFT JOIN albums AS a ON b.id = a.band_id
+GROUP BY b.id;
+HAVING num_albums = 1
 ```
