@@ -150,8 +150,24 @@ SELECT bands.name AS 'Band Name'
 FROM bands
 WHERE bands.id NOT IN (select band_id FROM albums)
 
+```
 
+## With clause to create views
+WITH clause is used to define a temporary relation.  
+When a query with a WITH clause is executed, first the query mentioned within the  clause is evaluated and the output of this evaluation is stored in a temporary relation. Following this, the main query associated with the WITH clause is finally executed that would use the temporary relation produced  
 
+```SQL
+/*Find all the employee whose salary is more than the average salary of all employees*/
+
+/* the averageValue passed in with is comming from the avg(Salary) of the Select clause column
+and this column is used in the main query - temporaryTable.avergaValue*/
+WITH temporaryTable(averageValue) as
+  (SELECT avg(Salary)
+  from Employee)
+
+SELECT EmployeeID,Name, Salary 
+FROM Employee, temporaryTable 
+WHERE Employee.Salary > temporaryTable.averageValue;
 ```
 
 
