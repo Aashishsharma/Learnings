@@ -105,7 +105,7 @@ The FROM clause, and subsequent JOINs are first executed to determine the total 
 2. Filter the rows (Where)
 3. Group rows (Group by)
 The remaining rows after the WHERE constraints are applied are then grouped based on common values in the column specified in the GROUP BY clause. As a result of the grouping, there will only be as many rows as there are unique values in that column.
-4. Aggregate funcs are run on those grouped rows
+4. Aggregate funcs are run on those grouped rows, on each grouped rows, the aggreagte func is run
 5. Fitler the groups (Having)
 the constraints in the HAVING clause are then applied to the grouped rows, discard the grouped rows that don't satisfy the constraint
 6. Return the expression (Select then distinct)
