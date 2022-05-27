@@ -85,16 +85,47 @@ WHERE name LIKE '%night%' OR band_id = 2
 
 /*default is inner join*/
 SELECT * from bands
-JOIN albums ON bands.id = albums.band_id
+JOIN albums ON bands.id = albums.band_id;
 
 /*left join*/
 /*all rows from left table, and common rows from both table*/
 
 SELECT * from bands
-LEFT JOIN albums ON bands.id = albums.band_id
+LEFT JOIN albums ON bands.id = albums.band_id;
 
 SELECT * from bands
-RIGHT JOIN albums ON bands.id = albums.band_id
+RIGHT JOIN albums ON bands.id = albums.band_id;
 
 /*all joins, it's better to have the ON condition*/
+```
+
+## Aggregate functions
+```SQL
+SELECT AVG(release_year) FROM albums;
+
+SELECT band_id, COUNT(band_id) FROM albums;
+GROUP BY band_id
+/*get all the bands and see how many bands each og the album have
+basically aggregate funcs return only 1 row  
+but since we are using Group by, the count finc is run on all the grouped
+band_ids and we get count for each band_id 
+*/
+
+/*SUM, COUNT*/
+
+/*power of aggregate functions*/
+/*find no. of albums for each band*/
+SELECT b.name AS band_name, COUNT(a.id) AS num_albums
+FROM bands AS band_id
+LEFT JOIN albums AS a ON b.id = a.band_id
+GROUP BY b.id;
+
+/*SQL query execution - 
+1. Get data (FROM, JOIN)
+2. Filter the rows (Where)
+3. Group rows (Group by)
+4. Fitler the groups (Having)
+5. Return the expression (Select)
+6. Order and Paging (Order by & Limit / offset)
+*/
 ```
