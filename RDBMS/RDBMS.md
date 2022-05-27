@@ -50,9 +50,25 @@ VALUES ('Iron Maiden')
 /*multiple insert*/
 INSERT into bands (name) 
 VALUES ('Deuce'), ('Avenged'), ('Ankor')
+
+INSERT INTO albums (name, release_year, band_id)
+VALUES ('No of Beasts', 1985, 1),
+		('Nightmare', 2018, 2),
+		('Nightmare', null, 2);
 ```
 
 ## 3. Select
 ```SQL
+SELECT * FROM bands LIMIT 2;
 
+SELECT name AS 'BAND NAME' FROM bands;
+
+SELECT * FROM bands ORDER BY name desc
+```
+
+## 4. Update
+```SQL
+UPDATE albums
+SET release_year = 1982
+WHERE id = 1;
 ```
