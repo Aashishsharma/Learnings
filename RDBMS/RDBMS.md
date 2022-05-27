@@ -122,10 +122,14 @@ GROUP BY b.id;
 
 /*SQL query execution - 
 1. Get data (FROM, JOIN)
+The FROM clause, and subsequent JOINs are first executed to determine the total working set of data that is being queried. This includes subqueries in this clause
+
 2. Filter the rows (Where)
 3. Group rows (Group by)
+The remaining rows after the WHERE constraints are applied are then grouped based on common values in the column specified in the GROUP BY clause. As a result of the grouping, there will only be as many rows as there are unique values in that column.
 4. Fitler the groups (Having)
-5. Return the expression (Select)
+the constraints in the HAVING clause are then applied to the grouped rows, discard the grouped rows that don't satisfy the constraint
+5. Return the expression (Select then distinct)
 6. Order and Paging (Order by & Limit / offset)
 */
 ```
