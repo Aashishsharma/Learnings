@@ -94,10 +94,13 @@ Tank.insertMany([{ size: 'small' }], function(err) {
 ```
 
 ##### 5. CRUD operations
-Mongoose models provide several static helper functions for CRUD operations.
+Mongoose models provide several static helper functions for CRUD operations.  
+**Note - findOne() and find() methods in mongoose work exactly same that in mongoDB shell commands.**  
+So if we know mongoDB, mongoose query commands would be same
 ```javascript
 // 1. read
 const Person = mongoose.model('Person', yourSchema);
+
 // find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
 Person.findOne({ 'name.last': 'Ghost' }, 'name occupation', function (err, person) {
   if (err) return handleError(err);
@@ -109,8 +112,11 @@ Person.findOne({ 'name.last': 'Ghost' }, 'name occupation', function (err, perso
 // find all documents
 await MyModel.find({});
 
-// find all documents named john and at least 18
+// find all documents named john and at least 18 - same as mongoDB schema
 MyModel.find({ name: 'john', age: { $gte: 18 }}, function (err, docs) {});
+
+// there is another way we can use monggose
+const user = MyModel.where("name").eq("john").where("age").gt(18) // same o/p as above
 
 // 2. create
 const schema = new Schema({ name: String, age: { type: Number, min: 0 } });
@@ -186,7 +192,7 @@ const breakfastSchema = new Schema({
   },
    date: { type: Date, default: () => Date.now()), immutable: true }
     // default needs to be a value, but if we don't wrap this data in a function, every time the 1st time value of Date.now() would be passed
-    // immutable = true means that value cannot be changed gain, usually used in createdAt/ updatedAt field
+    // immutable = true means that value cannot be changed gain, usually used in createdAt field
    
 });
 const Breakfast = db.model('Breakfast', breakfastSchema);
@@ -227,6 +233,11 @@ Middleware (also called pre and post hooks) are functions which are passed contr
 const schema = new Schema(..);
 schema.pre('save', function(next) {
   // do stuff
+  // note we cannot use arrow functions because we are using this
+  // this refereces to the model instance thta we are about to save
+  // add updatedAt val, so we don't have to do this on every doc save
+  this.updatedAt = Date.now()
+  // call next middleware if exists
   next();
 });
 // this function would be called for every document that is being saved
