@@ -12,9 +12,26 @@
 It is mongodb object document modeling (ODM) for node.js  
 Object Document Mapper (ODM) is used to map objects with a Document Database like MongoDB  
 
+
+### Connecting to a DB
+```javascript
+mongoose.connect('mongodb://localhost:27017/test', () => {
+  console.log('Connected to MDB')
+}, (error) => {
+  console.log('Error connecting to MDB')
+});
+
+
+// To handle errors after initial connection was established
+mongoose.connection.on('error', err => {
+  logError(err);
+});
+```
+Mongoose lets you start using your models immediately, without waiting for mongoose to establish a connection to MongoDB.  
+That's because mongoose buffers model function calls internally.
+
 ### Schemas
 ##### 1. Define a schema
-
 Everything in Mongoose starts with a Schema. Each schema maps to a MongoDB collection and defines the shape of the documents within that collection.
 ```javascript
  import mongoose from 'mongoose';
@@ -24,12 +41,12 @@ Everything in Mongoose starts with a Schema. Each schema maps to a MongoDB colle
     author: String,
     body:   String,
     comments: [{ body: String, date: Date }],
-    date: { type: Date, default: Date.now },
     hidden: Boolean,
     meta: {
       votes: Number,
       favs:  Number
-    }
+    },
+    address: addressSchema // this can be a new schema - new Schema({street: String, houseNo: String})
   });
 ```
 schema types -  
@@ -48,17 +65,18 @@ schema types -
 To use our schema definition, we need to convert our blogSchema into a Model we can work with. 
 ```javascript
 //syntax
-mongoose.model(modelName, schema)
+mongoose.model(collectionNameInDB, schema)
 
 const Blog = mongoose.model('Blog', blogSchema);
 // ready to go!
+// the returned value 'Blog' can be used to perform operations
 ```
 Mongoose automatically looks for the plural, lowercased version of your model name. Thus, for the example above, the model Blog is for the Blogs collection in the database.  
 
 By default, Mongoose adds an **_id** (of type ObjectId) property to your schemas.  
 Instance of Models is documents
 ```javascript
-const doc = new Model();
+const doc = new Blog();
 await doc.save();
 ```
 
@@ -74,33 +92,6 @@ small.save(function (err) {
 Tank.insertMany([{ size: 'small' }], function(err) {
 });
 ```
-
-##### 4. Connecting to a DB
-```javascript
-mongoose.connect('mongodb://username:password@host:port/database?options...',
-  {
-  	useNewUrlParser: true
-  }
-);
-// The underlying MongoDB driver has deprecated their current connection string parser.
-//  You should set useNewUrlParser: true unless that prevents you from connecting. 
-// Note that if you specify useNewUrlParser: true, you must specify a port in your 
-// connection string, like mongodb://localhost:27017/dbname
-
-//to handle error for initial connection
-try {
-  await mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true });
-} catch (error) {
-  handleError(error);
-}
-
-// To handle errors after initial connection was established
-mongoose.connection.on('error', err => {
-  logError(err);
-});
-```
-Mongoose lets you start using your models immediately, without waiting for mongoose to establish a connection to MongoDB.  
-That's because mongoose buffers model function calls internally.
 
 ##### 5. CRUD operations
 Mongoose models provide several static helper functions for CRUD operations.
@@ -141,6 +132,14 @@ res.nModified; // Number of documents modified
 const res = await Person.updateMany({ name: /Stark$/ }, { isDeleted: true });
 res.n; // Number of documents matched
 res.nModified; // Number of documents modified
+
+// Try to not use Update methods since they skip schema validation
+// See Validation Skip section, instea do this
+let user = await MyModel.find({ name: 'john'});
+user.name = 'kyle'
+user.save();
+// this will run the validation
+// but sometimes it's convenient to use updateMany(), since we are doing a bulk update
 
 // 4 Delete
 Character.deleteOne({ name: 'Eddard Stark' }, function (err) {});
@@ -184,7 +183,11 @@ const breakfastSchema = new Schema({
     required: function() {
       return this.bacon > 3;
     }
-  }
+  },
+   date: { type: Date, default: () => Date.now()), immutable: true }
+    // default needs to be a value, but if we don't wrap this data in a function, every time the 1st time value of Date.now() would be passed
+    // immutable = true means that value cannot be changed gain, usually used in createdAt/ updatedAt field
+   
 });
 const Breakfast = db.model('Breakfast', breakfastSchema);
 const badBreakfast = new Breakfast({
@@ -203,7 +206,7 @@ const userSchema = new Schema({
     validate: {
       validator: function(v) {
         return /\d{3}-\d{3}-\d{4}/.test(v); // regex for valid phone no
-        // v argument is a phone number value thatis set for a particluar doc
+        // v argument is a phone number value that is set for a particluar doc
       },
       message: props => `${props.value} is not a valid phone number!`
     },
@@ -212,6 +215,9 @@ const userSchema = new Schema({
 });
 
 ```
+
+### Validation Skip
+**NOTE - All those validations work when we use the .save() method while adding new record/document. Id doesn't work when we do updateOne/Many. So the best way is to first find the object uwing find queries, then update that obj, and then call the save method, so that the validation is run**
 
 ##### 7. Middlewares
 Middleware (also called pre and post hooks) are functions which are passed control during execution of asynchronous functions.  
