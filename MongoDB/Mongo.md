@@ -72,7 +72,7 @@ db.post.insertMany([
 db.collectioName.find()
 db.posts.find();
 db.posts.find().pretty() // pretty output
-db.posts.find.sort({title: 1}) //sorts o/p by title
+db.posts.find().sort({title: 1}) //sorts o/p by title
 // for decending order use {title: -1}
 
 // e.g. 2 using where clause
@@ -91,6 +91,48 @@ db.posts.find().forEach(function(doc) {
 //findOne
 db.posts.findOne({category: 'news'})
 // returns the first doc which matched the where clause
+
+// above find returns all the fields by default, if we want to retuen onlt specific fields
+db.posts.find({category: 'news'}, {name: 1}) // return only name field
+db.posts.find({category: 'news'}, {age: 0}) // return all fields except age field
+
+//////////////////// COMPLEX QUERIES ///////////////////
+// syntax - we pass an object as value in the find func as arg, with one of the operators
+db.posts.find({columnName: <object-for-complex-query>})
+// 1. find all users where name = "Sally"
+db.posts.find({name: {$eq: "Sally"}}) // we can pass $ne for not equal
+// other operators $gt, $gte, $lt, $lte
+// $in
+db.posts.find({name: {$in: ["Sally", "kyle"]}}) // $nin
+
+db.posts.find({age: {$exists: true}}) // return all docs where age field exists, agev with null values are also returned
+
+// find all users whose age > 20 and < 40 and name = "Sally"
+db.posts.find({age: {$gt: 20, $lt: 40}}, {name: {$eq: "Sally"}})
+// by default and operator is used
+
+// explicitly using $and operator
+// name = sally and age = 26
+db.posts.find({$and: [{age: 26}, {name: {$eq: "Sally"}}]})
+// similarly we can use OR
+
+// AND OR NOT in where clause
+// find all docs from inventory where qty is less than 10 OR greator then 50 AND
+// sale is true OR price is lesst then 5
+db.inventory.find({
+    $and: [
+        { $or: [ { qty: { $lt : 10 } }, { qty : { $gt: 50 } } ] },
+        { $or: [ { sale: true }, { price : { $lt : 5 } } ] }
+    ]
+})
+
+// $expr - if we want to compare 2 different properties in the same doc
+db.posts.find({$expr: {$gt: ["$debt", "$balance"]}}) // find all users where debt column val > balance
+// note that we need to use $ before the field names as well
+
+// where clause on nested object - 
+db.posts.find({"$address.street": "123 Main street"})
+
 ```
 
 #### 3. Update
@@ -99,7 +141,7 @@ db.posts.findOne({category: 'news'})
 // replace entire doc
 // syntax
 db.collectionName.update({whereclause}, {data-to-be-updated}, {upsert: true})
-// 3rd parameter is optional, is says if where clause is not matched
+// 3rd parameter is optional, it says if where clause is not matched
 // then add new row, if not provided new row won't be created
 
 db.posts.update({title: 'new post'}, 
@@ -131,7 +173,7 @@ db.posts.update({title: 'new post'},
 		upsert: true
 	}
 )
-// int this case, other fileds are still available, like categoory
+// in this case, other fileds are still available, like categoory
 // here set is an operator
 
 // other operators
@@ -142,19 +184,22 @@ db.posts.update({title: 'new post'}, {$inc: {likes: 2}})
 // 2. rename operator
 db.posts.update({title: 'new post'}, {$rename: {likes: 'views'}})
 // renames likes field to views
+
+// 3. Updating arrays
+db.posts.update({title: 'new post'}, {$push: {comments: 'new comment'}})
+// use $pull to remove from array
+
+// 4. replace
+// similar as update - update updates only those columns which we asked for if we use $set operatoe
+// replace will remove all fields and only add the ones we pass
+db.posts.replace({title: "new post"}, {title: "replaced post"})
+// if this post had other fields like, those would be deleted
 ```
 
 #### 4. delete
 ```javascript
 db.posts.remove({title: 'new post'})
 
-// AND OR NOT in where clause
-db.inventory.find( {
-    $and: [
-        { $or: [ { qty: { $lt : 10 } }, { qty : { $gt: 50 } } ] },
-        { $or: [ { sale: true }, { price : { $lt : 5 } } ] }
-    ]
-} )
 ```
 Note - everywhere is where clasue we have used title, but mostly **_id** attribute should be used in where clause
 It is similar to primary key from relational DB  
@@ -162,7 +207,7 @@ Mongo creates a new Object attribute every time when a new doc is inserted which
 it is **"_id": "ObjectId("234234cdaa4322243234")"**
 
 #### Adding subdocuments
-If post collection has a comments field, it can be a dub document (nested object) or a separate collection  
+If post collection has a comments field, it can be a sub document (nested object) or a separate collection  
 But what is preferred?
 ```javascript
 db.posts.update({title: 'new post'},
@@ -184,24 +229,6 @@ db.posts.update({title: 'new post'},
 	}
 )
 
-//element match operator
-// used in nested docs
-db.posts.find({title: 'new post'},
-	{
-		comments: {
-			$elemMatch: {
-				user: 'Ashish'
-			}
-		}
-	}
-)
-//gives all the comments from Ashish on post - new post
-
-// less than greater than operators
-db.posts.find({views: {$gt: 50}})
-// find all posts where views is greater than 50
-// use $gte for greater than or equal to
-// similarly we have $lt and $lte 
 ```
 
 #### Data Modelling
