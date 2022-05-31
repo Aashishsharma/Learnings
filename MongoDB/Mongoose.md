@@ -260,3 +260,34 @@ schema.post('remove', function(doc, next) {
 When to use?  
 1. complex validation
 2. removing dependent documents (removing a user removes all his blogposts), using this foreign key constraint can be applied, same as RDBMS,but again the difference is it would be at application level and RDBMS have this constraints at DB level (implicit)
+
+##### 8. Schema methods (3 types)
+We can write methods at schema level so that any model / doc (instance of a model) can use this method.  
+Helps in code re-usebality
+
+```javascript
+const userSchema = new Schema(...)
+
+1. Methods at instance level
+userSchema.methods.sayHi = function() {
+  console.log(`Hi ${this .name}`)
+} // can't user arrow func because of this, and again this references to the instance of model
+
+// using the re-usable instance method
+const user = User.findOne({name: "kyle"})
+user.sayHi()
+// can be used as logger
+
+2. Methods at Model level
+userSchema.statics.findByName = function(name) {
+  return this.where({name: new Regex(name, i)) // returns name with insensitve case
+} 
+
+// using the model level method
+const user = User.findByName({name: "kyle"}) // case insensitive where clause us run 
+```
+
+
+```javascript
+
+```
