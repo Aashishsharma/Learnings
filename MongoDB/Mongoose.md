@@ -244,13 +244,16 @@ schema.pre('save', function(next) {
 // verify above statement
 
 // 2. post hooks
-schema.post('validate', function(doc) {
+// in post hooks we get doc as first arg in cb func
+// this doc consists the dox we have saved/ validated
+// hence in pre hooks we use this, and in post hooks we use doc
+schema.post('validate', function(doc, next) {
   console.log('%s has been validated (but not saved yet)', doc._id);
 });
-schema.post('save', function(doc) {
+schema.post('save', function(doc, next) {
   console.log('%s has been saved', doc._id);
 });
-schema.post('remove', function(doc) {
+schema.post('remove', function(doc, next) {
   console.log('%s has been removed', doc._id);
 });
 ```
