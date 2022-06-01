@@ -138,11 +138,11 @@ services -
   mongodb:  
     image: mongo  
     ports: 27017:27017
-    volumes:                   ---- this volume specifies the named volume for this container
-    - db-data:/var/lib/mysql/data
-volumes:
-  db-data: (if we have multiple containers with multiple volumes, we need to specify all those volumes under this key)
-    driver:local 
+    volumes:                   ---- this volume specifies the named volume for this container  
+      - db-data:/var/lib/mysql/data  
+    volumes:
+  db-data: (if we have multiple containers with multiple volumes, we need to specify all those volumes under this key)  
+  driver:local 
   
 
 **Note - the contianer-dir defres for each DB**  
@@ -152,4 +152,3 @@ volumes:
 
 in docoker-compose ->
 ![alt text](PNG/volumes.PNG "Title")  
-also under volumes section add 
