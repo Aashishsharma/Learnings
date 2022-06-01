@@ -37,9 +37,44 @@ this creates new image and adds the tag so that this image can be pushed to any 
 Docker allows multiple apps with diff versions run simultaneously like 2 diff ver of redis can be run, here redis is opened to default port (6379), so now there are 2 containers (running instances of 2 diff redis version) and both exposing to port 6379, so this is possible because of -p hostport:containerport, no issues as long as host port is always diff.  
 
 #### Network
-Allow different contianer to talk to each other  
+Allow different contianer (mongo container can talk to mongo-express container) within same docker to talk to each other  
 **Commands**  
 1. ```docker network create <network-name>```
+```docker network create mongo-network```  use this network name on dcoer-run command - see docker run command above  
+2. ```docker network ls```
+
+#### Sample application
+Creating Node js app to connect to MongoDB db and connect MongoDB db with mongo-express so that we can use
+the UI for MongoDB db  
+1. Create mongoDB container and mongo-express container both within same network
+```docker run -d \                             -- run in detached mode
+-p 27017:27017 \                               -- specify host and docker port
+-e MONGO_INITDB_ROOT_USERNAME=admin \  -- this is env. variable required as mentioned in mondoDB docker docs
+-e MONGO_INITDB_ROOT_PASSWORD=password \
+--name mongoDB \                               -- optional name to the container
+--net mongo-network \                 -- create this in the network (mongo-network) which we created above
+mongo                                 -- image name form which the container should be created
+``` 
+
+2. Similar to mongoDB container, create mongo-express container
+```docker run -d \
+-p 8080:8080 \
+-e ME_CONFIG_MONGODB_ADMINUSERNAME=admin \  -- required from ME docker docs to connect to mongoDB container
+-e ME_CONFIG_MONGODB_ADMINPASSWORD=password \ -- should be same as mondoDB credentials we used above
+-e ME_CONFIG_MONGO_DB_SERVER=mongoDB \ -- should be the container name of mongoDB container (mentioed in docs)
+--new mongo-network \                        -- network name should be same as used in mondoDB container
+--name mongo-express \ 
+mongo-express
+```
+Now we can use mongo-express container running at localhost:8081  
+We can use this UI to create DBs and tables and add data
+
+3. Connect Node app with MongoDB container
+```javascript
+// Write node code to connect to MongoDB
+MongoClient.connect('mongodb://admin:password@localhost:27017') 
+// these details are comming from the mongoDB container we created in step 1
+```
 
 #### Docker compose
 Run multiple services in one go, simpler, better than running docker commands individually  
