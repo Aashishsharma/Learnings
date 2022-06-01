@@ -11,6 +11,7 @@
 
 **Commands**  
 1. ```docker images```
+2.```docker pull <image-name:version>```
 2. ```docker image rm <img-name>```
 3. ```docker tag <existing-image:version> to new-ecr-domain-image:version```  
 this creates new image and adds the tag so that this image can be pushed to any other container registry like ECR and then push
@@ -19,19 +20,21 @@ this creates new image and adds the tag so that this image can be pushed to any 
 
 #### Containers  
 **Namespaces + own filesystem + controlgroups (CGroups)**
-1. They package application with all necessary dependencies and configurations  
-2. Running instance of an image (obj. in terms of java)
+1. Layers of images
+2. They package application with all necessary dependencies and configurations, also portable 
+3. Running instance of an image (obj. in terms of java)
 
 **COMMANDS**
-1. Start **new** container from image - ```docker run <image-name>``` -p for port, -d for detached, --name, --net for network, -e for env. vars, -v(volumes) host-dir:contianer-dir
+1. Start **new** container from image - ```docker run <image-name>``` -p for port, -d for detached, --name, --net for network, -e for env. vars, -v(volumes) host-dir:contianer-dir (if image not available, it will check in docker hub)
 2. List all running containers - ```docker ps``` add -a to list running + stopped containers
 3. Stop the container - ```docker stop <container-id>```
 4. start **existing** container not from image - ```docker start <container-id>``` 
 5. remove container - ```docker container rm <container-id>```
 6. logs ```docker logs <container-id>```
-7. logs - imp for debugging- ```docker exec -it <container-id> /bin/bash or /bin/sh```  just to env to see all env. vars that are set
+7. logs - imp for debugging- ```docker exec -it <container-id> /bin/bash or /bin/sh```  - to start the terminal in the running container
 
-Docker allows multiple apps with diff versions simultaneously like 2 diff ver of redis can be run, here redis is opened to just one port (6379), so this is possible because of -p hostport:containerport, no issues as long as host port is always diff
+**port binding -**  
+Docker allows multiple apps with diff versions run simultaneously like 2 diff ver of redis can be run, here redis is opened to default port (6379), so now there are 2 containers (running instances of 2 diff redis version) and both exposing to port 6379, so this is possible because of -p hostport:containerport, no issues as long as host port is always diff.  
 
 #### Network
 Allow different contianer to talk to each other  
