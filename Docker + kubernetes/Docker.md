@@ -56,7 +56,7 @@ the UI for MongoDB db
 -e MONGO_INITDB_ROOT_PASSWORD=password \
 --name mongoDB \                               -- optional name to the container
 --net mongo-network \                 -- create this in the network (mongo-network) which we created above
-mongo                                 -- image name form which the container should be created
+mongodb123                                -- image name form which the container should be created
 ``` 
 
 ### Step 3. Similar to mongoDB container, create mongo-express container
@@ -83,7 +83,7 @@ in docker-compose network is automatically created
 ### Step 4. Connect Node app with MongoDB container
 ```javascript
 // Write node code to connect to MongoDB
-MongoClient.connect('mongodb://admin:password@localhost:27017') 
+MongoClient.connect('mongodb://admin:password@mongodb123:27017') 
 // these details are comming from the mongoDB container we created in step 1
 ```
 Note - When the MongoDB container restarts, all the data in MongoDB is lost. Te data stored in the database is only available when the container is running. So to permanently store the data inside the container we use **Volumes** see volumes section  
@@ -126,12 +126,25 @@ If we push to Dockerhub, registryDomain is not required it by default adds the d
 From the server, pull docker image and run the app using docker-compose command
 
 #### Docker volumes - to persist data in docker
-Container restarted data lost so need vloumes  
+Container restarted data lost so need vloumes   
 **Internal working** - a directory from virtual filesystem (container) is mounted to the host file system  
 **3 Types** -  
 1. Host volumes - ```docker run -v host-dir:container-dir```  
-2. Anonymosy volumes - ```docker run -v container-dir``` host-dir = /var/lib/docker/volumes/hash/_data  
-3. Named values (preferred) - ```docker run -v name:container-dir``` host-dir - same as above  
+2. Anonymosy volumes - ```docker run -v container-dir``` host-dir = /var/lib/docker/volumes/hash/_data (for linux/mac) 
+3. Named values (preferred) - ```docker run -v name:container-dir``` host-dir - same as above 
+
+In docker compose above volumn settings is achieved via volume  
+services -   
+  mongodb:  
+    image: mongo  
+    ports: 27017:27017
+    volumes:                   ---- this volume specifies the named volume for this container
+    - db-data:/var/lib/mysql/data
+volumes:
+  db-data: (if we have multiple containers with multiple volumes, we need to specify all those volumes under this key)
+    driver:local 
+  
+
 **Note - the contianer-dir defres for each DB**  
 1. For myslq - /var/lib/mysql
 2. For mongo - /data/db
@@ -139,4 +152,4 @@ Container restarted data lost so need vloumes
 
 in docoker-compose ->
 ![alt text](PNG/volumes.PNG "Title")  
-also under volumes section add driver:local
+also under volumes section add 
