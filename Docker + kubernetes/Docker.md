@@ -15,8 +15,7 @@
 2. ```docker image rm <img-name>```
 3. ```docker tag <existing-image:version> to new-ecr-domain-image:version```  
 this creates new image and adds the tag so that this image can be pushed to any other container registry like ECR and then push
-4. ```docker push <image-name:version>``` also first do docker login
-
+4. ```docker push <image-name:version>``` also first do docker login  
 
 #### Containers  
 **Namespaces + own filesystem + controlgroups (CGroups)**
@@ -115,6 +114,16 @@ Any change in docker file would requires us to build the image again usign docke
 ### Step 7. Start the node js container from using docker-compose
 In docker-compose.yml file add node js container as a new service, and give required env, ports so that using one docker-compose command all the app is started.  
 **Note - the port(hostport:dockerpost) given in the node js service is the one we would be using to access the application from host machine**
+
+### Step 8. Push to docker image to cloud repo (Docker hub or AWS ECR)
+We do this using docker push command  
+```docker push <image-name:version>``` also first do docker login   
+Image names in docker registries (like AWS ECR)  
+registryDomain/imageName:tag  
+If we push to Dockerhub, registryDomain is not required it by default adds the dockerhub registry, but while pushing to other docker repos, we need to include registryDomain
+
+### 9. Run the image pushed in step 8 on the actual prod server  
+From the server, pull docker image and run the app using docker-compose command
 
 #### Docker volumes - to persist data in docker
 Container restarted data lost so need vloumes  
