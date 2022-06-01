@@ -43,13 +43,14 @@ Allow different contianer (mongo container can talk to mongo-express container) 
 ```docker network create mongo-network```  use this network name on dcoer-run command - see docker run command above  
 2. ```docker network ls```
 
-#### Sample application
+## Sample application
 Creating Node js app to connect to MongoDB db and connect MongoDB db with mongo-express so that we can use
-the UI for MongoDB db  
-1. Create docker network  
+the UI for MongoDB db 
+
+### Step 1. Create docker network  
 ```docker network create mongo-network```  
 
-2. Create mongoDB container and mongo-express container both within same network
+### Step 2. Create mongoDB container and mongo-express container both within same network
 ```docker run -d \                             -- run in detached mode
 -p 27017:27017 \                               -- specify host and docker port
 -e MONGO_INITDB_ROOT_USERNAME=admin \  -- this is env. variable required as mentioned in mondoDB docker docs
@@ -59,7 +60,7 @@ the UI for MongoDB db
 mongo                                 -- image name form which the container should be created
 ``` 
 
-3. Similar to mongoDB container, create mongo-express container
+### Step 3. Similar to mongoDB container, create mongo-express container
 ```docker run -d \
 -p 8080:8080 \
 -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin \  -- required from ME docker docs to connect to mongoDB container
@@ -70,36 +71,50 @@ mongo                                 -- image name form which the container sho
 mongo-express
 ```
 Now we can use mongo-express container running at localhost:8081  
-We can use this UI to create DBs and tables and add data
-
-4. Connect Node app with MongoDB container
-```javascript
-// Write node code to connect to MongoDB
-MongoClient.connect('mongodb://admin:password@localhost:27017') 
-// these details are comming from the mongoDB container we created in step 1
-```
+We can use this UI to create DBs and tables and add data  
 
 To avoid running above commands to start all containers isn't ideal, so we use docker-compose
-#### Docker compose
+**Docker compose**
 Run multiple services in one go, simpler, better than running docker commands individually  
 Version is version of docker compose in the image below  
 ![alt text](PNG/docker-compose.PNG "Title")  
 in docker-compose network is automatically created  
 ```docker-compose -f <yaml-file-name> up/down```
 
-#### Dockerfile(exact name) - Blueprint for building images
-add \ for a command to be multiline in the terminal
+### Step 4. Connect Node app with MongoDB container
+```javascript
+// Write node code to connect to MongoDB
+MongoClient.connect('mongodb://admin:password@localhost:27017') 
+// these details are comming from the mongoDB container we created in step 1
+```
+Note - When the MongoDB container restarts, all the data in MongoDB is lost. Te data stored in the database is only available when the container is running. So to permanently store the data inside the container we use **Volumes** see volumes section  
+
+### Step 5. Create our own docker image of the node js app
+Our app is ready, but we need to containerize the node js app as well. To create our own custom docker image, we use dockerfile
+
+**Dockerfile(exact name) - Blueprint for building images**
+Create docker file for our node js app we created in step 4
 ```
 From node:14(latest default)
 WORKDIT /app - makes this current directory for the container
 ENV key=val - preferred to set this in docker-compose
-RUN <any linux command> - runs while buliding image
-COPY . .
-CMD ["node", "server.js"] - runs when staring the container
+RUN <any linux command> - runs while buliding image (RUN commands can be multiple)
+COPY . .  - why not use RUN <linux-copy-command> instead of using COPY command of docker? -> any linux
+            command that we run us run within docker container, bu we need to copy files from host system
+            to the docker env, hence we use this COPY command
+CMD ["node", "server.js"] - runs when staring the container (CMD command can be used only once)
 ```
-**Building image**
-```docker build -t <image-name:version> .``` . or path to Dockerfile  
-create all images from Dockerfile and then create your app at once using docker-compose
+add \ for a command to be multiline
+
+### Step 6. Building image from Dockerfile created in step 5
+```docker build -t <image-name:version> .``` -t to sepcify image name, and use . or path to Dockerfile  
+create all images from Dockerfile and then create your app at once using docker-compose  
+Docker build command is run in CI/CD - jenkins, bamboo  
+Any change in docker file would requires us to build the image again usign docker build command
+
+### Step 7. Start the node js container from using docker-compose
+In docker-compose.yml file add node js container as a new service, and give required env, ports so that using one docker-compose command all the app is started.  
+**Note - the port(hostport:dockerpost) given in the node js service is the one we would be using to access the application from host machine**
 
 #### Docker volumes - to persist data in docker
 Container restarted data lost so need vloumes  
