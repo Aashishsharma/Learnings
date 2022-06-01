@@ -30,7 +30,7 @@ this creates new image and adds the tag so that this image can be pushed to any 
 3. Stop the container - ```docker stop <container-id>```
 4. start **existing** container not from image - ```docker start <container-id>``` 
 5. remove container - ```docker container rm <container-id>```
-6. logs ```docker logs <container-id>```
+6. logs ```docker logs <container-id>``` -tail 100 - show last 100 line, -f - to stream the logs
 7. logs - imp for debugging- ```docker exec -it <container-id> /bin/bash or /bin/sh```  - to start the terminal in the running container
 
 **port binding -**  
@@ -46,7 +46,10 @@ Allow different contianer (mongo container can talk to mongo-express container) 
 #### Sample application
 Creating Node js app to connect to MongoDB db and connect MongoDB db with mongo-express so that we can use
 the UI for MongoDB db  
-1. Create mongoDB container and mongo-express container both within same network
+1. Create docker network  
+```docker network create mongo-network```  
+
+2. Create mongoDB container and mongo-express container both within same network
 ```docker run -d \                             -- run in detached mode
 -p 27017:27017 \                               -- specify host and docker port
 -e MONGO_INITDB_ROOT_USERNAME=admin \  -- this is env. variable required as mentioned in mondoDB docker docs
@@ -56,7 +59,7 @@ the UI for MongoDB db
 mongo                                 -- image name form which the container should be created
 ``` 
 
-2. Similar to mongoDB container, create mongo-express container
+3. Similar to mongoDB container, create mongo-express container
 ```docker run -d \
 -p 8080:8080 \
 -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin \  -- required from ME docker docs to connect to mongoDB container
@@ -69,22 +72,23 @@ mongo-express
 Now we can use mongo-express container running at localhost:8081  
 We can use this UI to create DBs and tables and add data
 
-3. Connect Node app with MongoDB container
+4. Connect Node app with MongoDB container
 ```javascript
 // Write node code to connect to MongoDB
 MongoClient.connect('mongodb://admin:password@localhost:27017') 
 // these details are comming from the mongoDB container we created in step 1
 ```
 
+To avoid running above commands to start all containers isn't ideal, so we use docker-compose
 #### Docker compose
 Run multiple services in one go, simpler, better than running docker commands individually  
+Version is version of docker compose in the image below  
 ![alt text](PNG/docker-compose.PNG "Title")  
-services means name of the container  
 in docker-compose network is automatically created  
 ```docker-compose -f <yaml-file-name> up/down```
 
 #### Dockerfile(exact name) - Blueprint for building images
-add \ for a command to be multiline
+add \ for a command to be multiline in the terminal
 ```
 From node:14(latest default)
 WORKDIT /app - makes this current directory for the container
