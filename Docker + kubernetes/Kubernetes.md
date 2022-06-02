@@ -20,33 +20,52 @@
 ![alt text](PNG/K8-architecture.PNG "Title")  
 1. **Worker Node** - (Machine physical/virtual), **Cluster** - Group of nodes, each node must have (1. Kube proxy (pass request from services to pods), 2. container runtime (docker), 3. Kublet (interacts with container and node to create pods))
 2. **Master Node** - has 4 processes  
-a. **API server** - client (kubelet) interacts with this api server to deploy app in K8 cluster, also does authentication of client  
+a. **API server** - client (kubectl) interacts with this api server to deploy app in K8 cluster, also does authentication of client  
 b. **Scheduler** - intelligent (checks CPU, RAM) to decide on which node next pod needs to be scheduled, just schedules  
 c. **Controller Manager (CM)** - Detect state changes like crashing of pods, and try to recover the cluster/node state by calling scheduler  
 d. **etcd** - (cluster brain) - key value store of a cluster state, any state change like pod died/started is stored in this key-value store, CM checks this to understand cluster health, and scheduler check this key store to determine where next pod should be created 
 
-## K8 comands
+## K8 local setup using minikube and kubectl
+**minikube** - It mocks the k8 cluster on local machine (it is 1 node k8 cluster)
+![alt text](PNG/minikube.PNG "Title") 
+
+**kubectl** - cmd tool to interact with the API server in the master node to make deployments  
+**kubectl comands**  
 1. kubectl get node/pod/service/deployment/replicaset
-2. kubectl create deployment(this is pod, u don't create a pod but a deployment) name --image=image
-3. kubectl describe pod <pod-name>
-4. kubectl logs <pod-name>
-5. kubectl exect -it <pod-name> -- /bin/bash
-6. kubectl delete deployment <dep-nm>
-7. kubectl apply/delete -f <file-name>
+2. kubectl create deployment(this is pod, u don't create a pod but a deployment) name --image=image  
+e.g. ```kubectl create deployment nginx-depl --image=nginx``` this will create new pod from img-nginx(from docker)
+3. kubectl describe (pod pod-name)
+4. kubectl logs (pod-name)
+5. kubectl exect -it (pod-name) -- /bin/bash      - open terminal for the pod
+6. kubectl delete deployment (dep-nm)
+7. kubectl apply/delete -f (file-name)
   
 ## K8 config.yaml files
 **3. Parts**
 1. Metadata
-2. spec - all the config of a component/kind
-3. status - we don't specify it, k8 does it internally, that's how self-healing works in k8 (using etcd)
+2. spec - all the config of a component/kind (spec keys differs from component to component)
+3. status - we don't specify it, k8 does it internally (it checks the desired status and the actual status and if there is a diff, k8 tries to fix it), that's how self-healing works in k8 (using etcd)
  
-**Connecting components using selectors and labels (key-val pair)**  
+**Deployment blueprint**  
+![alt text](PNG/deployment-blueprint.PNG "Title")  
+kind = deployment, it can be service/  
+Since deployment includes pods, everything inside template key is blueprint for pod  
+
+**Connecting different components using selectors and labels (key-val pair)** 
+![alt text](PNG/service-deploy-connect "title")  
+
 Metadata containes lables -labels: app: nginx  
 and spec contains selectors - selector: matchLabels: app: nginx  
 kind = deployment must know which pods are in that deployment since deploy->replicas->pods->containers  
 Hence, in kind=deploy, spec is nested and we need labels and selectors  
 kind = service must know which pod/deply to connect hence use labels and selectors  
+
+**Deployment component and Service component port mapping**  
 kind = service must know on which port pod is running, so it has it's own port and target(for pod) port  
+![alt text](PNG/deploy-service-port-mapping.PNG "Title")  
+Now we can run the apply commands to start both the components  
+```kubectl apply -f nginx-deployment.yml and kubectl apply -f nginx-service.yml ```   
+
 
 
   
