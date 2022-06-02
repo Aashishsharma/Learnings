@@ -65,6 +65,15 @@ kind = service must know on which port pod is running, so it has it's own port a
 ![alt text](PNG/deploy-service-port-mapping.PNG "Title")  
 Now we can run the apply commands to start both the components  
 ```kubectl apply -f nginx-deployment.yml and kubectl apply -f nginx-service.yml ```   
+```kubectl delete -f nginx-deployment.yml``` to delete the components
+
+## Complelete application setup using K8
+**App architecture**  
+2 pods  
+(1. mongoDB - which will be DB and would be exposed via internal service, so that only the components within same
+K8 cluster can access the pod)  
+(2. mongo-express - which will use config maps and secrests to connect to mongoDB and will also expose external service, so that browser can access the mongo-express pod)
+[!alt text](PNG/app-architecture.PNG "Title")  
 
 
 
