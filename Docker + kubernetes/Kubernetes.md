@@ -75,6 +75,55 @@ K8 cluster can access the pod)
 (2. mongo-express - which will use config maps and secrests to connect to mongoDB and will also expose external service, so that browser can access the mongo-express pod)
 [!alt text](PNG/app-architecture.PNG "Title")  
 
+### Step 1 - Create mongo-deploy.yml
+```yaml
+apiVersion: apps/v1
+kind: Deployment                          ------------ this specifies that this component is a pod
+metadata:
+  name: mongodb-deployment
+  labels:
+    app: mongodb    ----- this label is used in other comp's selector section, so that 2 comps can communicate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:        -------- from here the blueprint for pod starts
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb   
+        image: mongo        -------- image on which the pod would be built
+        ports:
+        - containerPort: 27017  ------- this pod would be exposed on this port
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME  ----- env var name
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongo-root-username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongo-root-password
+---
+apiVersion: v1
+kind: Service                               ----------- this indicates that this comp is a service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb                          ----------- this indicates that connect to mongodb deployment
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017                    ---------- and under mongodb comp, connect to pod whose port is 27017 
+
+```  
+
 
 
   
