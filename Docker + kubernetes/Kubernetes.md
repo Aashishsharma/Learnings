@@ -236,6 +236,9 @@ Ingress also requires Ingress controller which takes care of routing rules and n
 **Configuring TLS certificate for https**  
 ![alt text](PNG/tls.PNG "Title")
 
+## Helm (package manager for K8)
+To package all yml files of your app and store in public/private repos, similar to npm
+
 
 
 
