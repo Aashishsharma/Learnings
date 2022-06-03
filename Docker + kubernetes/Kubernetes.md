@@ -149,7 +149,7 @@ data:
   database_url: mongodb-service ------------ IMP - note dbUrl is used on mongo-express as env variable (see below mongo-express comp). typically the value is mongodb://uname:pwd@localhost:port, but here we are providing mongo-service (this is the name of internal service which we created above), so now we don;t have to worry about the IPs just give the service name which exposes mongoDb db
 
 ```
-### Step 4 - Create mongo-express component
+### Step 5 - Create mongo-express component and external mongo-express service
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -190,19 +190,27 @@ spec:
               key: database_url
 ---                                    
 apiVersion: v1
-kind: Service                     -------------   externam service to connect to mongo-express
+kind: Service                     -------------   external service to connect to mongo-express
 metadata:
   name: mongo-express-service
 spec:
   selector:
-    app: mongo-express
-  type: LoadBalancer  
+    app: mongo-express        ------- this indicates this external service to connect to mongo-express container
+  type: LoadBalancer          ------- this (Loadbalancer) indicates that this is an external service
   ports:
     - protocol: TCP
-      port: 8081
-      targetPort: 8081
-      nodePort: 30000
+      port: 8081                
+      targetPort: 8081 - this service connects to mongo-express container (by checking selector field)on port 8081
+      nodePort: 30000  ----------- this external serivce can be accessed (from browser) on port 30000, range for this type of port is between (30000 to 32767)
 ```
+
+### Step 6 - accessing the app
+All we need to do is call the external mongo-express service we created in step 5.  
+We already know the port - 3000  
+To get the IP address, we need to run the command ```kubectl get service```, check the mongo-express-service, we will see internal IP and External IP, use the External IP and port to call this service from browser.  
+**Note - on minikube**, external IP is not assigned so we need to run the command  
+```minikube service <service-name>``` and this will assign the IP automatically and open the browser.  
+This command is just required for minikube
 
 
 
