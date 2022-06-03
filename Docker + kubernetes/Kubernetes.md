@@ -231,7 +231,10 @@ Ingress also requires Ingress controller which takes care of routing rules and n
 ![alt text](PNG/ingress-multiplepath.PNG "Title") 
 
 **Subdomain ingress example**  
-![alt text](PNG/subdomain-ingress.PNG "Title")
+![alt text](PNG/subdomain-ingress.PNG "Title")  
+
+**Configuring TLS certificate for https**  
+![alt text](PNG/tls.PNG "Title")
 
 
 
