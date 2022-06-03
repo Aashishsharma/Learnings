@@ -102,8 +102,8 @@ spec:
         - name: MONGO_INITDB_ROOT_USERNAME  ----- env var name
           valueFrom:
             secretKeyRef:
-              name: mongodb-secret
-              key: mongo-root-username
+              name: mongodb-secret     ----- name of the secret component from where the values would be fetched
+              key: mongo-root-username ----- keyName from the secret component
         - name: MONGO_INITDB_ROOT_PASSWORD
           valueFrom: 
             secretKeyRef:
@@ -123,6 +123,20 @@ spec:
       targetPort: 27017                    ---------- and under mongodb comp, connect to pod whose port is 27017 
 
 ```  
+
+### Step 2 - Create secrets component
+This secret component must be created (using kubectl apply command) before other components which use this secret
+```yaml
+apiVersion: v1
+kind: Secret                         ------------- this is a service component
+metadata:
+    name: mongodb-secret             ------------- comp name, which is used as env name in other comps (see above)
+type: Opaque                         ------------- default
+data:
+    mongo-root-username: dXNlcm5hbWU=  ---------- this name is used as key in ev vars
+    mongo-root-password: cGFzc3dvcmQ=
+
+```
 
 
 
