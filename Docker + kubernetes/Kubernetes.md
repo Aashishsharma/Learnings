@@ -31,7 +31,7 @@ d. **etcd** - (cluster brain) - key value store of a cluster state, any state ch
 
 **kubectl** - cmd tool to interact with the API server in the master node to make deployments  
 **kubectl comands**  
-1. kubectl get node/pod/service/deployment/replicaset
+1. kubectl get node/pod/service/deployment/replicaset/all(to get all components)
 2. kubectl create deployment(this is pod, u don't create a pod but a deployment) name --image=image  
 e.g. ```kubectl create deployment nginx-depl --image=nginx``` this will create new pod from img-nginx(from docker)
 3. kubectl describe (pod pod-name)
@@ -84,7 +84,7 @@ metadata:
   labels:
     app: mongodb    ----- this label is used in other comp's selector section, so that 2 comps can communicate
 spec:
-  replicas: 1
+  replicas: 1       ----- no of pods to be created
   selector:
     matchLabels:
       app: mongodb
@@ -109,19 +109,18 @@ spec:
             secretKeyRef:
               name: mongodb-secret
               key: mongo-root-password
----
+---                                     --------- 3 dashes in yml indicates it's a new document is starting
 apiVersion: v1
 kind: Service                               ----------- this indicates that this comp is a service
 metadata:
   name: mongodb-service
 spec:
   selector:
-    app: mongodb                          ----------- this indicates that connect to mongodb deployment
+    app: mongodb                          ----------- this indicates that connect to mongodb deployment pod
   ports:
     - protocol: TCP
-      port: 27017
+      port: 27017 - this service comp is exposed on port 27017, so other comps can connect to this internal servi 
       targetPort: 27017                    ---------- and under mongodb comp, connect to pod whose port is 27017 
-
 ```  
 
 ### Step 2 - Create secrets component
@@ -135,7 +134,74 @@ type: Opaque                         ------------- default
 data:
     mongo-root-username: dXNlcm5hbWU=  ---------- this name is used as key in ev vars
     mongo-root-password: cGFzc3dvcmQ=
+```
 
+### Step 3 - create internal service so that other comps can call the mongoDB pod
+Service.yml blueprint is added in setp 1. See code after --- in mongo-deploy.yml file in step 1
+
+### Step 4 - create config map to store env vars for mongo-express container
+```yaml
+apiVersion: v1
+kind: ConfigMap                  ------------ this is configMap component
+metadata:
+  name: mongodb-configmap       ------------- any arbitary name (same name required in comps who use this comp)
+data:
+  database_url: mongodb-service ------------ IMP - note dbUrl is used on mongo-express as env variable (see below mongo-express comp). typically the value is mongodb://uname:pwd@localhost:port, but here we are providing mongo-service (this is the name of internal service which we created above), so now we don;t have to worry about the IPs just give the service name which exposes mongoDb db
+
+```
+### Step 4 - Create mongo-express component
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-express
+  labels:
+    app: mongo-express
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-express
+  template:
+    metadata:
+      labels:
+        app: mongo-express
+    spec:
+      containers:
+      - name: mongo-express
+        image: mongo-express
+        ports:
+        - containerPort: 8081                  ------------- this container is exposed on 8081
+        env:
+        - name: ME_CONFIG_MONGODB_ADMINUSERNAME  ---------- this name is comming from mongo-express docker docs
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongo-root-username
+        - name: ME_CONFIG_MONGODB_ADMINPASSWORD ---------- from mongo-express docker docs (required field)
+          valueFrom: 
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongo-root-password
+        - name: ME_CONFIG_MONGODB_SERVER --- required env var from docker docs to start mongo-express container
+          valueFrom: 
+            configMapKeyRef:
+              name: mongodb-configmap
+              key: database_url
+---                                    
+apiVersion: v1
+kind: Service                     -------------   externam service to connect to mongo-express
+metadata:
+  name: mongo-express-service
+spec:
+  selector:
+    app: mongo-express
+  type: LoadBalancer  
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+      nodePort: 30000
 ```
 
 
