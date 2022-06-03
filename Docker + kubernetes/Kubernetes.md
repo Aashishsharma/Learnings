@@ -212,6 +212,23 @@ To get the IP address, we need to run the command ```kubectl get service```, che
 ```minikube service <service-name>``` and this will assign the IP automatically and open the browser.  
 This command is just required for minikube
 
+## K8 namespaces (virtual cluster within a cluster)
+Used to separate group of components from other components  
+1. via kubectl - ```kubect create namespace <namespace-name>```
+2. via blueprints (yml files) - under metadata add **namespace: value** as a key  
+**Use case for namespaces**  
+1. Restrict access at namespace level
+2. Avoid component name conflicts
+3. Staging and prod env seggegration 
+
+## Ingress
+Similar to external service, but we Ingress can do domain mapping, external service would only give IP and port  
+It has a key called paths: thus multiple paths (code) of the apps can be stored in different containers
+![alt text](PNG/ingress.PNG "Title")  
+Ingress also requires Ingress controller which takes care of routing rules and need to be configurd at cluster level. Out of scope for me.  
+
+
+
 
 
   
