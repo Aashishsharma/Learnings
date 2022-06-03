@@ -227,6 +227,12 @@ It has a key called paths: thus multiple paths (code) of the apps can be stored 
 ![alt text](PNG/ingress.PNG "Title")  
 Ingress also requires Ingress controller which takes care of routing rules and need to be configurd at cluster level. Out of scope for me.  
 
+**Ingress multiple path example**
+![alt text](PNG/ingress-multiplepath.PNG "Title") 
+
+**Subdomain ingress example**  
+![alt text](PNG/subdomain-ingress.PNG "Title")
+
 
 
 
