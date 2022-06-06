@@ -254,11 +254,19 @@ K8 volumns can be connected to
 ### 3 Steps to configure volumes in k8
 1. Configure and connect volumes to external storage (K8 administratos does this)
 2. Create (PVC) - Persistent Volume claims (yml) so that the app can pick from the available volumes
-3. Use PVC in the pod config (under volumes key and under volumeMounts key)
+3. Use PVC in the pod config (under volumes key and under volumeMounts key (for con))
 ![alt text](PNG/PVC.PNG "Title")
 
 **Summary**  
 ![alt text](PNG/Volumes-summary.PNG "Title")  
+
+## Stateful set (another K8 component)
+Stateful apps - apps that use DB  
+Stateless apps use deployment K8 comp while Stateful apps use Stateful set k8 comp for deployment  
+
+**Deployment vs Stateful set**  
+1. Creating replica for stateless apps is straight forward, but dificult for stateful apps due to data consistent issues
+2. In deployment, replica pods get random hashes, in statful set replica pods gets incremented ids (predictable pod name). This is to preserve the state of the app. **Scaling DB mechanism - (1 master pod, others worker, only master can do read/write and workers can do only read. This way data consistency is achieved)**. In stategul set frst replica pod is master and the rest ones are slave pods (can onyl read from DB) with autoincrement ID
 
 
 
