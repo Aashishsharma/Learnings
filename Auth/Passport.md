@@ -164,6 +164,56 @@ app.listen(process.env['PORT'] || 8080);
 ```
 
 ## Passport local-Strategy for login/register forms
+
+```javascript
+//passport-config.js
+
+const LocalStrategy = require('passport-local').Strategy      // use local strategy
+const bcrypt = require('bcrypt')     // to encrypt passwords
+
+function initialize(passport, getUserByEmail, getUserById) {
+
+  // this function does actual auth - i.e, check the actual credentials provided by the user
+  // in done cb we pass 2 args - 
+  // 1. null (no error), 
+  // 2. user/false - false (invalid creds), if valid pass user which would be stored in session and would be availbale in each request
+  // 3. optional obj, with messages
+  // and this authenticateUser need to be passed in pp.use(new LocalStrategy({}, authenticateUser)), see below
+  const authenticateUser = async (email, password, done) => {
+    // get user by email is paased in initialzie method from the callee in server.js
+    const user = getUserByEmail(email)
+    if (user == null) {
+      return done(null, false, { message: 'No user with that email' })
+    }
+
+    try {
+      if (await bcrypt.compare(password, user.password)) {
+        return done(null, user)
+      } else {
+        return done(null, false, { message: 'Password incorrect' })
+      }
+    } catch (e) {
+      return done(e)
+    }
+  }
+
+  // in local strategy we pass the actual authentication function which is specific to our app
+  // { usernameField: 'email' } - to indicate what the userName would be
+  passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser))
+
+  // serialize user to store the user info in session
+  passport.serializeUser((user, done) => done(null, user.id))
+
+  // deserialize used to remove user info from session, note - to deserialize, we just need id, since we are
+  // going to remove user details
+  passport.deserializeUser((id, done) => {
+    return done(null, getUserById(id))
+  })
+}
+
+module.exports = initialize
+```
+
 ```javascript
 // server.js
 if (process.env.NODE_ENV !== 'production') {
@@ -182,6 +232,7 @@ const initializePassport = require('./passport-config')
 // initailize passport
 initializePassport(
   passport,
+  // this is the getUserByEMail func used in initialize method, get this data from DB
   email => users.find(user => user.email === email),
   id => users.find(user => user.id === id)
 )
@@ -190,7 +241,7 @@ const users = []      // should be comming from DB
 
 app.use(express.urlencoded({ extended: false }))
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET,  // use to encrty all the info in session for us
   resave: false,
   saveUninitialized: false
 }))
@@ -205,6 +256,8 @@ app.get('/login', checkNotAuthenticated, (req, res) => { //checkNotAuthenticated
   res.render('login.ejs')
 })
 
+// passport.authenticate() is where the actual login of user happens when user click on login
+// the custom authenticateUser we created in passport-config.js gets called via passport.use(localstrategy) method
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login',
@@ -254,52 +307,4 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 app.listen(3000)
-```
-
-```javascript
-//passport-config.js
-
-const LocalStrategy = require('passport-local').Strategy      // use local strategy
-const bcrypt = require('bcrypt')     // to encrypt passwords
-
-function initialize(passport, getUserByEmail, getUserById) {
-
-  // this function does actual auth - i.e, check the actual credentials provided by the user
-  // in done cb we pass 2 args - 
-  // 1. null (no error), 
-  // 2. user/false - false (invalid creds), if valid pass user which would be stored in session and would be availbale in each request
-  // 3. optional obj, with messages
-  // and this authenticateUser need to be passed in pp.use(new LocalStrategy({}, authenticateUser)), see below
-  const authenticateUser = async (email, password, done) => {
-    const user = getUserByEmail(email)
-    if (user == null) {
-      return done(null, false, { message: 'No user with that email' })
-    }
-
-    try {
-      if (await bcrypt.compare(password, user.password)) {
-        return done(null, user)
-      } else {
-        return done(null, false, { message: 'Password incorrect' })
-      }
-    } catch (e) {
-      return done(e)
-    }
-  }
-
-  // in local strategy we pass the actual authentication function which is specific to our app
-  // { usernameField: 'email' } - to indicate what the userName would be
-  passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser))
-
-  // serialize user to store the user info in session
-  passport.serializeUser((user, done) => done(null, user.id))
-
-  // deserialize used to remove user info from session, note - to deserialize, we just need id, since we are
-  // going to remove user details
-  passport.deserializeUser((id, done) => {
-    return done(null, getUserById(id))
-  })
-}
-
-module.exports = initialize
 ```
