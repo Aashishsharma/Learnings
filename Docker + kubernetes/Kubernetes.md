@@ -266,7 +266,9 @@ Stateless apps use deployment K8 comp while Stateful apps use Stateful set k8 co
 
 **Deployment vs Stateful set**  
 1. Creating replica for stateless apps is straight forward, but dificult for stateful apps due to data consistent issues
-2. In deployment, replica pods get random hashes, in statful set replica pods gets incremented ids (predictable pod name). This is to preserve the state of the app. **Scaling DB mechanism - (1 master pod, others worker, only master can do read/write and workers can do only read. This way data consistency is achieved)**. In stategul set frst replica pod is master and the rest ones are slave pods (can onyl read from DB) with autoincrement ID
+2. In deployment, replica pods get random hashes, in statful set replica pods gets incremented ids (predictable pod name). This is to preserve the state of the app. **Scaling DB mechanism - (1 master pod, others worker, only master can do read/write and workers can do only read. This way data consistency is achieved)**. In stategul set frst replica pod is master and the rest ones are slave pods (can onyl read from DB) with autoincrement ID  
+
+#### Stateful apps aren't ideal candidates for containerization, only stateless apps are
 
 
 
