@@ -234,6 +234,7 @@ initializePassport(
   passport,
   // this is the getUserByEMail func used in initialize method, get this data from DB
   email => users.find(user => user.email === email),
+  // this is getuserbyId to deserialize user, val should come from DB?
   id => users.find(user => user.id === id)
 )
 
@@ -242,7 +243,7 @@ const users = []      // should be comming from DB
 app.use(express.urlencoded({ extended: false }))
 app.use(session({
   secret: process.env.SESSION_SECRET,  // use to encrty all the info in session for us
-  resave: false,
+  resave: false,  // save if nothing changed?
   saveUninitialized: false
 }))
 app.use(passport.initialize())
@@ -268,6 +269,7 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
   res.render('register.ejs')
 })
 
+// add new users to DB
 app.post('/register', checkNotAuthenticated, async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
