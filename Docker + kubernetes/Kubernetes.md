@@ -239,6 +239,29 @@ Ingress also requires Ingress controller which takes care of routing rules and n
 ## Helm (package manager for K8)
 To package all yml files of your app and store in public/private repos, similar to npm
 
+## Volumes
+Container/deploy dies, db dies, all data lost  
+Volume is persistent storage that
+1. doesn't depend on pod lifecycle
+2. which should be available on all nodes within the cluster
+3. can survive even if the enitre cluster is down 
+
+K8 volumns can be connected to 
+1. Local storage of those individual nodes (but this doesnot solve pt. no 2 & 3 mentined above)
+2. On cloud - AWS, GCP, Azure (this solves 1,2 and 3, so preferred)
+![alt text](PNG/persistent-volumes.PNG "Title")  
+
+### 3 Steps to configure volumes in k8
+1. Configure and connect volumes to external storage (K8 administratos does this)
+2. Create (PVC) - Persistent Volume claims (yml) so that the app can pick from the available volumes
+3. Use PVC in the pod config (under volumes key and under volumeMounts key)
+![alt text](PNG/PVC.PNG "Title")
+
+**Summary**  
+![alt text](PNG/Volumes-summary.PNG "Title")  
+
+
+
 
 
 
