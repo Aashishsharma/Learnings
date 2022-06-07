@@ -462,3 +462,21 @@ function generateAccessToken(user) {
 
 app.listen(4000)
 ```
+
+**What to store in JWT**
+```javascript
+{
+    "iss": "stackoverflow",  // identifies the principal that issued the JWT.
+    "aud": ["all"],     // audience, identifies the recipients that the JWT is intended for
+    "iat": 1300819370,  // issued at
+    "exp": 1300819380, // expiring at
+    "jti": "3F2504E0-4F89-11D3-9A0C-0305E82C3301" // uniqueId for this jwt
+    "context": {        // this is rhe obj where we store all the user permissions (authorization)
+        "user": {
+            "key": "joe",
+            "displayName": "Joe Smith"
+        },
+        "roles":["admin","finaluser"]     // roles/scopes
+    }
+}
+```
