@@ -330,3 +330,135 @@ If the client deliberatley tries to change the payload or header, then on server
 In session auth, all the user info is stored on the server side and client just sends to sessionId. Difficult to handle in microservices, or when we scale the app, the user session is stored only on one node. So the subsequent same user requests need to go to same node.  
 In JWT, user info is store on client. This is the fundamental difference. SO requet can go to any node in the cluster, as long as all the nodes share the same secret. Which is obvious  
 Also useful when different apps googlemaps.com and drive.com need same user session (so user does not need to re-login to different app). They can use it as long as both the servers (googlemaps.com and drive.com) share same JWT secret
+
+## Node JWT implementation
+```javascript
+// sever.js
+require('dotenv').config()
+
+const express = require('express')
+const app = express()
+const jwt = require('jsonwebtoken')     // for JWT
+app.use(express.json())
+const posts = [
+  {
+    username: 'Kyle',
+    title: 'Post 1'
+  },
+  {
+    username: 'Jim',
+    title: 'Post 2'
+  }
+]
+
+// Do the user authenitcation we did above in Passport local-Strategy for login/register forms section
+app.post('/login', (req, res) => {
+  // Authenticate User - first we need to do this so that user is logged in and then send the token
+
+  // since we have used passport for login, we have the user data in all request made from the client
+  const username = req.body.username
+  const user = { name: username }
+
+  // generate jwt token and in 1st arg we specify tha necessary data that would be stored in the JWT payload
+  // this data includes user permission details
+  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
+  // send this toekn to client and client will need to send this token everytime to access protected routes
+  res.json({ accessToken: accessToken })
+  // more robust code includes refresh tokens see below in authServer.js
+})
+
+// add authenticateToken middleware to validate token on all routes
+app.get('/posts', authenticateToken, (req, res) => {
+  res.json(posts.filter(post => post.username === req.user.name))
+})
+
+function authenticateToken(req, res, next) {
+  // client will need to send the access token in every request
+  // in the header - Authorization: Bearer <JWT-token>
+  // below code gets the token from header
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+  if (token == null) return res.sendStatus(401)
+
+  // vrify func validates the token using the same secret and if valid, we get the payload 
+  // which we stored in jwt.sign() method. In this case - user
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    console.log(err)
+    if (err) return res.sendStatus(403)
+    // if we get user, add it in request obj. Remember? since this func is a middleware, this func bydefault has access to req and res, so we cann add any data to req or send res directly from this func
+    req.user = user
+    next()
+  })
+}
+app.listen(3000)
+```
+
+```javascript
+// authserver.js - In prod this would be a separate server which will do the job of create/delete and refresh the token, basically handeling the auth part
+
+// Why do we need refresh token?
+// if we don't refresh tokens then if anyone steals jwt token on the client, they will have access to that user data forever, so refresh tokens
+// but we send both JWT token and JWT refresh token to client, so if the hacker already has access to user token, hacker can also get the refresh token, for that we use delete token, so uer will have to re-login
+require('dotenv').config()
+const express = require('express')
+const app = express()
+const jwt = require('jsonwebtoken')
+app.use(express.json())
+
+let refreshTokens = [] // ideally we store refresh tokens in DB or redis cache since, refreshTokens created and destroyed by the server only
+
+// this is the request client will have to make to get the new token in the earlier token has expired
+// e.g. request
+//POST http://localhost:4000/token Content-Type: application/json and in body
+//{ "token": "abc"}
+
+app.post('/token', (req, res) => {
+  // get refresh token from body
+  const refreshToken = req.body.token
+  if (refreshToken == null) return res.sendStatus(401)
+  // check if refresh token exists in DB / redis cache
+  if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
+  // if refresh token found, verify that token using refresh_token_secret
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403)
+    // if all OK, send new refreshed token to the user to make further api calls in sever.js
+    const accessToken = generateAccessToken({ name: user.name })
+    res.json({ accessToken: accessToken })
+  })
+})
+
+// now delete the token when user logs out
+app.delete('/logout', (req, res) => {
+  // delete the refresh token from DB or redis cache
+  // now client cannot get the new refresh tokens from /token api we created above since we have deleted the refresh token
+  // now they have to login to get new JWT token
+  refreshTokens = refreshTokens.filter(token => token !== req.body.token)
+  res.sendStatus(204)
+})
+
+app.post('/login', (req, res) => {
+  // Authenticate User
+
+  // this func is same as the above one in server.js
+  // I have kept the same route in server.js for better understanding
+  // this code needs to be used since it has refresh token impl
+  const username = req.body.username
+  const user = { name: username }
+
+  // create access token which expires
+  const accessToken = generateAccessToken(user)
+  // crete refresh token which does not expire, we expire this token on the server side
+  const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
+  // save this refresh token in DB or redis cache
+  refreshTokens.push(refreshToken)
+  // send both tokens to client
+  res.json({ accessToken: accessToken, refreshToken: refreshToken })
+})
+
+function generateAccessToken(user) {
+  // generate access token and expire it in 10 mins
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' })
+}
+
+app.listen(4000)
+```
