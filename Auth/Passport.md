@@ -250,7 +250,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.get('/', checkAuthenticated, (req, res) => {    // checkAuthenticated - add on all routes to protect routes
-  res.render('index.ejs', { name: req.user.name })
+  res.render('index.ejs', { name: req.user.name })  // since we are using pp and session, whatever data we serialize is available by defaul on all the requests
 })
 
 app.get('/login', checkNotAuthenticated, (req, res) => { //checkNotAuthenticated - show login page
@@ -310,3 +310,23 @@ function checkNotAuthenticated(req, res, next) {
 
 app.listen(3000)
 ```
+
+## JWT (Json web tokens)
+Used for authorization.
+3 parts, separated by dots (.), and serialized using base64. ```xxxxx.yyyyy.zzzzz```  
+1. Header     - ```{"alg": "HS256", "typ": "JWT"}```
+2. Payload - to share info - ```{name": "John Doe", "admin": true}```
+3. Signature - To create the signature part you have to take the encoded header, the encoded payload, a secret, the algorithm specified in the header, and sign that  
+```HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload), secret)```
+
+If the client deliberatley tries to change the payload or header, then on server when server will try and create the signature using payload, header and secret and the newely available signature will not match the signature available on the JWT token sent by the client and the token would be invalid
+
+**user authorization using JWT**  
+1. When the user successfully logs in using their credentials, a JSON Web Token will be returned by server
+2. Client on every req, will send this token in header ```Authorization: Bearer <token>```  
+3. Apps protected route will verify the token, if valid, from JWT payload, fetch user permissions and then process the request, if permission not allowed, return access denied  
+
+**JWT auth vs session auth**  
+In session auth, all the user info is stored on the server side and client just sends to sessionId. Difficult to handle in microservices, or when we scale the app, the user session is stored only on one node. So the subsequent same user requests need to go to same node.  
+In JWT, user info is store on client. This is the fundamental difference. SO requet can go to any node in the cluster, as long as all the nodes share the same secret. Which is obvious  
+Also useful when different apps googlemaps.com and drive.com need same user session (so user does not need to re-login to different app). They can use it as long as both the servers (googlemaps.com and drive.com) share same JWT secret
