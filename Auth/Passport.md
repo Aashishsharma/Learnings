@@ -355,7 +355,8 @@ const posts = [
 app.post('/login', (req, res) => {
   // Authenticate User - first we need to do this so that user is logged in and then send the token
   // since we have used passport for login, we have the user data in all request made from the client
-  const username = req.body.username // this is for demo, user name would come from DB, for login route, for other routes, it will come from req header, if using JWT or from req.user if using passport session
+  const username = req.body.username // this is for demo, user name would come from DB, for login route, for
+  //other routes, it will come from req header, if using JWT or from req.user if using passport session
   const user = { name: username }
 
   // generate jwt token and in 1st arg we specify tha necessary data that would be stored in the JWT payload
@@ -384,7 +385,9 @@ function authenticateToken(req, res, next) {
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     console.log(err)
     if (err) return res.sendStatus(403)
-    // if we get user, add it in request obj. Remember? since this func is a middleware, this func bydefault has access to req and res, so we cann add any data to req or send res directly from this func
+    // if we get user, add it in request obj. Remember? since this func is a middleware, 
+    //this func bydefault has access to req and res, so we cann add any data to req or 
+    //send res directly from this func
     req.user = user
     next()
   })
@@ -393,18 +396,23 @@ app.listen(3000)
 ```
 
 ```javascript
-// authserver.js - In prod this would be a separate server which will do the job of create/delete and refresh the token, basically handeling the auth part
+// authserver.js - In prod this would be a separate server which will 
+//do the job of create/delete and refresh the token, basically handeling the auth part
 
 // Why do we need refresh token?
-// if we don't refresh tokens then if anyone steals jwt token on the client, they will have access to that user data forever, so refresh tokens
-// but we send both JWT token and JWT refresh token to client, so if the hacker already has access to user token, hacker can also get the refresh token, for that we use delete token, so uer will have to re-login
+// if we don't refresh tokens then if anyone steals jwt token on the client,
+// they will have access to that user data forever, so refresh tokens
+// but we send both JWT token and JWT refresh token to client, so if the hacker already has access to 
+//user token, hacker can also get the refresh token, for that we use delete token, so uer will have to re-login
 require('dotenv').config()
 const express = require('express')
 const app = express()
 const jwt = require('jsonwebtoken')
 app.use(express.json())
 
-let refreshTokens = [] // ideally we store refresh tokens in DB or redis cache since, refreshTokens created and destroyed by the server only
+let refreshTokens = [] 
+// ideally we store refresh tokens in DB or redis cache since, 
+//refreshTokens created and destroyed by the server only
 
 // this is the request client will have to make to get the new token in the earlier token has expired
 // e.g. request
