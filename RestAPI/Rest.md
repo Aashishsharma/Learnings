@@ -73,7 +73,7 @@ for nested associations use search qyery param
 Proper error message for public APIs, for secure APIs no description is necessary. Also for most common error like 404, only status code is enough, description not necessary
 
 #### 6. Caching
-Usually, it is done at both server and client side. Rest guidelins suggests to implement caching at client side by sedning cachine details in resposne header
+Usually, it is done at both server and client side. Rest guidelines suggests to implement caching at client side by sending cache details in resposne header
 1. Use Entity Tags (Etags) in response header.  
 It is a vesrion number which identifies version of the resource.  
 While making a get client can use **If-None-Match: "Etag value"** (sent by server in response headers), so if not matched then make a GET request or use cache.  
