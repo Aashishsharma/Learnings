@@ -447,8 +447,10 @@ let john = { name: "John" };
 john = null;
 // the object will be removed from memory
 
-//but of an object or elements of an array or another data structure are considered reachable and kept in memory while that data structure is in memory.
-//For instance, if we put an object into an array, then while the array is alive, the object will be alive as well, even if there are no other references to it.
+//but for an object or elements of an array or another data structure are considered reachable and kept in memory
+// while that data structure is in memory.
+//For instance, if we put an object into an array, then while the array is alive, the object will be 
+// alive as well, even if there are no other references to it.
 //e.g
 let john = { name: "John" };
 let array = [ john ];

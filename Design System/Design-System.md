@@ -15,5 +15,11 @@ And reason for queue build-up
 3. Limited resource capability
 
 #### 1. Latency
+1. Network latency
+-Do data compression while sending response, (do only id data is huge)  
+-Cache static data  
+2. Memory latency
+-Use weak/soft refrecnes (WeakMap, WeakSet), to free up memory
+
 #### 2. Concurrency
 #### 3. Caching 
