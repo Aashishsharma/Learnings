@@ -351,12 +351,11 @@ const posts = [
   }
 ]
 
-// Do the user authenitcation we did above in Passport local-Strategy for login/register forms section
+// Do the user authenitcation, i.e, check if user name and hashed pwd from DB if valid process below
 app.post('/login', (req, res) => {
   // Authenticate User - first we need to do this so that user is logged in and then send the token
-
   // since we have used passport for login, we have the user data in all request made from the client
-  const username = req.body.username
+  const username = req.body.username // this is for demo, user name would come from DB, for login route, for other routes, it will come from req header, if using JWT or from req.user if using passport session
   const user = { name: username }
 
   // generate jwt token and in 1st arg we specify tha necessary data that would be stored in the JWT payload
@@ -437,7 +436,7 @@ app.delete('/logout', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-  // Authenticate User
+  // Authenticate User i.e, check if user name and hashed pwd from DB if valid process below
 
   // this func is same as the above one in server.js
   // I have kept the same route in server.js for better understanding
