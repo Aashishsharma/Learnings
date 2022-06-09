@@ -57,3 +57,15 @@ Low TTL value - decreases cache inconsistency but decreases cache hits
 **Note - if caching strategy is bad it can affect performance negatively**
 
 ## 2. Scalibility
+Ability to increase its throughput by adding more hardware capacity
+#### 1. Vertical scaling - only 1 machine, but increase it's capacity (cpu, ram), limited scalibility
+#### 2. Horizontal scaling - add more machine/hardware, unlimited scalibility  
+
+**Scalibility principle**  
+1. Decentralization - specialized services, more worker nodes (doing same job)
+2. Independence - each worker needs to be independent
+
+**Ways to achieve scalibility** 
+1. Modularity - Business logic needs to be split into modules (order module, user module)
+2. Replication - replicate nodes, dbs  
+Replicate nodes - Problem - if session is used on server, then the next request from client might go to some other node where the session is not created for that client. To solve this, use JWT (since user data is stored in the client side), if we still need to use server session, send the cookie to client with user data + node id, where the session is created, and when next time client makes the request, the load balancer gets the node id from cookie and reroutes the request to same node (this is called sticky session), other option - store session data in Redis (since it is distributed cache system)
