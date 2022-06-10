@@ -70,7 +70,8 @@ Ability to increase its throughput by adding more hardware capacity
 #### 2. Replication - replicate nodes, dbs  
 Replicate nodes - Problem - if session is used on server, then the next request from client might go to some other node where the session is not created for that client. To solve this, use JWT (since user data is stored in the client side), if we still need to use server session, send the cookie to client with user data + node id, where the session is created, and when next time client makes the request, the load balancer gets the node id from cookie and reroutes the request to same node (this is called sticky session), other option - store session data in Redis (since it is distributed cache system)  
 **Note - in multi-threading, we can use OS level locks to manage shared resources like reading a file. In replication, we cannot use OS level locks, since there is not just 1 OS, due to multiple nodes(machine), in this case we need to create a lock table, and when one node is accessing a shared resource, add new record in the lock table, once done release the lock on that row**  
-![alt text](PNG/DB-replica.PNG "Title")
+![alt text](PNG/DB-replica.PNG "Title")  
+In Master-slave - synchronous replica, when write query comes to DB, it is executed in master replica, and then DB will replicate same transaction on all the replica nodes, and only when this is successful, the execution returns to the server, which then sends response to client, this way it is consistent but will have high latency writes hence used in backup replicas
 
 #### 3. Vertical partitioning (Micro-services)  
 Create service of each business domain (Inventory, Order, Catalog, User) such that  
@@ -102,19 +103,20 @@ in K8, we don't have to worry about Discovery service, handeled by default for i
 Use when
 1. Frequent Deployment
 2. Independent deployment
-3. Independent development
+3. Independent developmenst
 4. Independent Services
 
 Before micro-services we had SOA (Service oriented architecture)  
 SOA -  
 Each service has own tech stack, frameworks  
 Each service can be scaled independently  
-But  
-Need to have common interface - XML, in miscroservices (REST is used)  
-And all services accessed same DB  
+But all services accessed same DB  
 
 In micro-service architecture  
-Sepearte service and separate DB for each businness domain, like (Order, Inventory, User)
+Sepearte service and separate DB for each businness domain, like (Order, Inventory, User)  
+
+**Problems with micro-services**  
+
 
 
 
