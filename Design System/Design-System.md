@@ -92,7 +92,11 @@ Each service can have 100 replicas which will have 100 Ips, so which one to call
 Services have internal load balancers, in K8 (internal services) and app is exposed on external load balancers (in K8 - Ingress)  
 **Discovery services** - keep track of each all instances of different services (catalog, user, inventory) are alive along with their IP addresses.  
 Load balancer calls this discovery service, gets IPs of the service in needs to call, and based on the routing algo we define (Round robin, Least connection, Least res time)  
-in K8, we don't have to worry about Discovery service, handeled by default for internal pods
+in K8, we don't have to worry about Discovery service, handeled by default for internal pods  
+
+2 Types of LBs  
+1. Hardware load balancers
+2. Software load balancer (Apache, nginx)
 
 
 
