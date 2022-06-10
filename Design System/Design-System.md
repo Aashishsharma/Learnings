@@ -77,6 +77,9 @@ Inventory service connected to Invenotry DB, order service to order DB and so on
 So instaed of having 1 DB, it is now partitioned vertically, so different tables in different DB. (Note - common tables should not be present in these different DBs)  
 Verticle partitioning can scale only upto certain limit, if we have only 2 business domains, then only 2 different DBs. Also id order DB has large amount of data as compared to user DB, then orderDB would be bottleneck.  
 So **Horizontal partitioning** -   
+Partition the Vertically partitioned DB (OrderDB) in smaller dataset, rows are partitioned  
+1. Range based partitioning - Distribution of data can be uneven 
+2. Hash based partitioning - data evenly distributed but, range queries (get rows between 100 and 400) are inefficient 
 
 
 
