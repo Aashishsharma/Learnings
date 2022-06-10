@@ -130,7 +130,12 @@ Call inventory, shipment and order services, check if order can be placed then a
 Since we acquire locks, other requests can't do a write which defeats the purpose of scalibility, and we are using micro-services for scaling  
 2. Using Saga pattern (Solves Distributed ACID transactions)  
 Instead of acquiring locks, make the updates in the DB, like (update inventory, create shipment record, place order), anywhere the transaction fails (let's say we updated the invenotry, but shipment on that address not possible), undo the changes in the inventory DB. (We need to write the entire undo logic) DB won't handle.  
-But what would happen, if while doing undo, the inventory DB goes down?  
+But what would happen, if while doing undo, the inventory DB goes down?  use Event driven transactions  
+**Event driven transactions**  
+Use message queue  
+The idea is to use messaging system, so that the main service can publish events to messaging queues and each micro-service (inventory, order) can subscribe to specific events and when that event occurs, they execute the process, if any service can't do the transaction (like shipment service says order can't be delivered to this location), then shipment service will send another event to messaging queue - (undo order transaction), which would be subscribed by the order service and to the necessary changes
+![alt text](PNG/event-driven-transaction.PNG "title")  
+
 
 
 
