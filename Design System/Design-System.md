@@ -116,6 +116,22 @@ In micro-service architecture
 Sepearte service and separate DB for each businness domain, like (Order, Inventory, User)  
 
 **Problems with micro-services**  
+1. Micro-service transactions  
+See below example, we need to book an order, since we are using micro-services architecture (vertical partitioning as per business domains), we have 3 services (inventory, order and shipment) with their own DB, and different DBs don't have ACID properties  
+So if an order is made, the app needs to ensure 3 things  
+1. Call inventory service and deduct the count of product from inventory DB
+2. Call shipment service and ensure the product can be delivered to the desired location, and add shipment related detials to shipment table
+3. Call order service and add new order in the order DB  
+Now we cannot gurantee consistency or ACID props here  
+![alt text](PNG/ms-transaction.PNG "title")  
+two solve this we have 2 solutions  
+1. Distributed ACID transactions using 2PC (2 phase commit)  
+Call inventory, shipment and order services, check if order can be placed then acquire locks on those tables, then commit the transaction  
+Since we acquire locks, other requests can't do a write which defeats the purpose of scalibility, and we are using micro-services for scaling  
+2. Using Saga pattern (Solves Distributed ACID transactions)  
+Instead of acquiring locks, make the updates in the DB, like (update inventory, create shipment record, place order), anywhere the transaction fails (let's say we updated the invenotry, but shipment on that address not possible), undo the changes in the inventory DB. (We need to write the entire undo logic) DB won't handle.  
+But what would happen, if while doing undo, the inventory DB goes down?  
+
 
 
 
