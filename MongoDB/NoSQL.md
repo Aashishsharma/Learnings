@@ -31,7 +31,7 @@ like employee table - name, age, and address ID, then address is a separate tabl
 8. Scalability is a big advantage
 
 #### Disadvantages
-1. Updates/ consistency is a problem. (ACID properties is not guranteed)
+1. Updates/ consistency is a problem. (ACID properties is not guranteed) (ACID properties can still be achieved if we put all the required data updated from different collections in one collection (nested collection), and updating only one collection is always ACID compatible)
 2. So not used in financial systems.
 3. Not read efficient  
 e.g. read age from employee tables, every time whole record/document is read, and then age field is filtered  

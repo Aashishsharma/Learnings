@@ -128,7 +128,7 @@ two solve this we have 2 solutions
 1. Distributed ACID transactions using 2PC (2 phase commit)  
 Call inventory, shipment and order services, check if order can be placed then acquire locks on those tables, then commit the transaction  
 Since we acquire locks, other requests can't do a write which defeats the purpose of scalibility, and we are using micro-services for scaling  
-2. Using Saga pattern (Solves Distributed ACID transactions)  
+2. Using Saga pattern (Solves Distributed ACID transactions) (Eventual consistency) 
 Instead of acquiring locks, make the updates in the DB, like (update inventory, create shipment record, place order), anywhere the transaction fails (let's say we updated the invenotry, but shipment on that address not possible), undo the changes in the inventory DB. (We need to write the entire undo logic) DB won't handle.  
 But what would happen, if while doing undo, the inventory DB goes down?  use Event driven transactions  
 **Event driven transactions**  
