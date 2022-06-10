@@ -136,7 +136,8 @@ Use message queue
 The idea is to use messaging system, so that the main service can publish events to messaging queues and each micro-service (inventory, order) can subscribe to specific events and when that event occurs, they execute the process, if any service can't do the transaction (like shipment service says order can't be delivered to this location), then shipment service will send another event to messaging queue - (undo order transaction), which would be subscribed by the order service and to the necessary changes
 ![alt text](PNG/event-driven-transaction.PNG "title")  
 
-## 3. Reliability
+## 3. Reliability  
+In scalibility topic, we saw how system can fail at various levels, so we need system reliability
 
 
 
