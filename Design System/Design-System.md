@@ -98,6 +98,27 @@ in K8, we don't have to worry about Discovery service, handeled by default for i
 1. Hardware load balancers
 2. Software load balancer (Apache, nginx)
 
+#### 5. Micro-service architecture
+Use when
+1. Frequent Deployment
+2. Independent deployment
+3. Independent development
+4. Independent Services
+
+Before micro-services we had SOA (Service oriented architecture)  
+SOA -  
+Each service has own tech stack, frameworks  
+Each service can be scaled independently  
+But  
+Need to have common interface - XML, in miscroservices (REST is used)  
+And all services accessed same DB  
+
+In micro-service architecture  
+Sepearte service and separate DB for each businness domain, like (Order, Inventory, User)
+
+
+
+
 
 
 
