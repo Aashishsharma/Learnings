@@ -80,7 +80,12 @@ Verticle partitioning can scale only upto certain limit, if we have only 2 busin
 So **Horizontal partitioning** -   
 Partition the Vertically partitioned DB (OrderDB) in smaller dataset, rows are partitioned  
 1. Range based partitioning - Distribution of data can be uneven 
-2. Hash based partitioning - data evenly distributed but, range queries (get rows between 100 and 400) are inefficient 
+2. Hash based partitioning (use consistent hashing algo)- data evenly distributed but, range queries (get rows between 100 and 400) are inefficient  
+
+**Note - partitioned DBs no longer support ACID properties**  
+But how does app know which partitioned DB to pass the query to? this is handled by DBs themeselves. We don't have to worry as app developer for e.g.  
+1. MongoDB - it provides client (mongoClient package npm) router which is cluster aware (knows how many clusters are avaialble and what partition method (range/hash) is used and re-routes the request to appropriate partitioned DB)  
+This is the case only when DB is partitioned horizontally, in case of vertical partition, we have already partitioned DB into separate DB and each separate DB is attached to the service like (Inventory service connected to Inventary DB) see above
 
 
 
