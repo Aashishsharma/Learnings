@@ -172,7 +172,13 @@ Use monitoring system (Dynatrace/ AWS monitoring services) to detect faults
 
 **3. Recovery**  
 For stateless recovery - just restart failed pods/nodes or spin up new pods/nodes (K8 doeas this by default)  
-For stateful recovery - 
+For stateful recovery -  
+1. For Load balancers - using floating IPs, we have 1 primary LB and a secondary LB and a floating IP which redirects requests to primary or secondary LB based on which is available  
+2. For DBs - only in case of master slave setup  
+a. Using synchronous replication (backups) (aka - hot standby), but writes are slow so if primary DB is down, we have backup  
+b. Using asynchronous replication (db replica) (aka - warm standby) - possibility of loss of data, since if promary DB is down, and some data is yet to be replicated  
+c. Database recovery (aka cold recovery) - take old backup and create new DB, significant downtime
+
 
 
 
