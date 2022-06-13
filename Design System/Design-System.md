@@ -166,7 +166,13 @@ Use secondary load balancers if primary LB goes down
 Fault models  
 1. Response failure - server fails to respond to client's request 
 2. Timeout failure - server response longer than the timeout threshold
-3. Crash failure - server went down
+3. Crash failure - server went down  
+
+Use monitoring system (Dynatrace/ AWS monitoring services) to detect faults
+
+**3. Recovery**  
+For stateless recovery - just restart failed pods/nodes or spin up new pods/nodes (K8 doeas this by default)  
+For stateful recovery - 
 
 
 
