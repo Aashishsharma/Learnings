@@ -177,7 +177,7 @@ For stateful recovery -
 2. For DBs - only in case of master slave setup  
 a. Using synchronous replication (backups) (aka - hot standby), but writes are slow so if primary DB is down, we have backup  
 b. Using asynchronous replication (db replica) (aka - warm standby) - possibility of loss of data, since if promary DB is down, and some data is yet to be replicated  
-c. Database recovery (aka cold recovery) - take old backup and create new DB, significant downtime
+c. Database recovery (aka cold recovery) - keep taking backup every x hours, then take old backup and create new DB if DB goes down or corrupted, significant downtime
 
 
 
