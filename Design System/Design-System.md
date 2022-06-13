@@ -177,7 +177,18 @@ For stateful recovery -
 2. For DBs - only in case of master slave setup  
 a. Using synchronous replication (backups) (aka - hot standby), but writes are slow so if primary DB is down, we have backup  
 b. Using asynchronous replication (db replica) (aka - warm standby) - possibility of loss of data, since if promary DB is down, and some data is yet to be replicated  
-c. Database recovery (aka cold recovery) - keep taking backup every x hours, then take old backup and create new DB if DB goes down or corrupted, significant downtime
+c. Database recovery (aka cold recovery) - keep taking backup every x hours, then take old backup and create new DB if DB goes down or corrupted, significant downtime  
+
+#### Some steps to avoid system failures/slowness
+**1. Timeouts on API calls**
+**Add timeouts to the API calls, beacsue if some API slow down for some reason (specially if the api call is making another API call to some other server), then we need to set a timeout to our service, because if the dependent service slows down from some reason (out of our control), then the threads on our server would be occupied and if many clients keep calling this AIP, our server would start running out od threads since older threads are still busy. To avoid this set timeout on our API endpoints and return some msg to the suer after that timeout, so that the threads a re freed up**  
+**2. Retries**  
+In case of transient errors (e.g. 2 clients trying to book same seats in movie ticket, this will cause race condition, since only 1 client will be able to book the specified set). To avoid this ask other client to rety the request  
+**Use idempotent tokens** -client makes a request, request is processed (let's say updating a DB), but while sending a response, node goes down. Client retires request, which goes to another node, but we have already updated the DB, if the server process the request, DB would be updated again, to avoid this, save the requestId in the DB is the request has been processed, so when new node processes the request, it will see the request Id is available in DB, so don't update the DB, send the response. Frequently we can keep deleting those requestIds from DB.  
+ 
+
+
+
 
 
 
