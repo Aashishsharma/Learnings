@@ -137,7 +137,27 @@ The idea is to use messaging system, so that the main service can publish events
 ![alt text](PNG/event-driven-transaction.PNG "title")  
 
 ## 3. Reliability  
-In scalibility topic, we saw how system can fail at various levels, so we need system reliability
+In scalibility topic, we saw how system can fail at various levels, so we need system reliability  
+Largescale/distributed systems can fail  
+1. Partially - any node / component failure 
+2. Single point of failure (bring entire system down)  
+
+System should be  
+1. Reliable - continue to function correctly even in partial failures
+2. Available - 
+3. Fault tolerant - ability to detect, handle and recover partial failures  
+
+#### Designing fault tolerant system
+Using  
+1. Redundancy - replicating critical components, secondary capacity is kept available in case primary is not available
+2. Fault detection
+3. Recovery
+
+**1. Redundancy**  
+For stateless components just increase no. of nodes  
+For stateful components - 
+
+
 
 
 
