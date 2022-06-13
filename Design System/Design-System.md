@@ -140,7 +140,7 @@ The idea is to use messaging system, so that the main service can publish events
 In scalibility topic, we saw how system can fail at various levels, so we need system reliability  
 Largescale/distributed systems can fail  
 1. Partially - any node / component failure 
-2. Single point of failure (bring entire system down)  
+2. Single point of failure (bring entire system down, load balancer)  
 
 System should be  
 1. Reliable - continue to function correctly even in partial failures
@@ -154,8 +154,20 @@ Using
 3. Recovery
 
 **1. Redundancy**  
-For stateless components just increase no. of nodes  
-For stateful components - 
+Redundancy for stateless components just increase no. of nodes  
+Redundancy for stateful components (DB, cache, MQs are stateful components) -  
+For DB - (create db backups and not replicas, backups are synchronous replication (see DB scalability above))  
+For MQs - same as DB redundancy. All the replication/backup is handled by respective DB/MQ vendors  
+For Caches - Not really needed (since cache is secondary source of data). If data is lost from cache, we can always get from DB. Redis has capability to provide redundant cache data, memcache does not have this feature  
+Redundancy for infrastructural components (Load balancers) - 
+Use secondary load balancers if primary LB goes down  
+
+**2. Fault Detection**  
+Fault models  
+1. Response failure - server fails to respond to client's request 
+2. Timeout failure - server response longer than the timeout threshold
+3. Crash failure - server went down
+
 
 
 
