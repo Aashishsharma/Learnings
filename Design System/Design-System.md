@@ -237,7 +237,9 @@ Now based on user groups and permissions protect routes by following below steps
 ![alt text](PNG/xss.PNG "title")  
 To avoid this - do input validation  
 3. Cross Site Resource Forgery - CSRF  
-![alt text](PNG/csrf.PNG "title") 
+![alt text](PNG/csrf.PNG "title")  
+Here in step 2, if user is logged in to bank app and then goes to some attacker site, and that attacker make a call to bank api using a redirect (see img src), then the api would be executed since the user is already logged in to bank account and the session is active  
+To avoid this - sned csrf-token in cookie
 
 
 
