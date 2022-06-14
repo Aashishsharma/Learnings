@@ -192,14 +192,7 @@ In case of transient errors (e.g. 2 clients trying to book same seats in movie t
 Both client and server have same key which is used to encrypt and decrypt messages  
 But how do we share same key with client and server? Can't send in plain text.  Achieved using asymettric key encryption and SSL protocol (see below)
 **2. Public/asymmetric key encryption**  
-Public, private key, private & public key stored at server, public key on all clients but not private key, so ecah client can encrypt message which can be decoded only using private key, so no other client/hacker can decrypt message until they have private key
-**3. SSL protocol (s in https)**  
-![alt text](PNG/ssl.PNG "title")  
-3 Steps  
-1. Transfer public key - client initiates https protocol, server sends public key to client using certificates. Here publick key can be sent without any encryption since it is public key 
-2. Generate & transfer symmetric key - cleint generates symmetric key and and encrypts this key using servers publick key (so only the server can decrypt the symmetric key via it's private key)
-3. For all future calls between client and server - use the generated symmetric key for encrypting and decrypting the messages  
-But why do we need secodn step(why to create symmetric key, we can use public/private keys for encrypting and decrypting messages) - Becasue symmetric key alogs are fast as compared to asymmetric keys  
+Public, private key, private & public key stored at server, public key on all clients but not private key, so ecah client can encrypt message which can be decoded only using private key, so no other client/hacker can decrypt message until they have private key  
 
 **Digital signatures - ensure who has signed the doc and the doc is not altered once it is signed**  
 ![alt text](PNG/signature.PNG "title")  
@@ -208,6 +201,14 @@ But why do we need secodn step(why to create symmetric key, we can use public/pr
 2. Verify the signature (client side) - client calculate hash of the data using same algo, client decrypts the hashed signature using publick key, if both hash match it is digitally signed  
 
 **Note - digital certificate is public key of server + digital signature of the server**
+
+**3. SSL protocol (s in https)**  
+![alt text](PNG/ssl.PNG "title")  
+3 Steps  
+1. Transfer public key - client initiates https protocol, server sends public key to client using certificates (digitally signed using digital signature we saw above). Here publick key can be sent without any encryption since it is public key 
+2. Generate & transfer symmetric key - cleint generates symmetric key and and encrypts this key using servers publick key (so only the server can decrypt the symmetric key via it's private key)
+3. For all future calls between client and server - use the generated symmetric key for encrypting and decrypting the messages  
+But why do we need secodn step(why to create symmetric key, we can use public/private keys for encrypting and decrypting messages) - Becasue symmetric key alogs are fast as compared to asymmetric keys  
 
 #### 2. Identiy management
 #### 3. Access management
