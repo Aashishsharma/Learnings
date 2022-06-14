@@ -214,7 +214,7 @@ But why do we need secodn step(why to create symmetric key, we can use public/pr
 Firewall is a network component which sits between our app and external world. It allows or blocks the incomming/outgoing requests at various levels  
 can be blocked at Source IP level, allow only range of IPs to pass to our app, Ports (allow communication only on specific ports), Protocols (allow communication only on certain protocols (TCP,FTP,SMTP))  
 
-#### 2. Identiy management  
+#### 2. Identiy/Access management  
 SSO, JWT, session based auth (express session), OAth2  
 
 **Role based Access Control (RBAC)** - Industry wide approach  
@@ -230,9 +230,10 @@ Now based on user groups and permissions protect routes by following below steps
 
 **Note - all the 3 steps should be done in the middleware**  
 
-
-#### 3. Access management
-#### 4. Common vulnerabilities
+#### 3. Common vulnerabilities
+1. SQL injection  
+![alt text](PNG/sqlInjection.PNG "title")
+2. Cross Site Scripting
 
 
 
