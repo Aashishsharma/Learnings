@@ -201,8 +201,13 @@ Public, private key, private & public key stored at server, public key on all cl
 3. For all future calls between client and server - use the generated symmetric key for encrypting and decrypting the messages  
 But why do we need secodn step(why to create symmetric key, we can use public/private keys for encrypting and decrypting messages) - Becasue symmetric key alogs are fast as compared to asymmetric keys  
 
-**Digital signatures**  
-![alt text](PNG/signature.PNG "title")
+**Digital signatures - ensure who has signed the doc and the doc is not altered once it is signed**  
+![alt text](PNG/signature.PNG "title")  
+2 Steps  
+1. Digitally signing (server side) - hash of the data is generated (using md5, sha2 algos), and this hash is encryped using server's private key. Now data and the signature (encrypted has of data is a signature) is sent to the client  
+2. Verify the signature (client side) - client calculate hash of the data using same algo, client decrypts the hashed signature using publick key, if both hash match it is digitally signed  
+
+**Note - digital certificate is public key of server + digital signature of the server**
 
 #### 2. Identiy management
 #### 3. Access management
