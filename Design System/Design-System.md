@@ -211,7 +211,7 @@ Public, private key, private & public key stored at server, public key on all cl
 But why do we need secodn step(why to create symmetric key, we can use public/private keys for encrypting and decrypting messages) - Becasue symmetric key alogs are fast as compared to asymmetric keys  
 
 **4. Firewalls**  
-Network components which sits between our app and external world. It allows or blocks the incomming/outgoing requests at various levels  
+Firewall is a network component which sits between our app and external world. It allows or blocks the incomming/outgoing requests at various levels  
 can be blocked at Source IP level, allow only range of IPs to pass to our app, Ports (allow communication only on specific ports), Protocols (allow communication only on certain protocols (TCP,FTP,SMTP))  
 
 #### 2. Identiy management
