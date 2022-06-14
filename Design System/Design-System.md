@@ -233,8 +233,11 @@ Now based on user groups and permissions protect routes by following below steps
 #### 3. Common vulnerabilities
 1. SQL injection  
 ![alt text](PNG/sqlInjection.PNG "title")
-2. Cross Site Scripting
-
+2. Cross Site Scripting  
+![alt text](PNG/xss.PNG "title")  
+To avoid this - do input validation  
+3. Cross Site Resource Forgery - CSRF  
+![alt text](PNG/csrf.PNG "title") 
 
 
 
