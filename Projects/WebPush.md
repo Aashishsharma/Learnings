@@ -35,6 +35,19 @@ sendSubscriptionToBackEnd(pushSubscription, selectedCategories);
 
 The application server keys, also known as VAPID keys, are unique to your server. They allow a push service to know which application server subscribed a user and ensure that it's the same server triggering the push messages to that user.  
 
+#### Push subscription format  
+
+```json
+{
+  "endpoint": "https://random-push-service.com/some-kind-of-unique-id-1234/v2/",
+  "keys": {
+    "p256dh": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM=",
+    "auth": "tBHItJI5svbpez7KI4CCXg=="
+  }
+}
+```
+
+Endpoint - unique to each user  
+Keys - 
+
 ## Step 2 - Send push message
-
-
