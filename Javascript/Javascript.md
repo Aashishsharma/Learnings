@@ -1,4 +1,5 @@
 ## Index
+
 1. **Javascript** - (dynamic, oo, scripting), compiled/interpreted(hoisting, let error, JIT)
 2. **Event Loop** - runtime(heap, stack), web/dom apis, event queue, ES6 job queue
 3. **automatic semicolon insertion**
@@ -9,7 +10,7 @@
 8. **Alert, Confirm, Prompt**
 9. **Type conversion** - + to string others (/,*,-) to number/NAN, Strict equality, different types are converted to numbers by the equality operator ==
 10. **Nullish coalesing operator** - ?? - || returns the first truthy value. ?? returns the first defined value.
-11. **Hoisting** - only declaration/var/fun declare not initialization/let/fun express 
+11. **Hoisting** - only declaration/var/fun declare not initialization/let/fun express
 12. **Closure** - child fun accessing parent's lexical env. - to create private fun - with IIFE
 13. **Garbage collection** - remove from memory if not reachable
 14. **Module, defer, async** - (**export** (4 - before/after decl (named), as, (when?(util/class))default(only 1, can be combined with named)) (**import** - named - {}, default without {}, for dynamic -  import()) - same module imported into multiple other places, its code is executed only the first time, defer(dwnld async, exec after DOMContentLoaded), async(dwnld.exec - async)
@@ -18,28 +19,34 @@
 17. **Debouncing and Throtlting** - Api rate limiting techniques
 
 ## Javascript
+
 Javascript is  
+
 1. Dynamically typed: same variable can be assigned to multiple datatypes
 2. Object-oriented: It is an object-oriented language.
 3. Scripting Language: is a programming language for a special run-time environment (in case of JS it is the browser) that automates the execution of tasks  
 
 **compiled or interpreted**  
 **more of a Compiled language:** - proof  
-1. compilers use parsers, JS code is also parsed, that's why hoisting works. If it was not parsed, then how can we call before it's definition (hositing) 
-2. declaring 2 let variables with same name gives error immediately, if it was interpreted, then error would have thorwn at the line where the second let was declared 
+
+1. compilers use parsers, JS code is also parsed, that's why hoisting works. If it was not parsed, then how can we call before it's definition (hositing)
+2. declaring 2 let variables with same name gives error immediately, if it was interpreted, then error would have thorwn at the line where the second let was declared
 3. It uses JIT compilers where only the part of code is compiled. If else block is not executed, it is not compiled
 
-## Javascript event loop. 
+## Javascript event loop
+
 [Javascript event loop](https://www.youtube.com/watch?v=8aGhZQkoFbQ)
 Javascript event loop elements are  
+
 1. Javascript Runtime (heap and stack)
 2. Web Apis (DOM APIs, AJAX (n/w requests), setTimeout)
-3. Task/callback queue 
-4. ES6 Job Queue 
+3. Task/callback queue
+4. ES6 Job Queue
 
-ES6 has new element **4. ES6 Job Queue** in addition to the **callback queue**    
+ES6 has new element **4. ES6 Job Queue** in addition to the **callback queue**
 It's a way to execute the result of an **async function** as soon as possible, rather than being put at the end of the call stack.  
 Promises that resolve before the current function ends will be executed right after the current function.  
+
 ```javascript
 const bar = () => console.log('bar')
 const baz = () => console.log('baz')
@@ -64,6 +71,7 @@ foo()
 The old HTML standard, HTML4, required a script to have a type. Usually it was type="text/javascript". It’s not required anymore. Now, it is used for JavaScript modules.
 
 #### Automatic semicolon insertion
+
 A semicolon may be omitted in most cases when a line break exists.  
 JavaScript interprets the line break as an “implicit” semicolon. This is called an automatic semicolon insertion.
 
@@ -95,11 +103,14 @@ num = 5; // error: num is not defined
 Modern JavaScript supports “classes” and “modules” – advanced language structures, that enable use strict automatically. So we don’t need to add the "use strict" directive, if we use them.  
 
 ------------------------------------------------------------------------------
+
 #### Let, var, const
 
 ###### let ve var
+
 1. let has a block scope, var ha no block scope, Variables, declared with var, are either function-wide or global.
 2. “var” tolerates redeclarations
+
 ```javascript
 let user;
 let user; // SyntaxError: 'user' has already been declared
@@ -109,7 +120,9 @@ var user = "John"; // this "var" does nothing (already declared)
 // ...it doesn't trigger an error
 alert(user); // John
 ```
+
 3. var is hoisted but not let
+
 ```javascript
 console.log(typeof name); // undefined
 var name = "John";
@@ -117,17 +130,20 @@ var name = "John";
 console.log(typeof name); // ReferenceError
 let name = "John";
 ```
+
 Let and const are TDZ - The variable is said to be in a "temporal dead zone" (TDZ) from the start of the block until the declaration has completed.
 
 ##### IIFE Immediately invoked function expression
+
 ```javascript
 (function() {
   var foo = "bar";
   console.log(foo);
 })();
 ```
+
 **use of IIFE**
-As in the past there was only var, and it has no block-level visibility, programmers invented a way to emulate it. 
+As in the past there was only var, and it has no block-level visibility, programmers invented a way to emulate it.
 Local variables declared using the var keyword are scoped to the enclosing function. If no such function exists, the variables will be created as global variables instead, thus polluting the global scope. To prevent this, we can use an IIFE to create a function wrapper for local variables  
 nowadays there’s no reason to use IIFE.
 
@@ -139,14 +155,18 @@ const pageLoadTime = /* time taken by a webpage to load */;
 ```
 
 ------------------------------------------------------------------------------
+
 #### Datatypes in JS
+
 There are eight basic data types in JavaScript  
 We can put any type in a variable  
+
 ```javascript
 // no error
 let message = "hello";
 message = 123456;
 ```
+
 Programming languages that allow such things, are called “dynamically typed”, meaning that there exist data types, but variables are not bound to any of them.  
 
 1. **number** - for numbers of any kind: integer or floating-point, integers are limited by ±2(raise to 53).
@@ -158,6 +178,7 @@ Programming languages that allow such things, are called “dynamically typed”
 7. **object** for more complex data structures.
 8. **symbol** for unique identifiers.  
 A “symbol” represents a unique identifier.  
+
 ```javascript
 //syntax
 let id = Symbol();
@@ -172,6 +193,7 @@ let id = Symbol("id");
 user[id] = 1;
 alert( user[id] ); // we can access the data using the symbol as the key
 ```
+
 What’s the benefit of using Symbol("id") over a string "id"?  
 As user objects belongs to another code, and that code also works with them, we shouldn’t just add any fields to it. That’s unsafe. But a symbol cannot be accessed accidentally, the third-party code probably won’t even see it, so it’s probably all right to do.  
 Also, imagine that another script wants to have its own identifier inside user, for its own purposes. That may be another JavaScript library, so that the scripts are completely unaware of each other.  
@@ -181,7 +203,9 @@ typeof x or typeof(x)
 Both are same 1st one is operator and later one is a function  
 
 ------------------------------------------------------------------------------
+
 ## Interaction: alert, prompt, confirm
+
 ```javascript
 // 1 alert
 alert("Hello");
@@ -198,10 +222,12 @@ let isBoss = confirm("Are you the boss?");
 alert( isBoss ); // true if OK is pressed
 ```
 
-
 ------------------------------------------------------------------------------
+
 ## Type Conversions
+
 #### String Conversion
+
 ```javascript
 let value = true;
 alert(typeof value); // boolean
@@ -217,6 +243,7 @@ alert( '6' / '2' ); // 3, converts both operands to numbers
 ```
 
 #### Numeric conversion
+
 ```javascript
 // 1
 alert( "6" / "2" ); // 3, strings are converted to numbers
@@ -236,6 +263,7 @@ alert( Number(false) );       // 0
 ```
 
 #### Boolean conversion
+
 ```javascript
 alert( Boolean(1) ); // true
 alert( Boolean(0) ); // false
@@ -245,6 +273,7 @@ alert( Boolean("") ); // false
 ```
 
 #### Strict equality
+
 ```javascript
 alert( '' == false ); // true
 // This happens because operands of different types are converted to numbers by the equality operator ==. An empty string, just like false, becomes a zero.  
@@ -253,11 +282,13 @@ alert( 0 === false ); // false, because the types are different
 ```
 
 #### Nullish coalescing operator '??'
+
 The nullish coalescing operator ?? provides a short syntax for selecting a first “defined” variable from the list.  
 
 The result of a ?? b is:  
 a if it’s not null or undefined,  
 b, otherwise.  
+
 ```javascript
 // So, x = a ?? b is a short equivalent to
 x = (a !== null && a !== undefined) ? a : b;
@@ -269,16 +300,21 @@ let nickName = "Supercoder";
 // show the first not-null/undefined value
 alert(firstName ?? lastName ?? nickName ?? "Anonymous"); // Supercoder
 ```
+
 **?? vs ||**
 The important difference is that:  
 || returns the first truthy value.  
 ?? returns the first defined value.
 
 ------------------------------------------------------------------------------
+
 ## Hoisting
+
 JavaScript’s behavior of moving declarations (variable and function) to the top of their current scope (function or global).  
+
 1. Code is not moved but at compile time, variables and functions are put in memory (lexical scoping), before the execution pahse begins
 2. Only the declaration is hoisted and not the initialization
+
 ```javascript
 console.log(a); // undefined instead of error-> not declared
 var a = 5;
@@ -288,7 +324,9 @@ var a;
 console.log(a);
 a=5;
 ```
+
 3. Function declaration is hoised and not function expression
+
 ```javascript
 // function declaration
 abc(); // ouptput abc
@@ -304,9 +342,12 @@ var abc = function(defaultValue = 0) { //FYI -> adding default parameter in a fu
 ```
 
 ------------------------------------------------------------------------------
+
 ## Closure
+
 - **Defination  (function with its lexical env)**
 Closure is created when a child function keep the environment of the parent scope even after the parent function has already executed
+
 ```javascript
 function foo(outer_arg) { 
     function inner(inner_arg) { 
@@ -318,8 +359,10 @@ var get_func_inner = foo(5);
 console.log(get_func_inner(4)); //outputs 9
 console.log(get_func_inner(3)); //outputs 8
 ```
+
 We can access the variable outer_arg (value 5) which is defined in function foo() through function inner() as the later preserves the scope chain of enclosing function at the time of execution of enclosing function i.e. the inner function knows the value of outer_arg through it’s scope chain.
 This is closure in action that is inner function can have access to the outer function variables as well as all the global variables.
+
 ```javascript
 // another example
 function outer()  
@@ -341,8 +384,11 @@ console.log(get_arr[2]());  // 4
 console.log(get_arr[3]());  // 4
 // due to closure
 ```
+
 **Use case**  
+
 1. To create private functions/variables  
+
 ```javascript
 a = (function () {
     var privatefunction = function () {
@@ -355,9 +401,10 @@ a = (function () {
     }
 })();
 ```  
+
 As you can see there, a is now an object, with a method publicfunction ( a.publicfunction() ) which calls privatefunction, which only exists inside the closure. You can NOT call privatefunction directly (i.e. a.privatefunction() ), just publicfunction()
 
-2. Debouncung 
+2. Debouncung
 3. Throttling
 
 Disadvantage of closure - memory consumption sue to variable in scope
@@ -365,6 +412,7 @@ Disadvantage of closure - memory consumption sue to variable in scope
 ------------------------------------------------------------------------------
 
 #### Garbage collection
+
 The main concept of memory management in JavaScript is reachability.
 
 “reachable” values are those that are accessible or usable somehow. They are guaranteed to be stored in memory.
@@ -400,17 +448,23 @@ let family = marry({
 });
 // resulting memory structure
 ```
+
 ![alt text](PNG/memorystructure.PNG "Title")
+
 ```javascript
 delete family.father;
 delete family.mother.husband;
 // Outgoing references do not matter. Only incoming ones can make an object reachable. So, John is now unreachable and will be removed from the memory with all its data that also became unaccessible
 ```
+
 Idle-time collection – the garbage collector tries to run only while the CPU is idle, to reduce the possible effect on the execution.
 
 ------------------------------------------------------------------------------
+
 ## Modules
+
 A module is just a file. One script is one module. As simple as that.
+
 ```javascript
 //import export
 // 📁 sayHi.js
@@ -492,6 +546,7 @@ say();
 
 1. Top-level variables and functions from a module are not seen in other scripts.
 2. If the same module is imported into multiple other places, its code is executed only the first time
+
 ```javascript
 // 📁 alert.js
 alert("Module is evaluated!");
@@ -500,7 +555,9 @@ import `./alert.js`; // Module is evaluated!
 // 📁 2.js
 import `./alert.js`; // (shows nothing)
 ```
+
 4. When a module exports an object:
+
 ```javascript
 // 📁 admin.js
 export let admin = {
@@ -517,12 +574,15 @@ import {admin} from './admin.js';
 alert(admin.name); // Pete
 // Both 1.js and 2.js imported the same obje
 ```
+
 the module is executed only once. Exports are generated, and then they are shared between importers, so if something changes the admin object, other modules will see that.  
 
 **Module scripts are deferred same effect as defer attribute**  
+
 1. downloading external module scripts doesn’t block HTML processing, they load in parallel with other resources
 2. module scripts wait until the HTML document is fully ready (even if they are tiny and load faster than HTML), and then run.
 3. relative order of scripts is maintained: scripts that go first in the document, execute first.
+
 ```java
 <script type="module">
   alert(typeof button); // object: the script can 'see' the button below
@@ -536,8 +596,10 @@ Compare to regular script below:
 <button id="button">Button</button>
 // the second script actually runs before the first! So we’ll see undefined first, and then object
 ```
+
 4. External scripts that have type="module" - they run only once even if included multiple times on a page and they require cors headers for security purpose i.e, the remote server must supply a header Access-Control-Allow-Origin allowing the fetch.
 6. Async
+
 ```javascript
 // all dependencies are fetched (analytics.js), and the script runs
 // doesn't wait for the document or other <script> tags to get loaded
@@ -552,7 +614,8 @@ Compare to regular script below:
 ------------------------------------------------------------------------------
 
 ## Cookies
-1. Cookies are small strings of data that are stored directly in the browser. 
+
+1. Cookies are small strings of data that are stored directly in the browser.
 2. Cookies are usually set by a web-server using response Set-Cookie HTTP-header. Then the browser automatically adds them to (almost) every request to the same domain using Cookie HTTP-header.
 3. Mostly used for authentication
 4. We can also access cookies from the browser, using document.cookie property.
@@ -560,8 +623,10 @@ Compare to regular script below:
 6. should not exceed 4KB. So we can’t store anything huge in a cookie.
 7. The total number of cookies per domain is limited to around 20+, the exact limit depends on a browser.
 
-e.g. cookie - document.cookie = "user=John; path=/; expires=Tue, 19 Jan 2038 03:14:07 GMT" 
+e.g. cookie - document.cookie = "user=John; path=/; expires=Tue, 19 Jan 2038 03:14:07 GMT"
+
 #### Cookie options (The options are listed after key=value, delimited by ;)
+
 1. Path
 The url path prefix, the cookie will be accessible for pages under that path. Must be absolute. By default, it’s the current path.
 If a cookie is set with path=/admin, it’s visible at pages /admin and /admin/something, but not at /home or /adminpage.
@@ -571,19 +636,22 @@ By default, a cookie is accessible only at the domain that set it. So, if the co
 3. expires, max-age
 If not present, cookie expires when the browser is closed
 4. secure
-The cookie should be transferred only over HTTPS. By default, if we set a cookie at http://site.com, then it also appears at https://site.com and vice versa.
+The cookie should be transferred only over HTTPS. By default, if we set a cookie at <http://site.com>, then it also appears at <https://site.com> and vice versa.
 5. httpOnly
 The web-server uses Set-Cookie header to set a cookie. And it may set the httpOnly option.  
 This option forbids any JavaScript access to the cookie. We can’t see such cookie or manipulate it using document.cookie.  
 That’s used as a precaution measure, to protect from certain attacks when a hacker injects his own JavaScript code into a page and waits for a user to visit that page. That shouldn’t be possible at all, a hacker should not be able to inject their code into our site, but there may be bugs that let hackers do it.
 
 ## LocalStorage, sessionStorage (Web storage objects)
+
 ##### LocalStorage
+
 1. Unlike cookies, web storage objects are not sent to server with each request
 2. Can store upto 2 MB data
 3. Also unlike cookies, the server can’t manipulate storage objects via HTTP headers. Everything’s done in JavaScript.
 4. The storage is bound to the origin (domain/protocol/port triplet). That is, different protocols or subdomains infer different storage objects, they can’t access data from each other.
 5. Both storage objects provide same methods and properties:
+
 ```javascript
 setItem(key, value) – store key/value pair.
 getItem(key) – get the value by key.
@@ -597,10 +665,12 @@ localStorage.setItem('test', 1);
 // get from browser
 alert( localStorage.getItem('test') ); // 1
 ```
+
 We only have to be on the same origin (domain/port/protocol), the url path can be different.
 The localStorage is shared between all windows with the same origin, so if we set the data in one window, the change becomes visible in another one.
 
 ##### Sessionstorage
+
 1. Properties and methods are the same as local storage, but it’s much more limited
 2. The sessionStorage exists only within the current browser tab.
 Another tab with the same page will have a different storage.  
@@ -608,10 +678,13 @@ sessionStorage.setItem('test', 1);
 sessionStorage.getItem('test')
 
 ## Debouncing and Throttling
+
 Api rate limiting techniques  
+
 1. DEBOUNCE  
 Instead of calling api every single time, call only when there is a specific time gap between 2 api calls - used in input search autocomplete  
 If user is typing a keyword, keyup event is called every single time, but make api call when there is a pause (say 300ms) see on flipkart website, autosuggestion changes only when you wait fir skme time after you type your keyword.  
+
 ```javascript
 Doc.getElembyId.addEvntList('onkeyup', debounceCall) 
 
@@ -635,6 +708,7 @@ console.log(' calling search api')
 ```
 
 2. THROTTLING
+
 ```javascript
 Doc.getElembyId.addEvntList('onResize', throttleCalk) 
 
@@ -659,5 +733,3 @@ Func callSearchApi() {
 console.log(' calling search api')
 } 
 ```
-
-
