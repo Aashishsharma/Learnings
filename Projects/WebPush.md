@@ -48,6 +48,37 @@ The application server keys, also known as VAPID keys, are unique to your server
 ```
 
 Endpoint - unique to each user  
-Keys - 
+Keys - the message which we send to the push servers needs to be encrypted, only browser should be able to see the message, so the browser generates the public-private key, we get this public key, using which we can encrypt the message, and only browser has the private key.
 
 ## Step 2 - Send push message
+
+1. Using web-push nodejs library  
+
+```javascript
+webpush.sendNotification(subscription, dataToSend).then()
+```
+
+A push service receives a network request, validates it and delivers a push message to the appropriate browser. If the browser is offline, the message is queued until the the browser comes online.  
+
+## Step 3 - Display push message
+
+This code is present in the service worker which has certain events that gets triggered when the push servers send notification to the browser
+
+```javascript
+self.addEventListener('push', function(event) {
+ // event.data has data sent from our server
+ self.registration.showNotification(title,options)
+ // option includes
+ const options = {
+      body: data.message,
+      badge: '/principal-logo.png',
+      icon: '/principal-logo.png'
+ }
+}
+
+//another event
+self.addEventListener('notificationclick', function(event) {}
+```
+
+Service worker -  
+A service worker is a script that runs independently in the browser background. On the user side, it can intercept its network requests and decide what to load
