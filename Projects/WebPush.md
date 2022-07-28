@@ -81,4 +81,7 @@ self.addEventListener('notificationclick', function(event) {}
 ```
 
 Service worker -  
-A service worker is a script that runs independently in the browser background. On the user side, it can intercept its network requests and decide what to load
+A service worker is a script that runs independently in the browser background. On the user side, it can intercept its network requests and decide what to load  
+Stored as js file in backend server and on ui relative path is given of that file while regestring SW
+
+In our app - We used GTM to add the pop-up and permissions (client-side step) js file on p.com
