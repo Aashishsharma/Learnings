@@ -84,4 +84,6 @@ Service worker -
 A service worker is a script that runs independently in the browser background. On the user side, it can intercept its network requests and decide what to load  
 Stored as js file in backend server and on ui relative path is given of that file while regestring SW
 
-In our app - We used GTM to add the pop-up and permissions (client-side step) js file on p.com
+In our app - We used GTM to add the pop-up and permissions (client-side step) js file on p.com  
+We also had a backend cron job to ensure that the notification is delieverd for failed user -   
+When we call **webpush.sendNotification()** func, in promise it returns failed/delieverd status to push servers, so we track the failed messages and re-send them at a later stage in cron job
