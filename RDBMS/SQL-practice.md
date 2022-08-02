@@ -267,3 +267,10 @@ Where emp.rownum = N
 ```SQL
 SELECT * FROM Table_Name WHERE Rowid = SELECT MAX(Rowid) from Table_Name;  
 ```
+
+5. Show the first N characters of the string
+```SQL
+SELECT SUBSTRING(Column_Name, 1, N) from Table_Name;  
+```
+
+6.
