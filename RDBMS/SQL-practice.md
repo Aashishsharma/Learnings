@@ -247,14 +247,23 @@ ORDER BY Salary ASC;
 ```
 
 3. nth higest/lowest without using top/limit
-we will find the salary value until the inner query returns a count of n-1 rows having the salary greater than other distinct salaries  
+SQL server provides a window function called ROW_NUMBER() func,  
+Syntax - ROW_NUMBER() over (Salary desc)  
+need to use this func in where clause, but this func can only be used in select  
+So hack - use nested query, where output from sub-query can be used as column, which can then be used in
+where clause
+
 ```SQL
-SELECT Salary
-FROM EmployeeSalary Emp1
-WHERE N-1 = (
-                SELECT COUNT( DISTINCT ( Emp2.Salary ) )
-                FROM EmployeeSalary Emp2
-                WHERE Emp2.Salary > Emp1.Salary
-            )
+SELECT Salary from (
+   SELECT Salary, ROW_NUMBER() over (Salary desc) as ronnum
+    FROM EmployeeSalary
+) as emp   ----- note this alias which we add to result of sub-query
+Where emp.rownum = N
+
 ```
 
+4. last record from the table (Not worling in sql server)
+
+```SQL
+SELECT * FROM Table_Name WHERE Rowid = SELECT MAX(Rowid) from Table_Name;  
+```
