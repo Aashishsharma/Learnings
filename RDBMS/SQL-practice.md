@@ -245,3 +245,16 @@ FROM (
       )
 ORDER BY Salary ASC;
 ```
+
+3. nth higest/lowest without using top/limit
+we will find the salary value until the inner query returns a count of n-1 rows having the salary greater than other distinct salaries  
+```SQL
+SELECT Salary
+FROM EmployeeSalary Emp1
+WHERE N-1 = (
+                SELECT COUNT( DISTINCT ( Emp2.Salary ) )
+                FROM EmployeeSalary Emp2
+                WHERE Emp2.Salary > Emp1.Salary
+            )
+```
+
