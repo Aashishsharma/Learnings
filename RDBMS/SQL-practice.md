@@ -1,5 +1,6 @@
 
 ## 1. CREATE
+
 ```SQL
 /* this is for sql server*/
 CREATE DATABASE record_company;
@@ -9,20 +10,20 @@ DROP DATABASE record_company;
 USE record_company;
 
 CREATE TABLE bands (
-	id INT NOT NULL AUTO_INCREMENT,
-	name VARCHAR(255) NOT NULL,
-	PRIMARY KEY (id)
+ id INT NOT NULL AUTO_INCREMENT,
+ name VARCHAR(255) NOT NULL,
+ PRIMARY KEY (id)
 );
 
 CREATE TABLE albums (
-	id INT NOT NULL AUTO_INCREMENT,
-	name VARCHAR(255) NOT NULL,
-	release_year INT,
-	band_id INT NOT NULL,
-	PRIMARY KEY (id),
-	/*define relationship between band_id and band table*/
-	FOREIGN KEY (band_id) REFERENCES bands(id)/*create foreign key with band table(id col)*/
-	/*SQL will not allow to insert any album whose band_id doesn't exists in band table (id col)*/
+ id INT NOT NULL AUTO_INCREMENT,
+ name VARCHAR(255) NOT NULL,
+ release_year INT,
+ band_id INT NOT NULL,
+ PRIMARY KEY (id),
+ /*define relationship between band_id and band table*/
+ FOREIGN KEY (band_id) REFERENCES bands(id)/*create foreign key with band table(id col)*/
+ /*SQL will not allow to insert any album whose band_id doesn't exists in band table (id col)*/
 );
 
 ALTER TABLE test
@@ -31,6 +32,7 @@ DROP TABLE
 ```
 
 ## 2. Insert
+
 ```SQL
 INSERT into bands (name) 
 VALUES ('Iron Maiden')
@@ -41,11 +43,12 @@ VALUES ('Deuce'), ('Avenged'), ('Ankor')
 
 INSERT INTO albums (name, release_year, band_id)
 VALUES ('No of Beasts', 1985, 1),
-		('Nightmare', 2018, 2),
-		('Nightmare', null, 2);
+  ('Nightmare', 2018, 2),
+  ('Nightmare', null, 2);
 ```
 
 ## 3. Select
+
 ```SQL
 SELECT * FROM bands LIMIT 2;
 
@@ -55,6 +58,7 @@ SELECT * FROM bands ORDER BY name desc
 ```
 
 ## 4. Update
+
 ```SQL
 UPDATE albums
 SET release_year = 1982
@@ -62,13 +66,16 @@ WHERE id = 1;
 ```
 
 ## 5. Where clause
+
 ```SQL
 SELECT * from albums
 WHERE name LIKE '%night%' OR band_id = 2
 
 /*OR, AND, BETWEEN (2000 AND 2019)*/
 ```
+
 ## JOINS
+
 ```SQL
 
 /*default is inner join*/
@@ -88,6 +95,7 @@ RIGHT JOIN albums ON bands.id = albums.band_id;
 ```
 
 ## Query order of execution
+
 1. Get data (FROM, JOIN)
 The FROM clause, and subsequent JOINs are first executed to determine the total working set of data that is being queried. This includes subqueries in this clause
 2. Filter the rows (Where)
@@ -100,6 +108,7 @@ the constraints in the HAVING clause are then applied to the grouped rows, disca
 7. Order and Paging (Order by & Limit / offset)
 
 ## Aggregate, group by and having
+
 ```SQL
 SELECT AVG(release_year) FROM albums;
 
@@ -131,6 +140,7 @@ HAVING num_albums = 1
 ```
 
 ## Practice queries
+
 ```SQL
 /*Return all bands that have album*/
 /* This assummes all bands have a unique name */
@@ -153,6 +163,7 @@ WHERE bands.id NOT IN (select band_id FROM albums)
 ```
 
 ## With clause to create views
+
 WITH clause is used to define a temporary relation.  
 When a query with a WITH clause is executed, first the query mentioned within the  clause is evaluated and the output of this evaluation is stored in a temporary relation. Following this, the main query associated with the WITH clause is finally executed that would use the temporary relation produced  
 
@@ -178,12 +189,12 @@ FROM EMPLOYEE)
 
 ```
 
-
-![alt text](PNG/Schema.PNG "Title") 
+![alt text](PNG/Schema.PNG "Title")
 
 -------------------------------------------------------------------------------------------
 
 ### Queries
+
 ![alt text](PNG/Q1.PNG "Title")
 
 -------------------------------------------------------------------------------------------  
@@ -209,3 +220,28 @@ FROM EMPLOYEE)
 
 -------------------------------------------------------------------------------------------
 
+#### Interview questions
+
+1. Fetch duplicates  
+use GROUP BY on and then use the HAVING clause to return only those fields whose count is greater than 1
+
+```SQL
+SELECT FullName COUNT(*)
+FROM EmployeeDetails
+GROUP BY FullName
+HAVING COUNT(*) > 1;
+```
+
+2. nth highest salary  
+From sub-query fetch top n sal in desc order, in main query get top 1 and in asc order  
+For nth lowest sal - from sub-query get top n sal, but his time ord by asc, then in main query by desc
+
+```SQL
+SELECT TOP 1 Salary
+FROM (
+      SELECT DISTINCT TOP N Salary
+      FROM Employee
+      ORDER BY Salary DESC
+      )
+ORDER BY Salary ASC;
+```
