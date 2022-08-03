@@ -232,7 +232,17 @@ GROUP BY FullName
 HAVING COUNT(*) > 1;
 ```
 
-2. nth highest salary  
+2. delete duplicates - not same as above, since delete will delete all duplicates, we need one duplicate val 
+```SQL
+delete from EMP
+where EMPID not in (
+  select MAX(EMPID) from EMP
+  group by fullname
+)
+```
+keep only maxId of EMP, delete rest of records whihc have duplicate fullname
+
+3. nth highest salary  
 From sub-query fetch top n sal in desc order, in main query get top 1 and in asc order  
 For nth lowest sal - from sub-query get top n sal, but his time ord by asc, then in main query by desc
 
@@ -246,7 +256,7 @@ FROM (
 ORDER BY Salary ASC;
 ```
 
-3. nth higest/lowest without using top/limit
+4. nth higest/lowest without using top/limit
 SQL server provides a window function called ROW_NUMBER() func,  
 Syntax - ROW_NUMBER() over (Salary desc)  
 need to use this func in where clause, but this func can only be used in select  
@@ -262,15 +272,22 @@ Where emp.rownum = N
 
 ```
 
-4. last record from the table (Not worling in sql server)
+5. last record from the table (Not worling in sql server)
 
 ```SQL
 SELECT * FROM Table_Name WHERE Rowid = SELECT MAX(Rowid) from Table_Name;  
 ```
 
-5. Show the first N characters of the string
+6. Show the first N characters of the string
 ```SQL
 SELECT SUBSTRING(Column_Name, 1, N) from Table_Name;  
 ```
+7. Extract frst nm and lastnm from comma separated fullname
+```SQL
+--E.g. Ashish, Sharma
+select LEFT(FULLNAME, CHARINDEX(',', FULLNAME) -1) as firstName, -- here FULLNAME is the name of col in table
+RIGHT(FULLNAME, LEN(FULLNAME) - CHARINDEX(',', FULLNAME)) as lastName
+-- LEFT (col-nm, index) - start from left get all chars till the index is reached
+-- RIGHT (col-nm, no-of-chars) - start from right, fetch no-of-chars
 
-6.
+```
