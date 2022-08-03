@@ -295,3 +295,11 @@ RIGHT(FULLNAME, LEN(FULLNAME) - CHARINDEX(',', FULLNAME)) as lastName
 -- LEFT (col-nm, index) - start from left get all chars till the index is reached
 -- RIGHT (col-nm, no-of-chars) - start from right, fetch no-of-chars
 ```
+
+8. Get age from birthday  
+Pre-requisite - datediff(<format>, fromDate, toDate) -- format - MM - returns difference from 2 dates (other vals - DD/YY)
+```SQL
+select datediff(YY, birthday, getdate()) as AGE
+from EMP
+--use YY to get age, here birthday is col-nm
+```
