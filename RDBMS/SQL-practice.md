@@ -232,7 +232,8 @@ GROUP BY FullName
 HAVING COUNT(*) > 1;
 ```
 
-2. delete duplicates - not same as above, since delete will delete all duplicates, we need one duplicate val 
+2. delete duplicates - not same as above, since delete will delete all duplicates, we need one duplicate val
+
 ```SQL
 delete from EMP
 where EMPID not in (
@@ -240,6 +241,7 @@ where EMPID not in (
   group by fullname
 )
 ```
+
 keep only maxId of EMP, delete rest of records whihc have duplicate fullname
 
 3. nth highest salary  
@@ -279,15 +281,17 @@ SELECT * FROM Table_Name WHERE Rowid = SELECT MAX(Rowid) from Table_Name;
 ```
 
 6. Show the first N characters of the string
+
 ```SQL
 SELECT SUBSTRING(Column_Name, 1, N) from Table_Name;  
 ```
+
 7. Extract frst nm and lastnm from comma separated fullname
+
 ```SQL
 --E.g. Ashish, Sharma
 select LEFT(FULLNAME, CHARINDEX(',', FULLNAME) -1) as firstName, -- here FULLNAME is the name of col in table
 RIGHT(FULLNAME, LEN(FULLNAME) - CHARINDEX(',', FULLNAME)) as lastName
 -- LEFT (col-nm, index) - start from left get all chars till the index is reached
 -- RIGHT (col-nm, no-of-chars) - start from right, fetch no-of-chars
-
 ```
