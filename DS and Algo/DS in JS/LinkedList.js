@@ -117,12 +117,33 @@ class LinkedList {
     return -1;
 
   }
+
   print() {
     let currentNode = this.head
     while(currentNode) {
       console.log(currentNode.value);
       currentNode = currentNode.next;
     }
+  }
+
+  // algos - reverse
+  // 1. Reverse a linkedList
+  // use 3 pointers, prev (init val - null ), curr (init val - head), next (init val = curr.next) (next node is a tmp node)
+  // then curr.next = prev, then move both curr and prev forward
+
+  reverse() {
+    let prev = null;
+    let curr = this.head;
+    while(curr) {
+      let nextNode = curr.next;
+      if(!curr.next)
+        this.head = curr;
+      curr.next = prev;
+      prev = curr;
+      curr = nextNode;
+    }
+    console.log('reversed linked list ');
+    this.print()
   }
 
 }
@@ -136,7 +157,8 @@ myLL.insert(444, 1)
 myLL.print();
 console.log(myLL.search(333))
 
-/////////////////////////////////// ALGORITHMS //////////////////////////////////////////////
 
-//1. Reverse a linkedList
+myLL.reverse()
+
+
 
