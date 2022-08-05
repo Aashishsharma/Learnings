@@ -1,26 +1,7 @@
 /* Stacks! */
 // functions: push, pop, peek, length
 
-// 1. usign arrays
-const letters = []; // this is our stack
-const word = "racecar"
-let rword = "";
 
-// put letters of word into stack
-for (let i = 0; i < word.length; i++) {
-  letters.push(word[i]);
-}
-// pop off the stack in reverse order
-for (let i = 0; i < word.length; i++) {
-  rword += letters.pop(); 
-}
-if (rword === word) {
-  console.log(word + "palindrome");
-} else {
-  console.log(word + " ! palindrome");
-}
-
-// 2. using customstack class
 // Creates a stack
 class Stack {
   stackTop = 0;
@@ -54,3 +35,8 @@ myStack.push('freeCodeCamp');
 console.log(myStack.peek());
 console.log(myStack.pop());
 console.log(myStack.peek());
+
+// Stack usage
+// 1. Browser history
+// 2. Undo operation
+// 3. Call stack in JS runtime

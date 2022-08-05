@@ -1,121 +1,142 @@
 /* LinkedList */
 
-function LinkedList() { 
-  var length = 0; 
-  var head = null; 
-  var Node = function(element){
-    this.element = element; 
-    this.next = null; 
-  }; 
-  this.size = function(){
-    return length;
-  };
-  this.head = function(){
-    return head;
-  };
-  this.add = function(element){
-    var node = new Node(element);
-    if(head === null){
-        head = node;
+// Linked List data structure
+// 1. Node which is an class, which has data and pointer to next node
+// 2. Linked list - class which has a head - pointing to beginning of linked list and size
+
+//methods
+// note below methods take value as arg and not the node
+// 1. isEmpty, prepend, append,
+
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null
+  }
+}
+
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.size = 0
+  }
+
+  isEmpty() {
+    return this.size === 0
+  }
+
+  getSize() {
+    return this.size
+  }
+
+  // O(1)
+  prepend(value) {
+    const node = new Node(value);
+    if(this.isEmpty()) {
+      this.head = node;
     } else {
-        var currentNode = head;
-        while(currentNode.next){
-            currentNode  = currentNode.next;
-        }
-        currentNode.next = node;
+      node.next = this.head;
+      this.head = node;
     }
-    length++;
-  }; 
-  this.remove = function(element){
-    var currentNode = head;
-    var previousNode;
-    if(currentNode.element === element){
-        head = currentNode.next;
+    this.size++;
+  }
+
+  // O(n), to make it O(1) keep reference of the tail node, similar to that of head
+  append(value) {
+    const node = new Node(value);
+    if(this.isEmpty()) {
+      this.head = node;
     } else {
-        while(currentNode.element !== element) {
-            previousNode = currentNode;
-            currentNode = currentNode.next;
-        }
-        previousNode.next = currentNode.next;
+      let pointer = this.head;
+      while(pointer.next) {
+        pointer = pointer.next;
+      }
+      pointer.next = node;
     }
-    length --;
-  };
-  this.isEmpty = function() {
-    return length === 0;
-  };
-  this.indexOf = function(element) {
-    var currentNode = head;
-    var index = -1;
-    while(currentNode){
-        index++;
-        if(currentNode.element === element){
-            return index;
-        }
-        currentNode = currentNode.next;
+    this.size++;
+  }
+
+  insert(value, index) {
+    if(index < 0 || index > this.size) {
+      console.log('Invalid index val');
+      return;
+    }
+    if(index === 0) {
+      this.prepend(value); 
+      return;
+    } 
+    if(index === this.size) {
+      this.append(value);
+      return;
+    }
+    let currentNode = this.head;
+    const node = new Node(value);
+    for(let i=0; i<index-1; i++) {
+      currentNode = currentNode.next;
+    }
+    node.next = currentNode.next;
+    currentNode.next = node;
+    this.size++;
+  }
+
+  // note remove can also take node value, in this case, we need to check each node value while traversing
+  remove(index) {
+    if(index < 0 || index > this.size) {
+      console.log('invalid index');
+      return;
+    }
+    let removedNode;
+    if(index === 0) {
+      removedNode = this.head;
+      this.head = this.head.next;
+      this.size--;
+      return removedNode.value;
+    }
+    let currentNode = this.head;
+    for(let i=0; i<index-1; i++) {
+      currentNode = currentNode.next;
+    }
+    removedNode = currentNode.next;
+    currentNode.next = removedNode.next
+    this.size--;
+    return removedNode.value
+
+  }
+
+  // -1 if val not found or index pos of node where val found
+  search(value) {
+    let currentNode = this.head;
+    let pos = 0;
+    while(currentNode) {
+      if(currentNode.value === value) {
+        return pos;
+      }
+      pos++;
+      currentNode = currentNode.next;
     }
     return -1;
-  };
 
-  this.elementAt = function(index) {
-    var currentNode = head;
-    var count = 0;
-    while (count < index){
-        count ++;
-        currentNode = currentNode.next
-    }
-    return currentNode.element;
-  };
-  this.addAt = function(index, element){
-    var node = new Node(element);
-    var currentNode = head;
-    var previousNode;
-    var currentIndex = 0;
-    if(index > length){
-        return false;
-    }
-    if(index === 0){
-        node.next = currentNode;
-        head = node;
-    } else {
-        while(currentIndex < index){
-            currentIndex++;
-            previousNode = currentNode;
-            currentNode = currentNode.next;
-        }
-        node.next = currentNode;
-        previousNode.next = node;
-    }
-    length++;
   }
-  this.removeAt = function(index) {
-    var currentNode = head;
-    var previousNode;
-    var currentIndex = 0;
-    if (index < 0 || index >= length){
-        return null
+  print() {
+    let currentNode = this.head
+    while(currentNode) {
+      console.log(currentNode.value);
+      currentNode = currentNode.next;
     }
-    if(index === 0){
-        head = currentNode.next;
-    } else {
-        while(currentIndex < index) {
-            currentIndex ++;
-            previousNode = currentNode;
-            currentNode = currentNode.next;
-        }
-        previousNode.next = currentNode.next
-    }
-    length--;
-    return currentNode.element;
   }
-} 
-var conga = new LinkedList();
-conga.add('Kitten');
-conga.add('Puppy');
-conga.add('Dog');
-conga.add('Cat');
-conga.add('Fish');
-console.log(conga.size());
-console.log(conga.removeAt(3));
-console.log(conga.elementAt(3));
-console.log(conga.indexOf('Puppy'));
-console.log(conga.size());
+
+}
+
+var myLL = new LinkedList();
+myLL.append(123);
+myLL.prepend(222);
+myLL.insert(333, 1)
+myLL.insert(444, 1)
+//myLL.remove(1);
+myLL.print();
+console.log(myLL.search(333))
+
+/////////////////////////////////// ALGORITHMS //////////////////////////////////////////////
+
+//1. Reverse a linkedList
+
