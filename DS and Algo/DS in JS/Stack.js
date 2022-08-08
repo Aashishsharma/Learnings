@@ -2,39 +2,48 @@
 // functions: push, pop, peek, length
 
 
-// Creates a stack
+const LinkedListWithTail = require('./LinkedList');
+
 class Stack {
-  stackTop = 0;
-  data = {};
-  // Adds a value onto the end of the stack
-  push = function(value) {
-    this.data[this.stackTop] = value;
-    this.stackTop++;
+  constructor() {
+    this.list = new LinkedListWithTail()
   }
-  // Removes and returns the value at the end of the stack
-  pop = function() {
-    if (this.stackTop === 0) {
-        return undefined;
-    }
-    this.stackTop--;
-    var result = this.data[this.stackTop];
-    delete this.data[this.stackTop];
-    return result;
-  }   
-  size = function() {
-    return this.stackTop;
+
+  push(val) {
+    this.list.prepend(val);
   }
-  // Returns the value at the end of the stack
-  peek = function() {
-    return this.data[this.stackTop-1];
+
+  pop() {
+    return this.list.removeFromFront();
+  }
+
+  peek() {
+    return this.list.head.value;
+  }
+
+  isEmpty() {
+    return this.list.isEmpty()
+  }
+
+  size() {
+    return this.list.size()
+  }
+
+  print() {
+    this.list.print();
   }
 }
-const myStack = new Stack();
-myStack.push(1);
-myStack.push('freeCodeCamp');
-console.log(myStack.peek());
-console.log(myStack.pop());
-console.log(myStack.peek());
+const stack = new Stack();
+stack.push(10);
+stack.push(20);
+stack.push(30);
+
+stack.print();
+
+stack.pop();
+stack.print();
+
+console.log('Stack peek ', stack.peek())
 
 // Stack usage
 // 1. Browser history

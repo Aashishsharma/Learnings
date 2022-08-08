@@ -2,78 +2,57 @@
 
 // priority queue vs queue - only enqueue operation is different
 // enqueue based on priority lower no. higher priority
-class Queue { 
-  collection = [];
-  print = function() {
-    console.log(this.collection);
-  };
-  enqueue = function(element) {
-    this.collection.push(element);
-  };
-  dequeue = function() {
-    return this.collection.shift(); 
-  };
-  front = function() {
-    return this.collection[0];
-  };
-  size = function() {
-    return this.collection.length; 
-  };
-  isEmpty = function() {
-    return (this.collection.length === 0); 
-  };
-}
-const q = new Queue(); 
-q.enqueue('a'); 
-q.enqueue('b');
-q.enqueue('c');
-q.print();
-q.dequeue();
-console.log(q.front());
-q.print();
 
-function PriorityQueue () {
-  const collection = [];
-  this.printCollection = function() {
-    (console.log(collection));
-  };
-  this.enqueue = function(element){
-    if (this.isEmpty()){ 
-      collection.push(element);
-    } else {
-      let added = false;
-      for (let i=0; i<collection.length; i++){
-        if (element[1] < collection[i][1]){ //checking priorities
-          collection.splice(i,0,element);
-          added = true;
-          break;
-        }
-      }
-      if (!added){
-        collection.push(element);
-      }
-    }
-  };
-  this.dequeue = function() {
-    const value = collection.shift();
-    return value[0];
-  };
-  this.front = function() {
-    return collection[0];
-  };
-  this.size = function() {
-    return collection.length; 
-  };
-  this.isEmpty = function() {
-    return (collection.length === 0); 
-  };
-}
+/* Queues! */
+// functions: enqueue, dequeue, size, print
 
-const pq = new PriorityQueue(); 
-pq.enqueue(['Beau Carnes', 2]); 
-pq.enqueue(['Quincy Larson', 3]);
-pq.enqueue(['Briana Swift', 2])
-pq.printCollection();
-pq.dequeue();
-console.log(pq.front());
-pq.printCollection();
+
+const LinkedListWithTail = require('./LinkedList');
+
+class Queue {
+  constructor() {
+    this.list = new LinkedListWithTail()
+  }
+
+  enqueue(val) {
+    // note here we can do prepend, and in dequeue we can do removeFromEnd, but removeFromEnd is O(n)
+    // so we do the opposite
+    this.list.append(val);
+  }
+
+  dequeue() {
+    return this.list.removeFromFront();
+  }
+
+  peek() {
+    return this.list.head.value;
+  }
+
+  isEmpty() {
+    return this.list.isEmpty()
+  }
+
+  size() {
+    return this.list.size()
+  }
+
+  print() {
+    this.list.print();
+  }
+}
+const queue = new Queue();
+queue.enqueue(10);
+queue.enqueue(20);
+queue.enqueue(30);
+
+queue.print();
+
+queue.dequeue();
+queue.print();
+
+console.log('Queue peek ', queue.peek())
+
+// Queue usage
+// 1. Browser history
+// 2. Undo operation
+// 3. Call Queue in JS runtime
