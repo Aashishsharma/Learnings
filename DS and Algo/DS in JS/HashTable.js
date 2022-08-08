@@ -1,4 +1,15 @@
 /* Hash Table */
+
+// Stores key-val pair
+// Where we need insertion and deletion in O(1)
+// Linkedlist with tail have O(1) for prepend/append/removefromFront
+// but removefromend or remove from index is O(n)
+
+// JS objects also inbuilt uses hash tables to store key-val pair
+// but keys can only be string and objs in JS have inbuilt-keys which can be overidden accidently
+// But we can use MAP, why we need HASH tables
+// for interviews
+
 var hash = (string, max) => {
   var hash = 0;
   for (var i = 0; i < string.length; i++) {
@@ -6,51 +17,58 @@ var hash = (string, max) => {
   }
   return hash % max;
 };
-let HashTable = function() {
-  let storage = [];
-  const storageLimit = 14;
-  this.print = function() {
-    console.log(storage)
+class HashTable {
+  constructor() {
+    this.storage = [];
+    this.storageLimit = 14;
   }
-  this.add = function(key, value) {
-    var index = hash(key, storageLimit);
-    if (storage[index] === undefined) {
-      storage[index] = [
+  
+  print() {
+    console.log(this.storage)
+  }
+
+  add(key, value) {
+    let index = hash(key, this.storageLimit);
+    if (this.storage[index] === undefined) {
+      this.storage[index] = [
         [key, value]
       ];
     } else {
+      // handle collision
       var inserted = false;
-      for (var i = 0; i < storage[index].length; i++) {
-        if (storage[index][i][0] === key) {
-          storage[index][i][1] = value;
+      for (let i = 0; i < this.storage[index].length; i++) {
+        if (this.storage[index][i][0] === key) {
+          this.storage[index][i][1] = value;
           inserted = true;
         }
       }
       if (inserted === false) {
-        storage[index].push([key, value]);
+        this.storage[index].push([key, value]);
       }
     }
   };
-  this.remove = function(key) {
-    var index = hash(key, storageLimit);
-    if (storage[index].length === 1 && storage[index][0][0] === key) {
-      delete storage[index];
+  
+  remove(key) {
+    let index = hash(key, this.storageLimit);
+    if (this.storage[index].length === 1 && this.storage[index][0][0] === key) {
+      delete this.storage[index];
     } else {
-      for (var i = 0; i < storage[index].length; i++) {
-        if (storage[index][i][0] === key) {
-          delete storage[index][i];
+      for (let i = 0; i < this.storage[index].length; i++) {
+        if (this.storage[index][i][0] === key) {
+          delete this.storage[index][i];
         }
       }
     }
   };
-  this.lookup = function(key) {
-    var index = hash(key, storageLimit);
-    if (storage[index] === undefined) {
+  
+  lookup(key) {
+    var index = hash(key, this.storageLimit);
+    if (this.storage[index] === undefined) {
       return undefined;
     } else {
-      for (var i = 0; i < storage[index].length; i++) {
-        if (storage[index][i][0] === key) {
-          return storage[index][i][1];
+      for (let i = 0; i < this.storage[index].length; i++) {
+        if (this.storage[index][i][0] === key) {
+          return this.storage[index][i][1];
         }
       }
     }
@@ -65,3 +83,7 @@ ht.add('rex', 'dinosour');
 ht.add('tux', 'penguin')
 console.log(ht.lookup('tux'))
 ht.print();
+
+// Usage
+// 1. Caches
+// 2. DB indexing
