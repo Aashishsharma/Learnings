@@ -53,6 +53,3 @@ queue.print();
 console.log('Queue peek ', queue.peek())
 
 // Queue usage
-// 1. Browser history
-// 2. Undo operation
-// 3. Call Queue in JS runtime
