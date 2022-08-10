@@ -1,3 +1,10 @@
+//Trees a re no-linear datastructure unlike linkedlist,stack etc
+// with linear DS, search time is proportional to the size of the data
+// in non-linear DS search is faster
+// trees do not contain any loop/cycle, graphs do
+
+// Binary tree - each node has at max 2 childs
+// BST - left child val < parent val < right child val
 /* Binary Search Tree */
 
 class Node {
@@ -226,3 +233,8 @@ console.log('inOrder: ' + bst.inOrder());
 console.log('preOrder: ' + bst.preOrder());
 console.log('postOrder: ' + bst.postOrder());
 console.log('levelOrder: ' + bst.levelOrder());
+
+// Tree usage
+// 1. File system for directory
+// 2. DOM
+// 3. In chatbots 
