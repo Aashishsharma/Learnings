@@ -8,6 +8,7 @@
 /* Binary Search Tree */
 // operations - isEmpty, insert, delete, traversal (BFS, DFS)
 
+// key operation to watch out for - REMOVE
 // Tree means RECURSION
 
 class Node {
@@ -61,6 +62,7 @@ class BST {
     }
     return current.data;
   }
+  
   findMax() {
     let current = this.root;
     while (current.right !== null) {
@@ -126,9 +128,13 @@ class BST {
         node.right = removeNode(node.right, tempNode.data);
         return node;
       } else if (data < node.data) {
+        // traverse down and after deleting the node, recursively traverse up changing the left/right
+        // links of the parent node till the subtree's (see above - node havind 2 children) parent is reached
         node.left = removeNode(node.left, data);
         return node;
       } else {
+        // traverse down and after deleting the node, recursively traverse up changing the left/right
+        // links of the parent node till the subtree's (see above - node havind 2 children) parent is reached
         node.right = removeNode(node.right, data);
         return node;
       }
