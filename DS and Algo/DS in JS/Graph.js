@@ -1,32 +1,7 @@
 /* Graphs: Breadth-first search */
 // BFS finds distance of each node from the target node
-
-function bfs(graph, root) {
-  var nodesLen = {};
-  for (var i = 0; i < graph.length; i++) {
-    nodesLen[i] = Infinity;
-  }
-  nodesLen[root] = 0; 
-  var queue = [root]; 
-  var current; 
-  while (queue.length != 0) {
-    current = queue.shift();
-    var curConnected = graph[current];
-    var neighborIdx = []; 
-    var idx = curConnected.indexOf(1); 
-    while (idx != -1) {
-      neighborIdx.push(idx); 
-      idx = curConnected.indexOf(1, idx + 1); 
-    }
-    for (var j = 0; j < neighborIdx.length; j++) {
-      if (nodesLen[neighborIdx[j]] == Infinity) {
-        nodesLen[neighborIdx[j]] = nodesLen[current] + 1;
-        queue.push(neighborIdx[j]); 
-      }
-    }
-  }
-  return nodesLen;
-};
+// 2 ways to represent the graph
+// 1. Adjacency Matrix
 var exBFSGraph = [
   [0, 1, 1, 1, 0],
   [0, 0, 1, 0, 0],
@@ -34,4 +9,18 @@ var exBFSGraph = [
   [0, 0, 0, 1, 0],
   [0, 1, 0, 0, 0]
 ];
+
+// 2. Adjacenct List
+// instead of arrays, it can be - Map as key, val pair
+// Map(Vertex<String>, edgeTo<LinkedList>)
+const adjList = {
+  'A': ['B', 'C', 'D'],
+  'B': ['A', 'D'],
+  'C': ['A'],
+  'D': ['A', 'B']
+}
 console.log(bfs(exBFSGraph, 1));
+
+// Usage
+// 1. Google maps
+// 2. Fb/Insta to identify friends - users are vertices and connection is edge

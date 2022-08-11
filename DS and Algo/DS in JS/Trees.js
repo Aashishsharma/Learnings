@@ -6,10 +6,12 @@
 // Binary tree - each node has at max 2 childs
 // BST - left child val < parent val < right child val
 /* Binary Search Tree */
-// operations - isEmpty, insert, delete, traversal (BFS, DFS)
+// operations - isEmpty, insert, delete, traversal (BFS, DFS (in/pre/post order))
 
 // key operation to watch out for - REMOVE
 // Tree means RECURSION
+
+const Queue = require('./Queue');
 
 class Node {
   constructor(data, left = null, right = null) {
@@ -187,21 +189,15 @@ class BST {
     };
   }
 
-  preOrder() {
-    if (this.root == null) {
-      return null;
-    } else {
-      var result = new Array();
-      function traversePreOrder(node) {
-        result.push(node.data);
-        node.left && traversePreOrder(node.left);
-        node.right && traversePreOrder(node.right);
-      };
-      traversePreOrder(this.root);
-      return result;
-    };
+  preOrder(root) {
+    if(root) {
+      console.log(root.value);
+      this.postOrder(root.left);
+      this.preOrder(root.right);
+    }
   }
 
+  // if want to store the data in the array
   postOrder() {
     if (this.root == null) {
       return null;
@@ -216,7 +212,29 @@ class BST {
       return result;
     }
   }
-  
+
+  // create a queue
+  // enqueue root
+  // while queue not empty, dequeue front Node, read it's value, enqueue node.left then enqueue node.right if exists
+  BFS() {
+    const queue = new Queue()
+    if(!this.root) {
+      return;
+    } else {
+      queue.enqueue(this.root);
+      while(!queue.isEmpty()) {
+        const nextNode = queue.dequeue();
+        console.log(nextNode.data);
+        if(nextNode.left) {
+          queue.enqueue(nextNode.left)
+        } 
+        if(nextNode.right) {
+          queue.enqueue(nextNode.right);
+        }
+      }
+    }
+  }
+   
   levelOrder() {
       let result = [];
       let Q = []; 
@@ -256,6 +274,8 @@ console.log('preOrder: ' + bst.preOrder());
 console.log('postOrder: ' + bst.postOrder());
 console.log('levelOrder: ' + bst.levelOrder());
 console.log('search ', bst.search(17))
+
+console.log('BFS - ', bst.BFS())
 
 // Tree usage
 // 1. File system for directory

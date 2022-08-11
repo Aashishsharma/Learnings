@@ -40,16 +40,18 @@ class Queue {
     this.list.print();
   }
 }
-const queue = new Queue();
-queue.enqueue(10);
-queue.enqueue(20);
-queue.enqueue(30);
+// const queue = new Queue();
+// queue.enqueue(10);
+// queue.enqueue(20);
+// queue.enqueue(30);
 
-queue.print();
+// queue.print();
 
-queue.dequeue();
-queue.print();
+// queue.dequeue();
+// queue.print();
 
-console.log('Queue peek ', queue.peek())
+// console.log('Queue peek ', queue.peek())
+
+module.exports = Queue;
 
 // Queue usage
