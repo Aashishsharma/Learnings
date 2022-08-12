@@ -55,3 +55,8 @@ class Queue {
 module.exports = Queue;
 
 // Queue usage
+// 1. OS job queue
+// 2. event/cb queue in event loop in JS
+
+//////////////////////////////////////////// yet to implement //////////////////////////////////
+// 1. Priority queue

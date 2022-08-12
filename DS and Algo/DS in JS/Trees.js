@@ -286,3 +286,6 @@ console.log('BFS - ', bst.BFS())
 // 1. Searching
 // 2. sorting
 // 3. priority queues
+
+//////////////////////////////////////////// yet to implement //////////////////////////////////
+// 1. AVL Trees
