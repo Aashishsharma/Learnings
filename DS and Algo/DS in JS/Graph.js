@@ -24,6 +24,9 @@ const adjList = {
 
 // method to watch out for - removeEdge / remove vertices
 
+const Queue = require('./Queue');
+const Stack = require('./Stack'); 
+
 class Graph {
   constructor() {
     this.adjacencyList = {}
@@ -86,6 +89,61 @@ class Graph {
       delete this.adjacencyList[vertex];
     }
   }
+
+  // 1. Start from any vertex, put the frst vertex in queue
+  // 2. dequeu (and mark the dequed vertex as visited) 
+  // and put all the adjacent vertex (which are not visited yet) of the current vertex to queue
+  // 3. repeat step 2 while queue is not empty
+  bfsSearch(startingVertex) {
+    console.log('BFS search -> ')
+    const queue = new Queue();
+    const visitedVertex = [];
+    if(!this.adjacencyList[startingVertex])
+      return;
+    queue.enqueue(startingVertex);
+    while(!queue.isEmpty()) {
+      const currentVertex = queue.dequeue();
+      console.log(`${currentVertex}, `);
+      
+      [...this.adjacencyList[currentVertex]].forEach((vertex) => {
+        if(visitedVertex.includes(vertex))
+          return;
+        queue.enqueue(vertex);
+      });
+      visitedVertex.push(currentVertex);
+      
+    }
+  }
+
+  // 1. Start from any vertex and push frst vertex to stack
+  // 2. pop from stack, call is current vertex, if current vertex has adjacent which is not visited
+  // push current vertex to stack and use the frst adjacent vertex as current vertx
+  // if current vertex adjacent is visited, check if curr vertex has another adjacent which is not visited
+  // when no adjacent found, pop from stack
+  // 3. repeat step 2 until stack not empty
+  dfsSearch(startingVertex) {
+    console.log('DFS search -> ')
+    const stack = new Stack();
+    const visitedVertex = [];
+    if(!this.adjacencyList[startingVertex])
+      return;
+    stack.push(startingVertex);
+    while(!stack.isEmpty()) {
+      const currentVertex = stack.pop();
+      for(let i = 0; this.adjacencyList[currentVertex][i]; i++) {
+        this.dfsSearch()
+      }
+      console.log(`${currentVertex}, `);
+      
+      [...this.adjacencyList[currentVertex]].forEach((vertex) => {
+        if(visitedVertex.includes(vertex))
+          return;
+        queue.enqueue(vertex);
+      });
+      visitedVertex.push(currentVertex);
+      
+    }
+  }
 }
 
 const graph = new Graph();
@@ -101,12 +159,15 @@ graph.display();
 console.log(graph.hasEdge('A', 'C'));
 
 console.log('----------------removing edge -------------')
-graph.removeEdge('A', 'B');
+//graph.removeEdge('A', 'B');
 graph.display();
 
 console.log('----------------removing vertex -------------')
-graph.removeVertex('B');
+//graph.removeVertex('B');
 graph.display();
+
+graph.bfsSearch('A');
+graph.dfsSearch('A');
 // Usage
 // 1. Google maps
 // 2. Fb/Insta to identify friends - users are vertices and connection is edge
