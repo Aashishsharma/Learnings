@@ -116,33 +116,36 @@ class Graph {
   }
 
   // 1. Start from any vertex and push frst vertex to stack
-  // 2. pop from stack, call is current vertex, if current vertex has adjacent which is not visited
-  // push current vertex to stack and use the frst adjacent vertex as current vertx
+  // 2. pop from stack, call it current vertex, if current vertex has adjacent which is not visited
+  // print & push current vertex to stack and use the frst adjacent vertex as current vertx
   // if current vertex adjacent is visited, check if curr vertex has another adjacent which is not visited
   // when no adjacent found, pop from stack
   // 3. repeat step 2 until stack not empty
   dfsSearch(startingVertex) {
     console.log('DFS search -> ')
-    const stack = new Stack();
     const visitedVertex = [];
     if(!this.adjacencyList[startingVertex])
       return;
-    stack.push(startingVertex);
-    while(!stack.isEmpty()) {
-      const currentVertex = stack.pop();
-      for(let i = 0; this.adjacencyList[currentVertex][i]; i++) {
-        this.dfsSearch()
-      }
-      console.log(`${currentVertex}, `);
-      
-      [...this.adjacencyList[currentVertex]].forEach((vertex) => {
-        if(visitedVertex.includes(vertex))
-          return;
-        queue.enqueue(vertex);
-      });
+    let me = this;
+    const dfs = function(currentVertex, me) {
+      if(!currentVertex)
+        return;
       visitedVertex.push(currentVertex);
+      console.log(currentVertex);
+
+      const newCurrent = me.adjacencyList[currentVertex][0];
+      let i = 0;
+      for(let item of me.adjacencyList[currentVertex]) {
+        if(visitedVertex.includes(item)) {
+          i++;
+          continue;
+        } else {
+          dfs(item, me)
+        } 
+      }   
       
     }
+    dfs(startingVertex, me);
   }
 }
 
