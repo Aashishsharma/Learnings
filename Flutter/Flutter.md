@@ -5,10 +5,6 @@
 Mobile UI framework for creating android + IOS apps  
 Dart is used as a programing lang. for creating apps in flutter
 
-Components
-
-1. Widgets - everything inside a flutter app is a widgets (widget is a class)
-
 ## Dart
 
 Similar to java, statically typed (string can't be addigned to int vars)
@@ -79,3 +75,14 @@ class SuperUser extends User {
 }
 
 ```
+
+## Components
+
+### Widgets - everything inside a flutter app is a widgets (widget is a class)
+
+Different widgets  
+
+Inbuilt widgets
+
+#### 1. Scaffloding widget (defines layout of a page)
+
