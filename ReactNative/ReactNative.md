@@ -25,7 +25,7 @@ ecpo-cli provides various ways to view app
 ```javascript
 import React, {useState} from 'react';
 // see below line - these are default comps provided in RN
-import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Button, FlatList, TouchableOpacity } from 'react-native';
 
 // veiw = div in html and Text = p, TextInput = <input> in html
 // since this is for mobile apps, we cannot render html/css below
@@ -69,7 +69,10 @@ export default function App() {
         keyExtractor={(item) => item.id} // react requires key prop for each item, if our array has id instead of key then
         data={people} // actual array list that needs to be renderd
         renderItem={({ item }) => ( // JSX - to let FlatList know what to render
-          <Text style={styles.item}>{item.name}</Text>
+          // TouchableOpacity - makes anything touchable on the app
+          <TouchableOpacity onPress={() => pressHandler(item.id)}>
+            <Text style={styles.item}>{item.name}</Text>
+          </TouchableOpacity>
         )}
       />
   );
