@@ -85,4 +85,17 @@ Different widgets
 Inbuilt widgets
 
 #### 1. Scaffloding widget (defines layout of a page)
+Implements the basic Material Design visual layout structure.
+
+
+#### Adding fonts
+Download font files grom google fonts, add it in projects font directory.  
+Then in pubspec.yaml file add the newly added font details
+
+```yaml
+  fonts:
+    - family: Satisfy
+      fonts:
+        - asset: fonts/Satisfy-Regular.ttf
+```
 
