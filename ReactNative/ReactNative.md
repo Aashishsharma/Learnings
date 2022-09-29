@@ -24,7 +24,8 @@ ecpo-cli provides various ways to view app
 
 ```javascript
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+// see below line - these are default comps provided in RN
+import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
 
 // veiw = div in html and Text = p, TextInput = <input> in html
 // since this is for mobile apps, we cannot render html/css below
@@ -47,7 +48,12 @@ export default function App() {
           placeholder='name'
           keyboardType='numeric' // default is aplhabhetic
           onChangeText={(val) => setName(val)}/>
-       <Button title="update name" onPress={updateName} />
+       <Button title="update name" onPress={updateName}
+       // note - we can't add style attribute to button comp
+       // workaround - create our own button func in RN
+       // although button can accept few props like - color, which should be enough
+       /> 
+       
        <Text>Updated name is {name}</Text>
       </View>    
       
@@ -56,6 +62,16 @@ export default function App() {
     // students.map((item) => {return <View><Text>{item.name}</Text></View>})
     // by default in RN, we cannot scroll, to do that we need to use <ScrollView> comp provided by RN
     // <ScrollView> {render-the-list} </ScrollView>
+
+    // instead of rendering list by above method we can use inbuild comp of RN - FlatList
+    <FlatList 
+        numColumns={2} // 2 list items renderd in 1 row
+        keyExtractor={(item) => item.id} // react requires key prop for each item, if our array has id instead of key then
+        data={people} // actual array list that needs to be renderd
+        renderItem={({ item }) => ( // JSX - to let FlatList know what to render
+          <Text style={styles.item}>{item.name}</Text>
+        )}
+      />
   );
 }
 
