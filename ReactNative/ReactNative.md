@@ -26,9 +26,10 @@ ecpo-cli provides various ways to view app
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
-// veiw = div in html and Text = p in html
+// veiw = div in html and Text = p, TextInput = <input> in html
 // since this is for mobile apps, we cannot render html/css below
 // hooks are same as react hooks
+
 export default function App() {
     const [name, setName] = useState('Ashish');
     const updateName = () => {
@@ -40,11 +41,21 @@ export default function App() {
         <Text style={styles.boldText}>Hello, World!</Text>
       </View>
       <View style={styles.body}>
-       <Text > My Name is {name}</Text>
+       <Text > Enter Name </Text>
+       <TextInput 
+          style={styles.input}
+          placeholder='name'
+          keyboardType='numeric' // default is aplhabhetic
+          onChangeText={(val) => setName(val)}/>
        <Button title="update name" onPress={updateName} />
-      </View>
+       <Text>Updated name is {name}</Text>
+      </View>    
       
     </View>
+    // we can render lists same way as that in react
+    // students.map((item) => {return <View><Text>{item.name}</Text></View>})
+    // by default in RN, we cannot scroll, to do that we need to use <ScrollView> comp provided by RN
+    // <ScrollView> {render-the-list} </ScrollView>
   );
 }
 
@@ -69,6 +80,9 @@ const styles = StyleSheet.create({
   },
   boldText: {
     fontWeight: 'bold',
+  },
+  input: {
+    borderWidth: 1
   }
 });
 ```
