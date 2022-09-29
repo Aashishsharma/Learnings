@@ -106,4 +106,4 @@ const styles = StyleSheet.create({
 });
 ```
 
-Use this link to add any icons in RN -  <https://icons.expo.fyi/>  
+Use this link to add any icons in RN -  <https://icons.expo.fyi/>   
