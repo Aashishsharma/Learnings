@@ -69,7 +69,7 @@ export default function App() {
         keyExtractor={(item) => item.id} // react requires key prop for each item, if our array has id instead of key then
         data={people} // actual array list that needs to be renderd
         renderItem={({ item }) => ( // JSX - to let FlatList know what to render
-          // TouchableOpacity - makes anything touchable on the app
+          // TouchableOpacity - makes anything touchable on the app, and changes it's opacity
           <TouchableOpacity onPress={() => pressHandler(item.id)}>
             <Text style={styles.item}>{item.name}</Text>
           </TouchableOpacity>
@@ -105,3 +105,5 @@ const styles = StyleSheet.create({
   }
 });
 ```
+
+Use this link to add any icons in RN -  <https://icons.expo.fyi/>  
