@@ -32,7 +32,10 @@ AS activities
 1. Send email
 2. Sql query  
 ![alt text](PNG/AS2.PNG "Title")  
- 
+3. File transfer  
+4. Script activity - serer side JS  
+5. filter activity to filter records
+6. Wait activity 
 
 
 ## Journey Builder
@@ -77,3 +80,9 @@ Webinar email campaign
 2. Send reminder emails after X days
 3. Send thank you email after registration complete
 4. Thank you email for attending
+
+## To-do
+Amp script
+cloud pages
+Einstein activity
+project think through
