@@ -20,6 +20,8 @@ emailaddr type should only be 1, if we need to store multiple emails, store othe
 use %%dataextensionfieldname%% when sending email in bulk like  
 Hey %%firstName%%  
 
+You can create DE from scratch / form other DE (aka filtered DE)
+
 ## Automation Studio  
 Entry source can be file drop (any file put to SFMC ftp) or scheduled  
 Below automation gets file from FTP location (based on file-name-patter) and add that data into DE  
@@ -39,6 +41,9 @@ Subscriber in ES
 Customers can change profile attributes when they click on settings in email send vai SFMC
 ![alt text](PNG/ES1.PNG "Title") 
 ![alt text](PNG/ES2.PNG "Title") 
+
+## Marketing cloud connect
+Connect with Salesforce CRM
 
 ## My project
 Webinar email campaign  
