@@ -16,3 +16,9 @@ Thus we need to add 1 mandatory field in DE with datatype as emailaddress (see b
 emailaddr type should only be 1, if we need to store multiple emails, store others in text as a datatype
 
 ![alt text](PNG/DE1.PNG "Title")  
+
+use %%dataextensionfieldname%% when sending email in bulk like  
+Hey %%firstName%%  
+
+## Automation Studio  
+
