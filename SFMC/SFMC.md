@@ -26,11 +26,21 @@ You can create DE from scratch / form other DE (aka filtered DE)
 Entry source can be file drop (any file put to SFMC ftp) or scheduled  
 Below automation gets file from FTP location (based on file-name-patter) and add that data into DE  
 It maps csv headers into DE fields, we can set failuer/success email alerts to devs
-![alt text](PNG/AS1.PNG "Title")  
+![alt text](PNG/AS1.PNG "Title")    
+In AS we can run SQL queries on DE  
+
 
 ## Journey Builder
-Entry sources - DE, API (external sources can inject contacts into this JB)  
-While selectind DE, we can add a filter criteria for DE rows
+Entry sources - DE, API (external sources can inject contacts into this JB), Salesforce (SF)  
+WHen SF is entry source - use case - (when a case in SF is closed, send email from SFMC)  
+1. Entry source - SF
+2. Select obj - case
+3. add filters - select attribute = case, status = closed
+4. Entry source configured, send email  
+
+![alt text](PNG/JB1.PNG "Title") 
+
+While selecting DE, we can add a filter criteria for DE rows
 
 ## Email Studio  
 Subscriber in ES  
@@ -43,7 +53,14 @@ Customers can change profile attributes when they click on settings in email sen
 ![alt text](PNG/ES2.PNG "Title") 
 
 ## Marketing cloud connect
-Connect with Salesforce CRM
+Connect with Salesforce CRM  
+Steps  
+1. Install the managed package
+2. in Salesforce configure user page layout to add SFMC user details
+3. in SFMC under user setting -> saleforce integration -> connect account -> login to salesforce -> connection successful
+4. Create API user in SFMC (while creating user in SFMC, we have option to select API user)
+5. Assign admin and SFMC admin roles to the api user
+6. 
 
 ## My project
 Webinar email campaign  
