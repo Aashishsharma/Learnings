@@ -27,7 +27,12 @@ Entry source can be file drop (any file put to SFMC ftp) or scheduled
 Below automation gets file from FTP location (based on file-name-patter) and add that data into DE  
 It maps csv headers into DE fields, we can set failuer/success email alerts to devs
 ![alt text](PNG/AS1.PNG "Title")    
-In AS we can run SQL queries on DE  
+
+AS activities
+1. Send email
+2. Sql query  
+![alt text](PNG/AS2.PNG "Title")  
+ 
 
 
 ## Journey Builder
@@ -39,7 +44,10 @@ WHen SF is entry source - use case - (when a case in SF is closed, send email fr
 4. Entry source configured, send email  
 
 ![alt text](PNG/JB1.PNG "Title")
-![alt text](PNG/JB2.PNG "Title") 
+![alt text](PNG/JB2.PNG "Title")  
+Wait activity can be based on DE field - send email on B'day  
+In Decision split - split based on DE filed  
+
 
 While selecting DE, we can add a filter criteria for DE rows
 
