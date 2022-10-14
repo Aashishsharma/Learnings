@@ -38,7 +38,8 @@ WHen SF is entry source - use case - (when a case in SF is closed, send email fr
 3. add filters - select attribute = case, status = closed
 4. Entry source configured, send email  
 
-![alt text](PNG/JB1.PNG "Title") 
+![alt text](PNG/JB1.PNG "Title")
+![alt text](PNG/JB2.PNG "Title") 
 
 While selecting DE, we can add a filter criteria for DE rows
 
