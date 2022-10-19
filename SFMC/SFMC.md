@@ -23,19 +23,22 @@ Hey %%firstName%%
 You can create DE from scratch / form other DE (aka filtered DE)
 
 ## Automation Studio  
-Entry source can be file drop (any file put to SFMC ftp) or scheduled  
+Entry source can be file drop (any file put to SFMC ftp) or scheduled or trigerred (using API call)  
 Below automation gets file from FTP location (based on file-name-patter) and add that data into DE  
 It maps csv headers into DE fields, we can set failuer/success email alerts to devs
 ![alt text](PNG/AS1.PNG "Title")    
 
 AS activities
 1. Send email
-2. Sql query  
+2. Sql query   - extract data from DE and store in anohter DE - (append, update, owerwrite)
 ![alt text](PNG/AS2.PNG "Title")  
-3. File transfer  
-4. Script activity - serer side JS  
+3. File transfer  - using FTP to other location
+4. Script activity - server side JS e.g. (Filter out those subscribers with a birthday in the next week) 
 5. filter activity to filter records
 6. Wait activity 
+7. import file activity - to update DE with external file
+8. Data extract activity - data extract activity creates one or more zipped files for your use outside the Marketing Cloud application
+9. verification activity - e.g. - if record count in DE < 10000 then stop automation, then send email to dev team
 
 
 ## Journey Builder
