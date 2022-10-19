@@ -35,7 +35,7 @@ AS activities
 3. File transfer  - using FTP to other location
 4. Script activity - server side JS e.g. (Filter out those subscribers with a birthday in the next week) 
 5. filter activity to filter records
-6. Wait activity 
+6. Wait activity - why wait in AD? - send multiple emails after some wait time
 7. import file activity - to update DE with external file
 8. Data extract activity - data extract activity creates one or more zipped files for your use outside the Marketing Cloud application
 9. verification activity - e.g. - if record count in DE < 10000 then stop automation, then send email to dev team
