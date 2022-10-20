@@ -49,6 +49,20 @@ WHen SF is entry source - use case - (when a case in SF is closed, send email fr
 3. add filters - select attribute = case, status = closed
 4. Entry source configured, send email  
 
+**Entry sources**  
+1. DE - can schedule how often you want to check the data extension for updates, from hourly to yearly.
+2. Audience - Create an audience in Contact Builder. Drag Audience onto the canvas.
+3. API event - Create DE, vai API call add contacts to DE, then contact would be pushed to JB
+4. GA 360
+5. Salesforce data - we saw above
+6. Cloud pages
+
+**Goals** 
+set goal at exit, if 10 out of 15 contacts go to path go, goal criteria met  
+
+
+
+
 ![alt text](PNG/JB1.PNG "Title")
 ![alt text](PNG/JB2.PNG "Title")  
 Wait activity can be based on DE field - send email on B'day  
@@ -57,6 +71,7 @@ In Decision split - split based on DE filed
 
 While selecting DE, we can add a filter criteria for DE rows
 
+We can enable GA360 in JB
 ## Email Studio  
 Subscriber in ES  
 1. Status - Active/In-active
