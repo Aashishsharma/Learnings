@@ -59,8 +59,18 @@ WHen SF is entry source - use case - (when a case in SF is closed, send email fr
 
 **Goals** 
 set goal at exit, if 10 out of 15 contacts go to path go, goal criteria met  
+Exit criteria can remove customers who no longer fit the journey's purpose or for whom the journey's content is no longer relevant.  
+e.g. - Set a Goal that removes a contact after they download the mobile app regardless of where they are in the journey. These contacts are counted as achieving the goal.  
 
-
+**JB activities**  
+1. spilt activities (random, decision, engagement)
+2. join activity
+3. customer update activities
+4. custom activities
+5. path optimizer - enables you to test up to 10 variations of a journey path to determine which path performs best.
+6. Einstein split - 
+7. Einstein STO - Send Time Optimization (STO) uses machine learning and 90 days of email or push notification engagement data to determine the best time within the next 24 hours to send a message to each contact
+  
 
 
 ![alt text](PNG/JB1.PNG "Title")
