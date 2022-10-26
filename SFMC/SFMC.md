@@ -174,6 +174,7 @@ Explaination - From LoyaltyMembers DE, fetch EmailAddress where SubscriberKey = 
 
 
 AMP script lookuprows - returns a set of unordered rows from a Data Extension, can return all columns  
+Below code also covers syntax for if-else and for loop
 ```
 %%[
 var @rows, @row, @rowCount, @region, @i
