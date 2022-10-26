@@ -154,7 +154,56 @@ for First_Name: %%[IF Empty(First_Name) == "False" THEN SET @FN = First_Name ELS
 1. AMP scripts blocks - do not render output, just execute code must be insed square brackets []
 
 
-![alt text](PNG/AMP1.PNG "Title") 
+![alt text](PNG/AMP1.PNG "Title")  
+![alt text](PNG/AMP2.PNG "Title")  
+
+AMP script lookups  - returns single column value
+```
+%%[
+var @EmailAddress, @lookupValue
+
+set @lookupValue = AttributeValue("_subscriberkey") /* value from attribute or DE column in send context */
+set @lookupValue = "5497" /* or a literal value */
+
+set @EmailAddress = Lookup("LoyaltyMembers","EmailAddress","SubscriberKey", @lookupValue)
+
+]%%
+EmailAddress: %%=v(@EmailAddress)=%%
+```
+Explaination - From LoyaltyMembers DE, fetch EmailAddress where SubscriberKey = 5497
+
+
+AMP script lookuprows - returns a set of unordered rows from a Data Extension, can return all columns  
+```
+%%[
+var @rows, @row, @rowCount, @region, @i
+
+set @region = AttributeValue("Region") /* value from attribute or DE column in send context */
+set @region = "North" /* or a literal value */
+set @rows = LookupRows("LoyaltyMembers","region", @region)
+set @rowCount = rowcount(@rows)
+
+output(concat("region: ", @region))
+
+if @rowCount > 0 then
+
+  for @i = 1 to @rowCount do
+
+    var @emailAddress, @firstName, @rank
+    set @row = row(@rows, @i) /* get row based on counter */
+    set @firstName = field(@row,"firstName")
+    set @emailAddress = field(@row,"emailAddress")
+
+    ]%%
+
+    <br>Row %%=v(@i)=%%, firstName: %%=v(@firstName)=%%, emailAddress: %%=v(@emailAddress)=%%
+
+    %%[
+  next @i ]%%
+%%[ else ]%%
+No rows found
+%%[ endif ]%%
+```
 
 **Content detective** -  helps you identify spam triggers in your email content  
 1. Trigger words - e.g. - Absolutely Free, Accept Credit Cards, act now! don't hesitate!  
