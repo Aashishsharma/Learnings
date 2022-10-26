@@ -20,6 +20,9 @@ emailaddr type should only be 1, if we need to store multiple emails, store othe
 use %%dataextensionfieldname%% when sending email in bulk like  
 Hey %%firstName%%  
 
+You can create shared DE under shared folder in parent's org.  
+This way you can share data between multiple orgs
+
 You can create DE from scratch / form other DE (aka filtered DE)
 
 ## Automation Studio  
@@ -79,7 +82,7 @@ Wait activity can be based on DE field - send email on B'day
 In Decision split - split based on DE filed  
 
 
-While selecting DE, we can add a filter criteria for DE rows
+While selecting DE, we can add a filter criterfia for DE rows
 
 We can enable GA360 in JB  
 
