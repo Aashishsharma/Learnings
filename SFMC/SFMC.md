@@ -70,7 +70,7 @@ e.g. - Set a Goal that removes a contact after they download the mobile app rega
 5. path optimizer - enables you to test up to 10 variations of a journey path to determine which path performs best.
 6. Einstein split - 
 7. Einstein STO - Send Time Optimization (STO) uses machine learning and 90 days of email or push notification engagement data to determine the best time within the next 24 hours to send a message to each contact
-  
+
 
 
 ![alt text](PNG/JB1.PNG "Title")
@@ -81,7 +81,21 @@ In Decision split - split based on DE filed
 
 While selecting DE, we can add a filter criteria for DE rows
 
-We can enable GA360 in JB
+We can enable GA360 in JB  
+
+**Einstein engagement score for email studio**  -
+![alt text](PNG/E1.PNG "Title")  
+it use ML to get the predecitve analysis 
+Types of subscribers - 
+1. Dormants - low open, low click
+2. WindowShoppers - high open, low click
+3. selective subscribers - low open, high click
+4. loaylists - high open, high click
+
+All Einstein's data is stored in DE - Einstein_MC_Predictive_Scores - we can use this DE to create subscribers segments (filter the subscribers)  
+Then in JB we can use the Einstein scoring split activity to create multiple paths and send segment based personalized emails based on types of subscribers (dormants and others)  
+![alt text](PNG/E2.PNG "Title")  
+
 ## Email Studio  
 Subscriber in ES  
 1. Status - Active/In-active
