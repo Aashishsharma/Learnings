@@ -141,6 +141,7 @@ We can use litmus to test email in different browsers
 De-duplication is a process Email Studio uses to remove duplicate instances of the same subscriber on a send, DE can have multiple rows with same emailaddr
 
 **AMP script**  
+it is a scripting language in SFMC. SFMC is the runtime env for AMP script.
 ```
 for First_Name: %%[IF Empty(First_Name) == "False" THEN SET @FN = First_Name ELSE SET @FN = "Customer" ENDIF]%%Hi %%=v(@FN)=%%
 
@@ -149,7 +150,11 @@ for First_Name: %%[IF Empty(First_Name) == "False" THEN SET @FN = First_Name ELS
 %%xtdayofweek%%
 %%xtshortdate%%
 
-```
+```  
+1. AMP scripts blocks - do not render output, just execute code must be insed square brackets []
+
+
+![alt text](PNG/AMP1.PNG "Title") 
 
 **Content detective** -  helps you identify spam triggers in your email content  
 1. Trigger words - e.g. - Absolutely Free, Accept Credit Cards, act now! don't hesitate!  
