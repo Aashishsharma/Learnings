@@ -256,6 +256,9 @@ Each matrix is a link, so clicking that number gives which subscribers fall in t
 ![alt text](PNG/R2.PNG "Title")  
 ![alt text](PNG/R3.PNG "Title")  
 
+We can use pivot tables in Datorama to create custom reports
+![alt text](PNG/R4.PNG "Title")  
+
 
 
 ## My project
