@@ -283,7 +283,5 @@ Webinar email campaign
 ## To-do
 cloud pages
 project think through
-email click - bounce rate
-reporting
 BU
 billing per super email / per sms
