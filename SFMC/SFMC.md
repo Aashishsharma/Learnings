@@ -266,6 +266,10 @@ JB reporting in datorama
 ![alt text](PNG/R6.PNG "Title")  
 ![alt text](PNG/R7.PNG "Title")  
 
+All types of reports can be exported and scheduled and send to email or FTP location.
+Sample report for tracking  
+![alt text](PNG/R8.PNG "Title")  
+
 
 
 
