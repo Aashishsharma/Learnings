@@ -262,6 +262,10 @@ We can use pivot tables in Datorama to create custom reports
 JB reporting in datorama
 ![alt text](PNG/R5.PNG "Title")  
 
+3. Standard reports - (for non-enterprise / non corporate accounts)
+![alt text](PNG/R6.PNG "Title")  
+
+
 
 
 ## My project
