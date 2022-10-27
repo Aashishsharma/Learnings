@@ -33,6 +33,7 @@ It maps csv headers into DE fields, we can set failuer/success email alerts to d
 
 AS activities
 1. Send email
+2. data extract - data can be extracted from DE, Tracking extract, mobile push extract etc
 2. Sql query   - extract data from DE and store in anohter DE - (append, update, owerwrite)
 ![alt text](PNG/AS2.PNG "Title")  
 3. File transfer  - using FTP to other location
@@ -247,6 +248,16 @@ Steps
 5. Assign admin and SFMC admin roles to the api user
 6. 
 
+## Reporting
+1. Email reporting
+![alt text](PNG/R1.PNG "Title")   
+Each matrix is a link, so clicking that number gives which subscribers fall in that number
+2. Datorama reports (available for enterprise and corporate accounts), nnder analytics builder clcik on datorama reports  
+![alt text](PNG/R2.PNG "Title")  
+![alt text](PNG/R3.PNG "Title")  
+
+
+
 ## My project
 Webinar email campaign  
 1. Send Webinar details
@@ -255,11 +266,8 @@ Webinar email campaign
 4. Thank you email for attending
 
 ## To-do
-Amp script
 cloud pages
-Einstein activity
 project think through
-shared DE
 email click - bounce rate
 reporting
 BU
