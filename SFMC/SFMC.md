@@ -264,6 +264,7 @@ JB reporting in datorama
 
 3. Standard reports - (for non-enterprise / non corporate accounts)
 ![alt text](PNG/R6.PNG "Title")  
+![alt text](PNG/R7.PNG "Title")  
 
 
 
