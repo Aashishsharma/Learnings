@@ -271,7 +271,11 @@ Sample report for tracking
 ![alt text](PNG/R8.PNG "Title")  
 
 
-
+## Super message 
+It is a salesforce currency. Way for SFMC to charge you.  
+1 super message = 20RS in India (not sure)  
+![alt text](PNG/SM1.PNG "Title")  
+So 1 high priority trigerred email = 4 SM = 100 RS
 
 ## My project
 Webinar email campaign  
