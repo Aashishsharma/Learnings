@@ -277,6 +277,12 @@ It is a salesforce currency. Way for SFMC to charge you.
 ![alt text](PNG/SM1.PNG "Title")  
 So 1 high priority trigerred email = 4 SM = 100 RS
 
+## BUs in SFMC
+allow you to control access to information and sharing of information.  
+Multiple BUs can have shared folders, shared emails, shared DEs
+
+## User roles and permissions
+
 ## My project
 Webinar email campaign  
 1. Send Webinar details
@@ -287,5 +293,3 @@ Webinar email campaign
 ## To-do
 cloud pages
 project think through
-BU
-billing per super email / per sms
