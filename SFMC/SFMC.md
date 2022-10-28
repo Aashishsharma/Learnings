@@ -304,6 +304,9 @@ Click on your name -> setup -> users -> create roles -> select necessary group o
 
 ## My project
 Webinar email campaign  
+Initial list of subscribers comes from SFDC, connected through Salesforce connector, records injected in DE.  
+That DE used as entry source in SFMC, and send welcome to webinar email along with registration link. Users given 5 days to register to webinar link, if they click on register, update DE with registered as true, if not registered send reminder email when 2 days left. If registered send thank you for registering. Once webinar complete, get attendance DE from Webex and Webcast, for webex using API calls, and add that in SFMC DE. For webcast, it has it's own connect with salesforce, fetch that data and sedn it back to SFMC.  
+Used another journey to send thankyou for atteding webinar email 
 1. Send Webinar details
 2. Send reminder emails after X days
 3. Send thank you email after registration complete
