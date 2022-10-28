@@ -282,6 +282,20 @@ allow you to control access to information and sharing of information.
 Multiple BUs can have shared folders, shared emails, shared DEs
 
 ## User roles and permissions
+### MC roles
+1. MC admin
+2. MC viewer 
+3. MC Channel-manager - permits a user to create, send, and monitor Marketing Cloud journeys and messages
+
+### MC email studio roles
+1. Admin - all email functionality
+2. Content creator - access all shared folders, and tracking
+3. Data manager - Access to everything in Email Studio except email content
+4. Analyst - Access to tracking features in Email Studio
+
+**How to assign a role to a user?**
+Click on your name -> setup -> users -> select user -> manage roles -> select necessary role  
+
 
 ## My project
 Webinar email campaign  
