@@ -285,7 +285,9 @@ Multiple BUs can have shared folders, shared emails, shared DEs
 ### MC roles
 1. MC admin
 2. MC viewer 
-3. MC Channel-manager - permits a user to create, send, and monitor Marketing Cloud journeys and messages
+3. MC Channel-manager - permits a user to create, send, and monitor Marketing Cloud journeys and messages, access to reports
+4. MC security admin - manages user roles and security issues with SFMC
+5. MC content editor / publisher - same as MC channel-manager, but no access to reports, access to content builder
 
 ### MC email studio roles
 1. Admin - all email functionality
@@ -293,8 +295,11 @@ Multiple BUs can have shared folders, shared emails, shared DEs
 3. Data manager - Access to everything in Email Studio except email content
 4. Analyst - Access to tracking features in Email Studio
 
-**How to assign a role to a user?**
+**How to assign a role to a user?** (fist you should be MC admin)
 Click on your name -> setup -> users -> select user -> manage roles -> select necessary role  
+
+**How to create custom role?**
+Click on your name -> setup -> users -> create roles -> select necessary group of roles role  
 
 
 ## My project
