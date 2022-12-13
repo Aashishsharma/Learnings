@@ -36,7 +36,7 @@ Javascript is
 ## Javascript event loop
 
 [Javascript event loop](https://www.youtube.com/watch?v=8aGhZQkoFbQ)
-Javascript event loop elements are  
+Web browser is made up of -  
 
 1. Javascript Runtime (heap and stack)
 2. Web Apis (DOM APIs, AJAX (n/w requests), setTimeout)
@@ -76,15 +76,6 @@ A semicolon may be omitted in most cases when a line break exists.
 JavaScript interprets the line break as an “implicit” semicolon. This is called an automatic semicolon insertion.
 
 But there are situations where JavaScript “fails” to assume a semicolon where it is really needed.
-
-```javascript
-alert("There will be an error")
-
-[1, 2].forEach(alert)
-// Now if we run the code, only the first alert is shown and then we have an error!
-// if semicolon is inserted after the 1st alert, it would work fine
-// The error in the no-semicolon variant occurs because JavaScript does not assume a semicolon before square brackets [...]
-```
 
 #### The modern mode, "use strict"
 
