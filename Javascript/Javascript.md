@@ -195,26 +195,6 @@ Both are same 1st one is operator and later one is a function
 
 ------------------------------------------------------------------------------
 
-## Interaction: alert, prompt, confirm
-
-```javascript
-// 1 alert
-alert("Hello");
-
-// 2 prompt
-// title - text to show to user
-// default - default value
-// result - i/p entered by user
-result = prompt(title, [default]);
-
-// 3 confirm
-let isBoss = confirm("Are you the boss?");
-
-alert( isBoss ); // true if OK is pressed
-```
-
-------------------------------------------------------------------------------
-
 ## Type Conversions
 
 #### String Conversion
