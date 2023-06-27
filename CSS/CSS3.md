@@ -16,66 +16,10 @@
 ## CSS2 and CSS3
 Importing css in a css, possible only in css3  
 @import "heading.css"  
-1. To style 2 tags at one time
-```css
-h1, h2 {
-	color: white;
-}
-```
-2. To style all tags
-```css
-* {
-	color: white;
-}
-```
-3. To style all tags inside a div
-```css
-div * {
-	color: white;
-}
-```
-4. To style a class
-```css
-.sitelink {
-	color: white;
-}
-```
-5. To style id
-```css
-#sitelink {
-	color: white;
-}
-```
-6. classes named sitelink only inside a paragraph
-```css
-p.sitelink {
-	color: white;
-}
-```
-7. span only with specific id
-```css
-span#sitelink {
-	color: white;
-}
-```
-8. target an id, and only ol
-```css
-#sitelink ol {
-	color: white;
-}
-```
-9. target first p inside h3 tag
-```css
-h3 + p {
-	color: white;
-}
-```
-10. target a inside first p of h3
-```css
-h3 + p > a {
-	color: white;
-}
-```
+
+
+![alt text](PNG/basic-selectors.PNG "Title")  
+
 11. to target all p with specific class, notice the diff. with pt. no 6.
 ```css
 p[sitelink] {
@@ -270,7 +214,7 @@ All postion type should have top, right, bottom, left parameters, or at lest one
 4. When two or more styles target a particular element, the style with the highest specificity is the one that gets applied.  
 
 **Calculate specificity**  
-![alt text](PNG/specificity.PNG "Title") 
+c
 
 #### CSS naming conventions
 **Use BEM (Block-Element-Modifier) standard**  
