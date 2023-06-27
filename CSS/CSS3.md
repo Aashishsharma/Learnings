@@ -17,123 +17,10 @@
 Importing css in a css, possible only in css3  
 @import "heading.css"  
 
-
 ![alt text](PNG/basic-selectors.PNG "Title")  
 
 ![alt text](PNG/advanced-selectors.PNG "Title")  
 
-11. to target all p with specific class, notice the diff. with pt. no 6.
-```css
-p[sitelink] {
-	color: white;
-}
-
-//for ids same as class
-p[sitelink] {
-	color: white;
-}
-```
-12. combinators
-```css
-1. Descendant combinator
-// The following example selects all <p> elements inside <div> elements:  
- div p {
-  background-color: yellow;
-}
-
-2. Child combinator
-// The following example selects all <p> elements that are children of a <div> element:
-div > p {
-  background-color: yellow;
-}
-// here diff. between descendent selector is that it will not style a p tag if it is not a DIRECT child
-
-3. Adjacent sibling combinator
-// The following example selects all <p> elements that are placed immediately after <div> elements:
-div + p {
-  background-color: yellow;
-}
-
-4. General sibling combinator
-// The following example selects all <p> elements that are siblings of <div> elements: 
-// they have same parent
-div ~ p {
-  background-color: yellow;
-}
-```
-
-#### pseudo classes and elements
-1. Pseudo element  
-A CSS pseudo-element is used to style specified parts of an element.  
-```css
-// syntax
-selector::pseudo-element {
-  property: value;
-}
-
-// The following example formats the first line of the text in all <p> elements:
-p::first-line {
-  color: #ff0000;
-  font-variant: small-caps;
-}
-//similarly we have
-div/p::first-letter
-::before - used to insert some content before the content of an element
-h1::before {
-  content: url(smiley.gif);
-}
-
-::after - used to insert some content after the content of an element
-
-//multiple combinations
-p.intro::first-letter
-
-Target first child li in all html elements
-li:first-child {
-color:blue
-} 
-
-li:last-child
-li:nth-child(2) {
-} 
-
-li:only-child
-Above is targetted using elem selector
-
-
-Syntax for class and id selector 
-
-.classname:first-child
-#id:first-child 
-
-```
-2. Pseudo classes
-A pseudo-class is used to define a special state of an element.
-```css
-//syntax
-selector:pseudo-class {
-  property: value;
-}
-
-a:link {
-	color: red
-}
-
-//similarly
-visited
-hover
-active
-// above are for a, div tags
-
-// for input tags we have
-checked, enabled, focus, invalid
-```
-
-3. Attribute selector - select tags to apply style based on attributes
-img[src^="../img/"] - select all images whose src attribite starts with ../img
-^ - start with
-$ - ends with
-* - contains
 
 **Types of units in css**  
 2 categories
@@ -231,7 +118,7 @@ e.g. - disabled, highlighted, checked, fixed, size big, color yellow
 **block-name__elem-name_mod-name_mod-val**  
 notice when to use - and _ and how many times  
 
-####CSS layouts  
+#### CSS layouts  
 
 #### 1. CSS Box Model  
 ![alt text](PNG/css-box-model.png "Title")  
