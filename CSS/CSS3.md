@@ -23,23 +23,7 @@ Importing css in a css, possible only in css3
 
 
 **Types of units in css**  
-2 categories
-1. Absoulte units and 2. Relative units 
-
-1. Absoulte
-1.px - pixel - although absolute, depend on device's px display settings 
-
-2. cm, pt- for points little pig then px, pc - 12 pts 
-
-2. Relative (for responsive design, size depends on parent's unit size)
-1. % 
-2. em - 2em - double the default font size
-3. vw(view width) and vh(view height)
-.abc {
-width: 70vw;
-height: 80vh;
-}
-set width od elem to 70 time 1% of view width, same for height 
+![alt text](PNG/units.PNG "Title")  
 
 ## Text and Fonts
 1. Text styling
