@@ -20,6 +20,8 @@ Importing css in a css, possible only in css3
 
 ![alt text](PNG/basic-selectors.PNG "Title")  
 
+![alt text](PNG/advanced-selectors.PNG "Title")  
+
 11. to target all p with specific class, notice the diff. with pt. no 6.
 ```css
 p[sitelink] {
@@ -214,7 +216,7 @@ All postion type should have top, right, bottom, left parameters, or at lest one
 4. When two or more styles target a particular element, the style with the highest specificity is the one that gets applied.  
 
 **Calculate specificity**  
-c
+![alt text](PNG/specificity.PNG "Title")  
 
 #### CSS naming conventions
 **Use BEM (Block-Element-Modifier) standard**  
@@ -232,7 +234,8 @@ notice when to use - and _ and how many times
 ####CSS layouts  
 
 #### 1. CSS Box Model  
-![alt text](PNG/css-box-model.PNG "Title")  
+![alt text](PNG/css-box-model.png "Title")  
+
 Padding - space between border and content
 Margin - soace between border and other elems
 padding/margin : 10px
