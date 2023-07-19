@@ -43,7 +43,7 @@ function Example() {
 ```
 
 ### 3 concepts
-#### COncept 1. Queries
+#### Concept 1. Queries
 Requires 2 args, 1. Key, 2 func that returns promise or throws error
 ```javascript
 const { isLoading, isError, data, error } = useQuery('todos', fetchTodoList)
@@ -53,6 +53,7 @@ useQuery({
   queryFn: fetchTodo,
   ...config, // more on this below
 })
+//instaed of isloading / error we can use status obj (status = 'loading' / status = 'error')
 
 // keys can be string, array(When a query needs more information to uniquely describe its data)
 // array example
@@ -118,3 +119,70 @@ const { isIdle, data: projects } = useQuery(
 // isIdle will be `true` until `enabled` is true and the query begins to fetch.
 // It will then go to the `isLoading` stage and hopefully the `isSuccess` stage :)
 ```
+
+###### Indicators
+```javascript
+// 1. isFetching = additional indicator that a query is refetching in the background, it is defferent than isLoading / status === 'loading' flg
+function Todos() {
+  const { status, data: todos, error, isFetching } = useQuery(
+    'todos',
+    fetchTodos
+  )
+  return status === 'loading' ? (
+    <span>Loading...</span>
+  ) : status === 'error' ? (
+    <span>Error: {error.message}</span>
+  ) : (
+    <>
+      {isFetching ? <div>Refreshing...</div> : null}
+
+      <div>
+        {todos.map(todo => (
+          <Todo todo={todo} />
+        ))}
+      </div>
+    </>
+  )
+}
+```
+
+##### Pausing query
+```javascript
+// using enabled = false, then need to use refetch() func to trigger the query
+function Todos() {
+  const {isIdle, isLoading, isError, data, error, refetch, isFetching} = useQuery('todos', fetchTodoList, {
+    enabled: false,
+  })
+
+  //instaed of this - {isIdle, isLoading, isError, data, error, refetch, isFetching} we can use one obj as result = useQuery() and then
+  // use all the above keys as result.isIdle or result.refetch() or result.data
+
+  return (
+    <>
+      <button onClick={() => refetch()}>Fetch Todos</button>
+
+      {isIdle ? (
+        'Not ready...'
+      ) : isLoading ? (
+        <span>Loading...</span>
+      ) : isError ? (
+        <span>Error: {error.message}</span>
+      ) : (
+        <>
+          <ul>
+            {data.map(todo => (
+              <li key={todo.id}>{todo.title}</li>
+            ))}
+          </ul>
+          <div>{isFetching ? 'Fetching...' : null}</div>
+        </>
+      )}
+    </>
+  )
+}
+```
+
+#### Concept 2. Mutations
+#### Concept 3. Queriy Invalidation
+
+#### Important defaults
