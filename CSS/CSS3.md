@@ -61,7 +61,7 @@ it just means that the element will flow into the page as it normally would.
 2. relative  
 What it really means is “relative to itself”. If you set position: relative; on an element but no other positioning attributes (top, left, bottom or right), it will have no effect on it’s positioning at all, it will be exactly as it would be if you left it as position: static; But if you do give it some other positioning attribute, say, top: 10px;, it will shift its position 10 pixels down from where it would normally be.  
 3. fixed  
-A fixed position element is positioned relative to the viewport, or the browser window itself. The viewport doesn’t change when the window is scrolled, so a fixed positioned element will stay right where it is when the page is scrolled.  
+A fixed position element is positioned relative to the viewport, or the browser window itself. In this case, the element is removed from the normal document flow. The viewport doesn’t change when the window is scrolled, so a fixed positioned element will stay right where it is when the page is scrolled.  
 This might be used for something like a navigation bar  
 
 4. absolute  

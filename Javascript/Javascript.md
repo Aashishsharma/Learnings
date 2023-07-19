@@ -316,7 +316,7 @@ var abc = function(defaultValue = 0) { //FYI -> adding default parameter in a fu
 
 ## Closure
 
-- **Defination  (function with its lexical env)**
+- **Definition  (function with its lexical env)**
 Closure is created when a child function keep the environment of the parent scope even after the parent function has already executed
 
 ```javascript
@@ -664,11 +664,10 @@ Let debounceCall = callApiWrapper(callSearchApi, 300)
 Func callApiwrapper(fn, time) {
 let timer; //clusure helps in clearing timout of below retunred func
 return function() {
-  Let context = this;
   let arg = arguments;
   clearTimeout(timer)
    setTimeout(() => {
-fn.apply(this,args)
+    fn.apply(this,args)
 }, time) 
 
 }
@@ -678,7 +677,8 @@ console.log(' calling search api')
 }
 ```
 
-2. THROTTLING
+2. THROTTLING  
+In debounce, if an event occurs before specifieed timeout, new timeout is created, that means, in case of input search autocomplete, if 300ms is gap and if we press 100 keys, the first func call would be made after 30 secs, and in throttling, no matter on the no. of evnts, the func would be executed exactly after 300ms (in case of window resize)
 
 ```javascript
 Doc.getElembyId.addEvntList('onResize', throttleCalk) 
@@ -689,15 +689,13 @@ Func callResizeApiwrapper(fn, time) {
 let flg = true; //clusure helps in using this val on each fncall 
 return function() {
 if(flg){
-  Let context = this;
   let arg = arguments
-fn.apply(this,args)
-flg=false;
+    fn.apply(this,args)
+    flg=false;
    setTimeout(() => {
-flg=true // call next api only after certain interval of time
-}, time)
-} 
-
+    flg=true // call next api only after certain interval of time
+  }, time)
+  } 
 }
   
 Func callSearchApi() {
