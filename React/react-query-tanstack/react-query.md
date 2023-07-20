@@ -281,11 +281,6 @@ mutations are used to create/update/delete data or perform server side-effects
 #### Concept 3. Queriy Invalidation
 
 #### Important defaults
-1. retry - default 3 / retry = false
-2. retryDelay - default 1000ms
-3. keepPreviousData : true - for paginated queries
-4. stale time - default to 0
-5. initialQueryData - hardcoded mock-up of data from API, to avoid loder
 ```javascript
 // we can configure queries at global level (for all queries) or at a query level
 // at global level - using the QueryCLient Object
@@ -293,9 +288,10 @@ mutations are used to create/update/delete data or perform server side-effects
 const queryClientConfig = {
     defaultOptions: {
       queries: {
-        retry: 3, // false // (failureCnt, error) => if(err.type === network || failureCnt < 10) return true else return false
-        staleTime: 1000 * 30,// 30seconds
-        cacheTime: 1000 * 30, //30 seconds
+        retry: 3 //, // false // (failureCnt, error) => if(err.type === network || failureCnt < 10) return true else return false
+        cacheTime: 1000 * 60 * 5 // 5 mins, Infinity// after 5 mins - if comp rerenders, user will see cached data but still API call would be made, 
+                    // and if api data has changed, the data will change on UI. isLoading would be false, but isFetching would be true
+        staleTime: 0 // 0 secs, Infinity// if comp reredners, cahced data would be shown and no API would be made for staletime secs. (no api call made)
         refetchOnMount: "always",
         refetchOnWindowFocus: "always",
         refetchOnReconnect: "always",
