@@ -292,10 +292,11 @@ const queryClientConfig = {
         cacheTime: 1000 * 60 * 5 // 5 mins, Infinity// after 5 mins - if comp rerenders, user will see cached data but still API call would be made, 
                     // and if api data has changed, the data will change on UI. isLoading would be false, but isFetching would be true
         staleTime: 0 // 0 secs, Infinity// if comp reredners, cahced data would be shown and no API would be made for staletime secs. (no api call made)
-        refetchOnMount: "always",
-        refetchOnWindowFocus: "always",
-        refetchOnReconnect: "always",
-        refetchInterval: 1000 * 30, //30 seconds
+                     // react query by default consider cached data as stale. (understand)
+        refetchOnMount: "always", // false - query won't be called when component re-renders
+        refetchOnWindowFocus: "always", // false - query won't be called when window focused back
+        refetchOnReconnect: "always", // internet connection lost
+        refetchInterval: 1000 * 30, //30 seconds, default - false else time in ms (5000), refetch after every 5 secs
         refetchIntervalInBackground: false,
         suspense: false,
 
