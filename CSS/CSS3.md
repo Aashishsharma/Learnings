@@ -41,12 +41,12 @@ Importing css in a css, possible only in css3
 |           | `pt`                 | Represents points, a unit of length used primarily in typography.                                   |
 |           | `cm`, `mm`, `in`     | Represents physical units like centimeters, millimeters, and inches.                                |
 |           |                       | These are mostly used for print styles rather than web design.                                      |
-| Relative  | `em`  `p { font-size: 16px; } .child { font-size: 1.5em; }`               | font size of child elem  = 16*1.5 = 24px Represents a unit relative to the font size of its parent element. e.g.                                  |
-|           | `rem`                | Represents a unit relative to the root (document-level) font size.                                 |
+| Relative  | `em`  `p { font-size: 16px; } .child { font-size: 1.5em; }`               | font size of child elem  = 16*1.5 = 24px. Represents a unit relative to the font size of its parent element.                                  |
+|           | `rem`                |Similar to em, but instead of relative to parent, it is relative to finc-size of html elem. Represents a unit relative to the root (html - level) font size.                                 |
 |           | `vw`, `vh`, `vmin`, `vmax` | Represents a percentage of the viewport width/height, or the smaller/larger of the two.      |
 |           | `%`                  | Represents a percentage of a parent element's property (like width or height).                     |
-| Flexible  | `fr`                 | Represents a fraction of available space in a CSS Grid layout.                                      |
-|           | `auto`               | Represents a value that is automatically calculated based on context (e.g., element content).      |
+| Flexible  | `fr`                 | Represents a fraction of available space in a **CSS Grid layout**.                                      |
+|           | `auto`               | Represents a value that is automatically calculated based on context (e.g., element text content).      |
 
 
 ## Text and Fonts
