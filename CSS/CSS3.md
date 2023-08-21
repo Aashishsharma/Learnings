@@ -19,6 +19,9 @@ Importing css in a css, possible only in css3
 
 | Selector Type            | Example              | Description                                                                                                        |
 |--------------------------|--------------------- |--------------------------------------------------------------------------------------------------------------------|
+| ID Selector   | `#myElement`      | Targets an element with a specific unique ID attribute, such as `<div id="myElement">`.                |
+| Tag Selector  | `div`             | Targets all elements of a specific HTML tag, such as `<div>`, `<p>`, or `<h1>`.                        |
+| Class Selector| `.myClass`        | Targets elements with a specific class attribute, like `<div class="myClass">`.                        |
 | Descendant Selector      | `div p`              | Selects all `<p>` elements inside of a `<div>` element. (direct / indirect, all p elems are selected)                                           |
 | Child Selector           | `div > p`            | Selects all `<p>` elements that are direct children of a `<div>` element. (indirect p elems are not selected)                                        |
 | Adjacent Sibling Selector | `h2 + p`            | Selects only the first `<p>` element that immediately follows an `<h2>` element and have same parent                                           |
