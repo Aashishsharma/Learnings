@@ -41,8 +41,7 @@ Importing css in a css, possible only in css3
 |           | `pt`                 | Represents points, a unit of length used primarily in typography.                                   |
 |           | `cm`, `mm`, `in`     | Represents physical units like centimeters, millimeters, and inches.                                |
 |           |                      | These are mostly used for print styles rather than web design.                                      |
-| Relative  | `em`                 | Represents a unit relative to the font size of its parent element.                                 |
-|           | e.g.                 | ```css
+| Relative  | `em`                 | Represents a unit relative to the font size of its parent element.  e.g.  ```css
                p {
                  font-size: 16px;
                }
@@ -55,6 +54,7 @@ Importing css in a css, possible only in css3
 |           | `%`                  | Represents a percentage of a parent element's property (like width or height).                     |
 | Flexible  | `fr`                 | Represents a fraction of available space in a CSS Grid layout.                                      |
 |           | `auto`               | Represents a value that is automatically calculated based on context (e.g., element content).      |
+
 
 
 ## Text and Fonts
