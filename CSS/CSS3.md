@@ -41,12 +41,17 @@ Importing css in a css, possible only in css3
 |           | `pt`                 | Represents points, a unit of length used primarily in typography.                                   |
 |           | `cm`, `mm`, `in`     | Represents physical units like centimeters, millimeters, and inches.                                |
 |           |                       | These are mostly used for print styles rather than web design.                                      |
-| Relative  | `em`                 | Represents a unit relative to the font size of its parent element. e.g.  p {
-    font-size: 16px;
-  }
-  .child {
-    font-size: 1.5em; /* Relative to the parent <p> element's font size */, so it would be 16*1.5 = 24px
-  }                                 |
+| Relative  | `em`                 | Represents a unit relative to the font size of its parent element. 
+             | e.g. 
+             | ```css
+               p {
+                 font-size: 16px;
+               }
+               .child {
+                 font-size: 1.5em; /* Relative to the parent <p> element's font size, so it would be 16*1.5 = 24px */
+               }
+               ```
+                              |
 |           | `rem`                | Represents a unit relative to the root (document-level) font size.                                 |
 |           | `vw`, `vh`, `vmin`, `vmax` | Represents a percentage of the viewport width/height, or the smaller/larger of the two.      |
 |           | `%`                  | Represents a percentage of a parent element's property (like width or height).                     |
