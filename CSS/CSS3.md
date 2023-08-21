@@ -26,6 +26,13 @@ Importing css in a css, possible only in css3
 | Child Selector           | `div > p`            | Selects all `<p>` elements that are direct children of a `<div>` element. (indirect p elems are not selected)                                        |
 | Adjacent Sibling Selector | `h2 + p`            | Selects only the first `<p>` element that immediately follows an `<h2>` element and have same parent                                           |
 | General Sibling Selector | `h2 ~ p`             | Selects all `<p>` elements that come after (not before) `<h2>` element and share the same parent.                   |
+| Attribute Selector    | `[type="text"]`           | Targets elements with a specific attribute and value, such as `<input type="text">`.                      |
+| Pseudo-Class Selector | `a:hover`                 | Targets elements in a specific state, like when hovered over, using the `:pseudo-class` notation.          |
+| Pseudo-Element Selector | `p::first-line`         | Targets a specific part of an element's content, like the first line of a paragraph, using the `::pseudo-element` notation. |
+| :matches() Selector    | `p:matches(.special, .important)` | Targets elements that match any of the provided selectors inside the `:matches()` pseudo-class.              |
+| :not() Selector        | `input:not([type="submit"])`  | Targets elements that do not match the provided selector inside the `:not()` pseudo-class.                    |
+| :nth-child() Selector  | `li:nth-child(odd)`           | Targets elements that are specified numeric positions within their parent, using the `:nth-child()` pseudo-class. |
+| :nth-of-type() Selector| `div:nth-of-type(3)`          | Targets elements of a specific type that are specified numeric positions within their parent.               |
 
 
 ![alt text](PNG/advanced-selectors.PNG "Title")  
