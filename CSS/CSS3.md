@@ -19,10 +19,10 @@ Importing css in a css, possible only in css3
 
 | Selector Type            | Example             | Description                                                                                                        |
 |--------------------------|---------------------|--------------------------------------------------------------------------------------------------------------------|
-| Descendant Selector      | `div p`             | Selects all `<p>` elements that are descendants of a `<div>` element.                                            |
-| Child Selector           | `div > p`           | Selects all `<p>` elements that are direct children of a `<div>` element.                                        |
-| Adjacent Sibling Selector | `h2 + p`           | Selects the `<p>` element that immediately follows an `<h2>` element.                                           |
-| General Sibling Selector | `h2 ~ p`           | Selects all `<p>` elements that are siblings of an `<h2>` element and share the same parent.                   |
+| Descendant Selector      | `div p`             | Selects all `<p>` elements inside of a `<div>` element. (direct / indirect, all p elems are selected)                                           |
+| Child Selector           | `div > p`           | Selects all `<p>` elements that are direct children of a `<div>` element. (indirect p elems are not selected)                                        |
+| Adjacent Sibling Selector | `h2 + p`           | Selects only the first `<p>` element that immediately follows an `<h2>` element and have same parent                                           |
+| General Sibling Selector | `h2 ~ p`           | Selects all `<p>` elements that come after (not before) `<h2>` element and share the same parent.                   |
 
 
 ![alt text](PNG/advanced-selectors.PNG "Title")  
