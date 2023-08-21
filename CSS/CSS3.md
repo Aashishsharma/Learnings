@@ -49,23 +49,26 @@ Importing css in a css, possible only in css3
 |           | `auto`               | Represents a value that is automatically calculated based on context (e.g., element text content).      |
 
 
-## Text and Fonts
-1. Text styling
-body{
-text-transform - uppercase/lowercase/capatilized/none
-text-decoration - underline/overline/line-through
-text-align: left, right, center, justify(each line of para would use entire width, if word not fitring in the end, more space added inbetwwen words
-} 
+### CSS Text Properties
 
-2. Fonts
-body{
-font-weight: 100-800 // thickness of font
-font-style: italic
-font-size: 1.25em // 25% larger then standard font-size
-font-family - 3 default available, serif(edgey characters) sans-serif (opp. of serif - good readibility), monospace (each character has same width)
-Other common available - times new roman, aerial on users computer 
-
-font-family: "Times New Roman", serif - it basically says - use font family as TNR, if not available on users computer, use default as serif 
+| Property                 | Example Value                          | Description                                           |
+|--------------------------|----------------------------------------|-------------------------------------------------------|
+| `font-size`              | `font-size: 16px;`                    | Sets the size of the font.                          |
+| `font-weight`            | `font-weight: bold; (100 - 800)`                 | Specifies the thickness of the font.                |
+| `font-style`             | `font-style: italic;`                 | Defines the style of the font (italic, oblique).    |
+| `text-align`             | `text-align: center;`                 | Aligns the text horizontally within its container.  |
+| `text-decoration`        | `text-decoration: underline;`         | Adds decoration to the text (underline, line-through). |
+| `text-transform`         | `text-transform: uppercase;`          | Changes the capitalization of the text to uppercase. |
+|                          | `text-transform: lowercase;`          | Changes the capitalization of the text to lowercase. |
+|                          | `text-transform: capitalize;`         | Capitalizes the first letter of each word.          |
+| `line-height`            | `line-height: 1.5;`                   | Sets the height of a line of text.                 |
+| `letter-spacing`         | `letter-spacing: 2px;`                | Adjusts the space between characters.               |
+| `word-spacing`           | `word-spacing: 3px;`                  | Controls the space between words.                  |
+| `text-shadow`            | `text-shadow: 1px 1px 1px black;`     | Adds a shadow to the text.                         |
+| `white-space`            | `white-space: nowrap;`               | Controls how whitespace within an element is handled. |
+| `overflow`               | `overflow: hidden;`                   | Specifies how overflowed content is displayed.       |
+| `font-family`            | `font-family: Arial, sans-serif;`      | Defines the font family for the text.  3 default available, serif(edgey characters) sans-serif (opp. of serif - good readibility), monospace (each character has same width)
+Other common available - times new roman, aerial on users computer font-family: "Times New Roman", serif - it basically says - use font family as TNR, if not available on users computer, use default as serif               |
 
 External fonts -
 Fonts.google.com
