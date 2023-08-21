@@ -67,7 +67,8 @@ Importing css in a css, possible only in css3
 | `text-shadow`            | `text-shadow: 1px 1px 1px black;`     | Adds a shadow to the text.                         |
 | `white-space`            | `white-space: nowrap;`               | Controls how whitespace within an element is handled. |
 | `overflow`               | `overflow: hidden;`                   | Specifies how overflowed content is displayed.       |
-| `font-family`            | `font-family: Arial, sans-serif;`      | Defines the font family for the text.  3 default available, serif(edgey characters) sans-serif (opp. of serif - good readibility), monospace (each character has same width) Other common available - times new roman, aerial on users computer font-family: "Times New Roman", serif - it basically says - use font family as TNR, if not available on users computer, use default as serif               |
+| `font-family`            | `font-family: Arial, sans-serif;`      | Defines the font family for the text.  3 default available, serif(edgey characters) sans-serif (opp. of serif - good readibility), monospace (each character has same width)
+Other common available - times new roman, aerial on users computer font-family: "Times New Roman", serif - it basically says - use font family as TNR, if not available on users computer, use default as serif               |
 
 External fonts -
 Fonts.google.com
