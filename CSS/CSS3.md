@@ -35,9 +35,6 @@ Importing css in a css, possible only in css3
 | :nth-of-type() Selector| `div:nth-of-type(3)`          | Targets elements of a specific type that are specified numeric positions within their parent.               |
 
 
-![alt text](PNG/advanced-selectors.PNG "Title")  
-
-
 **Types of units in css**  
 ![alt text](PNG/units.PNG "Title")  
 
