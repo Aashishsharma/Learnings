@@ -147,6 +147,7 @@ Output
 | `.text`           | `color: green;`     | 0,0,2,0      | Green         |
 | `p#intro`         | `color: purple;`    | 0,1,1,0      | Purple        |
 | `p.text#intro`    | `color: orange;`    | 0,1,2,1      | N/A           |
+
 **Note** - p#intro means target p elems where id = intro, similaly p.text#intro = p elem with id = intro and class = text, hence no color is applied
 
 
