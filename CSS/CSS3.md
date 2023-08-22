@@ -166,7 +166,8 @@ notice when to use - and _ and how many times
 #### CSS layouts  
 
 #### 1. CSS Box Model  
-describes how elements in a web page are structured and how their dimensions are calculated
+describes how elements in a web page are structured and how their dimensions are calculated  
+
 ![alt text](PNG/css-box-model.png "Title")  
 
 Padding - space between border and content
