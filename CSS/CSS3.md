@@ -93,6 +93,17 @@ BLock elements have display: block/none, and inline have display: inline/none
 All postion type should have top, right, bottom, left parameters, or at lest one of them  
 
 #### Specificty
+CSS specificity is a set of rules that determine which styles are applied to elements when there are conflicting style declarations.  
+specificty value is a b c d 
+where  
+
+| Part | Description                                                         | Example                      |
+|------|---------------------------------------------------------------------|------------------------------|
+| `a`  | The number of inline styles applied directly to elements using the `style` attribute. If none, it's 0. | `style="color: red;"`        |
+| `b`  | The number of ID selectors in the selector. If none, it's 0.        | `#intro`                     |
+| `c`  | The number of class selectors, pseudo-classes, and attribute selectors in the selector. If none, it's 0. | `.text:hover`                |
+| `d`  | The number of element selectors and pseudo-elements in the selector. If none, it's 0. | `p::before`                  |
+
 
 ```html
 <!DOCTYPE html>
