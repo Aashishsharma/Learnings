@@ -93,13 +93,51 @@ BLock elements have display: block/none, and inline have display: inline/none
 All postion type should have top, right, bottom, left parameters, or at lest one of them  
 
 #### Specificty
-1. Specificity is the means by which browsers decide which CSS property values are the most relevant to an element and, therefore, will be applied.  
-2. It helps us understand why some styles are not being applied to an element when we think they should  
-3. It's so easy to just slap an !important value on your CSS styles, but this causes your CSS to quickly spiral out of control  
-4. When two or more styles target a particular element, the style with the highest specificity is the one that gets applied.  
 
-**Calculate specificity**  
-![alt text](PNG/specificity.PNG "Title")  
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  /* Specificity: 0,0,1,0 */
+  p {
+    color: red;
+  }
+  /* Specificity: 0,1,0,0 */
+  #intro {
+    color: blue;
+  }
+  /* Specificity: 0,0,1,0 */
+  .text {
+    color: green;
+  }
+  /* Specificity: 0,1,1,0 */
+  p#intro {
+    color: purple;
+  }
+</style>
+</head>
+<body>
+
+<p>This is a normal paragraph.</p>
+<p id="intro">This is a paragraph with an id.</p>
+<p class="text">This is a paragraph with a class.</p>
+<p id="intro" class="text">This is a paragraph with both id and class.</p>
+
+</body>
+</html>
+
+```
+Output 
+| Selector          | Style Rule          | Specificity  | Applied Color |
+|-------------------|---------------------|--------------|---------------|
+| `p`               | `color: red;`       | 0,0,1,0      | Red           |
+| `#intro`          | `color: blue;`      | 0,1,0,0      | Blue          |
+| `.text`           | `color: green;`     | 0,0,2,0      | Green         |
+| `p#intro`         | `color: purple;`    | 0,1,1,0      | Purple        |
+| `p.text#intro`    | `color: orange;`    | 0,1,2,1      | N/A           |
+**Note** - p#intro means target p elems where id = intro, similaly p.text#intro = p elem with id = intro and class = text, hence no color is applied
+
 
 #### CSS naming conventions
 **Use BEM (Block-Element-Modifier) standard**  
