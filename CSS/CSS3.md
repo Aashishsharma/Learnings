@@ -153,12 +153,11 @@ Output
 
 #### CSS naming conventions
 **Use BEM (Block-Element-Modifier) standard**  
-1. Block - Standalone entity that is meaningful on its own.  
-e.g. - header, container, menu, checkbox, input  
-2. Element - A part of a block that has no standalone meaning and is semantically tied to its block.  
-e.g. - menu item, list item, checkbox caption, header title  
-3. Modifier - A flag on a block or element. Things that change appearance or behavior.  
-e.g. - disabled, highlighted, checked, fixed, size big, color yellow
+| Type      | Description                                                             | Example                     |
+|-----------|-------------------------------------------------------------------------|-----------------------------|
+| Block     | Standalone entity that is meaningful on its own.                       | Header, Container, Checkbox |
+| Element   | A part of a block that has no standalone meaning and is semantically tied to its block. | Menu item, List item, Checkbox caption |
+| Modifier  | A flag on a block or element. Things that change appearance or behavior. | Disabled, Highlighted, Checked, Size big |
 
 **naming syntax**  
 **block-name__elem-name_mod-name_mod-val**  
@@ -167,6 +166,7 @@ notice when to use - and _ and how many times
 #### CSS layouts  
 
 #### 1. CSS Box Model  
+describes how elements in a web page are structured and how their dimensions are calculated
 ![alt text](PNG/css-box-model.png "Title")  
 
 Padding - space between border and content
@@ -174,10 +174,10 @@ Margin - soace between border and other elems
 padding/margin : 10px
 (If one arg, then top, right, bottom and left, same padding/margin applied, if 2 args- 1st arg for top-bottom, if 4 args, from top to left) 
 
-### 2. Flex-box
+### 2. Flex-box (for navbars, card grids ets)
 Is a one-dimensional layout model where as css-grid layout is 2 dimensional  
 (Flexible box) used to layout a page
-Alternative to box model + float and display to layout elems on a web page. 
+ 
 
 Set dispaly:flex - to parent div/any other elem to start with flexbox 
 
@@ -187,62 +187,36 @@ Set dispaly:flex - to parent div/any other elem to start with flexbox
 #### 1. Containers properties
 (add wd/ht to entire container by default all items are stretched to container ht) 
 
-##### 1. Flex, and flex-wrap 
-.container {
-display:flex,
-flex-direction: row(default)/column, row-reverse, column-reverse;
-flex-wrap: nowrap(default)/ wrap (if wrap - items moved to next line if no more space available
-} 
-
-##### 2. flex-flow (shorthand for above)
-flex-flow: column wrap
-
-##### 3. justify-content
-Alligning flex items in a container
-for horizontal alignment  
-justify-content: flex-start, flex-end, center,
-space-between(all items spread out till the end of the container with equal space in between), space-around (space between + same space left at the left of 1st item and right of last item) 
-
-##### 4. align-items
-For vertical alignment
-align-items : stretch(default, height of all items same as that of container) center - (equal space left at top and bottom), flex-start (at the top of the container, at bottom empty space, items have their own height, not streched) flex-end, baseline(all items's center will have same base, no matter the height of each elem) 
+| Property         | Values and Description                                     | Possible Values                                   |
+|------------------|------------------------------------------------------------|---------------------------------------------------|
+| `display`        | `flex` (block-level flex container) or `inline-flex` (inline-level flex container). | `flex`, `inline-flex`                           |
+| `flex-direction` | `row` (default), `row-reverse`, `column`, `column-reverse`. | `row`, `row-reverse`, `column`, `column-reverse` |
+| `flex-wrap`      | `nowrap` (default), `wrap`, `wrap-reverse`.                 | `nowrap`, `wrap`, `wrap-reverse`                |
+| `flex-flow`      | Shorthand for `flex-direction` and `flex-wrap`.             | Combinations of `flex-direction` and `flex-wrap` |
+| `justify-content`| Aligns flex items along the main axis.                     | `flex-start`, `flex-end`, `center`, `space-between`, `space-around`, `space-evenly` |
+| `align-items`    | Aligns flex items along the cross axis.                     | `flex-start`, `flex-end`, `center`, `baseline`, `stretch` |
+| `align-content`  | Aligns flex lines when there's extra space along the cross axis (applies when `flex-wrap: wrap`). | `flex-start`, `flex-end`, `center`, `space-between`, `space-around`, `stretch` |
+| `gap`            | Defines the gap between flex items.                         | Any length value or `normal`                  |
 
 Tip - to align flex items exactly at the center of div
-justify-content: center - horizontal center
-align-items:  center - vertical center 
+justify-content: center - horizontal center align-items:  center - vertical center  
 
 So basically
 .abc {
 display: flex, justify-content and align-items to center
 } 
 
-##### 5. gap, row-gap, column-gap
-controls the space between flex items  
-gap: 10px // applies for both row and column
-
 
 #### 2. Items properties
-##### 1. Order
-One imp property- style="order: 0 to n", 0- default, and all other items are placed based on order no. Useful when componetns order is dynamic from javascript, 
-Generally used with inline style, since order no needs to be diff. for each item, can be used in render method arr.map() 
+| Property         | Description                                            | Possible Values                        |
+|------------------|--------------------------------------------------------|----------------------------------------|
+| `order`          | Specifies the order of the flex item.                 | Integer (default: 0)                   |
+| `flex-grow`      | Determines how much the item grows relative to others. | Number (default: 0)                    |
+| `flex-shrink`    | Determines how much the item shrinks relative to others. | Number (default: 1)                  |
+| `flex-basis`     | Specifies the initial size of the item.                | Length value, auto (default: auto)     |
+| `flex`           | Shorthand for `flex-grow`, `flex-shrink`, and `flex-basis`. | Combination of values (default: 0 1 auto) |
+| `align-self`     | Overrides the alignment set by the container.         | `auto`, `flex-start`, `flex-end`, `center`, `baseline`, `stretch` |
 
-Why flexbox is popular as opposed to display:block with float and grid layout 
-
-Due to shrink-grow and basis - they define the responsive layout 
-
-##### 2. --- flex-grow, shrink, basis ---
-(These properties are added to flex-item)
-These 3 properties decide how the extra space within the flex container is utilized 
-
-1. Flex-basis - default size of an element before the remaining space is distributed : 100px
-2. Flex-grow (default -0 - no item gets extra space)  - flex-grow:2 - this item would get twice the REMAINING SPACE as compared to other items, note that all other items need to have the grow properties as well, or only this item would get the remaining space
-3. Flex-shrink- (default-1 - all items are shrinked in equal proportion when screen size is being reduced) flez-shrink:3, this item would shrink thrice as compared to other items 
-
-4. Flex - as a shorthand
-flex: 1, 1, 100px (grow, shrink, basis) 
-
-##### 3. align-self: flex-start/end/center 
-this align individual items, as opposed to align-items (which is applied at container level)
 
 #### 3. CSS GRID
 Grid vs flexbox
