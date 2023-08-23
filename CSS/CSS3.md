@@ -182,9 +182,6 @@ Is a one-dimensional layout model where as css-grid layout is 2 dimensional
 
 Set dispaly:flex - to parent div/any other elem to start with flexbox 
 
-#### 1. Containers
-#### 2. Items 
-
 #### 1. Containers properties
 (add wd/ht to entire container by default all items are stretched to container ht) 
 
@@ -221,16 +218,18 @@ display: flex, justify-content and align-items to center
 
 #### 3. CSS GRID
 Grid vs flexbox
-Flexbox is 1D, grid is 2D -
-Only few options on css flexbox to set height of the flex container (focuses on width),
-In grid - you can specify width and height
-However grid requires more manaul settinga for responsiveness 
-
-Which to use when (grid is for layout, flexbox is for alignment)
-Flexbox -
-1. Small design 
-2. To align items
-3. Content first design - if you don't know how your content is going to look. 
+| Use Case                | Flexbox | CSS Grid |
+|-------------------------|---------|----------|
+| Flexibility            | Yes     | Yes      |
+| Alignment and Ordering | Yes     | Yes      |
+| Simple UI Components   | Yes     | No       |
+| Fixed-Sized Layouts    | Yes     | Yes      |
+| Complex Alignment      | Yes     | Yes      |
+| Uneven Space            | Yes     | No       |
+| One-Dimensional Layouts | Yes     | No       |
+| Two-Dimensional Layouts | No      | Yes      |
+| Regular Grids           | No      | Yes      |
+| Grid Tracks Control    | No      | Yes      |
 
 ### Grid -
 1. Complex design
@@ -242,64 +241,25 @@ Flexbox -
 
 ### 1. Container properties 
 Container (add wd/ht to entire container, by default all items are stretched to container ht)
+| Property             | Values and Description                                        | Possible Values and Examples          |
+|----------------------|---------------------------------------------------------------|--------------------------------------|
+| `display`            | `grid` (creates a block-level grid container) or `inline-grid` (creates an inline-level grid container). | `grid`, `inline-grid`                |
+| `grid-template-columns` | Defines the columns of the grid. Can use fixed lengths, flexible units, or the `fr` unit for fractions of available space. | `100px 1fr 2fr`, `repeat(3, 1fr)`   |
+| `grid-template-rows` | Defines the rows of the grid. Similar to `grid-template-columns`, but for rows. | `200px auto`, `repeat(2, 1fr)`       |
+| `grid-template-areas` | Defines named grid areas for items. Assigns layout using custom names instead of column and row lines. | `"header header header" "main . sidebar" "footer footer footer"` |
+| `grid-template`      | Shorthand for defining columns, rows, and areas in a single property. | See `grid-template-columns`, `grid-template-rows`, and `grid-template-areas` values. |
+| `grid-column-gap`    | Defines the size of gaps between columns.                     | Length values (`10px`, `1rem`)      |
+| `grid-row-gap`       | Defines the size of gaps between rows.                        | Length values (`10px`, `1rem`)      |
+| `grid-gap`           | Shorthand for `grid-row-gap` and `grid-column-gap`.           | Length values (`10px 20px`)         |
+| `grid-auto-columns`  | Defines the size of columns that aren't explicitly defined.    | Length values, `minmax()`, `auto`   |
+| `grid-auto-rows`     | Defines the size of rows that aren't explicitly defined.       | Length values, `minmax()`, `auto`   |
+| `grid-auto-flow`     | Controls how auto-placed items are positioned.                | `row`, `column`, `dense`, `row dense`, `column dense` |
+| `justify-items`      | Aligns grid items along the inline (horizontal) axis.         | `start`, `end`, `center`, `stretch` |
+| `align-items`        | Aligns grid items along the block (vertical) axis.            | `start`, `end`, `center`, `stretch` |
+| `place-items`        | Shorthand for `align-items` and `justify-items`.             | `start end`, `center stretch`       |
+| `justify-content`    | Aligns grid items along the inline (horizontal) axis within the grid container. | `start`, `end`, `center`, `space-between`, `space-around`, `space-evenly` |
+| `align-content`      | Aligns grid items along the block (vertical) axis within the grid container. | `start`, `end`, `center`, `space-between`, `space-around`, `space-evenly` |
 
-##### 1. display:grid | inline-grid
-
-##### 2. grid-template-columns:  50px 10px 50px 
- (it would create 3 cols with 1st and 3rd cols with width of 50px, to create more cols add more args) set auto auto auto - (all cols evenly distributed)  
-We can add %, fr(fraction), px to grid template-columns/rows  
-
-grid-template-columns:  20% auto 1fr  
-
-**useful css functions**  
-grid-template-columns:  repeat(5, 1fr) - create 5 cols with unit as 1fr each  
-grid-template-columns:  minmax(5px, 80%) - set min width of col to 5px and max to 80% of it's actual size  
-grid-template-columns:  repeat(8, minmax(10px, 1fr));
-
-**useful css units**  
-1. fr - portion of the remaining space  
-grid-template-columns: 1fr 3fr; - Means, 25% 75%, if we use % ot break when we add padding, so use fr  
-
-##### 3. grid-template-rows :10px 100px
-(1st row height of 10px, second od 100px) auto auto - (we afe able to set height here, hence 2D) 
-
-
-##### 4. grid-template : <grid-template-rows> / <grid-template-columns>
-shorthand for cols and rows to be defined on 1 prop  
-.container {
-	grid-template: 20% auto 30% / auto 50px auto
-}
-
-#### 5. column-gap, row-gap
-column-gap: 50px
-row-gap: 10px
-
-#### 6. gap - <row-gap> <column-gap>
-shorthand  
-gap: 50px 10px
-
-#### 7. justify-items (horizontal alignments) - applies for all items inside container
-justify-items: start | end | center | stretch
-
-#### 8. align-items (verticle alignment) - appies for all
-align-items: start | end | center | stretch
-
-#### 9. place-items - <align-items> / <justify-items>
-shorthand for above 2  
-place-item: center // centers horizontally and vertically
-
-#### 10. justify-content
-Sometimes the total size of the grid container might be less than the size of it's parent html elem, specially if the size of parent elem is set in pixels  
-This behaves same as justify-items (align horizontally), but entire grid acts like an item for the parent html elem  
-justify-content: start | end | center | stretch | space-around (between + space left on 1st and last item of the container) | space-between
-
-#### 10. align-content
-Sometimes the total size of the grid container might be less than the size of it's parent html elem, specially if the size of parent elem is set in pixels  
-This behaves same as align-items (align vertically), but entire grid acts like an item for the parent html elem  
-justify-content: start | end | center | stretch | space-around (between + space left on 1st and last item of the container) | space-between
-
-#### 11. place-content: <align-content> / <justify-content>
-Shorthand for above 2 
 
 ### 2. Item properties 
 
