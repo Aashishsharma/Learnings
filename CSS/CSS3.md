@@ -355,24 +355,35 @@ e.g. combinations
 1. Transition
 Transition is applied on the base selector, and which property to transition is applied on the pseudo selector 
 
-.submit-button { 
-background: blue;
-transtion: (property duration(s/ms) transition-style delay) background, padding 2s ease-in-out 100ms
-//other values
-Property(any css property, for multiple separarte using comma, for all use all)
-transition-style (ease, linear)
-} 
+| Property Name             | Description                                          | Possible Values                 |
+|---------------------------|------------------------------------------------------|---------------------------------|
+| `transition`              | Specifies properties to transition and their timing. | `property duration timing delay` |
+| `transition-property`     | Specifies the properties to transition.             | `width`, `opacity`, `color`      |
+| `transition-duration`     | Specifies the duration of the transition.           | `0.3s`, `1s`, `300ms`            |
+| `transition-timing-function` | Specifies the easing function for the transition. | `ease`, `linear`, `ease-in-out` |
+| `transition-delay`        | Specifies a delay before the transition starts.     | `0.2s`, `500ms`, `1s`            |
 
-then use pseudo-selector
-.submit-button:hover {
-  background: red; padding:10px
-} 
+```html
+<!DOCTYPE html>
+<style>
+  .button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Transition for background color */
+  }
 
-//older browser require transtition properties to be prefixed
-For chrome/safari
--webkit-transition
-For firefox
--moz-transtion 
+  .button:hover {
+    background-color: #2980b9; /* New background color on hover */
+  }
+</style>
+</head>
+</html>
+```
 
 2. Transform function
 Unlike transition ,this is applied only on base selectors, can also be allpied on pseudo selectors but is not meant for that.
