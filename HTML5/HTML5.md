@@ -3,9 +3,9 @@
 let the browser know that this is an HTML5 page and should be rendered accordingly
 2. <html dir="ltr" lang="en">  
 The content is written in left to right direction. e.g. urdu had rtl  
-
-3. Possible tags included in head tag in html
 language = 'english'  
+3. Possible tags included in head tag in html  
+
 | Tag         | Attribute(s)             | Description                                    | Example                                              | Example Explanation                                                                 |
 |-------------|--------------------------|------------------------------------------------|------------------------------------------------------|-------------------------------------------------------------------------------------|
 | `<meta>`    | `charset`                | Specifies the character encoding for the document. | `<meta charset="UTF-8">`                          | Sets the character encoding of the document to UTF-8.                             |
