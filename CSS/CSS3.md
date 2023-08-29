@@ -290,40 +290,21 @@ grid-template-area example
   
 </body>
 
-
 ```
 
 ### 2. Item properties 
 
-#### 1. grid-column-start/end, grid-row-start/end
-Different values that can be included  
-.item-a {
-  grid-column-start: 2;
-  grid-column-end: five;
-  grid-row-start: row1-start;
-  grid-row-end: 3;
-}
-
-shorthands for above (include start and end)  
-.item-c {
-  grid-column: 3 / span 2;
-  grid-row: third-line / 4;
-}
-
-#### 2. justify-self
-Aligns a grid item inside a cell (horizontally)  
-justify-self: start | end | center | stretch;  
-Note -justify-item - works for all the items inside the grid and justify-self (since it is applicable on a particular item, this style is applied to only this item) for all grid items we use justify-item
-
-#### 3. align-self
-Aligns a grid item inside a cell (horizontally)  
-align-self: start | end | center | stretch;  
-Same difference with align-items as above
-
-#### 4. place-self <align-self> / <justify-self>
-Same as place-items, but only applicable to this particular item as opposed to all items withing the gird container
-
-
+| Property Name     | Description                                          | CSS Syntax and Possible Values             |
+|-------------------|------------------------------------------------------|--------------------------------------------|
+| `grid-column`     | Placement along columns, from start to end lines.   | `grid-column: <start> / <end>;`<br>e.g., `grid-column: 2 / 4;` |
+| `grid-row`        | Placement along rows, from start to end lines.      | `grid-row: <start> / <end>;`<br>e.g., `grid-row: 1 / 3;`    |
+| `grid-area`       | Assign to named area or use row/column lines. (see grid-templat-area above)      | `grid-area: <row-start> / <column-start> / <row-end> / <column-end>;`<br>e.g., `grid-area: 2 / 1 / 4 / 3;` |
+| `grid-column-start` | Starting column line for item's placement.       | `grid-column-start: <line>;`<br>e.g., `grid-column-start: 2;` |
+| `grid-column-end`   | Ending column line for item's placement.         | `grid-column-end: <line>;`<br>e.g., `grid-column-end: 4;`   |
+| `grid-row-start`    | Starting row line for item's placement.          | `grid-row-start: <line>;`<br>e.g., `grid-row-start: 1;`      |
+| `grid-row-end`      | Ending row line for item's placement.            | `grid-row-end: <line>;`<br>e.g., `grid-row-end: 3;`        |
+| `justify-self`      | Alignment within grid cell along inline axis.   | `justify-self: start | end | center | stretch;`<br>e.g., `justify-self: center;` |
+| `align-self`        | Alignment within grid cell along block axis.    | `align-self: start | end | center | stretch;`<br>e.g., `align-self: stretch;` |
 
 #### Media queries
 The @media rule, introduced in CSS2, made it possible to define different style rules for different media types (like for computer screen, tv, mobile).  
