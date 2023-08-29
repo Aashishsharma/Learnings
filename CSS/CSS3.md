@@ -385,54 +385,45 @@ Transition is applied on the base selector, and which property to transition is 
 </html>
 ```
 
-#### Animation and Transform function
-Unlike transition ,this is applied only on base selectors, can also be allpied on pseudo selectors but is not meant for that.
-So no animation effect, transfrom functions are run on page load and not on user action 
-
-.submit-button {
-  transform: translate(50px, 100px) 50 px to right and 100 px to top, same as graph, for left and bottom us-ve vals 
-
+#### Transform function
+Transformations include translations, rotations, scalings, and more  
+syntax
+```css
+selector {
+  transform: <transform-function> <optional-transform-function>;
+}
+```
 transfrom: rotate(+-deg)
 transfrom: scale(2.5) maked it 2.5 times bigger - makes sense to use on pseudo selectors 
+transform: skew(20deg, -10deg) // skew (<x-angle>, <y-angle>) -  tilts the element either horizontally or vertically or both
 
-3. Animations
-Transition requires some event to happen like click/hover, animation - no event required, 
-For transition - it is not a function, so if same transition needs to br applied we have to catch all selectors and pseudo selectors and copy transition properties
-For animation - create one animation and same can br applied on all other selector by calling that animation 
+#### Css animation
+2 step process - 1. define animation using keyframes, 2 - use it in css selectors
+```html
+<style>
+  @keyframes moveRight {
+    0% { left: 0; }
+    100% { left: 300px; }
+  }
 
-Each animation has 2 key frames (start n end) can have more stages in between 
+  .square {
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    position: relative;
+    animation: moveRight 3s ease-in-out infinite; /* Apply animation */
+  }
+</style>
+</head>
+<body>
+  <div class="square"></div>
+</body>
+</html>
 
-Animation is a 2 step process 
+```
 
-Step 1. Define an animation using keyframes
-@keyframes <animation-name> {
-   from { background: red;} // starting pt
-   to {bacground : black;}
-}  
-Another way - adding steps 
-
-@keyframe red-to-black {
-  0% { color:red; transfrom: translate(0px, 0px)}
-50% {color:yellow; transfrom (10px, 10px)}
-100% {color:black;transfrom(20px, 20px)}
-} 
-
-Step 2. Use an animation
-.abc {
-//add animation name
-animation-name: red-to-black;
-// add animation properties
 1. animation-duration: 0s - default, 5s
 2. animation-timing-function: ease/linear/ease-in-out
 3. animation-delay: 2s /-2s, when -ve means 2 secs already covered in animation
 4. animation-iteration-count: 2/infinite
 5. animation-direction: normal(default - from 0% to 100%), reverse (100 to 0), alternate (forward then backword), alternate-reverse 
-
-//shorthand
-animation: (name duration timing-function delay iteration-count direction) 
-E.g.
-animation: red-to-black 5s ease 2s infinite alternate; 
-
-// for old browsers 
--webkit-animation: red-to-black 5s ease 2s infinite alternate;
-}
