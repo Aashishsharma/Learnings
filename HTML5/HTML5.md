@@ -1,13 +1,3 @@
-## Index
-1. **HTML5** - old(doctype req. reference to DTD), now (<'!DOCTYPE html'>), no type in script (<'script src/rel/href'>)
-2. **New tags** - in body - (header, nav, article, section, aside, footer)
-3. **New input types** - (datetime, number, email, url, required, placeholder)
-4. **Canvas** - to draw graphics using JavaScript
-5. **Audio/Video** - <'audio/video' src = ".mp3/4" width/height - 200px>
-6. **Geolocation** - navigator.geolocation.getCurrentPosition(showLocation, errorHandler), showLocation( position ) {position.coords.latitude/longitude)
-7. **Drag n drop APIs** 
-8. **WebPush** - navigator.serviceWorker.register('/service-worker.js')
-
 ### First 5 lines in HTML
 1. <!DOCTYPE html>  
 let the browser know that this is an HTML5 page and should be rendered accordingly
@@ -15,7 +5,7 @@ let the browser know that this is an HTML5 page and should be rendered according
 The content is written in left to right direction. e.g. urdu had rtl  
 
 3. Possible tags included in head tag in html
-language = 'english'
+language = 'english'  
 | Tag         | Attribute(s)             | Description                                    | Example                                              | Example Explanation                                                                 |
 |-------------|--------------------------|------------------------------------------------|------------------------------------------------------|-------------------------------------------------------------------------------------|
 | `<meta>`    | `charset`                | Specifies the character encoding for the document. | `<meta charset="UTF-8">`                          | Sets the character encoding of the document to UTF-8.                             |
@@ -42,9 +32,7 @@ language = 'english'
 | `<meta>`    | `name`                   | Specifies the name of the attribute.         | `<meta name="charset" content="UTF-8">`          | Sets the name of the attribute as "charset".                                      |
 |             | `content`                | Provides the actual content for the attribute. | `<meta name="charset" content="UTF-8">`          | Specifies the character encoding of the document as UTF-8.                         |
 |             | `name`                   | Specifies the name of the attribute.         | `<meta name="viewport" content="width=device-width, initial-scale=1.0">` | Sets the name of the attribute as "viewport".                                    |
-|             | `content`                | Provides the actual content for the attribute. | `<meta name="viewport" content="width=device-width, initial-scale=1.0">` | Specifies the viewport settings for responsive web design.                        |
-
-
+|             | `content`                | Provides the actual content for the attribute. | `<meta name="viewport" content="
 
 
 ## HTML5
