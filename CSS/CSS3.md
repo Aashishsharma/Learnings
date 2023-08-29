@@ -351,7 +351,7 @@ e.g. combinations
 } 
 ```
 
-#### CSS Transitions and animations
+#### CSS Transitions
 1. Transition
 Transition is applied on the base selector, and which property to transition is applied on the pseudo selector 
 
@@ -385,7 +385,7 @@ Transition is applied on the base selector, and which property to transition is 
 </html>
 ```
 
-2. Transform function
+#### Animation and Transform function
 Unlike transition ,this is applied only on base selectors, can also be allpied on pseudo selectors but is not meant for that.
 So no animation effect, transfrom functions are run on page load and not on user action 
 
