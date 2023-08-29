@@ -13,16 +13,38 @@
 let the browser know that this is an HTML5 page and should be rendered accordingly
 2. <html dir="ltr" lang="en">  
 The content is written in left to right direction. e.g. urdu had rtl  
+
+3. Possible tags included in head tag in html
 language = 'english'
-3. <meta charset="utf-8">
-meta tag is used to supply metadata about the document  
-(char-set) attribute tells the browser which character encoding to use  
-utf-8 allows us to use all sorts of symbols and emoji in source code
-4. <meta name="viewport" content="width=device-"... >  
-for properly sizing the webpage on small screens  
-width=device-width tells the browser to use 100% of the device’s width as the viewport so there’s no horizontal scrolling.  
-5. <meta property="og:site_name" content="Twitter">
-This tag is an Open Graph (OG) meta tag for the site name, used for SEO
+| Tag         | Attribute(s)             | Description                                    | Example                                              | Example Explanation                                                                 |
+|-------------|--------------------------|------------------------------------------------|------------------------------------------------------|-------------------------------------------------------------------------------------|
+| `<meta>`    | `charset`                | Specifies the character encoding for the document. | `<meta charset="UTF-8">`                          | Sets the character encoding of the document to UTF-8.                             |
+|             | `name`                   | Provides metadata's name for the document.     | `<meta name="description" content="My website description">` | Sets the description metadata for search engines.                                  |
+|             | `content`                | Provides the actual content for the attribute. | `<meta name="description" content="My website description">` | Specifies the actual content for the "description" metadata attribute.             |
+| `<title>`   | N/A                      | Sets the title of the web page.              | `<title>My Web Page</title>`                       | Sets the title of the web page as displayed in the browser's title bar or tab.     |
+| `<link>`    | `rel`                    | Specifies the relationship between the current document and the linked resource. | `<link rel="stylesheet" href="styles.css">`   | Specifies that the linked resource is a stylesheet.                                |
+|             | `href`                   | Specifies the URL of the linked resource.    | `<link rel="stylesheet" href="styles.css">`   | Provides the URL to the external stylesheet file.                                |
+|             | `type`                   | Specifies the MIME type of the linked resource. | `<link rel="stylesheet" type="text/css" href="styles.css">` | Defines the MIME type of the linked stylesheet as text/css.                        |
+|             | `media`                  | Specifies the media type for which the linked resource is intended. | `<link rel="stylesheet" media="screen" href="styles.css">` | Indicates that the stylesheet is intended for screen media.                        |
+|             | `sizes`                  | Specifies the sizes of the linked icon for different displays. | `<link rel="icon" sizes="16x16" href="favicon.ico">` | Specifies the dimensions of the favicon for different display contexts.            |
+| `<style>`   | `type`                   | Specifies the MIME type of the embedded style content. | `<style type="text/css">...</style>`               | Defines an embedded CSS style block with the specified MIME type.                  |
+| `<script>`  | `src`                    | Specifies the URL of the external script file. | `<script src="script.js"></script>`                | Links to an external JavaScript file.                                             |
+|             | `type`                   | Specifies the MIME type of the script content. | `<script type="text/javascript" src="script.js"></script>` | Defines the type of the linked script file as JavaScript.                          |
+|             | `async`                  | Specifies that the script should be executed asynchronously. | `<script async src="script.js"></script>`     | Instructs the browser to load and execute the script asynchronously.              |
+|             | `defer`                  | Specifies that the script should be deferred and executed after parsing. | `<script defer src="script.js"></script>`    | Delays the execution of the script until the HTML parsing is complete.            |
+| `<base>`    | `href`                   | Specifies the base URL for relative URLs.     | `<base href="https://www.example.com/">`         | Sets the base URL for resolving relative URLs.                                    |
+|             | `target`                 | Specifies the default target for all hyperlinks and forms. | `<base target="_blank">`                        | Opens all links and form submissions in a new browser tab or window.               |
+| `<meta>`    | `http-equiv`             | Provides an HTTP header value for the document. | `<meta http-equiv="refresh" content="5">`       | Sets an HTTP header to refresh the page after 5 seconds.                          |
+|             | `content`                | Provides the actual content for the attribute. | `<meta http-equiv="refresh" content="5">`       | Specifies the content for the "refresh" attribute, indicating the time interval.  |
+| `<noscript>`| N/A                      | Defines content to display if scripts are disabled. | `<noscript>Your browser doesn't support scripts.</noscript>` | Provides an alternative content for users with disabled JavaScript.               |
+| `<meta>`    | `name`                   | Provides various information to search engines. | `<meta name="author" content="John Doe">`         | Specifies the author's name for search engines.                                   |
+|             | `content`                | Provides the actual content for the attribute. | `<meta name="author" content="John Doe">`         | Sets the actual content of the "author" metadata attribute.                        |
+| `<meta>`    | `name`                   | Specifies the name of the attribute.         | `<meta name="charset" content="UTF-8">`          | Sets the name of the attribute as "charset".                                      |
+|             | `content`                | Provides the actual content for the attribute. | `<meta name="charset" content="UTF-8">`          | Specifies the character encoding of the document as UTF-8.                         |
+|             | `name`                   | Specifies the name of the attribute.         | `<meta name="viewport" content="width=device-width, initial-scale=1.0">` | Sets the name of the attribute as "viewport".                                    |
+|             | `content`                | Provides the actual content for the attribute. | `<meta name="viewport" content="width=device-width, initial-scale=1.0">` | Specifies the viewport settings for responsive web design.                        |
+
+
 
 
 ## HTML5
@@ -84,63 +106,6 @@ autofocus, required, placeholder and so on
 
 #### 5. Canvas
 HTML5 element <canvas> gives you an easy and powerful way to draw graphics using JavaScript
-```HTML
-<!DOCTYPE HTML>
-<html>
-   <head>
-      <style>
-         #mycanvas{border:1px solid red;}
-      </style>
-   </head>
-   <body>
-      <canvas id = "mycanvas" width = "100" height = "100"></canvas>
-   </body>
-</html>
-// This will draw a red box in the canvas area
-
-//e.g. 
-<!DOCTYPE HTML>
-<html>
-   <head>
-      <style>
-         #test {
-            width: 100px;
-            height:100px;
-            margin: 0px auto;
-         }
-      </style>
-      <script type = "text/javascript">
-         function drawShape() {
-            // get the canvas element using the DOM
-            var canvas = document.getElementById('mycanvas');
-            // Make sure we don't execute when canvas isn't supported
-            if (canvas.getContext) {
-               // use getContext to use the canvas for drawing
-               var ctx = canvas.getContext('2d');
-               // Filled triangle
-               ctx.beginPath();
-               ctx.moveTo(25,25);
-               ctx.lineTo(105,25);
-               ctx.lineTo(25,105);
-               ctx.fill();
-               // Stroked/empty triangle
-               ctx.beginPath();
-               ctx.moveTo(125,125);
-               ctx.lineTo(125,45);
-               ctx.lineTo(45,125);
-               ctx.closePath();
-               ctx.stroke();
-            } else {
-               alert('You need Safari or Firefox 1.5+ to see this demo.');
-            }
-         }
-      </script>
-   </head>
-   <body id = "test" onload = "drawShape();">
-      <canvas id = "mycanvas"></canvas>
-   </body>
-</html>
-```
 #### 6. Audio/Video
 HTML5 features, include native audio and video support without the need for Flash  
 ```HTML
