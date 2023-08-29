@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grid and Flexbox Layout</title>
 <style>
+  body {
+    border: 1px red solid;
+  }
  .grid-container {
   display: grid;
   grid-template-areas:
@@ -12,7 +15,8 @@
     "sidebar main"
     "footer footer";
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 500px 1fr 1fr;
+  grid-template-rows: 10vh 40vh 50vh;
+  grid-auto-rows: 200px;
 }
 
 .header {

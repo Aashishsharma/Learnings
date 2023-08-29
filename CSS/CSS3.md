@@ -246,15 +246,52 @@ Container (add wd/ht to entire container, by default all items are stretched to 
 | `grid-column-gap`    | Defines the size of gaps between columns.                     | Length values (`10px`, `1rem`)      |
 | `grid-row-gap`       | Defines the size of gaps between rows.                        | Length values (`10px`, `1rem`)      |
 | `grid-gap`           | Shorthand for `grid-row-gap` and `grid-column-gap`.           | Length values (`10px 20px`)         |
-| `grid-auto-columns`  | Defines the size of columns that aren't explicitly defined.    | Length values, `minmax()`, `auto`   |
+| `grid-auto-columns`  | Defines the size of columns that aren't explicitly defined. Explitily meaning when there are more grid items than explicitly defined columns in gird-template-columns property.    | Length values, `minmax()`, `auto`   |
 | `grid-auto-rows`     | Defines the size of rows that aren't explicitly defined.       | Length values, `minmax()`, `auto`   |
 | `grid-auto-flow`     | Controls how auto-placed items are positioned.                | `row`, `column`, `dense`, `row dense`, `column dense` |
-| `justify-items`      | Aligns grid items along the inline (horizontal) axis.         | `start`, `end`, `center`, `stretch` |
+| `justify-items`      | Aligns grid items along the inline (horizontal) axis. Aligns grid items at the center of their grid cells if justify-items: center         | `start`, `end`, `center`, `stretch` |
 | `align-items`        | Aligns grid items along the block (vertical) axis.            | `start`, `end`, `center`, `stretch` |
 | `place-items`        | Shorthand for `align-items` and `justify-items`.             | `start end`, `center stretch`       |
-| `justify-content`    | Aligns grid items along the inline (horizontal) axis within the grid container. | `start`, `end`, `center`, `space-between`, `space-around`, `space-evenly` |
-| `align-content`      | Aligns grid items along the block (vertical) axis within the grid container. | `start`, `end`, `center`, `space-between`, `space-around`, `space-evenly` |
 
+grid-template-area example
+```html
+-- Note we need to use grid-template-columns and gird-template-rows property as well
+-- below creates a 2 cols 3 rows 2 X 3 layout with named areas
+<style>
+ .grid-container {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar main"
+    "footer footer";
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 500px 1fr 1fr;
+}
+.header {
+  grid-area: header;
+}
+.sidebar {
+  grid-area: sidebar;
+}
+.main {
+  grid-area: main;
+}
+.footer {
+  grid-area: footer;
+}
+</style>
+<body>
+  <div class="grid-container">
+    <header class="header">Header</header>
+    <div class="sidebar">Sidebar</div>
+    <main class="main">Main Content</main>
+    <footer class="footer">Footer</footer>
+  </div>
+  
+</body>
+
+
+```
 
 ### 2. Item properties 
 
