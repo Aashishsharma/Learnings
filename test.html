@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grid and Flexbox Layout</title>
+<style>
+ .grid-container {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar main"
+    "footer footer";
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 500px 1fr 1fr;
+}
+
+.header {
+  grid-area: header;
+}
+
+.sidebar {
+  grid-area: sidebar;
+}
+
+.main {
+  grid-area: main;
+}
+
+.footer {
+  grid-area: footer;
+}
+
+</style>
+</head>
+<body>
+  <div class="grid-container">
+    <header class="header">Header</header>
+    <div class="sidebar">Sidebar</div>
+    <main class="main">Main Content</main>
+    <footer class="footer">Footer</footer>
+  </div>
+  
+</body>
+</html>

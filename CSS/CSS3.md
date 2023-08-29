@@ -22,6 +22,8 @@ Importing css in a css, possible only in css3
 | ID Selector   | `#myElement`      | Targets an element with a specific unique ID attribute, such as `<div id="myElement">`.                |
 | Tag Selector  | `div`             | Targets all elements of a specific HTML tag, such as `<div>`, `<p>`, or `<h1>`.                        |
 | Class Selector| `.myClass`        | Targets elements with a specific class attribute, like `<div class="myClass">`.                        |
+| Multiple Selector      | `div, p`              | Selects all `<div>` and `<p>` elements                                           |
+| Multiple Selector      | `div#intro.test`              | Selects all `<div>` elements who have id=intro and class=test (see specificity)                                           |
 | Descendant Selector      | `div p`              | Selects all `<p>` elements inside of a `<div>` element. (direct / indirect, all p elems are selected)                                           |
 | Child Selector           | `div > p`            | Selects all `<p>` elements that are direct children of a `<div>` element. (indirect p elems are not selected)                                        |
 | Adjacent Sibling Selector | `h2 + p`            | Selects only the first `<p>` element that immediately follows an `<h2>` element and have same parent                                           |
@@ -204,7 +206,6 @@ So basically
 display: flex, justify-content and align-items to center
 } 
 
-
 #### 2. Items properties
 | Property         | Description                                            | Possible Values                        |
 |------------------|--------------------------------------------------------|----------------------------------------|
@@ -232,12 +233,6 @@ Grid vs flexbox
 | Grid Tracks Control    | No      | Yes      |
 
 ### Grid -
-1. Complex design
-2. If you nees gap between block elems - we can define gap between rows and cols easily in grid
-3. Layout first design- when layout us already defined 
-
-#### 1. Container
-#### 2. Items 
 
 ### 1. Container properties 
 Container (add wd/ht to entire container, by default all items are stretched to container ht)
@@ -246,7 +241,7 @@ Container (add wd/ht to entire container, by default all items are stretched to 
 | `display`            | `grid` (creates a block-level grid container) or `inline-grid` (creates an inline-level grid container). | `grid`, `inline-grid`                |
 | `grid-template-columns` | Defines the columns of the grid. Can use fixed lengths, flexible units, or the `fr` unit for fractions of available space. | `100px 1fr 2fr`, `repeat(3, 1fr)`   |
 | `grid-template-rows` | Defines the rows of the grid. Similar to `grid-template-columns`, but for rows. | `200px auto`, `repeat(2, 1fr)`       |
-| `grid-template-areas` | Defines named grid areas for items. Assigns layout using custom names instead of column and row lines. | `"header header header" "main . sidebar" "footer footer footer"` |
+| `grid-template-areas` | The `grid-template-area` property in CSS Grid Layout is used to visually define a grid template by assigning names to grid cells or areas within a grid container. It allows you to create a layout using named areas, simplifying complex grid structures. By specifying the arrangement of areas in the `grid-template-areas` property and assigning those area names to grid items using `grid-area`, you can manage layouts more intuitively and efficiently. This is especially helpful for responsive designs where grid areas might need to adapt based on screen sizes. See example below | `"header header header" "main . sidebar" "footer footer footer"` |
 | `grid-template`      | Shorthand for defining columns, rows, and areas in a single property. | See `grid-template-columns`, `grid-template-rows`, and `grid-template-areas` values. |
 | `grid-column-gap`    | Defines the size of gaps between columns.                     | Length values (`10px`, `1rem`)      |
 | `grid-row-gap`       | Defines the size of gaps between rows.                        | Length values (`10px`, `1rem`)      |
