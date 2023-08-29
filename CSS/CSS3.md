@@ -312,14 +312,13 @@ CSS 3 introduces Media Queries
 
 Media queries in CSS3 extended the CSS2 media types idea: Instead of looking for a type of device, they look at the capability of the device such as width  and height, orientation and resolution  
 
+| Property Name     | Description                                     | Possible Values                |
+|-------------------|-------------------------------------------------|--------------------------------|
+| `@media`          | Specifies the type of media to apply styles to. | `screen`, `print`, `all`, etc. |
+| `and`             | Combines media features.                        |                                |
+| `<condition>`     | Defines the conditions for applying styles.     | e.g., `(max-width: 768px)`    |
+
 ```css
-//syntax
-@media not|only mediatype and (expressions) {
-  CSS-Code;
-}
-
-mediatype can be screen, print (while printing this style would be applied), speech, all (default)
-
 e.g. 1 - it will execute when screen size is less than 500px
 @media screen and (max-width: 500px) {
 	body {
