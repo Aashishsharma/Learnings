@@ -72,13 +72,8 @@ function showLocation( position ) {
 
 #### 2.  Web Storage
 #### 3.  Web workers
-**Web Workers** are a part of HTML5 and are designed to run scripts in the background without affecting the performance of the main user interface. They provide a way to execute code concurrently in a separate thread, allowing for better utilization of multi-core processors and improving the responsiveness of web applications.
-
-Web Workers are particularly useful for tasks that are computationally intensive or time-consuming, such as data processing, image manipulation, or running complex algorithms. By offloading these tasks to a separate thread, the main UI thread remains responsive to user interactions.
-
-Here's a detailed explanation and a real-life example of using Web Workers:
-
-**Basic Concepts:**
+**Web Workers** are a part of HTML5 and are designed to run scripts in the background so that the main UI thread remains responsive to user interactions.
+They provide a way to execute code concurrently in a separate thread, allowing for better utilization of multi-core processors and improving the responsiveness of web applications.
 
 1. **Types of Web Workers:**
    - **Dedicated Web Workers:** These workers have a one-to-one relationship with the creating script. They run in a separate thread and communicate with the main thread through message passing.
@@ -87,10 +82,7 @@ Here's a detailed explanation and a real-life example of using Web Workers:
 2. **Communication:**
    Web Workers communicate with the main thread using a message-passing mechanism. They cannot directly access the DOM or interact with the UI thread. Messages are sent between the main thread and workers using the `postMessage()` method.
 
-**Real-Life Example: Using a Web Worker to Calculate Prime Numbers:**
-
-Let's say you want to calculate prime numbers within a specific range, which can be a computationally intensive task. You can use a Web Worker to perform this calculation without freezing the main UI. Here's an example:
-
+**Example: Using a Web Worker to Calculate Prime Numbers:**
 **index.html:**
 ```html
 <!DOCTYPE html>
@@ -112,6 +104,8 @@ Let's say you want to calculate prime numbers within a specific range, which can
     calculateButton.addEventListener('click', () => {
       const rangeStart = parseInt(document.getElementById('rangeStart').value);
       const rangeEnd = parseInt(document.getElementById('rangeEnd').value);
+
+      //Note that the worker.js file needs to be served from a web server, doesn't wotk locally
       const worker = new Worker('worker.js');
       
       worker.postMessage({ rangeStart, rangeEnd });
@@ -159,9 +153,6 @@ function isPrime(num) {
   return true;
 }
 ```
-
-In this example, the main `index.html` page contains input fields for the range of numbers and a button to trigger the calculation. When the user clicks the "Calculate Primes" button, a new Web Worker is created using the `worker.js` script. The Web Worker calculates prime numbers within the specified range and sends the result back to the main thread using `postMessage()`. The main thread updates the result on the page.
-
-Keep in mind that Web Workers are subject to the same-origin policy, meaning that a worker loaded from a different domain won't be able to access resources from the main page. Additionally, it's important to consider browser compatibility and limitations when using Web Workers.
+Note - worker loaded from a different domain won't be able to access resources from the main page.
 
 ## Accessibility
