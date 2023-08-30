@@ -1,49 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grid and Flexbox Layout</title>
-<style>
-  body {
-    border: 1px red solid;
-  }
- .grid-container {
-  display: grid;
-  grid-template-areas:
-    "header header"
-    "sidebar main"
-    "footer footer";
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 10vh 40vh 50vh;
-  grid-auto-rows: 200px;
-}
-
-.header {
-  grid-area: header;
-}
-
-.sidebar {
-  grid-area: sidebar;
-}
-
-.main {
-  grid-area: main;
-}
-
-.footer {
-  grid-area: footer;
-}
-
-</style>
+  <title>Prime Number Calculator</title>
 </head>
 <body>
-  <div class="grid-container">
-    <header class="header">Header</header>
-    <div class="sidebar">Sidebar</div>
-    <main class="main">Main Content</main>
-    <footer class="footer">Footer</footer>
-  </div>
+  <h1>Prime Number Calculator</h1>
+  <input type="number" id="rangeStart" placeholder="Start">
+  <input type="number" id="rangeEnd" placeholder="End">
+  <button id="calculate">Calculate Primes</button>
+  <div id="result"></div>
+
+  <script>
+
+const workerScript = `
+  self.onmessage = function(event) {
+  const rangeStart = event.data.rangeStart;
+  const rangeEnd = event.data.rangeEnd;
+  const primeNumbers = calculatePrimesInRange(rangeStart, rangeEnd);
   
+  self.postMessage(primeNumbers);
+};
+
+function calculatePrimesInRange(start, end) {
+  const primes = [];
+  for (let num = start; num <= end; num++) {
+    if (isPrime(num)) {
+      primes.push(num);
+    }
+  }
+  return primes;
+}
+
+function isPrime(num) {
+  if (num <= 1) return false;
+  if (num <= 3) return true;
+  if (num % 2 === 0 || num % 3 === 0) return false;
+
+  let i = 5;
+  while (i * i <= num) {
+    if (num % i === 0 || num % (i + 2) === 0) return false;
+    i += 6;
+  }
+
+  return true;
+}
+
+`;
+
+    const calculateButton = document.getElementById('calculate');
+    const resultDiv = document.getElementById('result');
+
+    calculateButton.addEventListener('click', () => {
+      const rangeStart = parseInt(document.getElementById('rangeStart').value);
+      const rangeEnd = parseInt(document.getElementById('rangeEnd').value);
+      
+const blob = new Blob([workerScript], { type: 'application/javascript' });
+const blobURL = URL.createObjectURL(blob);
+
+const worker = new Worker(blobURL);
+      
+      worker.postMessage({ rangeStart, rangeEnd });
+
+      worker.onmessage = function(event) {
+        resultDiv.textContent = 'Prime numbers: ' + event.data.join(', ');
+      };
+    });
+  </script>
+<script>
+  
+
+
+</script>
+
 </body>
 </html>

@@ -52,7 +52,9 @@ New input types
 | 12.  | `<meta http-equiv="Expires" content="Tue, 01 Jan 2024 12:00:00 GMT">` | This meta tag sets the expiration date and time for the page's content. Browsers and caching mechanisms use this information to determine whether to fetch a fresh version of the page. |
 | 13.  | `<meta http-equiv="Refresh" content="5;url=https://example.com/">` | This meta tag instructs the browser to refresh or reload the page after a specified time interval (in seconds) and provides a URL to redirect to. For example, after 5 seconds, the page will be redirected to "https://example.com/". |
 
-####  Geolocation
+
+## HTML 5 APIS
+#### 1.  Geolocation
 It is an HTML 5 Api
 ```javascript
 function getLocation() {
@@ -67,3 +69,99 @@ function showLocation( position ) {
    ...
 }
 ```
+
+#### 2.  Web Storage
+#### 3.  Web workers
+**Web Workers** are a part of HTML5 and are designed to run scripts in the background without affecting the performance of the main user interface. They provide a way to execute code concurrently in a separate thread, allowing for better utilization of multi-core processors and improving the responsiveness of web applications.
+
+Web Workers are particularly useful for tasks that are computationally intensive or time-consuming, such as data processing, image manipulation, or running complex algorithms. By offloading these tasks to a separate thread, the main UI thread remains responsive to user interactions.
+
+Here's a detailed explanation and a real-life example of using Web Workers:
+
+**Basic Concepts:**
+
+1. **Types of Web Workers:**
+   - **Dedicated Web Workers:** These workers have a one-to-one relationship with the creating script. They run in a separate thread and communicate with the main thread through message passing.
+   - **Shared Web Workers:** These workers are shared among multiple scripts from different origins. They allow cross-origin communication and are useful for collaborative applications.
+
+2. **Communication:**
+   Web Workers communicate with the main thread using a message-passing mechanism. They cannot directly access the DOM or interact with the UI thread. Messages are sent between the main thread and workers using the `postMessage()` method.
+
+**Real-Life Example: Using a Web Worker to Calculate Prime Numbers:**
+
+Let's say you want to calculate prime numbers within a specific range, which can be a computationally intensive task. You can use a Web Worker to perform this calculation without freezing the main UI. Here's an example:
+
+**index.html:**
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Prime Number Calculator</title>
+</head>
+<body>
+  <h1>Prime Number Calculator</h1>
+  <input type="number" id="rangeStart" placeholder="Start">
+  <input type="number" id="rangeEnd" placeholder="End">
+  <button id="calculate">Calculate Primes</button>
+  <div id="result"></div>
+
+  <script>
+    const calculateButton = document.getElementById('calculate');
+    const resultDiv = document.getElementById('result');
+
+    calculateButton.addEventListener('click', () => {
+      const rangeStart = parseInt(document.getElementById('rangeStart').value);
+      const rangeEnd = parseInt(document.getElementById('rangeEnd').value);
+      const worker = new Worker('worker.js');
+      
+      worker.postMessage({ rangeStart, rangeEnd });
+
+      worker.onmessage = function(event) {
+        resultDiv.textContent = 'Prime numbers: ' + event.data.join(', ');
+      };
+    });
+  </script>
+</body>
+</html>
+```
+
+**worker.js:**
+```javascript
+self.onmessage = function(event) {
+  const rangeStart = event.data.rangeStart;
+  const rangeEnd = event.data.rangeEnd;
+  const primeNumbers = calculatePrimesInRange(rangeStart, rangeEnd);
+  
+  self.postMessage(primeNumbers);
+};
+
+function calculatePrimesInRange(start, end) {
+  const primes = [];
+  for (let num = start; num <= end; num++) {
+    if (isPrime(num)) {
+      primes.push(num);
+    }
+  }
+  return primes;
+}
+
+function isPrime(num) {
+  if (num <= 1) return false;
+  if (num <= 3) return true;
+  if (num % 2 === 0 || num % 3 === 0) return false;
+
+  let i = 5;
+  while (i * i <= num) {
+    if (num % i === 0 || num % (i + 2) === 0) return false;
+    i += 6;
+  }
+
+  return true;
+}
+```
+
+In this example, the main `index.html` page contains input fields for the range of numbers and a button to trigger the calculation. When the user clicks the "Calculate Primes" button, a new Web Worker is created using the `worker.js` script. The Web Worker calculates prime numbers within the specified range and sends the result back to the main thread using `postMessage()`. The main thread updates the result on the page.
+
+Keep in mind that Web Workers are subject to the same-origin policy, meaning that a worker loaded from a different domain won't be able to access resources from the main page. Additionally, it's important to consider browser compatibility and limitations when using Web Workers.
+
+## Accessibility
