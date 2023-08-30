@@ -17,7 +17,9 @@ language = 'english'
 | 8.   | `<script src="script.js"></script>` | This script tag links an external JavaScript file named "script.js" to the HTML document. The JavaScript file can contain interactive behavior and functionality. |
 | 9.   | `<link rel="icon" href="favicon.ico" type="image/x-icon">` | This link tag specifies a favicon, a small icon displayed in the browser tab or bookmark bar. The `href` attribute points to the favicon image file. |
 | 10.  | `<meta name="author" content="John Doe">` | This meta tag attributes the authorship of the web page. The `content` attribute holds the author's name, which can be useful for search engine indexing and attribution. |
-
+| 11.  | `<meta http-equiv="Content-Language" content="en">` | This meta tag specifies the natural language of the content on the page. The `content` attribute holds the language code. |
+| 12.  | `<meta http-equiv="Expires" content="Tue, 01 Jan 2024 12:00:00 GMT">` | This meta tag sets the expiration date and time for the page's content. Browsers and caching mechanisms use this information to determine whether to fetch a fresh version of the page. |
+| 13.  | `<meta http-equiv="Refresh" content="5;url=https://example.com/">` | This meta tag instructs the browser to refresh or reload the page after a specified time interval (in seconds) and provides a URL to redirect to. For example, after 5 seconds, the page will be redirected to "https://example.com/". |
 
 
 ## HTML5
