@@ -72,15 +72,17 @@ function showLocation( position ) {
 
 #### 2.  Web Storage
 #### 3.  Web workers
-**Web Workers** are a part of HTML5 and are designed to run scripts in the background so that the main UI thread remains responsive to user interactions.
-They provide a way to execute code concurrently in a separate thread, allowing for better utilization of multi-core processors and improving the responsiveness of web applications.
+Certainly, here's the Markdown code for the provided content:
 
-1. **Types of Web Workers:**
-   - **Dedicated Web Workers:** These workers have a one-to-one relationship with the creating script. They run in a separate thread and communicate with the main thread through message passing.
-   - **Shared Web Workers:** These workers are shared among multiple scripts from different origins. They allow cross-origin communication and are useful for collaborative applications.
+```markdown
+| **Web Workers**   | Explanation                                                                                                                                                                                                             |
+|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Purpose**       | **Web Workers** are a part of HTML5 and are designed to run scripts in the background so that the main UI thread remains responsive to user interactions. They allow code execution in a separate thread, enhancing the utilization of multi-core processors and improving web app responsiveness. |
+| **Types**          | - **Dedicated Web Workers:** These workers are linked to a single creating script, operating in their own thread. They interact with the main thread through message passing. <br> - **Shared Web Workers:** Shared among various scripts from different origins. They enable cross-origin communication, useful for collaborative applications. |
+| **Communication** | Web Workers communicate with the main thread through the message-passing mechanism. They can't directly access the DOM or UI thread. Inter-thread communication involves using the `postMessage()` method to send messages between the main thread and the worker. |
+```
 
-2. **Communication:**
-   Web Workers communicate with the main thread using a message-passing mechanism. They cannot directly access the DOM or interact with the UI thread. Messages are sent between the main thread and workers using the `postMessage()` method.
+You can copy and paste the above Markdown code into your Markdown editor or renderer to display the content as a formatted table along with the detailed explanation.
 
 **Example: Using a Web Worker to Calculate Prime Numbers:**
 **index.html:**
