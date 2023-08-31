@@ -21,6 +21,7 @@ Re-engage with first time visitors (leeds) of the site
 2. Get subscription details
 3. Send subscription details to backend server
 
+
 ```javascript
 //show popup
 Notification.permission !== "granted" && Notification.permission !== "denied"

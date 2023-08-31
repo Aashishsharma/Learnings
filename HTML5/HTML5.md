@@ -182,6 +182,6 @@ Note - worker loaded from a different domain won't be able to access resources f
 | **Browser Support**| Supported in modern browsers.                                | Supported in modern browsers, but compatibility may vary for some features like background sync and push.         |
 | **Use Cases**     | Background computation, performance optimization.            | Offline access, push notifications, caching, enhancing user experience in web apps.                                  |
 
-**Service worker example with webpush notification**
+**Service worker example see webpush notification**
 
 ## Accessibility
