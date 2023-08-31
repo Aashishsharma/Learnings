@@ -71,7 +71,7 @@ function showLocation( position ) {
 ```
 
 #### 2.  Web Storage
-| **Web Storage** enables storing data in a user's web browser.
+**Web Storage** enables storing data in a user's web browser.
 
 |                  | **localStorage**                                           | **sessionStorage**                                          |
 |------------------|------------------------------------------------------------|------------------------------------------------------------|
