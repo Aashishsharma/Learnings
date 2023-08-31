@@ -81,7 +81,6 @@ function showLocation( position ) {
 | **Retrieving Data** | Use `getItem()` method: `localStorage.getItem('key')` | Use `getItem()` method: `sessionStorage.getItem('key')` |
 | **Removing Data** | Use `removeItem()` method: `localStorage.removeItem('key')` | Use `removeItem()` method: `sessionStorage.removeItem('key')` |
 | **Clearing All Data** | Use `clear()` method: `localStorage.clear()` | Use `clear()` method: `sessionStorage.clear()` |
-| **Example**      | Storing and retrieving user preferences: <br> ```javascript <br> localStorage.setItem('theme', 'dark'); <br> const theme = localStorage.getItem('theme'); <br> document.body.style.backgroundColor = theme === 'dark' ? '#333' : '#fff'; ``` | Storing and retrieving user preferences: <br> ```javascript <br> sessionStorage.setItem('theme', 'light'); <br> const theme = sessionStorage.getItem('theme'); <br> document.body.style.backgroundColor = theme === 'dark' ? '#333' : '#fff'; ``` |
 | **Caution**      | Not suitable for sensitive or large data storage. Meant for small data like preferences and temporary data. | Not suitable for sensitive or large data storage. Meant for small data like preferences and temporary data. |
 
 
