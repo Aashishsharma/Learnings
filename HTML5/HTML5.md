@@ -71,6 +71,21 @@ function showLocation( position ) {
 ```
 
 #### 2.  Web Storage
+| **Web Storage** enables storing data in a user's web browser.
+
+|                  | **localStorage**                                           | **sessionStorage**                                          |
+|------------------|------------------------------------------------------------|------------------------------------------------------------|
+
+| **Persistence**  | Data persists across sessions and is available to JavaScript code on the same domain. | Data is limited to a browsing session and remains accessible within the current tab or window. |
+| **Usage**        | Both `localStorage` and `sessionStorage` use the same API for storage. | Both `localStorage` and `sessionStorage` use the same API for storage. |
+| **Storing Data** | Use `setItem()` method: `localStorage.setItem('key', 'value')` | Use `setItem()` method: `sessionStorage.setItem('key', 'value')` |
+| **Retrieving Data** | Use `getItem()` method: `localStorage.getItem('key')` | Use `getItem()` method: `sessionStorage.getItem('key')` |
+| **Removing Data** | Use `removeItem()` method: `localStorage.removeItem('key')` | Use `removeItem()` method: `sessionStorage.removeItem('key')` |
+| **Clearing All Data** | Use `clear()` method: `localStorage.clear()` | Use `clear()` method: `sessionStorage.clear()` |
+| **Example**      | Storing and retrieving user preferences: <br> ```javascript <br> localStorage.setItem('theme', 'dark'); <br> const theme = localStorage.getItem('theme'); <br> document.body.style.backgroundColor = theme === 'dark' ? '#333' : '#fff'; ``` | Storing and retrieving user preferences: <br> ```javascript <br> sessionStorage.setItem('theme', 'light'); <br> const theme = sessionStorage.getItem('theme'); <br> document.body.style.backgroundColor = theme === 'dark' ? '#333' : '#fff'; ``` |
+| **Caution**      | Not suitable for sensitive or large data storage. Meant for small data like preferences and temporary data. | Not suitable for sensitive or large data storage. Meant for small data like preferences and temporary data. |
+
+
 #### 3.  Web workers
 Certainly, here's the Markdown code for the provided content:
 
@@ -159,7 +174,7 @@ Note - worker loaded from a different domain won't be able to access resources f
 |-------------------|-----------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
 | **Purpose**       | Run scripts in the background to keep the UI responsive.       | Act as a proxy between the web application and the network, allowing control over network requests and caching.       |
 | **Execution**     | Executes code in a separate thread, offloading UI thread.     | Executes in the background and runs even when the web app is closed.                                                    |
-| **Access to DOM** | Cannot access the DOM or UI thread directly.                  | Cannot access the DOM, but can communicate with the UI thread using the `postMessage()` method.                      |
+| **Access to DOM** | Cannot access the DOM or UI thread directly, but can communicate with the UI thread using the `postMessage()` method. .                  | Cannot access the DOM                     |
 | **Network**       | Cannot intercept or modify network requests.                  | Can intercept and control network requests, enabling caching, offline access, and more.                               |
 | **Caching**       | Not designed for caching or offline capabilities.             | Designed for caching assets and providing offline access. Can store resources and serve them when offline.          |
 | **Browser Scope** | Can be used for tasks such as background computation.         | Primarily used for tasks like caching, push notifications, and managing offline experiences.                         |
@@ -168,5 +183,6 @@ Note - worker loaded from a different domain won't be able to access resources f
 | **Browser Support**| Supported in modern browsers.                                | Supported in modern browsers, but compatibility may vary for some features like background sync and push.         |
 | **Use Cases**     | Background computation, performance optimization.            | Offline access, push notifications, caching, enhancing user experience in web apps.                                  |
 
+**Service worker example with webpush notification**
 
 ## Accessibility
