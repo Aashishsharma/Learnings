@@ -73,9 +73,8 @@ function showLocation( position ) {
 #### 2.  Web Storage
 **Web Storage** enables storing data in a user's web browser.
 
-|                  | **localStorage**                                           | **sessionStorage**                                          |
-|------------------|------------------------------------------------------------|------------------------------------------------------------|
-
+|                  | **localStorage**                                          | **sessionStorage**                                         |
+|------------------|-----------------------------------------------------------|-----------------------------------------------------------|
 | **Persistence**  | Data persists across sessions and is available to JavaScript code on the same domain. | Data is limited to a browsing session and remains accessible within the current tab or window. |
 | **Usage**        | Both `localStorage` and `sessionStorage` use the same API for storage. | Both `localStorage` and `sessionStorage` use the same API for storage. |
 | **Storing Data** | Use `setItem()` method: `localStorage.setItem('key', 'value')` | Use `setItem()` method: `sessionStorage.setItem('key', 'value')` |
@@ -84,6 +83,7 @@ function showLocation( position ) {
 | **Clearing All Data** | Use `clear()` method: `localStorage.clear()` | Use `clear()` method: `sessionStorage.clear()` |
 | **Example**      | Storing and retrieving user preferences: <br> ```javascript <br> localStorage.setItem('theme', 'dark'); <br> const theme = localStorage.getItem('theme'); <br> document.body.style.backgroundColor = theme === 'dark' ? '#333' : '#fff'; ``` | Storing and retrieving user preferences: <br> ```javascript <br> sessionStorage.setItem('theme', 'light'); <br> const theme = sessionStorage.getItem('theme'); <br> document.body.style.backgroundColor = theme === 'dark' ? '#333' : '#fff'; ``` |
 | **Caution**      | Not suitable for sensitive or large data storage. Meant for small data like preferences and temporary data. | Not suitable for sensitive or large data storage. Meant for small data like preferences and temporary data. |
+
 
 
 #### 3.  Web workers
