@@ -154,4 +154,19 @@ function isPrime(num) {
 ```
 Note - worker loaded from a different domain won't be able to access resources from the main page.
 
+#### 4.  Service workers
+| **Feature**       | **Web Workers**                                                | **Service Workers**                                                                                                     |
+|-------------------|-----------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| **Purpose**       | Run scripts in the background to keep the UI responsive.       | Act as a proxy between the web application and the network, allowing control over network requests and caching.       |
+| **Execution**     | Executes code in a separate thread, offloading UI thread.     | Executes in the background and runs even when the web app is closed.                                                    |
+| **Access to DOM** | Cannot access the DOM or UI thread directly.                  | Cannot access the DOM, but can communicate with the UI thread using the `postMessage()` method.                      |
+| **Network**       | Cannot intercept or modify network requests.                  | Can intercept and control network requests, enabling caching, offline access, and more.                               |
+| **Caching**       | Not designed for caching or offline capabilities.             | Designed for caching assets and providing offline access. Can store resources and serve them when offline.          |
+| **Browser Scope** | Can be used for tasks such as background computation.         | Primarily used for tasks like caching, push notifications, and managing offline experiences.                         |
+| **Examples**      | Calculations, data processing, image manipulation.            | Offline web apps, push notifications, background synchronization, caching static assets.                             |
+| **Communication** | Communicates with the main thread using `postMessage()`.     | Can communicate with the main thread using `postMessage()`.                                                           |
+| **Browser Support**| Supported in modern browsers.                                | Supported in modern browsers, but compatibility may vary for some features like background sync and push.         |
+| **Use Cases**     | Background computation, performance optimization.            | Offline access, push notifications, caching, enhancing user experience in web apps.                                  |
+
+
 ## Accessibility
