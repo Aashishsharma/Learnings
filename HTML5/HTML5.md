@@ -79,9 +79,7 @@ Certainly, here's the Markdown code for the provided content:
 | **Purpose**      | **Web Workers** are a part of HTML5 and are designed to run scripts in the background so that the main UI thread remains responsive to user interactions. They allow code execution in a separate thread, enhancing the utilization of multi-core processors and improving web app responsiveness. |
 | **Types**        | - **Dedicated Web Workers:** These workers are linked to a single creating script, operating in their own thread. They interact with the main thread through message passing. <br> - **Shared Web Workers:** Shared among various scripts from different origins. They enable cross-origin communication, useful for collaborative applications. |
 | **Communication**| Web Workers communicate with the main thread through the message-passing mechanism. They can't directly access the DOM or UI thread. Inter-thread communication involves using the `postMessage()` method to send messages between the main thread and the worker. |
-
-
-You can copy and paste the above Markdown code into your Markdown editor or renderer to display the content as a formatted table along with the detailed explanation.
+| **Real-Life Examples** | 1. **Image Manipulation:** A photo editing app can utilize Web Workers to apply filters, crop images, and adjust colors without freezing the UI. <br> 2. **Background Data Fetching:** Web Workers can fetch data from APIs in the background, ensuring the main thread remains responsive for user interactions. <br> 3. **Complex Calculations:** Applications dealing with simulations, scientific computations, or financial calculations can benefit from offloading resource-intensive tasks to Web Workers. <br> 4. **Multithreaded Video Encoding:** Video streaming platforms can use Web Workers to encode videos in multiple formats concurrently, improving performance and user experience. <br> 5. **Real-Time Collaboration:** Shared Web Workers can facilitate real-time collaboration on documents or projects, enabling users to work together without delays in responsiveness. |
 
 **Example: Using a Web Worker to Calculate Prime Numbers:**
 **index.html:**
