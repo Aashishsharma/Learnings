@@ -20,11 +20,13 @@
 
 ## Javascript
 
-Javascript is  
+| Javascript is        | Description                                                                                   |
+|----------------------|-----------------------------------------------------------------------------------------------|
+| Dynamically Typed    | JavaScript is dynamically typed, allowing the same variable to be assigned multiple datatypes.|
+| Object-Oriented      | JavaScript is an object-oriented language, allowing the creation and manipulation of objects.|
+| Scripting Language   | JavaScript is a scripting language used in a special runtime environment, often the browser, for automating task execution. |
+| Both compiled and interpreted Language   | It is primarily interpreted, but some modern JavaScript engines use just-in-time compilation for performance optimization. |
 
-1. Dynamically typed: same variable can be assigned to multiple datatypes
-2. Object-oriented: It is an object-oriented language.
-3. Scripting Language: is a programming language for a special run-time environment (in case of JS it is the browser) that automates the execution of tasks  
 
 **compiled or interpreted**  
 **more of a Compiled language:** - proof  
