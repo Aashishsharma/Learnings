@@ -185,3 +185,73 @@ Note - worker loaded from a different domain won't be able to access resources f
 **Service worker example see webpush notification**
 
 ## Accessibility
+Certainly! Here's the updated table with more details on the conformance levels of WCAG:
+
+```markdown
+|                            | **Web Content Accessibility Guidelines (WCAG)**                                                                                      |
+|----------------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| **Description**            | WCAG is a set of standards developed by the Web Accessibility Initiative (WAI) of the World Wide Web Consortium (W3C).     |
+| **Purpose**                | It provides guidelines for making digital content accessible to individuals with disabilities, ensuring usability for all. |
+| **Principles (POUR)**      | - **Perceivable:** Presenting content so users can perceive it. <br> - **Operable:** Ensuring interaction is possible. <br> - **Understandable:** Making content clear and usable. <br> - **Robust:** Ensuring compatibility with various user agents. |
+| **Guidelines and Levels**  | - Organized into guidelines, success criteria, and techniques. <br> - Conformance levels: A (basic), AA (minimum), AAA (advanced). |
+| **Conformance Levels**     | - **Level A:** The most basic accessibility requirements. Failure to meet these would make content inaccessible to some users. <br> - **Level AA:** Addresses significant barriers and is the minimum for most web content. <br> - **Level AAA:** Highest level, addressing advanced features for a more inclusive experience. |
+```
+
+**Example implementation of WCAG guidelines**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility Example</title>
+    <style>
+        /* Perceivable: Provide appropriate alt text for images */
+        img {
+            width: 200px;
+            height: 150px;
+        }
+        /* Operable: Ensure keyboard navigation and focus styles */
+        button:focus, a:focus {
+            outline: 2px solid blue;
+        }
+        /* Understandable: Use clear and concise link text */
+        a {
+            text-decoration: underline;
+        }
+        /* Robust: Use semantic HTML elements */
+        article, section, nav {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Accessibility Example</h1>
+    <!-- Perceivable: Provide appropriate alt text for images -->
+    <img src="example.jpg" alt="A beautiful landscape">
+    <!-- Operable: Ensure keyboard navigation and focus styles -->
+    <button>Click me</button>
+    <!-- Understandable: Use clear and concise link text -->
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+    <!-- Robust: Use semantic HTML elements -->
+    <article>
+        <h2>Introduction</h2>
+        <p>This is an example article for demonstrating accessibility guidelines.</p>
+    </article>
+    <section>
+        <h2>Features</h2>
+        <p>This section showcases the features of the website.</p>
+    </section>
+</body>
+</html>
+
+```
