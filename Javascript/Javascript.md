@@ -40,25 +40,6 @@ foo()
 // bar                   // promise
 // because of job queue added in ES6
 ```
-
-------------------------------------------------------------------------------
-
-#### The modern mode, "use strict"
-
-```javascript
-// note: no "use strict" in this example
-
-num = 5; // the variable "num" is created if it didn't exist
-// not declaring a variable makes it a global variable, no errors
-alert(num); // 5
-
-"use strict";
-
-num = 5; // error: num is not defined
-```
-
-Modern JavaScript supports “classes” and “modules” – advanced language structures, that enable use strict automatically. So we don’t need to add the "use strict" directive, if we use them.  
-
 ------------------------------------------------------------------------------
 
 #### Let, var, const
@@ -158,74 +139,30 @@ Programming languages that allow such things, are called “dynamically typed”
 | **                       |                                                    | `let obj = { toString: () => 'Hello' }; String(obj);` | `'Hello'` |
 | **                       |                                                    | `let obj = { [Symbol.toPrimitive]: () => 'Custom' }; +obj;` | `'Custom'` |
 
-#### Strict equality
-
-```javascript
-alert( '' == false ); // true
-// This happens because operands of different types are converted to numbers by the equality operator ==. An empty string, just like false, becomes a zero.  
-// A strict equality operator === checks the equality without type conversion.
-alert( 0 === false ); // false, because the types are different
-```
-
-#### Nullish coalescing operator '??'
-
-The nullish coalescing operator ?? provides a short syntax for selecting a first “defined” variable from the list.  
-
-The result of a ?? b is:  
-a if it’s not null or undefined,  
-b, otherwise.  
-
-```javascript
-// So, x = a ?? b is a short equivalent to
-x = (a !== null && a !== undefined) ? a : b;
-
-let firstName = null;
-let lastName = null;
-let nickName = "Supercoder";
-
-// show the first not-null/undefined value
-alert(firstName ?? lastName ?? nickName ?? "Anonymous"); // Supercoder
-```
-
-**?? vs ||**
-The important difference is that:  
-|| returns the first truthy value.  
-?? returns the first defined value.
+| Feature                   | Description                                                      | Example                                  | Output    |
+|---------------------------|------------------------------------------------------------------|------------------------------------------|-----------|
+| **Strict Equality (`===`)** | A comparison operator that checks both value and type equality. | `5 === 5;`                              | `true`    |
+|                           |                                                                  | `'5' === 5;`                            | `false`   |
+|                           |                                                                  | `true === 'true';`                      | `false`   |
+|                           |                                                                  | `null === undefined;`                   | `false`    |
+| **Nullish Coalescing (`??`)** | A logical operator that returns the right operand when the left operand is `null` or `undefined`. | `let x = null ?? 'Default';`            | `'Default'` |
+|                           |                                                                  | `let y = 'Value' ?? 'Default';`         | `'Value'` |
+| **'strict' Keyword**      | Not a standard JavaScript feature. Used as a placeholder for illustrative purposes. | `let x = 5; 'strict' x === 5;`          | N/A       |
+|                           |                                                                  | `let y = 'hello'; 'strict' y === 'hello';` | N/A       |
 
 ------------------------------------------------------------------------------
 
 ## Hoisting
-
-JavaScript’s behavior of moving declarations (variable and function) to the top of their current scope (function or global).  
-
-1. Code is not moved but at compile time, variables and functions are put in memory (lexical scoping), before the execution pahse begins
-2. Only the declaration is hoisted and not the initialization
-
-```javascript
-console.log(a); // undefined instead of error-> not declared
-var a = 5;
-
-// after hoisting
-var a;
-console.log(a);
-a=5;
-```
-
-3. Function declaration is hoised and not function expression
-
-```javascript
-// function declaration
-abc(); // ouptput abc
-function abc() {
-  console.log('abc');
-}
-
-// function expression
-abc(); // error
-var abc = function(defaultValue = 0) { //FYI -> adding default parameter in a function
-  console.log('abc');
-}
-```
+| Aspect                | Description                                                                                          |
+|-----------------------|------------------------------------------------------------------------------------------------------|
+| **What is Hoisting?** | Hoisting is a JavaScript behavior where variable and function declarations are moved to the top of their containing scope during the compilation phase, before code execution. |
+| **What Happens?**     | During compilation, the JavaScript engine identifies variable and function declarations, lifts them to the top of their containing scope, and assigns them an initial value of `undefined`. In the example, `hoistedFunction` is available for calling before its actual declaration, and `x` is initialized to `undefined`. |
+| **How to Use?**       | Variables declared with `var` are hoisted. Functions, both declared and assigned to variables, are hoisted. |
+| **What is Hoisted?**  | - Function declarations (including function names and bodies) are hoisted. - Variable declarations with `var` are hoisted. |
+| **What is Not Hoisted?** | - Variable assignments (values) are not hoisted. - Variables declared with `let` and `const` are hoisted but not initialized. - Function expressions (e.g., `const func = function() {...}`) are not hoisted. |
+| **When to Use?**      | - Use hoisting for function declarations to enable calling functions before they are defined. - Be cautious with `var`-declared variables; it's often better to use `let` or `const` for block-scoped variables. |
+| **Example Code**      | ```javascript // Function Declaration hoistedFunction(); function hoistedFunction() {   console.log('Hello, world!'); } // Variable Declaration console.log(x); var x = 5; ``` |
+| **Benefits for Developers** | - Helps avoid "not defined" errors when calling functions before their declarations. - Provides an understanding of the code structure as variables and functions are visually moved to the top of the scope, making the code more readable. - Supports coding styles where functions are declared at the bottom of a script for better readability. |
 
 ------------------------------------------------------------------------------
 
