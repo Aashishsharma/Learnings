@@ -167,6 +167,28 @@ Programming languages that allow such things, are called “dynamically typed”
 
 ## Closure
 
+| Aspect              | Description                                                                                         |
+|---------------------|-----------------------------------------------------------------------------------------------------|
+| **What is a Closure?** | A closure is a JavaScript feature that allows a function to remember and access its outer (enclosing) function's variables and parameters even after that outer function has finished executing. |
+| **How Closures Work** | Closures are created when an inner function references variables from its containing outer function. The inner function "closes over" these variables, effectively preserving them, even if the outer function has completed execution. |
+| **Use Cases**         | Closures are often used for data encapsulation, creating private variables, and maintaining state in functional programming. They are also fundamental in scenarios like callbacks and event handling. |
+| **Example Code**      | ```javascript
+                          function outerFunction(x) {
+                              // Inner function with closure over 'x'
+                              function innerFunction(y) {
+                                  return x + y;
+                              }
+                              return innerFunction;
+                          }
+                          
+                          const closureInstance = outerFunction(10);
+                          const result = closureInstance(5); // 'x' still accessible
+                          console.log(result); // Outputs: 15
+                          ```
+                          |
+| **Benefits for Developers** | - Enables data encapsulation and creation of private variables, promoting better code organization and reducing global scope pollution. - Facilitates the creation of reusable and modular code through closures as callbacks. - Provides a powerful tool for managing and maintaining state in asynchronous programming, such as with event listeners. |
+
+
 - **Definition  (function with its lexical env)**
 Closure is created when a child function keep the environment of the parent scope even after the parent function has already executed
 
