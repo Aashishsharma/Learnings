@@ -295,58 +295,16 @@ Idle-time collection – the garbage collector tries to run only while the CPU i
 ## Modules
 
 A module is just a file. One script is one module. As simple as that.
-| **Type of Import/Export** | **Description**                                                                                                     | **Example**                                                                                                                                      |
-|---------------------------|---------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| **CommonJS (Node.js)**    | Used in Node.js for server-side JavaScript. Requires the `require` function for importing and `module.exports` or `exports` for exporting. | **Exporting Module:** ```javascript
-exports.add = function(a, b) {
-    return a + b;
-};
-// Importing Module:
-const math = require('./math.js');
-console.log(math.add(2, 3)); // 5
-``` |
-| **ES6 Modules**           | Standardized in ES6 and supported in modern browsers and Node.js with `.mjs` extension. Imports and exports are specified using `import` and `export` statements. | **Exporting Module:** ```javascript
-export function add(a, b) {
-    return a + b;
-}
-// Importing Module:
-import { add } from './math.mjs';
-console.log(add(2, 3)); // 5
-``` |
-| **CommonJS to ES6**       | Converting CommonJS modules to ES6 modules by using a transpiler like Babel. Allows the use of ES6 `import` and `export` syntax in CommonJS environments. | **Transpiled Example:** ```javascript
-// math.js (CommonJS)
-module.exports.add = function(a, b) {
-    return a + b;
-};
-// Transpile to ES6
-// math.js (ES6)
-export function add(a, b) {
-    return a + b;
-}
-// Importing Transpiled Module:
-import { add } from './math.js';
-console.log(add(2, 3)); // 5
-``` |
-| **Dynamic Imports**       | Introduced in ES6, dynamic imports enable loading modules asynchronously at runtime. Useful for code splitting and reducing initial bundle size. | **Dynamic Import Example:** ```javascript
-// Dynamically import a module
-import('./math.mjs').then((mathModule) => {
-    const result = mathModule.add(2, 3);
-    console.log(result); // 5
-}).catch((error) => {
-    console.error('Dynamic import failed:', error);
-});
-``` |
-| **Node.js `import` (Experimental)** | Experimental feature in Node.js that allows using ES6 module syntax in CommonJS files by enabling the `--experimental-modules` flag. | **Example (Node.js Experimental):** ```javascript
-// math.mjs
-export function add(a, b) {
-    return a + b;
-}
-// Importing Module:
-import { add } from './math.mjs';
-console.log(add(2, 3)); // 5
-``` |
-
-This table provides an overview of different types of import/export mechanisms in JavaScript, along with examples for each type. You can copy and paste this Markdown code into your documents or applications to display the information in a table format.
+| **Type of Import/Export** | **Description** | **Example** |
+| --- | --- | --- |
+| **CommonJS (Node.js)** | Used in Node.js for server-side JavaScript. Requires the `require` function for importing and `module.exports` or `exports` for exporting. | **Exporting Module:** 
+  ```javascript
+  exports.add = function(a, b) {
+      return a + b;
+  };
+  // Importing Module:
+  const math = require('./math.js');
+  console.log(math.add(2, 3)); // 5
 
 
 ```javascript
