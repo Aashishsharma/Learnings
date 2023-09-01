@@ -161,8 +161,20 @@ Programming languages that allow such things, are called “dynamically typed”
 | **What is Hoisted?**  | - Function declarations (including function names and bodies) are hoisted. - Variable declarations with `var` are hoisted. |
 | **What is Not Hoisted?** | - Variable assignments (values) are not hoisted. - Variables declared with `let` and `const` are hoisted but not initialized. - Function expressions (e.g., `const func = function() {...}`) are not hoisted. |
 | **When to Use?**      | - Use hoisting for function declarations to enable calling functions before they are defined. - Be cautious with `var`-declared variables; it's often better to use `let` or `const` for block-scoped variables. |
-| **Example Code**      | ```javascript // Function Declaration hoistedFunction(); function hoistedFunction() {   console.log('Hello, world!'); } // Variable Declaration console.log(x); var x = 5; ``` |
+| **Example Code**      | ```javascript
+                        // Function Declaration
+                        hoistedFunction();
+                        function hoistedFunction() {
+                            console.log('Hello, world!');
+                        }
+
+                        // Variable Declaration
+                        console.log(x);
+                        var x = 5;
+                        ``` |
 | **Benefits for Developers** | - Helps avoid "not defined" errors when calling functions before their declarations. - Provides an understanding of the code structure as variables and functions are visually moved to the top of the scope, making the code more readable. - Supports coding styles where functions are declared at the bottom of a script for better readability. |
+
+In this updated table, the example code is presented in a readable format within the table cell. You can copy and paste this Markdown code into your documents or applications to display the updated table.
 
 ------------------------------------------------------------------------------
 
