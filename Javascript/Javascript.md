@@ -460,51 +460,6 @@ Compare to regular script below:
 | **Reading Cookies in JS**   | Access cookies in JavaScript on the client-side using `document.cookie`. You can read, modify, and delete cookies using this property.                                                                                                                                                                                          | ```const cookies = document.cookie; ```           |
 | **Deleting a Cookie**       | Remove a cookie by setting its expiration time to a past date. This instructs the browser to delete the cookie immediately.                                                                                                                                                                                                           | ```res.setHeader('Set-Cookie', 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT'); ``` |
 
-
-In this table:
-
-- **Configuration** lists various aspects of working with cookies.
-- **Description** provides an explanation of each configuration.
-- **Example** demonstrates how each configuration can be implemented with code examples.
-
-You can copy and paste this Markdown code into your documents or applications to display the table.
-
-
-## LocalStorage, sessionStorage (Web storage objects)
-
-##### LocalStorage
-
-1. Unlike cookies, web storage objects are not sent to server with each request
-2. Can store upto 2 MB data
-3. Also unlike cookies, the server can’t manipulate storage objects via HTTP headers. Everything’s done in JavaScript.
-4. The storage is bound to the origin (domain/protocol/port triplet). That is, different protocols or subdomains infer different storage objects, they can’t access data from each other.
-5. Both storage objects provide same methods and properties:
-
-```javascript
-setItem(key, value) – store key/value pair.
-getItem(key) – get the value by key.
-removeItem(key) – remove the key with its value.
-clear() – delete everything.
-key(index) – get the key on a given position.
-length – the number of stored items.
-
-// store in browser
-localStorage.setItem('test', 1);
-// get from browser
-alert( localStorage.getItem('test') ); // 1
-```
-
-We only have to be on the same origin (domain/port/protocol), the url path can be different.
-The localStorage is shared between all windows with the same origin, so if we set the data in one window, the change becomes visible in another one.
-
-##### Sessionstorage
-
-1. Properties and methods are the same as local storage, but it’s much more limited
-2. The sessionStorage exists only within the current browser tab.
-Another tab with the same page will have a different storage.  
-sessionStorage.setItem('test', 1);  
-sessionStorage.getItem('test')
-
 ## Debouncing and Throttling
 
 Api rate limiting techniques  
@@ -514,48 +469,72 @@ Instead of calling api every single time, call only when there is a specific tim
 If user is typing a keyword, keyup event is called every single time, but make api call when there is a pause (say 300ms) see on flipkart website, autosuggestion changes only when you wait fir skme time after you type your keyword.  
 
 ```javascript
-Doc.getElembyId.addEvntList('onkeyup', debounceCall) 
-
-Let debounceCall = callApiWrapper(callSearchApi, 300) 
-
-Func callApiwrapper(fn, time) {
-let timer; //clusure helps in clearing timout of below retunred func
-return function() {
-  let arg = arguments;
-  clearTimeout(timer)
-   setTimeout(() => {
-    fn.apply(this,args)
-}, time) 
-
+// In this example, the 'search' function will only be called after 300ms of inactivity
+// since the user stops typing. This prevents excessive calls while typing quickly.
+// Function to be debounced
+function search(query) {
+    console.log(`Searching for: ${query}`);
+    // Insert your search logic here
 }
-  
-Func callSearchApi() {
-console.log(' calling search api')
+// Debounce function
+function debounce(func, delay) {
+    let timeoutId;
+    
+    return function() {
+        const context = this;
+        const args = arguments;
+        
+        // Clear the previous timeout
+        clearTimeout(timeoutId);
+        
+        // Set a new timeout
+        timeoutId = setTimeout(() => {
+            func.apply(context, args);
+        }, delay);
+    };
 }
+// Create a debounced version of the search function
+const debouncedSearch = debounce(search, 300);
+// Example usage: Attach debouncedSearch to an input field's event listener
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('input', function(event) {
+    const query = event.target.value;
+    debouncedSearch(query);
+});
+// In this example, the 'search' function will only be called after 300ms of inactivity
+// since the user stops typing. This prevents excessive calls while typing quickly.
+
 ```
 
 2. THROTTLING  
 In debounce, if an event occurs before specifieed timeout, new timeout is created, that means, in case of input search autocomplete, if 300ms is gap and if we press 100 keys, the first func call would be made after 30 secs, and in throttling, no matter on the no. of evnts, the func would be executed exactly after 300ms (in case of window resize)
 
 ```javascript
-Doc.getElembyId.addEvntList('onResize', throttleCalk) 
-
-Let throttleCall = callResizeApiWrapper(resuzeApi, 300) 
-
-Func callResizeApiwrapper(fn, time) {
-let flg = true; //clusure helps in using this val on each fncall 
-return function() {
-if(flg){
-  let arg = arguments
-    fn.apply(this,args)
-    flg=false;
-   setTimeout(() => {
-    flg=true // call next api only after certain interval of time
-  }, time)
-  } 
+// Function to be throttled
+function handleScroll() {
+    console.log('Scrolled');
+    // Insert your scroll-related logic here
 }
-  
-Func callSearchApi() {
-console.log(' calling search api')
-} 
+// Throttle function
+function throttle(func, limit) {
+    let lastTimestamp = 0;
+
+    return function () {
+        const context = this;
+        const args = arguments;
+        const now = Date.now();
+
+        if (now - lastTimestamp >= limit) {
+            func.apply(context, args);
+            lastTimestamp = now;
+        }
+    };
+}
+// Create a throttled version of the scroll handler
+const throttledScroll = throttle(handleScroll, 200);
+// Example usage: Attach throttledScroll to the window's scroll event
+window.addEventListener('scroll', throttledScroll);
+// In this example, the 'handleScroll' function will be called at most every 200ms
+// during a continuous scroll. This prevents the function from executing too frequently.
+
 ```
