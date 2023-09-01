@@ -304,6 +304,7 @@ A module is just a file. One script is one module. As simple as that.
   // Importing Module:
   const math = require('./math.js');
   console.log(math.add(2, 3)); // 5
+  ```|
 
 
 ```javascript
