@@ -297,8 +297,7 @@ Idle-time collection – the garbage collector tries to run only while the CPU i
 A module is just a file. One script is one module. As simple as that.
 | **Type of Import/Export** | **Description** | **Example** |
 | --- | --- | --- |
-| **CommonJS (Node.js)** | Used in Node.js for server-side JavaScript. Requires the `require` function for importing and `module.exports` or `exports` for exporting. | **Exporting Module:** 
-  ```javascript
+| **CommonJS (Node.js)** | Used in Node.js for server-side JavaScript. Requires the `require` function for importing and `module.exports` or `exports` for exporting. | **Exporting Module:** ```javascript
   exports.add = function(a, b) {
       return a + b;
   };
