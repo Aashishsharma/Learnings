@@ -295,17 +295,6 @@ Idle-time collection – the garbage collector tries to run only while the CPU i
 ## Modules
 
 A module is just a file. One script is one module. As simple as that.
-| **Type of Import/Export** | **Description** | **Example** |
-| --- | --- | --- |
-| **CommonJS (Node.js)** | Used in Node.js for server-side JavaScript. Requires the `require` function for importing and `module.exports` or `exports` for exporting. | **Exporting Module:** ```javascript
-  exports.add = function(a, b) {
-      return a + b;
-  };
-  // Importing Module:
-  const math = require('./math.js');
-  console.log(math.add(2, 3)); // 5
-  ```|
-
 
 ```javascript
 //import export
@@ -457,32 +446,29 @@ Compare to regular script below:
 
 ## Cookies
 
-1. Cookies are small strings of data that are stored directly in the browser.
-2. Cookies are usually set by a web-server using response Set-Cookie HTTP-header. Then the browser automatically adds them to (almost) every request to the same domain using Cookie HTTP-header.
-3. Mostly used for authentication
-4. We can also access cookies from the browser, using document.cookie property.
-5. document.cookie = "user=John"; to write a cookie in broowser
-6. should not exceed 4KB. So we can’t store anything huge in a cookie.
-7. The total number of cookies per domain is limited to around 20+, the exact limit depends on a browser.
+| **Configuration**           | **Description**                                                                                                                                                                                                                                                     | **Example**                                                     |
+|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
+| **Creating a Cookie**       | Set a cookie using the `Set-Cookie` HTTP response header. A cookie typically has a name and value, and optional attributes like expiration time, domain, and path.                                                                                                                                              | ```javascript res.setHeader('Set-Cookie', 'username=johndoe'); ``` |
+| **Reading a Cookie**        | Access cookie values in subsequent HTTP requests using the `Cookie` HTTP request header. In JavaScript, you can access cookies through `document.cookie` in the browser.                                                                                                                                                    | ```javascript const username = req.headers.cookie; ```      |
+| **Expiring a Cookie**       | Define an expiration time for a cookie using the `expires` attribute in the future. When the expiration time is reached, the browser automatically removes the cookie.                                                                                                                                                          | ```javascript res.setHeader('Set-Cookie', 'username=johndoe; expires=Thu, 01 Jan 2024 00:00:00 GMT'); ``` |
+| **Session Cookies**         | Create session cookies by not specifying an expiration time. These cookies are stored in memory and are deleted when the browser session ends.                                                                                                                                                                                 | ```javascript res.setHeader('Set-Cookie', 'sessionID=123456'); ``` |
+| **Persistent Cookies**      | Set a cookie with a specific expiration time using the `expires` attribute. Persistent cookies are stored on the client-side until the expiration time is reached.                                                                                                                                                        | ```javascript res.setHeader('Set-Cookie', 'rememberMe=true; expires=Thu, 01 Jan 2025 00:00:00 GMT'); ``` |
+| **Domain-Specific Cookies** | Specify a domain for the cookie using the `domain` attribute. This allows the cookie to be accessible only on the specified domain and its subdomains.                                                                                                                                                                            | ```javascript res.setHeader('Set-Cookie', 'username=johndoe; domain=example.com'); ``` |
+| **Path-Specific Cookies**   | Set a cookie with a specific path using the `path` attribute. The cookie is only sent to the server for URLs that match the specified path or its subpaths.                                                                                                                                                                 | ```javascript res.setHeader('Set-Cookie', 'token=abc; path=/app'); ``` |
+| **Secure Cookies**          | Create secure cookies by including the `secure` attribute. These cookies are only transmitted over secure HTTPS connections, not over HTTP.                                                                                                                                                                                     | ```javascript res.setHeader('Set-Cookie', 'authToken=xyz; secure'); ``` |
+| **HttpOnly Cookies**        | Make cookies inaccessible to JavaScript by using the `HttpOnly` attribute. This enhances security by preventing client-side scripts from accessing the cookie.                                                                                                                                                                 | ```javascript res.setHeader('Set-Cookie', 'sessionID=123; HttpOnly'); ``` |
+| **Same-Site Cookies**       | Control when cookies are sent in cross-origin requests using the `SameSite` attribute. It helps protect against Cross-Site Request Forgery (CSRF) attacks. Options include `Lax`, `Strict`, and `None`.                                                                                                                                               | ```javascript res.setHeader('Set-Cookie', 'authToken=xyz; SameSite=Lax'); ``` |
+| **Reading Cookies in JS**   | Access cookies in JavaScript on the client-side using `document.cookie`. You can read, modify, and delete cookies using this property.                                                                                                                                                                                          | ```javascript const cookies = document.cookie; ```           |
+| **Deleting a Cookie**       | Remove a cookie by setting its expiration time to a past date. This instructs the browser to delete the cookie immediately.                                                                                                                                                                                                           | ```javascript res.setHeader('Set-Cookie', 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT'); ``` |
 
-e.g. cookie - document.cookie = "user=John; path=/; expires=Tue, 19 Jan 2038 03:14:07 GMT"
+In this table:
 
-#### Cookie options (The options are listed after key=value, delimited by ;)
+- **Configuration** lists various aspects of working with cookies.
+- **Description** provides an explanation of each configuration.
+- **Example** demonstrates how each configuration can be implemented with code examples.
 
-1. Path
-The url path prefix, the cookie will be accessible for pages under that path. Must be absolute. By default, it’s the current path.
-If a cookie is set with path=/admin, it’s visible at pages /admin and /admin/something, but not at /home or /adminpage.
-Usually, we should set path to the root: path=/ to make the cookie accessible from all website pages.
-2. domain
-By default, a cookie is accessible only at the domain that set it. So, if the cookie was set by site.com, we won’t get it other.com. Not even accissible to subdomain.
-3. expires, max-age
-If not present, cookie expires when the browser is closed
-4. secure
-The cookie should be transferred only over HTTPS. By default, if we set a cookie at <http://site.com>, then it also appears at <https://site.com> and vice versa.
-5. httpOnly
-The web-server uses Set-Cookie header to set a cookie. And it may set the httpOnly option.  
-This option forbids any JavaScript access to the cookie. We can’t see such cookie or manipulate it using document.cookie.  
-That’s used as a precaution measure, to protect from certain attacks when a hacker injects his own JavaScript code into a page and waits for a user to visit that page. That shouldn’t be possible at all, a hacker should not be able to inject their code into our site, but there may be bugs that let hackers do it.
+You can copy and paste this Markdown code into your documents or applications to display the table.
+
 
 ## LocalStorage, sessionStorage (Web storage objects)
 
