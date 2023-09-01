@@ -131,52 +131,32 @@ Programming languages that allow such things, are called “dynamically typed”
 ------------------------------------------------------------------------------
 
 ## Type Conversions
-
-#### String Conversion
-
-```javascript
-let value = true;
-alert(typeof value); // boolean
-
-value = String(value); // now value is a string "true"
-alert(typeof value); // string
-
-alert(2 + 2 + '1' ); // "41" and not "221"
-// Note that if any of the operands is a string, then the other one is converted to a string too
-// The binary + is the only operator that supports strings in such a way. Other arithmetic operators work only with numbers and always convert their operands to numbers.
-alert( 6 - '2' ); // 4, converts '2' to a number
-alert( '6' / '2' ); // 3, converts both operands to numbers
-```
-
-#### Numeric conversion
-
-```javascript
-// 1
-alert( "6" / "2" ); // 3, strings are converted to numbers
-
-// 2
-let str = "123";
-alert(typeof str); // string
-let num = Number(str); // becomes a number 123
-alert(typeof num); // number
-// Explicit conversion is usually required when we read a value from a string-based source like a text form but expect a number to be entered.
-
-// 3
-alert( Number("   123   ") ); // 123
-alert( Number("123z") );      // NaN (error reading a number at "z")
-alert( Number(true) );        // 1
-alert( Number(false) );       // 0
-```
-
-#### Boolean conversion
-
-```javascript
-alert( Boolean(1) ); // true
-alert( Boolean(0) ); // false
-
-alert( Boolean("hello") ); // true
-alert( Boolean("") ); // false
-```
+| Conversion Type           | Description                                        | Examples                            | Outputs     |
+|---------------------------|----------------------------------------------------|-------------------------------------|-------------|
+| **Implicit Coercion**    | Automatic type conversion by JavaScript.          | `5 + '5';`                          | `'55'`      |
+| **                       |                                                    | `true + 1;`                        | `2`         |
+| **                       |                                                    | `'5' * 2;`                         | `10`        |
+| **Explicit Conversion**   | Converting between types using functions/methods. | `Number('5');`                      | `5`         |
+| **                       |                                                    | `String(42);`                       | `'42'`      |
+| **                       |                                                    | `Boolean(0);`                       | `false`     |
+| **Truthy/Falsy Values**   | Implicit boolean conversion in conditions.        | `if ('Hello') { /* code */ }`       | `true`      |
+| **                       |                                                    | `if (0) { /* code */ }`             | `false`     |
+| **                       |                                                    | `!!'Hello';`                        | `true`      |
+| **String to Number**     | Converting a string to a number.                 | `parseInt('10');`                   | `10`        |
+| **                       |                                                    | `parseFloat('10.5');`               | `10.5`      |
+| **                       |                                                    | `Number('ABC');`                    | `NaN`       |
+| **Number to String**     | Converting a number to a string.                 | `String(42);`                       | `'42'`      |
+| **                       |                                                    | `(42).toString();`                  | `'42'`      |
+| **                       |                                                    | `(3.14).toFixed(2);`                | `'3.14'`    |
+| **Boolean to Number**    | Converting a boolean to a number.                | `Number(true);`                     | `1`         |
+| **                       |                                                    | `Number(false);`                    | `0`         |
+| **Number to Boolean**    | Converting a number to a boolean.                | `Boolean(0);`                       | `false`     |
+| **                       |                                                    | `Boolean(42);`                      | `true`      |
+| **String to Boolean**    | Converting a string to a boolean.                | `Boolean('false');`                 | `true`      |
+| **                       |                                                    | `Boolean('');`                      | `false`     |
+| **Object to Primitive**  | Converting an object to a primitive value.      | `let obj = { valueOf: () => 42 }; +obj;` | `42`    |
+| **                       |                                                    | `let obj = { toString: () => 'Hello' }; String(obj);` | `'Hello'` |
+| **                       |                                                    | `let obj = { [Symbol.toPrimitive]: () => 'Custom' }; +obj;` | `'Custom'` |
 
 #### Strict equality
 
