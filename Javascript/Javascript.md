@@ -63,32 +63,12 @@ Modern JavaScript supports “classes” and “modules” – advanced language
 
 #### Let, var, const
 
-###### let ve var
+| Keyword | Scope                        | Hoisting | Reassignment | Block Scope | Can Be Redeclared |
+|---------|------------------------------|----------|--------------|-------------|-------------------|
+| `var`   | Function or Global           | Yes      | Yes          | No          | Yes               |
+| `let`   | Block (Local)                | Yes      | Yes          | Yes         | No                |
+| `const` | Block (Local)                | Yes      | No           | Yes         | No                |
 
-1. let has a block scope, var ha no block scope, Variables, declared with var, are either function-wide or global.
-2. “var” tolerates redeclarations
-
-```javascript
-let user;
-let user; // SyntaxError: 'user' has already been declared
-
-var user = "Pete";
-var user = "John"; // this "var" does nothing (already declared)
-// ...it doesn't trigger an error
-alert(user); // John
-```
-
-3. var is hoisted but not let
-
-```javascript
-console.log(typeof name); // undefined
-var name = "John";
-
-console.log(typeof name); // ReferenceError
-let name = "John";
-```
-
-Let and const are TDZ - The variable is said to be in a "temporal dead zone" (TDZ) from the start of the block until the declaration has completed.
 
 ##### IIFE Immediately invoked function expression
 
@@ -125,39 +105,28 @@ message = 123456;
 ```
 
 Programming languages that allow such things, are called “dynamically typed”, meaning that there exist data types, but variables are not bound to any of them.  
+| Data Type   | Description                                       | Example                                  |
+|-------------|---------------------------------------------------|------------------------------------------|
+| `undefined` | Represents an uninitialized or missing value.    | `let x;`                                 |
+| `null`      | Represents an intentional absence of any object. | `let y = null;`                          |
+| `boolean`   | Represents a binary value, `true` or `false`.    | `let isTrue = true;`                     |
+| `number`    | Represents numeric values, including integers and floating-point numbers. | `let age = 30;` or `let price = 19.99;` |
+| `string`    | Represents textual data, enclosed in single or double quotes. | `let name = 'John';` |
+| `symbol`    | Represents unique and immutable values, often used as object property keys. | `const uniqueKey = Symbol();` |
+| `bigint`    | Represents large integers, supporting arbitrary precision. | `const bigNumber = 1234567890123456789012345678901234567890n;` |
+| `object`    | Represents a collection of key-value pairs, including arrays, functions, and objects. | `let person = { name: 'Alice', age: 25 };` |
+| `function`  | Represents a reusable block of code that can be called. | `function greet() { console.log('Hello!'); }` |
 
-1. **number** - for numbers of any kind: integer or floating-point, integers are limited by ±2(raise to 53).
-2. **bigint** is for integer numbers of arbitrary length. A BigInt value is created by appending n to the end of an integer
-3. **string** for strings. A string may have zero or more characters, there’s no separate single-character type.
-4. **boolean** for true/false.
-5. **null** for unknown values – a standalone type that has a single value null. Null as an assignment value. So you can assign the value null to any variable which basically means it’s blank.
-6. **undefined** for unassigned values – memory allocated to variable while hoisting, but no val assigned  Undefined is a variable that has been declared but not assigned a value.
-7. **object** for more complex data structures.
-8. **symbol** for unique identifiers.  
-A “symbol” represents a unique identifier.  
 
-```javascript
-//syntax
-let id = Symbol();
+| Feature            | Description                                                                                        |
+|--------------------|----------------------------------------------------------------------------------------------------|
+| **Data Type**      | `symbol`                                                                                           |
+| **Description**    | Represents unique and immutable values.                                                            |
+| **How to Use**     | Create symbols using the `Symbol()` constructor or the shorthand notation `Symbol(description)`. |
+| **When to Use**    | Use symbols when you need guaranteed unique values, typically as object property keys.            |
+| **Example**        | ```javascript const uniqueKey = Symbol('unique'); const obj = {}; obj[uniqueKey] = 'some value'; ``` |
+| **Why to Use**     | Symbols ensure property keys are unique, preventing unintended overwrites or conflicts in objects. They are often used in scenarios where property names need to be unique, such as when creating custom methods or metadata in objects. Or when dealing with objects from external libraries |
 
-//Every Symbol() call is guaranteed to return a unique Symbol.
-Symbol('foo') === Symbol('foo')  // false
-
-let user = { // belongs to another code
-  name: "John"
-};
-let id = Symbol("id");
-user[id] = 1;
-alert( user[id] ); // we can access the data using the symbol as the key
-```
-
-What’s the benefit of using Symbol("id") over a string "id"?  
-As user objects belongs to another code, and that code also works with them, we shouldn’t just add any fields to it. That’s unsafe. But a symbol cannot be accessed accidentally, the third-party code probably won’t even see it, so it’s probably all right to do.  
-Also, imagine that another script wants to have its own identifier inside user, for its own purposes. That may be another JavaScript library, so that the scripts are completely unaware of each other.  
-
-The typeof operator allows us to see which type is stored in a variable.  
-typeof x or typeof(x)  
-Both are same 1st one is operator and later one is a function  
 
 ------------------------------------------------------------------------------
 
