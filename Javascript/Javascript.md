@@ -172,40 +172,23 @@ Programming languages that allow such things, are called “dynamically typed”
 | **What is a Closure?** | A closure is a JavaScript feature that allows a function to remember and access its outer (enclosing) function's variables and parameters even after that outer function has finished executing. |
 | **How Closures Work** | Closures are created when an inner function references variables from its containing outer function. The inner function "closes over" these variables, effectively preserving them, even if the outer function has completed execution. |
 | **Use Cases**         | Closures are often used for data encapsulation, creating private variables, and maintaining state in functional programming. They are also fundamental in scenarios like callbacks and event handling. |
-| **Example Code**      | ```javascript
-                          function outerFunction(x) {
-                              // Inner function with closure over 'x'
-                              function innerFunction(y) {
-                                  return x + y;
-                              }
-                              return innerFunction;
-                          }
-                          
-                          const closureInstance = outerFunction(10);
-                          const result = closureInstance(5); // 'x' still accessible
-                          console.log(result); // Outputs: 15
-                          ```
-                          |
 | **Benefits for Developers** | - Enables data encapsulation and creation of private variables, promoting better code organization and reducing global scope pollution. - Facilitates the creation of reusable and modular code through closures as callbacks. - Provides a powerful tool for managing and maintaining state in asynchronous programming, such as with event listeners. |
 
+**Closure eamples**
 
-- **Definition  (function with its lexical env)**
-Closure is created when a child function keep the environment of the parent scope even after the parent function has already executed
-
-```javascript
-function foo(outer_arg) { 
-    function inner(inner_arg) { 
-        return outer_arg + inner_arg; 
-    } 
-    return inner; 
-} 
-var get_func_inner = foo(5); 
-console.log(get_func_inner(4)); //outputs 9
-console.log(get_func_inner(3)); //outputs 8
+ ```javascript
+    function outerFunction(x) {
+        // Inner function with closure over 'x'
+        function innerFunction(y) {
+            return x + y;
+        }
+        return innerFunction;
+    }
+    
+    const closureInstance = outerFunction(10);
+    const result = closureInstance(5); // 'x' still accessible
+    console.log(result); // Outputs: 15                          
 ```
-
-We can access the variable outer_arg (value 5) which is defined in function foo() through function inner() as the later preserves the scope chain of enclosing function at the time of execution of enclosing function i.e. the inner function knows the value of outer_arg through it’s scope chain.
-This is closure in action that is inner function can have access to the outer function variables as well as all the global variables.
 
 ```javascript
 // another example
@@ -226,7 +209,11 @@ console.log(get_arr[0]());  // 4
 console.log(get_arr[1]());  // 4
 console.log(get_arr[2]());  // 4
 console.log(get_arr[3]());  // 4
-// due to closure
+// due to closure - change var to let for o/p - 0 1, 2, 3
+// note this means both let and var variables are accessbile inside closure but
+// since let variables have block scope, a new i variable is created for each for loop
+// and the older i variable is accessed in closure
+// instead of let we can use IFFEs as well to ge o/p 0 1 2 3
 ```
 
 **Use case**  
@@ -308,6 +295,59 @@ Idle-time collection – the garbage collector tries to run only while the CPU i
 ## Modules
 
 A module is just a file. One script is one module. As simple as that.
+| **Type of Import/Export** | **Description**                                                                                                     | **Example**                                                                                                                                      |
+|---------------------------|---------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| **CommonJS (Node.js)**    | Used in Node.js for server-side JavaScript. Requires the `require` function for importing and `module.exports` or `exports` for exporting. | **Exporting Module:** ```javascript
+exports.add = function(a, b) {
+    return a + b;
+};
+// Importing Module:
+const math = require('./math.js');
+console.log(math.add(2, 3)); // 5
+``` |
+| **ES6 Modules**           | Standardized in ES6 and supported in modern browsers and Node.js with `.mjs` extension. Imports and exports are specified using `import` and `export` statements. | **Exporting Module:** ```javascript
+export function add(a, b) {
+    return a + b;
+}
+// Importing Module:
+import { add } from './math.mjs';
+console.log(add(2, 3)); // 5
+``` |
+| **CommonJS to ES6**       | Converting CommonJS modules to ES6 modules by using a transpiler like Babel. Allows the use of ES6 `import` and `export` syntax in CommonJS environments. | **Transpiled Example:** ```javascript
+// math.js (CommonJS)
+module.exports.add = function(a, b) {
+    return a + b;
+};
+// Transpile to ES6
+// math.js (ES6)
+export function add(a, b) {
+    return a + b;
+}
+// Importing Transpiled Module:
+import { add } from './math.js';
+console.log(add(2, 3)); // 5
+``` |
+| **Dynamic Imports**       | Introduced in ES6, dynamic imports enable loading modules asynchronously at runtime. Useful for code splitting and reducing initial bundle size. | **Dynamic Import Example:** ```javascript
+// Dynamically import a module
+import('./math.mjs').then((mathModule) => {
+    const result = mathModule.add(2, 3);
+    console.log(result); // 5
+}).catch((error) => {
+    console.error('Dynamic import failed:', error);
+});
+``` |
+| **Node.js `import` (Experimental)** | Experimental feature in Node.js that allows using ES6 module syntax in CommonJS files by enabling the `--experimental-modules` flag. | **Example (Node.js Experimental):** ```javascript
+// math.mjs
+export function add(a, b) {
+    return a + b;
+}
+// Importing Module:
+import { add } from './math.mjs';
+console.log(add(2, 3)); // 5
+``` |
+
+This table provides an overview of different types of import/export mechanisms in JavaScript, along with examples for each type. You can copy and paste this Markdown code into your documents or applications to display the information in a table format.
+
 
 ```javascript
 //import export
