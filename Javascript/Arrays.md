@@ -447,7 +447,7 @@ alert(item2);  // Donut
 ```
 
 ## Iterables
-An iterable is an object in JavaScript that has an associated iterable protocol, which defines how elements are accessed or iterated over in a specific order. Iterables include arrays, strings, maps, sets, and more. They enable you to loop or iterate through their elements one by one
+An iterable is an object in JavaScript that has an associated iterable protocol, which defines how elements are accessed or iterated over in a specific order. Iterables include arrays, strings, maps, sets, and more. They enable you to loop or iterate through their elements one by one  
 
 #### converting object to iterables
 ```javascript
@@ -471,6 +471,15 @@ for (const [key, value] of entriesIterable) {
 ```
 
 To convert an object to an iterable without using any built-in Object methods, you can create a custom iterator for the object. This involves defining a custom iterable protocol using the Symbol.iterator symbol. 
+
+To create a custom iterator in JavaScript:
+1. Create an Iterable Object: Start with an object you want to iterate over, like an array or a custom data structure.
+2. Define [Symbol.iterator] Method: Add a method named [Symbol.iterator] to your object, which returns an object with a next() method.
+3. Define the next() Method: In the next() method, return an object with value (the current item) and done (a boolean indicating if the iteration is complete).
+4. Implement Iteration Logic: In the next() method, implement the logic to retrieve the next value in the sequence. Use an internal index or counter to track the current position.
+5. Signal Completion: When done, set done to true in the object returned by next().
+6. Use the Iterable: You can now use your custom iterable object with built-in JavaScript iteration mechanisms, like for...of loops.
+
 ```javascript
 // Custom object with properties
 const customObject = {
