@@ -8,47 +8,18 @@
 ## Objects
 Used to store keyed collections of various data and more complex entities  
 Different ways of creating an object  
-The three common ways to create new objects in JavaScript are as follows:  
-```javascript
-// Each of the following options will create a new empty object:
-1. var newObject = {};
-2. var newObject = Object.create( Object.prototype );
-// it allows you to choose the prototype object for the object you want to create, without having to define a constructor function
-//e.g.
-// Animal properties and method encapsulation
-const Animal = {
-  type: 'Invertebrates', // Default value of properties
-  displayType: function() {  // Method which will display type of Animal
-    console.log(this.type);
-  }
-};
 
-// Create new animal type called animal1
-const animal1 = Object.create(Animal);
-animal1.displayType(); // Output: Invertebrates
+| **Method**                  | **Description**                                                                                                                         | **When to Use**                                                                                                   | **Example**                                                                                                                            | **Explanation**                                                                                                                                                                                        |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Object Literal              | Create an object using curly braces `{}` and define its properties and methods inline.                                                | Use when you need a simple object with a fixed structure.                                                       | ```const person = { name: 'John', age: 30 }; ```                 | Object literals are ideal for creating one-off objects or small, fixed data structures. Properties and methods are defined within `{}`.                                                               |
+| Constructor Function        | Define a constructor function that serves as a blueprint for creating multiple objects with shared properties and methods.          | Use when you need multiple objects with the same structure and behavior.                                         | ``` const person = new Person('John', 30); ``` | Constructor functions allow you to create multiple instances with similar properties and methods. Use `new` to create instances.                                                                      |
+| Object.create()             | Create a new object and optionally specify its prototype object.                                                                         | Use when you want to create an object with a specific prototype or inherit from an existing object.             | ``` const person = Object.create(null); person.name = 'John'; person.age = 30; ```                                   | `Object.create()` provides fine-grained control over the prototype chain, allowing for more advanced inheritance and object creation.       |
+| ES6 Class                   | Define a class using the `class` keyword and create objects using the `new` keyword.                                                    | Use when you want to implement object-oriented programming concepts with constructors, methods, and inheritance. | ``` const person = new Person('John', 30); ``` | ES6 classes provide a cleaner and more structured way to create objects with constructors and methods, improving code readability and organization. |
+| Object.assign()             | Combine multiple objects into one by copying their properties and methods into a target object.                                         | Use when you want to merge properties and methods from multiple objects into a single object.                   | ``` const combined = Object.assign({}, obj1, obj2); ```              | `Object.assign()` is useful for creating new objects that inherit properties from existing objects or for copying properties from one object to another.                                    |
+| Factory Function            | Create and return objects within a function, customizing their properties and methods based on parameters.                             | Use when you need to create objects with specific configurations or when object creation is more complex.       | ``` const person = createPerson('John', 30); ```        | Factory functions allow for dynamic object creation based on parameters and can encapsulate complex object initialization logic.        |
+| Singleton Pattern           | Define an object literal with a single instance, ensuring that there is only one instance of the object throughout the application.     | Use when you need a single, shared instance of an object that can be accessed from different parts of the code.  | ``` const singleton = { property: 'value' }; ```                                                                 | Singleton patterns ensure that there is only one instance of the object, which can be helpful for managing shared resources or configuration settings. |
+| Subclassing (extends)       | Create a subclass that inherits properties and methods from a parent class (superclass).                                                 | Use when you want to implement class-based inheritance and extend the functionality of an existing class.     | ``` class Dog extends Animal { speak() { console.log('Dog barks'); } } ``` | Subclassing allows you to create child classes that inherit behavior from a parent class while adding or overriding specific functionality.     |
 
-// Create new animal type called fish
-const fish = Object.create(Animal);
-fish.type = 'Fishes';
-fish.displayType(); // Output: Fishes
-
-3. Using a constructor function
-//It is a 3 step process
-// 1. Define the object type by writing a constructor function
-function Car(make, model, year) {
-  this.make = make;
-  this.model = model;
-  this.year = year;
-}
-// 2. Create an instance of the object with new keyword
-const kenscar = new Car('Nissan', '300ZX', 1992);
-const vpgscar = new Car('Mazda', 'Miata', 1990);
-
-//later add new property to obj without changing the constructor function
-Car.prototype.color = null;
-car1.color = 'black';
-
-````
 
 **Accessing obj. values (4 ways)**  
 ```javascript
