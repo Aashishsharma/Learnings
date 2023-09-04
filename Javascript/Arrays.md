@@ -398,7 +398,7 @@ alert(rest.length); // 2
 The destructuring assignment also works with objects.
 ```javascript
 // syntax
-let {var1, var2} = {var1:…, var2:…
+let {var1, var2} = {var1:…, var2:…}
 
 //e.g.
 let options = {
@@ -447,76 +447,223 @@ alert(item2);  // Donut
 ```
 
 ## Iterables
-Iterable objects is a generalization of arrays. That’s a concept that allows us to make any object useable in a for..of loop.  
-If an object isn’t technically an array, but represents a collection (list, set) of something, then for..of is a great syntax to loop over it  
+An iterable is an object in JavaScript that has an associated iterable protocol, which defines how elements are accessed or iterated over in a specific order. Iterables include arrays, strings, maps, sets, and more. They enable you to loop or iterate through their elements one by one
+
+#### converting object to iterables
 ```javascript
-let range = {
-  from: 1,
-  to: 5
+const person = {
+    name: 'John',
+    age: 30,
+    city: 'New York'
 };
 
-// We want the for..of to work:
-// for(let num of range) ... num=1,2,3,4,5
-// then use iterable
+const entriesIterable = Object.entries(person);
 
-// iterable
-let range = {
-  from: 1,
-  to: 5
-};
-// 1. call to for..of initially calls this
-range[Symbol.iterator] = function() {
-  // ...it returns the iterator object:
-  // 2. Onward, for..of works only with this iterator, asking it for next values
-  return {
-    current: this.from,
-    last: this.to,
-    // 3. next() is called on each iteration by the for..of loop
-    next() {
-      // 4. it should return the value as an object {done:.., value :...}
-      if (this.current <= this.last) {
-        return { done: false, value: this.current++ };
-      } else {
-        return { done: true };
-      }
-    }
-  };
-};
-// now it works!
-for (let num of range) {
-  alert(num); // 1, then 2, 3, 4, 5
+for (const [key, value] of entriesIterable) {
+    console.log(`${key}: ${value}`);
 }
-```
-There’s a universal method Array.from that takes an iterable or array-like value and makes a “real” Array from it. Then we can call array methods on it.
 
-#### Async iterables
-1. Use Symbol.asyncIterator instead of Symbol.iterator.
-2. The next() method should return a promise (to be fulfilled with the next value).
-3. The async keyword handles it, we can simply make async next().
-4. To iterate over such an object, we should use a for await (let item of iterable) loop
+// Output:
+// name: John
+// age: 30
+// city: New York
+
+```
+
+To convert an object to an iterable without using any built-in Object methods, you can create a custom iterator for the object. This involves defining a custom iterable protocol using the Symbol.iterator symbol. 
 ```javascript
-let range = {
-  from: 1,
-  to: 5,
-  [Symbol.asyncIterator]() { // (1)
-    return {
-      current: this.from,
-      last: this.to,
-      async next() { // (2)
-        // note: we can use "await" inside the async next:
-        await new Promise(resolve => setTimeout(resolve, 1000)); // (3)
-        if (this.current <= this.last) {
-          return { done: false, value: this.current++ };
-        } else {
-          return { done: true };
-        }
-      }
-    };
-  }
+// Custom object with properties
+const customObject = {
+    prop1: 'value1',
+    prop2: 'value2',
+    prop3: 'value3'
 };
+
+// Define a custom iterator for the object
+// We define a custom iterator for the customObject by assigning a function to the Symbol.iterator property of the object.
+customObject[Symbol.iterator] = function () {
+    const keys = Object.keys(this);
+    let index = 0;
+
+    // The next() function returns an object with value and done properties
+    return {
+      // this next method is required by the iterator protocol
+        next: () => {
+            if (index < keys.length) {
+                const key = keys[index++];
+                return { value: [key, this[key]], done: false };
+            } else {
+                return { done: true };
+            }
+        }
+    };
+};
+
+// Iterate through the customObject using a for...of loop
+for (const [key, value] of customObject) {
+    console.log(`Property: ${key}, Value: ${value}`);
+}
+
+// 
+// We initialize an index variable to keep track of the current key being processed.
+```
+
+**Usecase of iterables**
+| Scenario                | Description                                                                                                                                                                                                                                                                                                                              |
+|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Custom Data Structures** | If you've created custom data structures or objects that don't naturally support iteration, a custom iterator can provide a way to traverse and work with the data within those structures.                                                                                                                                              |
+| **Complex Data Transformation** | When you need to perform complex data transformations or filtering on an object's properties, a custom iterator allows you to define exactly how the iteration process should work.                                                                                                                                                        |
+| **Asynchronous Operations** | If you're dealing with asynchronous operations within the iterator, such as fetching data from external sources, you can encapsulate the logic for handling these operations within the custom iterator.                                                                                                                                  |
+| **Specific Iteration Order** | When the order in which you want to iterate through object properties matters, a custom iterator can enforce that order.                                                                                                                                                                                                                 |
+| **Custom Iteration Logic** | If you need to implement custom iteration logic that goes beyond what standard iteration methods (`Object.keys()`, `Object.values()`, etc.) can provide, a custom iterator allows you to define your own rules.                                                                                                                         |
+
+Keep in mind that JavaScript's built-in objects and data structures (arrays, maps, sets, etc.) are already iterable by default, and you may not need custom iterators for most common use cases. Custom iterators are typically used when working with user-defined or specialized data structures.
+
+#### Example 1. Making custom data structure (class) iterable
+```javascript
+// Define a custom data structure called CustomList.
+class CustomList {
+    constructor() {
+        this.items = [];
+    }
+    // Add items to the CustomList.
+    add(item) {
+        this.items.push(item);
+    }
+    // Define a custom iterator method for the CustomList.
+    [Symbol.iterator]() {
+        let index = 0;
+        // Return an object with a next() method.
+        return {
+            next: () => {
+                if (index < this.items.length) {
+                    // If there are more items, return the next item.
+                    return { value: this.items[index++], done: false };
+                } else {
+                    // If all items have been iterated, indicate completion.
+                    return { done: true };
+                }
+            }
+        };
+    }
+}
+// Create an instance of the CustomList.
+const myList = new CustomList();
+// Add items to the CustomList.
+myList.add('Item 1');
+myList.add('Item 2');
+myList.add('Item 3');
+// Use a for...of loop to iterate through the CustomList.
+for (const item of myList) {
+    console.log(item);
+}
+
+```
+
+#### Example 2. COmplex example of making custom data structure iterable
+```javascript
+class SocialNetwork {
+    constructor() {
+        this.users = new Map(); // Map to store users and their friendships.
+    }
+    // Add a user to the social network.
+    addUser(username) {
+        if (!this.users.has(username)) {
+            this.users.set(username, new Set()); // Initialize an empty friend set.
+        }
+    }
+    // Add a friendship between two users.
+    addFriendship(userA, userB) {
+        if (this.users.has(userA) && this.users.has(userB)) {
+            this.users.get(userA).add(userB);
+            this.users.get(userB).add(userA);
+        }
+    }
+    // Define a custom iterator to traverse through users and their friendships.
+    [Symbol.iterator]() {
+        const users = Array.from(this.users.keys());
+        let index = 0;
+
+        return {
+            next: () => {
+                if (index < users.length) {
+                    const user = users[index++];
+                    const friendships = Array.from(this.users.get(user));
+                    return { value: { user, friendships }, done: false };
+                } else {
+                    return { done: true };
+                }
+            },
+        };
+    }
+}
+// Create a social network.
+const mySocialNetwork = new SocialNetwork();
+// Add users and friendships.
+mySocialNetwork.addUser('Alice');
+mySocialNetwork.addUser('Bob');
+mySocialNetwork.addUser('Charlie');
+mySocialNetwork.addFriendship('Alice', 'Bob');
+mySocialNetwork.addFriendship('Bob', 'Charlie');
+// Use a for...of loop to iterate through users and their friendships in the social network.
+for (const { user, friendships } of mySocialNetwork) {
+    console.log(`User: ${user}`);
+    console.log(`Friendships: ${[...friendships].join(', ')}`);
+    console.log('---');
+}
+
+//output - 
+User: Alice
+Friendships: Bob
+---
+User: Bob
+Friendships: Alice, Charlie
+---
+User: Charlie
+Friendships: Bob
+---
+```
+#### Example 2.  Async operation real-life example
+```javascript
+// Create an array of URLs to fetch data from (simulated asynchronous operations).
+const urls = [
+    'https://jsonplaceholder.typicode.com/posts/1',
+    'https://jsonplaceholder.typicode.com/posts/2',
+    'https://jsonplaceholder.typicode.com/posts/3'
+];
+
+// Define a custom asynchronous iterable object with an async iterator method.
+const asyncIterable = {
+    [Symbol.asyncIterator]() {
+        let index = 0;
+
+        // Return an object with a next() method.
+        return {
+            async next() {
+                if (index < urls.length) {
+                    const url = urls[index];
+                    index++;
+
+                    // Simulate fetching data asynchronously from the URL.
+                    const response = await fetch(url);
+                    const data = await response.json();
+
+                    // Return the fetched data.
+                    return { value: data, done: false };
+                } else {
+                    // All iterations are done.
+                    return { done: true };
+                }
+            }
+        };
+    }
+};
+
+// Use a for await...of loop to iterate through and process the data.
 (async () => {
-  for await (let value of range) { // (4)
-    alert(value); // 1,2,3,4,5
-  }
-})()
+    for await (const item of asyncIterable) {
+        console.log(item);
+    }
+})();
+
 ```
