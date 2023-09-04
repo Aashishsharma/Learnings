@@ -676,3 +676,90 @@ const asyncIterable = {
 })();
 
 ```
+
+## Generators 
+Special type of function that can be paused and resumed. They provide a more flexible and powerful way to work with asynchronous code, iterate through large datasets (streams), and handle complex control flows.
+
+#### Usecases
+1. Asynchronous code - - when you need to make sequential api calls - it can now be done through async / await, but earlier generators were used
+2.  Iterating large datasets
+3. Streaming data
+4. Generate infinite sequence
+
+#### Steps 
+1. Declare a generator function using function*.
+2. Inside the generator function, use the yield keyword to yield values.
+3. To start the generator, call the generator function, which returns an iterator.
+4. Use the iterator's .next() method to start or resume the generator's execution and retrieve the yielded values. OR
+4. Iterate using for .. of loop
+
+#### Example 1. infinite sequence
+```javascript
+function* naturalNumbers() {
+    let num = 1;
+    while (true) {
+        yield num;
+        num++;
+    }
+}
+// Using the generator to get the first 5 natural numbers
+const iterator = naturalNumbers();
+for (let i = 0; i < 5; i++) {
+    console.log(iterator.next().value);
+}
+```
+
+#### Example 2. Streaming data 
+```javascript
+// Simulated data source that emits chunks of data
+function* dataGenerator() {
+    for (let i = 1; i <= 5; i++) {
+        yield `Data Chunk ${i}`;
+    }
+}
+// Stream processing function that processes data chunks one at a time
+function* processData() {
+    let totalProcessed = 0;
+    // Create a data generator
+    const generator = dataGenerator();
+    while (true) {
+        const { value, done } = generator.next();
+        if (done) {
+            break; // Exit the loop when all data is processed
+        }
+        // Simulate processing by printing each data chunk
+        console.log("Processing:", value);
+        totalProcessed++;
+    }
+    console.log(`Total Processed: ${totalProcessed} chunks`);
+}
+// Run the stream processing
+processData();
+```
+
+#### Example 3. Actual data streaming on UI
+```javascript
+let res = await fetch('some-api-call') // api returns stream response
+const reader = res.body.getReader(); // read data from the response stream
+let buffer = ''
+
+// this function returns an object with an [Symbol.asyncIterator] method, 
+// making it an asynchronous iterable
+const readChunks = (reader) => {
+  return {
+    async* [Symbol.asyncIterator]() {
+      let data = await reader.read();
+      while(!data.done) {
+        yield data.vale;
+        data = await reader.read()
+      }
+    }
+  }
+}
+
+for await (const chunk of readChunks(reader)) {
+  buffer+= new TextDecoder("utf-8").decode(chunk);
+  // process chunk
+  console.log(chunk)
+}
+```
