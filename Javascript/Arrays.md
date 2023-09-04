@@ -683,8 +683,9 @@ Special type of function that can be paused and resumed. They provide a more fle
 #### Usecases
 1. Asynchronous code - - when you need to make sequential api calls - it can now be done through async / await, but earlier generators were used
 2.  Iterating large datasets
-3. Streaming data
+3. Streaming data / downloading big files as stream
 4. Generate infinite sequence
+5. Paginated data for async generators
 
 #### Steps 
 1. Declare a generator function using function*.
@@ -782,4 +783,32 @@ for await (const chunk of readChunks(reader)) {
   // process chunk
   console.log(chunk)
 }
+```
+
+#### Example 4. Paginated data for async generators
+There are many online services that deliver paginated data. For instance, when we need a list of users, a request returns a pre-defined count (e.g. 100 users) – “one page”, and provides a URL to the next page. This pattern is very common.
+```javascript
+// implement async generator
+async function* fetchCommits(repo) {
+  let url = `https://api.github.com/repos/${repo}/commits`;
+  while (url) {
+    const response = await fetch(url, { // (1)
+      headers: {'User-Agent': 'Our script'}, // github needs any user-agent header
+    });
+    const body = await response.json(); // (2) response is JSON (array of commits)
+    // (3) the URL of the next page is in the headers, extract it
+    let nextPage = response.headers.get('Link').match(/<(.*?)>; rel="next"/);
+    nextPage = nextPage?.[1];
+    url = nextPage;
+    for(let commit of body) { // (4) yield commits one by one, until the page ends
+      yield commit;
+    }
+  }
+}
+//call the generator
+for await (let commit of fetchCommits("username/repository")) {
+  // process commit
+}
+//while url is not null, generator will keep on generating commits
+// do next for of iteration will get next paginated commits
 ```
