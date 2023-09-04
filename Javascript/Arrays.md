@@ -160,20 +160,21 @@ alert(Array.isArray([])); // true
 #### Map
 | **Aspect**          | **Description**                                                                                                                                         |
 |--------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **What is a Map?** | A `Map` is a built-in JavaScript data structure that allows you to store key-value pairs. Unlike objects, `Map` keys can be of any data type.            |
+| **What is a Map?** | A `Map` is a built-in data structure that allows you to store key-value pairs. Unlike objects, `Map` keys can be of any data type.            |
 | **Difference from Objects** | - Objects have limitations on key types (only strings or Symbols), while `Map` keys can be any data type. - `Map` maintains the order of key-value pairs, which is not guaranteed in objects. |
-| **Creating a Map** | ```javascript const myMap = new Map(); ```                                                                                                            |
-| **Setting Key-Value Pairs** | ```javascript myMap.set('name', 'John'); myMap.set(1, 'One'); myMap.set({}, 'Object'); ```                                                             |
-| **Getting a Value** | ```javascript const name = myMap.get('name'); // 'John' const one = myMap.get(1); // 'One' const objValue = myMap.get({}); // 'Object' (Note: Object reference matters) ``` |
-| **Checking for Key Existence** | ```javascript const hasName = myMap.has('name'); // true const hasAge = myMap.has('age'); // false ``` |
-| **Deleting a Key-Value Pair** | ```javascript myMap.delete('name'); // Removes the 'name' key-value pair ``` |
-| **Getting the Size** | ```javascript const size = myMap.size; // 2 (after deleting 'name') ``` |
-| **Iterating through Keys and Values (forEach)** | ```javascript myMap.forEach((value, key) => { console.log(`${key}: ${value}`); }); ``` |
-| **Iterating through Keys (for...of)** | ```javascript for (const key of myMap.keys()) { console.log(key); } ``` |
-| **Iterating through Values (for...of)** | ```javascript for (const value of myMap.values()) { console.log(value); } ``` |
-| **Iterating through Entries (for...of)** | ```javascript for (const [key, value] of myMap.entries()) { console.log(`${key}: ${value}`); } ``` |
-| **Iterating through Entries (using destructuring)** | ```javascript for (const [key, value] of myMap) { console.log(`${key}: ${value}`); } ``` |
-| **Clearing the Map** | ```javascript myMap.clear(); // Removes all key-value pairs ``` |
+| **Creating a Map** | ```const myMap = new Map(); ```                                                                                                            |
+| **Setting Key-Value Pairs** | ```myMap.set('name', 'John'); myMap.set(1, 'One'); myMap.set({}, 'Object'); ```                                                             |
+| **Getting a Value** | ```const name = myMap.get('name'); // 'John' const one = myMap.get(1); // 'One' const objValue = myMap.get({}); // 'Object' (Note: Object reference matters) ``` |
+| **Checking for Key Existence** | ```const hasName = myMap.has('name'); // true const hasAge = myMap.has('age'); // false ``` |
+| **Deleting a Key-Value Pair** | ```myMap.delete('name'); // Removes the 'name' key-value pair ``` |
+| **Getting the Size** | ```const size = myMap.size; // 2 (after deleting 'name') ``` |
+| **Iterating through Keys and Values (forEach)** | ```myMap.forEach((value, key) => { console.log(`${key}: ${value}`); }); ``` |
+| **Iterating through Keys (for...of)** | ```for (const key of myMap.keys()) { console.log(key); } ``` |
+| **Iterating through Values (for...of)** | ```for (const value of myMap.values()) { console.log(value); } ``` |
+| **Iterating through Entries (for...of)** | ```for (const [key, value] of myMap.entries()) { console.log(`${key}: ${value}`); } ``` |
+| **Iterating through Entries (using destructuring)** | ```for (const [key, value] of myMap) { console.log(`${key}: ${value}`); } ``` |
+| **Clearing the Map** | ```myMap.clear(); // Removes all key-value pairs ``` |
+
 
 #### Map from Object and vice versa
 ```javascript
@@ -201,15 +202,18 @@ A Set is a special type collection – “set of values” (without keys), where
 
 | **Aspect**          | **Description**                                                                                                                                             |
 |--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **What is a Set?** | A `Set` is a built-in JavaScript data structure that allows you to store unique values of any data type, eliminating duplicates.                              |
-| **Creating a Set** | ```javascript const mySet = new Set(); ```                                                                                                                |
-| **Adding Values**  | ```javascript mySet.add('apple'); mySet.add('banana'); mySet.add('cherry'); ```                                                                             |
-| **Checking for Value Existence** | ```javascript const hasApple = mySet.has('apple'); // true const hasGrape = mySet.has('grape'); // false ``` |
-| **Deleting a Value** | ```javascript mySet.delete('apple'); // Removes 'apple' from the set ``` |
-| **Getting the Size** | ```javascript const size = mySet.size; // 2 (after deleting 'apple') ``` |
-| **Iterating through Values (forEach)** | ```javascript mySet.forEach(value => { console.log(value); }); ``` |
-| **Iterating through Values (for...of)** | ```javascript for (const value of mySet) { console.log(value); } ``` |
-| **Clearing the Set** | ```javascript mySet.clear(); // Removes all values from the set ``` |
+| **What is a Set?** | A `Set` is a built-in data structure that allows you to store unique values of any data type, eliminating duplicates.                                      |
+| **Creating a Set** | ```const mySet = new Set(); ```                                                                                                                           |
+| **Adding Values**  | ```mySet.add('apple'); mySet.add('banana'); mySet.add('cherry'); ```                                                                                       |
+| **Checking for Value Existence** | ```const hasApple = mySet.has('apple'); // true const hasGrape = mySet.has('grape'); // false ``` |
+| **Deleting a Value** | ```mySet.delete('apple'); // Removes 'apple' from the set ``` |
+| **Getting the Size** | ```const size = mySet.size; // 2 (after deleting 'apple') ``` |
+| **Iterating through Values (forEach)** | ```mySet.forEach(value => { console.log(value); }); ``` |
+| **Iterating through Values (for...of)** | ```for (const value of mySet) { console.log(value); } ``` |
+| **Clearing the Set** | ```mySet.clear(); // Removes all values from the set ``` |
+
+In summary, a `Set` is a data structure for storing unique values of any data type. It automatically eliminates duplicates and provides various methods for working with these values.
+
 
 In summary, a `Set` in JavaScript is a data structure for storing unique values of any data type. It automatically eliminates duplicates and provides various methods for working with these values.
 
