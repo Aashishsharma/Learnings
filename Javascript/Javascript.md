@@ -135,10 +135,7 @@ Programming languages that allow such things, are called “dynamically typed”
 | **                       |                                                    | `Boolean(42);`                      | `true`      |
 | **String to Boolean**    | Converting a string to a boolean.                | `Boolean('false');`                 | `true`      |
 | **                       |                                                    | `Boolean('');`                      | `false`     |
-| **Object to Primitive**  | Converting an object to a primitive value.      | `let obj = { valueOf: () => 42 }; +obj;` In this example, obj is an object with a valueOf method that returns 42.
-When the unary plus operator (+) is applied to obj, JavaScript attempts to convert obj to a primitive value.
-It first checks if valueOf exists and is callable on obj. Since it does, it calls obj.valueOf(), which returns 42.
-The result of the expression +obj is 42. | `42`    |
+| **Object to Primitive**  | Converting an object to a primitive value.      | `let obj = { valueOf: () => 42 }; +obj;` When the unary plus operator (+) is applied to obj, JavaScript attempts to convert obj to a primitive value. It first checks if valueOf exists and is callable on obj. Since it does, it calls obj.valueOf(), which returns 42. | `42`    |
 | **                       |                                                    | `let obj = { toString: () => 'Hello' }; String(obj);` | `'Hello'` |
 | **                       |                                                    | `let obj = { [Symbol.toPrimitive]: () => 'Custom' }; +obj;` | `'Custom'` |
 
