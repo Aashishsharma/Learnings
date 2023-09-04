@@ -693,6 +693,26 @@ Special type of function that can be paused and resumed. They provide a more fle
 4. Use the iterator's .next() method to start or resume the generator's execution and retrieve the yielded values. OR
 4. Iterate using for .. of loop
 
+#### Syntax
+```javascript
+// create generator function which should yield a value
+function* numberGenerator() {
+  yield 1;
+  yield 2;
+  yield 3;
+}
+// genertor returns iterator which can be iterated in for of loop
+const iterator = numberGenerator();
+for (const value of iterator) {
+  console.log(value);
+}
+// instead of for of loop we can manually get the yeild values using the .next method, 
+// the iterator will have value and done as it's property as seen in the above iterator section
+while(!iterator.done) {
+  console.log(iterator.next().value)
+}
+```
+
 #### Example 1. infinite sequence
 ```javascript
 function* naturalNumbers() {
