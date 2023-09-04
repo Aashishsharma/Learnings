@@ -1,27 +1,139 @@
 ## Index
+
 1. **Objects** - creation-({}, .create(Object.prototype), new()(diff-constructor is run)), assignValues - (., [], Object.defineProperty, delete, in operator, key order(num/asc, string/insert))
 2. **Obj copy and references** -  objs. stored by reference, use.create() to avoid reference
-3. **Property descriptors** - {writable, enumerable, configurable}, Object.defineProperty(obj, propertyName, descriptor), Object.getOwnPropertyDescriptor(obj, key) 
+3. **Property descriptors** - {writable, enumerable, configurable}, Object.defineProperty(obj, propertyName, descriptor), Object.getOwnPropertyDescriptor(obj, key)
 4. **Property getters and setters** - get/set methods for encapsulation, get/set e.g. - remove age and add b'day field without breaking existing clients
 5. **Prototypal inheritance** -  (changing natie prototypes) - hidden _proto_ property, obj.hasOwnProperty(key) in for in loop, change native prorotypes - String.prototype.show = function(){} usecase - polyfilling, instead of proto use - Object.create(proto, [descriptors])
 
 ## Objects
-Used to store keyed collections of various data and more complex entities  
-Different ways of creating an object  
+Here are the most common ways to create objects in JavaScript:
 
-| **Method**                  | **Description**                                                                                                                         | **When to Use**                                                                                                   | **Example**                                                                                                                            | **Explanation**                                                                                                                                                                                        |
-|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Object Literal              | Create an object using curly braces `{}` and define its properties and methods inline.                                                | Use when you need a simple object with a fixed structure.                                                       | ```const person = { name: 'John', age: 30 }; ```                 | Object literals are ideal for creating one-off objects or small, fixed data structures. Properties and methods are defined within `{}`.                                                               |
-| Constructor Function        | Define a constructor function that serves as a blueprint for creating multiple objects with shared properties and methods.          | Use when you need multiple objects with the same structure and behavior.                                         | ``` const person = new Person('John', 30); ``` | Constructor functions allow you to create multiple instances with similar properties and methods. Use `new` to create instances.                                                                      |
-| Object.create()             | Create a new object and optionally specify its prototype object.                                                                         | Use when you want to create an object with a specific prototype or inherit from an existing object.             | ``` const person = Object.create(null); person.name = 'John'; person.age = 30; ```                                   | `Object.create()` provides fine-grained control over the prototype chain, allowing for more advanced inheritance and object creation.       |
-| ES6 Class                   | Define a class using the `class` keyword and create objects using the `new` keyword.                                                    | Use when you want to implement object-oriented programming concepts with constructors, methods, and inheritance. | ``` const person = new Person('John', 30); ``` | ES6 classes provide a cleaner and more structured way to create objects with constructors and methods, improving code readability and organization. |
-| Object.assign()             | Combine multiple objects into one by copying their properties and methods into a target object.                                         | Use when you want to merge properties and methods from multiple objects into a single object.                   | ``` const combined = Object.assign({}, obj1, obj2); ```              | `Object.assign()` is useful for creating new objects that inherit properties from existing objects or for copying properties from one object to another.                                    |
-| Factory Function            | Create and return objects within a function, customizing their properties and methods based on parameters.                             | Use when you need to create objects with specific configurations or when object creation is more complex.       | ``` const person = createPerson('John', 30); ```        | Factory functions allow for dynamic object creation based on parameters and can encapsulate complex object initialization logic.        |
-| Singleton Pattern           | Define an object literal with a single instance, ensuring that there is only one instance of the object throughout the application.     | Use when you need a single, shared instance of an object that can be accessed from different parts of the code.  | ``` const singleton = { property: 'value' }; ```                                                                 | Singleton patterns ensure that there is only one instance of the object, which can be helpful for managing shared resources or configuration settings. |
-| Subclassing (extends)       | Create a subclass that inherits properties and methods from a parent class (superclass).                                                 | Use when you want to implement class-based inheritance and extend the functionality of an existing class.     | ``` class Dog extends Animal { speak() { console.log('Dog barks'); } } ``` | Subclassing allows you to create child classes that inherit behavior from a parent class while adding or overriding specific functionality.     |
+1. **Object Literal**:
+   - This is the simplest way to create an object using curly braces `{}`.
+   - It allows you to define properties and values within the braces.
+   - Useful when you need a single, simple object.
 
+   ```javascript
+   const person = {
+       firstName: 'John',
+       lastName: 'Doe',
+       age: 30,
+   };
+   ```
+
+2. **Object Constructor**:
+   - You can create an object using the built-in `Object` constructor.
+   - It's less common than object literals but can be useful in certain situations.
+
+   ```javascript
+   const person = new Object();
+   person.firstName = 'John';
+   person.lastName = 'Doe';
+   person.age = 30;
+   ```
+
+3. **Factory Functions**:
+   - A factory function is a custom function that creates and returns an object.
+   - Useful when you need to create multiple objects with similar properties.
+
+   ```javascript
+   function createPerson(firstName, lastName, age) {
+       return {
+           firstName,
+           lastName,
+           age,
+       };
+   }
+
+   const person1 = createPerson('John', 'Doe', 30);
+   const person2 = createPerson('Jane', 'Smith', 25);
+   ```
+
+4. **Constructor Functions**:
+   - Constructor functions are used to create objects with shared properties and methods.
+   - You define a constructor function and then create objects using the `new` keyword.
+
+   ```javascript
+   function Person(firstName, lastName, age) {
+       this.firstName = firstName;
+       this.lastName = lastName;
+       this.age = age;
+   }
+
+   const person1 = new Person('John', 'Doe', 30);
+   const person2 = new Person('Jane', 'Smith', 25);
+   ```
+
+5. **ES6 Classes**:
+   - ES6 introduced class syntax, making it easier to create objects with constructors and methods.
+   - It's a more modern alternative to constructor functions.
+
+   ```javascript
+   class Person {
+       constructor(firstName, lastName, age) {
+           this.firstName = firstName;
+           this.lastName = lastName;
+           this.age = age;
+       }
+   }
+
+   const person1 = new Person('John', 'Doe', 30);
+   const person2 = new Person('Jane', 'Smith', 25);
+   ```
+
+6. **Object.create**:
+   - You can create an object with a specified prototype object using `Object.create()` method.
+   - Useful when you need to inherit properties and methods from an existing object.
+
+   ```javascript
+   const personPrototype = {
+       greet: function() {
+           console.log(`Hello, my name is ${this.firstName}`);
+       }
+   };
+
+   const person = Object.create(personPrototype);
+   person.firstName = 'John';
+   person.lastName = 'Doe';
+   person.age = 30;
+   ```
+
+7. **Singleton Pattern**:
+   - You can create a singleton object using a combination of approaches.
+   - It ensures that only one instance of the object is created.
+
+   ```javascript
+   const singleton = (() => {
+       let instance;
+
+       function createInstance() {
+           return {
+               // Properties and methods
+           };
+       }
+
+       return {
+           getInstance: function() {
+               if (!instance) {
+                   instance = createInstance();
+               }
+               return instance;
+           }
+       };
+   })();
+   ```
+
+The choice of which method to use depends on your specific use case:
+
+- **Object Literals** are suitable for creating simple, one-off objects.
+- **Factory Functions** are useful for creating multiple similar objects.
+- **Constructor Functions** and **ES6 Classes** are suitable for creating objects with shared methods and properties.
+- **Object.create** is handy when you want to inherit properties and methods.
+- **Singleton Pattern** is used when you need a single instance of an object.
 
 **Accessing obj. values (4 ways)**  
+
 ```javascript
 // ECMAScript 3 compatible approaches
 // 1. Dot syntax
@@ -88,6 +200,7 @@ defineProp(driver, "topSpeed", "100mph");
 // Get an inherited property (1981)
 console.log( driver.dateOfBirth );
 ```  
+
 ```javascript
 
 // deleting existing property
@@ -198,6 +311,7 @@ for (let prop in user) {
 ```
 
 #### Object copying, references
+
 One of the fundamental differences of objects vs primitives is that they are stored and copied “by reference”.
 
 To copy obj. we can use spread operator, but it will only do a shallow clone, for deep clone we can do JSON.parse(JSON.stringify(obj)), but this is expensive.
@@ -262,6 +376,7 @@ alert(clone.sizes.width); // 51, see the result from the other one
 ```
 
 #### Property descriptors
+
 Object properties, besides a value, have three special attributes (so-called “flags”):
 
 1. writable – if true, the value can be changed, otherwise it’s read-only.
@@ -270,6 +385,7 @@ Object properties, besides a value, have three special attributes (so-called “
 When we create an object “the usual way”, all of them are true. But we also can change them anytime.
 
 ##### getting/setting the flags
+
 ```javascript
 /// get syntax
 let descriptor = Object.getOwnPropertyDescriptor(obj, propertyName);
@@ -301,14 +417,17 @@ Object.defineProperty(user, "name", {
 });
 user.name = "Pete"; // Error: Cannot assign to read only property 'name'
 ```
+
 Errors appear only in strict mode
 In the non-strict mode, no errors occur when writing to non-writable properties and such. But the operation still won’t succeed. Flag-violating actions are just silently ignored in non-strict.
 
 #### Property getters and setters
-It’s accessor properties. They are essentially functions that execute on getting and setting a value, but look like regular properties to an external code. 
+
+It’s accessor properties. They are essentially functions that execute on getting and setting a value, but look like regular properties to an external code.
 These are used in object.defineproperty as well  
 
 1. **Using Objects**
+
 ```javascript
 //syntax
 let obj = {
@@ -332,7 +451,9 @@ alert(user.fullName); // John Smith
 //user.fullName = "Test"; // Error (property has only a getter)
 //note error only in strict mode otherwise ignored
 ```
+
 One of the great uses of accessors is that they allow to take control over a “regular” data property
+
 ```javascript
 function User(name, age) {
   this.name = name;
@@ -360,6 +481,7 @@ alert( john.age );      // ...as well as the age
 ```
 
 2. **Using functions**
+
 ```javascript
 function Circel(radius) {
 // with new keyword, new obj is created and this is assigned to it
@@ -399,6 +521,7 @@ circle.abc=5 // works
 ```
 
 ### Prototypal inheritance
+
 In JavaScript, objects have a special hidden property [[Prototype]] (as named in the specification), that is either null or references another object. That object is called “a prototype”:
 Arr, obj, fun have _proto_ property which provide access to inbuilt props and methods
 Let arr =[],
@@ -443,8 +566,10 @@ alert(longEar.jumps); // true (from rabbit)
 // multiple inheritance is not possible in JS
 //The references can’t go in circles. JavaScript will throw an error if we try to assign __proto__ in a circle. 
 ```
+
 The for..in loop iterates over inherited properties too.  
 If that’s not what we want, and we’d like to exclude inherited properties, there’s a built-in method obj.hasOwnProperty(key): it returns true if obj has its own (not inherited) property named key
+
 ```javascript
 // f.prototype
 let animal = {
@@ -457,13 +582,16 @@ Rabbit.prototype = animal;
 let rabbit = new Rabbit("White Rabbit"); //  rabbit.__proto__ == animal
 alert( rabbit.eats ); // true
 ```
+
 #### Changing native prototypes
+
 ```javascript
 String.prototype.show = function() {
   alert(this);
 };
 "BOOM!".show(); // BOOM!
 ```
+
 If two libraries add a method String.prototype.show, then one of them will be overwriting the method of the other.
 So, generally, modifying a native prototype is considered a bad idea.  
 In modern programming, there is only one case where modifying native prototypes is approved. That’s polyfilling.
@@ -471,6 +599,7 @@ Polyfilling is a term for making a substitute for a method that exists in the Ja
 We may then implement it manually and populate the built-in prototype with it.
 
 #### Borrowing methods from prototypes
+
 ```javascript
 let obj = {
   0: "Hello",
@@ -480,10 +609,13 @@ let obj = {
 obj.join = Array.prototype.join;
 alert( obj.join(',') ); // Hello,world!
 ```
+
 It works because the internal algorithm of the built-in join method only cares about the correct indexes and the length property. It doesn’t check if the object is indeed an array. Many built-in methods are like that.
 
-#### __proto__ alternatives
-The __proto__ is considered outdated and somewhat deprecated (in some browsers, works in node)
+#### **proto** alternatives
+
+The **proto** is considered outdated and somewhat deprecated (in some browsers, works in node)
+
 ```javascript
 // instead use
 Object.create(proto, [descriptors])
