@@ -1,12 +1,3 @@
-## Index
-1. **Arrays** - (obj with contigious memory), each elem can be of diff type
-2. **Array methods** - (push, pop, shift, unshift, splice(index[, deleteCount, elem1, ..., elemN])) return removed
-3. **Higher order array methods** - (forEach, map, filter, find, sort, every)(item,index,array), reduce(fun(accum, item, index), [initial]), reduceRight(), Array.isArray-(obj/array diff)
-4. **Map and Set** - **Map** - (set, get, has, delete) objvsmap - (datatype - string//any), **Set** - (set, has, delete)
-5. **WeakMap and WeakSet** - doesn’t prevent garbage-collection of key objects, keys must be objects, iteration not possible, Use - caching, storing 3rd party objs while available (obj transform - obj.fromEntries(obj.entries(obj)))
-6. **Destructuring assignment** - swap values ([guest, admin] = [admin, guest]), ...rest operator, obj destructuring
-7. **Iterables** - allows us to make any object useable in a for..of loop - obj[Symbol.Iterator] = fun() {return {curr, last, next()}}, async iterator
-
 #### Arrays
 In JS Array is an object.  
 But what makes arrays really special is their internal representation. The engine tries to store its elements in the contiguous memory area, one after another
@@ -25,96 +16,25 @@ arr[3](); // hello
 ```
 
 ### Array methods
-#### 1. Add/remove
-**
-1. arr.push(...items) – adds items to the end,
-2. arr.pop() – extracts an item from the end,
-3. arr.shift() – extracts an item from the beginning,
-4. arr.unshift(...items) – adds items to the beginning.**
-5. splice
-```javascript
-// It starts from the position index: removes deleteCount elements and then inserts elem1, ..., elemN at their place. Returns the array of removed elements.
-// It can do everything: insert, remove and replace elements.
-// syntax
-arr.splice(index[, deleteCount, elem1, ..., elemN])
 
-//e.g. 1 remove element
-let arr = ["I", "study", "JavaScript"];
-arr.splice(1, 1); // from index 1 remove 1 element
-alert( arr ); // ["I", "JavaScript"]
+| **Method**           | **Description**                                                                                                               | **Example**                                                                                                    | **Explanation**                                                                                                                                                                                                                                                   |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `push()`             | Adds one or more elements to the end of an array and returns the new length.                                                   | ```javascript let arr = [1, 2, 3]; arr.push(4, 5); ``` | `push()` modifies the original array by adding elements to its end. In this example, `arr` becomes `[1, 2, 3, 4, 5]`.                                                                                                                                               |
+| `pop()`              | Removes and returns the last element from an array.                                                                           | ```javascript let arr = [1, 2, 3]; let last = arr.pop(); ``` | `pop()` modifies the original array by removing the last element. In this example, `last` is `3`, and `arr` becomes `[1, 2]`.                                                                                                                                     |
+| `unshift()`          | Adds one or more elements to the beginning of an array and returns the new length.                                           | ```javascript let arr = [2, 3]; arr.unshift(0, 1); ``` | `unshift()` modifies the original array by adding elements to its beginning. In this example, `arr` becomes `[0, 1, 2, 3]`.                                                                                                                                       |
+| `shift()`            | Removes and returns the first element from an array.                                                                         | ```javascript let arr = [1, 2, 3]; let first = arr.shift(); ``` | `shift()` modifies the original array by removing the first element. In this example, `first` is `1`, and `arr` becomes `[2, 3]`.                                                                                                                                   |
+| `concat()`           | Combines two or more arrays and returns a new array.                                                                         | ```javascript let arr1 = [1, 2]; let arr2 = [3, 4]; let combined = arr1.concat(arr2); ``` | `concat()` does not modify the original arrays but creates a new array containing elements from both `arr1` and `arr2`. In this example, `combined` is `[1, 2, 3, 4]`.                                                                                           |
+| `join()`             | Combines all elements of an array into a string, separated by a specified separator, and returns the string.                | ```javascript let arr = ['apple', 'banana', 'cherry']; let str = arr.join(', '); ``` | `join()` does not modify the original array but creates a string by joining its elements with the specified separator. In this example, `str` is `'apple, banana, cherry'`.                                                                                |
+| `slice()`            | Returns a shallow copy of a portion of an array into a new array, without modifying the original array.                   | ```javascript let arr = [1, 2, 3, 4, 5]; let sliced = arr.slice(1, 4); ``` | `slice()` does not modify the original array but creates a new array containing elements from index `1` to `4-1 = 3` (excluding `4`). In this example, `sliced` is `[2, 3, 4]`.                                                                                        |
+| `splice()`           | Changes the contents of an array by removing, replacing, or adding elements and returns an array of the removed elements.   | ```javascript let arr = [1, 2, 3, 4, 5]; let removed = arr.splice(1, 2, 6, 7); ``` | `splice()` modifies the original array by removing two elements starting at index `1` and adding `6` and `7` in their place. It returns an array of the removed elements, which in this case is `[2, 3]`. The modified `arr` becomes `[1, 6, 7, 4, 5]`. |
+| `forEach()`          | Executes a provided function once for each array element.                                                                    | ```javascript let arr = [1, 2, 3]; arr.forEach(item => console.log(item)); ``` | `forEach()` does not modify the original array but iterates over its elements and applies a function to each. In this example, it logs each element (`1`, `2`, `3`) to the console.                                                                                   |
+| `map()`              | Creates a new array with the results of applying a provided function to each element of the original array.                | ```javascript let arr = [1, 2, 3]; let squared = arr.map(item => item * item); ``` | `map()` does not modify the original array but applies a function to each element and creates a new array with the results. In this example, `squared` is `[1, 4, 9]`.                                                                                             |
+| `filter()`           | Creates a new array with all elements that pass a provided test (specified by a function).                                  | ```javascript let arr = [1, 2, 3, 4, 5]; let even = arr.filter(item => item % 2 === 0); ``` | `filter()` does not modify the original array but creates a new array containing elements that pass the specified test. In this example, `even` is `[2, 4]`.                                                                                                   |
+| `reduce()`           | Applies a function to an accumulator and each element in the array (from left to right) to reduce it to a single value.    | ```javascript let arr = [1, 2, 3, 4, 5]; let sum = arr
 
-// e.g 2, remove elements and replace with new ones
-let arr = ["I", "study", "JavaScript", "right", "now"];
-// remove 3 first elements and replace them with another
-arr.splice(0, 3, "Let's", "dance");
-alert( arr ) // now ["Let's", "dance", "right", "now"]
-
-// e.g. 3 get removed elements
-let arr = ["I", "study", "JavaScript", "right", "now"];
-// remove 2 first elements
-let removed = arr.splice(0, 2);
-alert( removed ); // "I", "study" <-- array of removed elements
-
-// e.g. 4 add new elements without removing existing elements
-let arr = ["I", "study", "JavaScript"];
-// from index 2
-// delete 0
-// then insert "complex" and "language"
-arr.splice(2, 0, "complex", "language");
-alert( arr ); // "I", "study", "complex", "language", "JavaScript"
-
-// e.g. 5 -ve index
-let arr = [1, 2, 5];
-// from index -1 (one step from the end)
-// delete 0 elements,
-// then insert 3 and 4
-arr.splice(-1, 0, 3, 4);
-alert( arr ); // 1,2,3,4,5
-
-```
-6. slice
-```javascript
-//It returns a new array copying to it all items from index start to end (not including end). Both start and end can be negative, in that case position from array end is assumed.
-// syntax
-arr.slice([start], [end])
-
-//e.g.
-let arr = ["t", "e", "s", "t"];
-alert( arr.slice(1, 3) ); // e,s (copy from 1 to 3)
-alert( arr.slice(-2) ); // s,t (copy from -2 till the end)
-```
-7. concat
-```javascript
-//The method arr.concat creates a new array that includes values from other arrays and additional items.
-//syntax
-arr.concat(arg1, arg2...)
-
-//e.g
-let arr = [1, 2];
-// create an array from: arr and [3,4]
-alert( arr.concat([3, 4]) ); // 1,2,3,4
-// create an array from: arr and [3,4] and [5,6]
-alert( arr.concat([3, 4], [5, 6]) ); // 1,2,3,4,5,6
-// create an array from: arr and [3,4], then add values 5 and 6
-alert( arr.concat([3, 4], 5, 6) ); // 1,2,3,4,5,6
-```
-
+For higher order array methods (forEach, map, filter, reduce), syntax is arr.forEach((item, index, array) => {})
 #### 2.Iterate: forEach
 ```javascript
-// to run a function for every element of the array
-//syntax
-arr.forEach(function(item, index, array) {
-  // ... do something with item
-});
-
-// for each element call alert
-["Bilbo", "Gandalf", "Nazgul"].forEach(alert);
-
-// e.g. 2
-["Bilbo", "Gandalf", "Nazgul"].forEach((item, index, array) => {
-  alert(`${item} is at index ${index} in ${array}`);
-});
-
 // drawback of forEach function
 const arr = [1,2,3]
 
