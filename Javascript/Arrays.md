@@ -18,24 +18,32 @@ arr[3](); // hello
 ### Array methods
 | **Method**           | **Description**                                                                                                               | **Example**                                                                                                    | **Explanation**                                                                                                                                                                                                                                                   |
 |----------------------|-------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Modification Methods** | Methods that modify the original array. |
 | `push()`             | Adds one or more elements to the end of an array and returns the new length.                                                   | ```javascript let arr = [1, 2, 3]; arr.push(4, 5); ``` | `push()` modifies the original array by adding elements to its end. In this example, `arr` becomes `[1, 2, 3, 4, 5]`.                                                                                                                                               |
 | `pop()`              | Removes and returns the last element from an array.                                                                           | ```javascript let arr = [1, 2, 3]; let last = arr.pop(); ``` | `pop()` modifies the original array by removing the last element. In this example, `last` is `3`, and `arr` becomes `[1, 2]`.                                                                                                                                     |
 | `unshift()`          | Adds one or more elements to the beginning of an array and returns the new length.                                           | ```javascript let arr = [2, 3]; arr.unshift(0, 1); ``` | `unshift()` modifies the original array by adding elements to its beginning. In this example, `arr` becomes `[0, 1, 2, 3]`.                                                                                                                                       |
 | `shift()`            | Removes and returns the first element from an array.                                                                         | ```javascript let arr = [1, 2, 3]; let first = arr.shift(); ``` | `shift()` modifies the original array by removing the first element. In this example, `first` is `1`, and `arr` becomes `[2, 3]`.                                                                                                                                   |
+| `splice()`           | Changes the contents of an array by removing, replacing, or adding elements and returns an array of the removed elements.   | ```javascript let arr = [1, 2, 3, 4, 5]; let removed = arr.splice(1, 2, 6, 7); ``` | `splice()` modifies the original array by removing two elements starting at index `1` and adding `6` and `7` in their place. It returns an array of the removed elements, which in this case is `[2, 3]`. The modified `arr` becomes `[1, 6, 7, 4, 5]`. |
+| `sort()`             | Sorts the elements of an array in place and returns the sorted array.                                                          | ```javascript let arr = [3, 1, 2]; arr.sort(); ``` | `sort()` modifies the original array by arranging its elements in ascending order. In this example, `arr` becomes `[1, 2, 3]`.                                                                                                                                     |
+| `reverse()`          | Reverses the order of elements in an array in place and returns the reversed array.                                             | ```javascript let arr = [1, 2, 3]; arr.reverse(); ``` | `reverse()` modifies the original array by reversing the order of its elements. In this example, `arr` becomes `[3, 2, 1]`.                                                                                                                                    |
+| **Non-Modification Methods** | Methods that do not modify the original array but return a new array or value. |
 | `concat()`           | Combines two or more arrays and returns a new array.                                                                         | ```javascript let arr1 = [1, 2]; let arr2 = [3, 4]; let combined = arr1.concat(arr2); ``` | `concat()` does not modify the original arrays but creates a new array containing elements from both `arr1` and `arr2`. In this example, `combined` is `[1, 2, 3, 4]`.                                                                                           |
 | `join()`             | Combines all elements of an array into a string, separated by a specified separator, and returns the string.                | ```javascript let arr = ['apple', 'banana', 'cherry']; let str = arr.join(', '); ``` | `join()` does not modify the original array but creates a string by joining its elements with the specified separator. In this example, `str` is `'apple, banana, cherry'`.                                                                                |
 | `slice()`            | Returns a shallow copy of a portion of an array into a new array, without modifying the original array.                   | ```javascript let arr = [1, 2, 3, 4, 5]; let sliced = arr.slice(1, 4); ``` | `slice()` does not modify the original array but creates a new array containing elements from index `1` to `4-1 = 3` (excluding `4`). In this example, `sliced` is `[2, 3, 4]`.                                                                                        |
-| `splice()`           | Changes the contents of an array by removing, replacing, or adding elements and returns an array of the removed elements.   | ```javascript let arr = [1, 2, 3, 4, 5]; let removed = arr.splice(1, 2, 6, 7); ``` | `splice()` modifies the original array by removing two elements starting at index `1` and adding `6` and `7` in their place. It returns an array of the removed elements, which in this case is `[2, 3]`. The modified `arr` becomes `[1, 6, 7, 4, 5]`. |
-| `forEach()`          | Executes a provided function once for each array element.                                                                    | ```javascript let arr = [1, 2, 3]; arr.forEach(item => console.log(item)); ``` | `forEach()` does not modify the original array but iterates over its elements and applies a function to each. In this example, it logs each element (`1`, `2`, `3`) to the console.                                                                                   |
 | `map()`              | Creates a new array with the results of applying a provided function to each element of the original array.                | ```javascript let arr = [1, 2, 3]; let squared = arr.map(item => item * item); ``` | `map()` does not modify the original array but applies a function to each element and creates a new array with the results. In this example, `squared` is `[1, 4, 9]`.                                                                                             |
 | `filter()`           | Creates a new array with all elements that pass a provided test (specified by a function).                                  | ```javascript let arr = [1, 2, 3, 4, 5]; let even = arr.filter(item => item % 2 === 0); ``` | `filter()` does not modify the original array but creates a new array containing elements that pass the specified test. In this example, `even` is `[2, 4]`.                                                                                                   |
-| `reduce()`           | Applies a function to an accumulator and each element in the array (from left to right) to reduce it to a single value.    | ```javascript let arr = [1, 2, 3, 4, 5]; let sum = arr.reduce((acc, item) => acc + item, 0); ``` | `reduce()` does not modify the original array and is often used to accumulate a single value from its elements. In this example, `sum` is `15`, the sum of all elements.                                                                                   |
+| `reduce()`           | Applies a function to an accumulator and each element in the array (from left to right) to reduce it to a single value.    | ```javascript let arr = [1, 2, 3, 4, 5]; let sum = arr.reduce((acc, item) => acc + item, 0); ``` | `reduce()` does not modify the original array and is often used to accumulate a single value from its elements. In this example, `sum` is `15`, the sum of all elements.                   |
 | `indexOf()`          | Returns the first index at which a specified element is found in an array, or -1 if not found.                              | ```javascript let arr = [1, 2, 3, 4, 5]; let index = arr.indexOf(3); ``` | `indexOf()` does not modify the array but returns the index of the specified element (`3` in this case). If not found, it returns `-1`. In this example, `index` is `2` (zero-based index).                                                                    |
 | `includes()`         | Checks if an array includes a specified element and returns `true` or `false`.                                                | ```javascript let arr = [1, 2, 3, 4, 5]; let includes3 = arr.includes(3); ``` | `includes()` does not modify the array but checks if it contains the specified element (`3` in this case). It returns `true` if found and `false` otherwise. In this example, `includes3` is `true`.                                                               |
 | `every()`            | Checks if all elements in an array pass a specified test (specified by a function) and returns `true` or `false`.          | ```javascript let arr = [2, 4, 6, 8, 10]; let allEven = arr.every(item => item % 2 === 0); ``` | `every()` does not modify the array and checks if all elements pass the specified test. It returns `true` if all elements meet the condition and `false` otherwise. In this example, `allEven` is `true`.                                                                |
 | `some()`             | Checks if at least one element in an array passes a specified test (specified by a function) and returns `true` or `false`. | ```javascript let arr = [1, 3, 5, 7, 8]; let hasEven = arr.some(item => item % 2 === 0); ``` | `some()` does not modify the array and checks if at least one element passes the specified test. It returns `true` if found and `false` otherwise. In this example, `hasEven` is `true`.                                                                             |
+| `find()`             | Returns the first element in an array that satisfies a provided test (specified by a function) or `undefined` if not found. | ```javascript let arr = [1, 2, 3, 4, 5]; let even = arr.find(item => item % 2 === 0); ``` | `find()` does not modify the array but returns the first element that satisfies the specified test (`2` in this case). If not found, it returns `undefined`. In this example, `even` is `2`.                                                                       |
+| `sort()`             | Sorts the elements of an array in place and returns the sorted array.                                                          | ```javascript let arr = [3, 1, 2]; arr.sort(); ``` | `sort()` modifies the original array by arranging its elements in ascending order. In this example, `arr` becomes `[1, 2, 3]`.                                                                                                                                     |
+| `split()`            | Splits a string into an array of substrings based on a specified separator and returns the array.                         | ```javascript let str = 'apple,banana,cherry'; let arr = str.split(','); ``` | `split()` does not modify the original string but creates an array by splitting the string into substrings using the specified separator. In this example, `arr` is `['apple', 'banana', 'cherry']`.                                                                    |
+| `reverse()`          | Reverses the order of elements in an array in place and returns the reversed array.                                             | ```javascript let arr = [1, 2, 3]; arr.reverse(); ``` | `reverse()` modifies the original array by reversing the order of its elements. In this example, `arr` becomes `[3, 2, 1]`.                                                                                                                                    |
+                                                                          |
 
-**For higher order array methods (forEach, map, filter, reduce, every, somme), syntax is arr.forEach((item, index, array) => {})**
+**For higher order array methods (forEach, map, filter, reduce, every, somme, find), syntax is arr.forEach((item, index, array) => {})**
 
 #### 2.Iterate: forEach
 ```javascript
@@ -85,66 +93,8 @@ for await (let item of arr) {
 
 ```
 
-#### 3.Searching in array
-1. arr.indexOf(item, from) – looks for item starting from index from, and returns the index where it was found, otherwise -1.
-2. arr.lastIndexOf(item, from) – same, but looks for from right to left.
-3. arr.includes(item, from) – looks for item starting from index from, returns true if found
-4. find  
-Imagine we have an array of objects. How do we find an object with the specific condition?
-Here the arr.find(fn) method comes in handy.
-```javascript
-//syntax
-let result = arr.find(function(item, index, array) {
-  // if true is returned, item is returned and iteration is stopped
-  // for falsy scenario returns undefined
-});
-
-//e.g.
-let users = [
-  {id: 1, name: "John"},
-  {id: 2, name: "Pete"},
-  {id: 3, name: "Mary"}
-];
-let user = users.find(item => item.id == 1);
-alert(user.name); // John
-```
-5. filter
-The find method looks for a single (first) element that makes the function return true.  
-If there may be many, we can use arr.filter(fn).  
-The syntax is similar to find, but filter returns an array of all matching elements:
-```javascript
-//syntax
-let results = arr.filter(function(item, index, array) {
-  // if true item is pushed to results and the iteration continues
-  // returns empty array if nothing found
-});
-
-// e.g.
-let users = [
-  {id: 1, name: "John"},
-  {id: 2, name: "Pete"},
-  {id: 3, name: "Mary"}
-];
-// returns array of the first two users
-let someUsers = users.filter(item => item.id < 3);
-alert(someUsers.length); // 2
-```
-
 #### 4.Transform an array
-1. Map
-The arr.map method is one of the most useful and often used.  
-It calls the function for each element of the array and returns the array of results.
-```javascript
-//syntax
-let result = arr.map(function(item, index, array) {
-  // returns the new value instead of item
-});
-
-// e.g.
-let lengths = ["Bilbo", "Gandalf", "Nazgul"].map(item => item.length);
-alert(lengths); // 5,7,6
-```
-2. Sort
+1. Sort
 ```javascript
 let arr = [ 1, 2, 15 ];
 // the method reorders the content of arr
@@ -170,29 +120,6 @@ alert(arr);  // 1, 2, 15
 
 //or
 arr.sort( (a, b) => a - b );
-```
-3. reverse
-```javascript
-let arr = [1, 2, 3, 4, 5];
-arr.reverse();
-alert( arr ); // 5,4,3,2,1
-```
-4. split
-```javascript
-let names = 'Bilbo, Gandalf, Nazgul';
-let arr = names.split(', ');
-for (let name of arr) {
-  alert( `A message to ${name}.` ); // A message to Bilbo  (and other names)
-}
-
-//split into letters
-let str = "test";
-alert( str.split('') ); // t,e,s,t
-
-//join
-let arr = ['Bilbo', 'Gandalf', 'Nazgul'];
-let str = arr.join(';'); // glue the array into a string using ;
-alert( str ); // Bilbo;Gandalf;Nazgul
 ```
 4. reduce/reduceRight
 used to calculate a single value based on the array.
