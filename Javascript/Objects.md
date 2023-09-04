@@ -24,7 +24,6 @@ Here are the most common ways to create objects in JavaScript:
 
 2. **Object Constructor**:
    - You can create an object using the built-in `Object` constructor.
-   - It's less common than object literals but can be useful in certain situations.
 
    ```javascript
    const person = new Object();
@@ -52,7 +51,7 @@ Here are the most common ways to create objects in JavaScript:
 
 4. **Constructor Functions**:
    - Constructor functions are used to create objects with shared properties and methods.
-   - You define a constructor function and then create objects using the `new` keyword.
+   - for creating objects with shared methods and properties
 
    ```javascript
    function Person(firstName, lastName, age) {
@@ -106,13 +105,11 @@ Here are the most common ways to create objects in JavaScript:
    ```javascript
    const singleton = (() => {
        let instance;
-
        function createInstance() {
            return {
                // Properties and methods
            };
        }
-
        return {
            getInstance: function() {
                if (!instance) {
@@ -123,14 +120,6 @@ Here are the most common ways to create objects in JavaScript:
        };
    })();
    ```
-
-The choice of which method to use depends on your specific use case:
-
-- **Object Literals** are suitable for creating simple, one-off objects.
-- **Factory Functions** are useful for creating multiple similar objects.
-- **Constructor Functions** and **ES6 Classes** are suitable for creating objects with shared methods and properties.
-- **Object.create** is handy when you want to inherit properties and methods.
-- **Singleton Pattern** is used when you need a single instance of an object.
 
 **Accessing obj. values (4 ways)**  
 
