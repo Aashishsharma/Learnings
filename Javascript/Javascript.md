@@ -43,12 +43,12 @@ foo()
 ------------------------------------------------------------------------------
 
 #### Let, var, const
-
 | Keyword | Scope                        | Hoisting | Reassignment | Block Scope | Can Be Redeclared |
 |---------|------------------------------|----------|--------------|-------------|-------------------|
 | `var`   | Function or Global           | Yes      | Yes          | No          | Yes               |
-| `let`   | Block (Local)                | Yes      | Yes          | Yes         | No                |
-| `const` | Block (Local)                | Yes      | No           | Yes         | No                |
+| `let`   | Block (Local)                | Yes but (not initialized), will throw cannot access before initializtion error | Yes  | Yes         | No                |
+| `const` | Block (Local)                | Yes but (not initialized), will throw cannot access before initializtion error | No   | Yes         | No                |
+
 
 
 ##### IIFE Immediately invoked function expression
@@ -135,7 +135,10 @@ Programming languages that allow such things, are called “dynamically typed”
 | **                       |                                                    | `Boolean(42);`                      | `true`      |
 | **String to Boolean**    | Converting a string to a boolean.                | `Boolean('false');`                 | `true`      |
 | **                       |                                                    | `Boolean('');`                      | `false`     |
-| **Object to Primitive**  | Converting an object to a primitive value.      | `let obj = { valueOf: () => 42 }; +obj;` | `42`    |
+| **Object to Primitive**  | Converting an object to a primitive value.      | `let obj = { valueOf: () => 42 }; +obj;` In this example, obj is an object with a valueOf method that returns 42.
+When the unary plus operator (+) is applied to obj, JavaScript attempts to convert obj to a primitive value.
+It first checks if valueOf exists and is callable on obj. Since it does, it calls obj.valueOf(), which returns 42.
+The result of the expression +obj is 42. | `42`    |
 | **                       |                                                    | `let obj = { toString: () => 'Hello' }; String(obj);` | `'Hello'` |
 | **                       |                                                    | `let obj = { [Symbol.toPrimitive]: () => 'Custom' }; +obj;` | `'Custom'` |
 
@@ -147,9 +150,6 @@ Programming languages that allow such things, are called “dynamically typed”
 |                           |                                                                  | `null === undefined;`                   | `false`    |
 | **Nullish Coalescing (`??`)** | A logical operator that returns the right operand when the left operand is `null` or `undefined`. | `let x = null ?? 'Default';`            | `'Default'` |
 |                           |                                                                  | `let y = 'Value' ?? 'Default';`         | `'Value'` |
-| **'strict' Keyword**      | Not a standard JavaScript feature. Used as a placeholder for illustrative purposes. | `let x = 5; 'strict' x === 5;`          | N/A       |
-|                           |                                                                  | `let y = 'hello'; 'strict' y === 'hello';` | N/A       |
-
 ------------------------------------------------------------------------------
 
 ## Hoisting
