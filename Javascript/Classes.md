@@ -375,6 +375,63 @@ arr1 = [...arr1, ...arr2];
 10. map + set + weakmap + weakset
 
 
+## Design patterns in JS
+Design patterns in JavaScript are reusable solutions to common problems in software design.
 
-Study common design patterns in JavaScript, such as the Singleton, Factory, and Module patterns.
-Learn when and how to apply these patterns to your code.
+### 1. Singleton pattern
+
+1. Single Instance: There is only one instance of the Singleton class.
+2. Global Access: The Singleton instance is globally accessible, allowing any part of the code to access it.
+3. Lazy Initialization: The Singleton instance is created only when it's first requested, not necessarily at the beginning of the program.
+
+**Simple example**
+```javascript
+class Singleton {
+  constructor() {
+    // we check if the static property instance is already available,
+    // since it is called with ClassName.property, it is a static property
+    if (Singleton.instance) { 
+      return Singleton.instance; // return the same static instance
+    }
+    this.data = 'Singleton Data'; 
+    Singleton.instance = this;// here we are creating a static property named instance and assigning this (current/first instance) to it
+  }
+}
+const singleton1 = new Singleton();
+const singleton2 = new Singleton();
+console.log(singleton1 === singleton2); // true (Both instances are the same)
+console.log(singleton1.data); // 'Singleton Data'
+console.log(singleton2.data); // 'Singleton Data'
+```
+
+### 2. Factory pattern
+
+```javascript
+
+```
+
+### 3. Constructor pattern
+
+```javascript
+
+```
+
+### 4. Module pattern
+
+```javascript
+
+```
+
+### 5. Observer pattern
+
+```javascript
+
+```
+
+### 6. Command pattern
+
+```javascript
+
+```
+
+explain singleton pattern in detail with real-life example and when to use
