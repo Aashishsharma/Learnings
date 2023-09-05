@@ -222,153 +222,120 @@ console.log(instance.getPrivateMessage()); //=> test
 console.log(instance.#property); //=> Syntax error
 ```
 
-```javascript
-new User().sayHi(); // Hello, John!
-//The important difference of class fields is that they are set on individual objects, not User.prototype:
-let user = new User();
-alert(user.name); // John
-alert(User.prototype.name); // undefined
-```
-
-## Inheritance using constructor functions
-```javascript
-
-const Person = function (firstName, birthYear) {
-  this.firstName = firstName;
-  this.birthYear = birthYear;
-};
-
-Person.prototype.calcAge = function () {
-  console.log(2037 - this.birthYear);
-};
-
-const Student = function (firstName, birthYear, course) {
-// this is needed because if we directly call Person(), then its a function call and this would be // undefined in the parent constructor
-  Person.call(this, firstName, birthYear);
-  this.course = course;I
-};
-
-Student.prototype. introduce = function () {
-  console.log('My name is ${this.firstName} and Istudy `${this.course}`');
-};
-const mike = new Student ('Mike', 2020, 'Computer Science');
-mike.introduce();
-
-```
-## Class inheritance
-Similar to prototyping in objects
-```javascript
-//syntax
-class Child extends Parent
-```
-#### Overriding a method
-If same method name is used in child class it is method overriding, same as java  
-To call both parent and child method use super
-```javascript
-class Animal {
-  constructor(name) {
-    this.speed = 0;
-    this.name = name;
-  }
-  run(speed) {
-    this.speed = speed;
-    alert(`${this.name} runs with speed ${this.speed}.`);
-  }
-  stop() {
-    this.speed = 0;
-    alert(`${this.name} stands still.`);
-  }
-}
-class Rabbit extends Animal {
-  hide() {
-    alert(`${this.name} hides!`);
-  }
-  stop() {
-    super.stop(); // call parent stop //Arrow functions have no super
-    this.hide(); // and then hide
-  }
-}
-let rabbit = new Rabbit("White Rabbit");
-rabbit.run(5); // White Rabbit runs with speed 5.
-rabbit.stop(); // White Rabbit stands still. White rabbit hides!
-```
-Constructors in inheriting classes must call super(...), and (!) do it before using this
-
-### Static methods
+### Static properties and methods
+All the properites in the class are at instance level and can be declared in the class / construcor or any other class method using **this** keyword  
 static methods are used to implement functions/properties that belong to the class, but not to any particular object of it. same as java
 ```javascript
-class User {
-  // static property
-  static publisher = "Ilya Kantor";
-  //static function
-  static staticMethod() {
-    alert(this === User);
+class MyClass {
+  static staticProperty = 'I am a static property';
+  constructor(value) {
+    this.instanceProperty = value;
   }
 }
-User.staticMethod(); // true
+// Accessing a class-level property
+console.log(MyClass.staticProperty); // 'I am a static property'
+const obj1 = new MyClass('Instance 1');
+const obj2 = new MyClass('Instance 2');
+// Class-level properties are shared among instances
+console.log(obj1.staticProperty); // 'I am a static property'
+console.log(obj2.staticProperty); // 'I am a static property'
+
 ```
 inheritance works both for regular and static methods/properties.
 But when a buil-in class (Array, Map) is inherited, in this case, it's static methods/fields are not inherited. it is an exception
 
-### Private and protected properties and methods
-Protected fields are implemented in JavaScript using # symbol
-
+##### Usecases of static methods
+1. Utility functions
 ```javascript
-
-class Account {
-  // Public fields (instances)
-  locale=navigator.language;
-  // Private fields (instances)
-  #movements = [];
-  #pin;
-  constructor (owner, currency, pin) {
-    this.owner = owner;
-    this.currency = currency;
-    // Protected property
-    this.#pin = pin;
-    // this._movements = [];
-    // this.locale = navigator.language;
-    console.log(`Thanks for opening an account', owner);
+class MathUtils {
+  static add(x, y) {
+    return x + y;
   }
-  // Public methods
-  // Public interface
-  getMovements () {
-  return this.#movements;
-  }
-  // private methods
-  #deposit(val) {
-  this.#movements.push(val);
+  static subtract(x, y) {
+    return x - y;
   }
 }
-// using # sybmol, we cannot access class fields/methods outside the class since they become private members of the class 
+const sum = MathUtils.add(5, 3); // 8
+const difference = MathUtils.subtract(10, 4); // 6
+```
+
+2. To create factory methods - factory methods are responsible for creating instances of classes but provide more control over the object creation process than a typical constructor
+```javascript
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+  static createAdult(name) {
+    // or do any other type of validation before creating instance of the class (see validation e.g. below)
+    return new Person(name, 18);
+  }
+}
+const adult = Person.createAdult('John');
+```
+3. For valiadtion while creating instance
+```javascript
+class Email {
+  constructor(address) {
+    if (Email.validate(address)) {
+      this.address = address;
+    } else {
+      throw new Error('Invalid email address');
+    }
+  }
+  static validate(address) {
+    // Add email validation logic here
+    return /\S+@\S+\.\S+/.test(address);
+  }
+}
+const validEmail = new Email('john@example.com');
 ```
 
 ### Mixins
 In JavaScript we can only inherit from a single object. i.e, multiple inheritance not possible, same as java.  
 To solve this, JS has a concept of Mixins.  
 A mixin is a class containing methods that can be used by other classes without a need to inherit from it.  
-The simplest way to implement a mixin in JavaScript is to make an object with useful methods, so that we can easily merge them into a prototype of any class.
+Mixins are created using Object.assign method
 ```javascript
-// mixin
-let sayHiMixin = {
-  sayHi() {
-    alert(`Hello ${this.name}`);
+// object.assign syntax
+Object.assign(target, ...sources)
+
+// example
+const target = { a: 1, b: 2 };
+const source1 = { b: 3, c: 4 };
+const source2 = { d: 5 };
+const result = Object.assign(target, source1, source2);
+console.log(target);  // { a: 1, b: 3, c: 4, d: 5 }
+console.log(result);  // { a: 1, b: 3, c: 4, d: 5 } (same as target)
+
+```
+
+```javascript
+// Define a mixin as a separate class or object
+const canSwimMixin = {
+  swim() {
+    console.log('Swimming...');
   },
-  sayBye() {
-    alert(`Bye ${this.name}`);
-  }
 };
-// usage:
-class User {
+const canFlyMixin = {
+  fly() {
+    console.log('Flying...');
+  },
+};
+// Create a class and apply mixins
+class Bird {
   constructor(name) {
     this.name = name;
   }
 }
-// copy the methods, .assign method does the job here
-Object.assign(User.prototype, sayHiMixin);
-// now User can say hi
-new User("Dude").sayHi(); // Hello Dude!
-//There’s no inheritance, but a simple method copying. So User may inherit from another class and also include the mixin to “mix-in” the additional methods
+// Apply the mixins to the Bird class
+// so based on .assign method, canSwimMixin and canFlyMisin are added to the Bird prototype
+Object.assign(Bird.prototype, canSwimMixin, canFlyMixin);
+// Create instances of the Bird class
+const duck = new Bird('Duck');
+duck.swim(); // Outputs: Swimming...
+duck.fly();  // Outputs: Flying...
+
 ```
 
 ### ES6 features
