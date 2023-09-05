@@ -373,3 +373,8 @@ arr1 = [...arr1, ...arr2];
 8. Generators
 9. Modules
 10. map + set + weakmap + weakset
+
+
+
+Study common design patterns in JavaScript, such as the Singleton, Factory, and Module patterns.
+Learn when and how to apply these patterns to your code.
