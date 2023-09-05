@@ -1,11 +1,3 @@
-## Index
-
-1. **Objects** - creation-({}, .create(Object.prototype), new()(diff-constructor is run)), assignValues - (., [], Object.defineProperty, delete, in operator, key order(num/asc, string/insert))
-2. **Obj copy and references** -  objs. stored by reference, use.create() to avoid reference
-3. **Property descriptors** - {writable, enumerable, configurable}, Object.defineProperty(obj, propertyName, descriptor), Object.getOwnPropertyDescriptor(obj, key)
-4. **Property getters and setters** - get/set methods for encapsulation, get/set e.g. - remove age and add b'day field without breaking existing clients
-5. **Prototypal inheritance** -  (changing natie prototypes) - hidden _proto_ property, obj.hasOwnProperty(key) in for in loop, change native prorotypes - String.prototype.show = function(){} usecase - polyfilling, instead of proto use - Object.create(proto, [descriptors])
-
 ## Objects
 
 Here are the most common ways to create objects in JavaScript:
@@ -198,76 +190,31 @@ In the table:
 - `JSON.parse()` and `JSON.stringify()` create a deep copy by converting the object to a JSON string and then parsing it back, resulting in two separate objects.
 - `Object.create()` can be used to create new objects with specified prototypes. The first variant creates an empty object, while the second variant copies properties from another object, effectively creating a new object with the same properties but not sharing references.
 
-#### Property descriptors
-
-Object properties, besides a value, have three special attributes (so-called “flags”):
-
-1. writable – if true, the value can be changed, otherwise it’s read-only.
-2. enumerable – if true, then listed in loops, otherwise not listed.
-3. configurable – if true, the property can be deleted and these attributes can be modified, otherwise not. Making a property non-configurable is a one-way road. We cannot change it back with defineProperty.
-When we create an object “the usual way”, all of them are true. But we also can change them anytime.
-
 ### Prototypal inheritance
 
-In JavaScript, objects have a special hidden property [[Prototype]] (as named in the specification), that is either null or references another object. That object is called “a prototype”:
-Arr, obj, fun have _proto_ property which provide access to inbuilt props and methods
-Let arr =[],
-Thus we can access arr.filter() and others
-arr._proto_ is prototype for arr and arr._proto.proto_ = any obj._proto_ = base obj. of js.
-and _proto_ = .prototype  
-This is prototyoal inheritance.  
+Prototype Chain:
 
+In JavaScript, every object has a hidden property called [[Prototype]] (often referred to as __proto__) that points to another object. This other object is the object's prototype.
+When you try to access a property or method on an object, JavaScript first checks if that property or method exists on the object itself. If it doesn't, it looks in the object's prototype (and further up the chain) until it finds the property or method or reaches the end of the chain.
+
+**Adding method to a prototype**
 ```javascript
-let animal = {
-  eats: true
-};
-let rabbit = {
-  jumps: true
-};
-rabbit.__proto__ = animal;
-// we can find both properties in rabbit now:
-alert( rabbit.eats ); // true
-alert( rabbit.jumps ); // true
-// In modern language __proto__ is replaced with functions Object.getPrototypeOf/Object.setPrototypeOf
-
-//prototype chain
-let animal = {
-  eats: true,
-  walk() {
-    alert("Animal walk");
-  }
-};
-let rabbit = {
-  jumps: true,
-  __proto__: animal
-};
-let longEar = {
-  earLength: 10,
-  __proto__: rabbit
-};
-// walk is taken from the prototype chain
-longEar.walk(); // Animal walk
-alert(longEar.jumps); // true (from rabbit)
-
-// above is multilevel inheritance
-// multiple inheritance is not possible in JS
-//The references can’t go in circles. JavaScript will throw an error if we try to assign __proto__ in a circle. 
-```
-
-The for..in loop iterates over inherited properties too.  
-If that’s not what we want, and we’d like to exclude inherited properties, there’s a built-in method obj.hasOwnProperty(key): it returns true if obj has its own (not inherited) property named key
-
-```javascript
-// f.prototype
-let animal = {
-  eats: true
-};
-function Rabbit(name) {
+// Constructor function
+function Person(name, age) {
   this.name = name;
+  this.age = age;
 }
-Rabbit.prototype = animal;
-let rabbit = new Rabbit("White Rabbit"); //  rabbit.__proto__ == animal
-alert( rabbit.eats ); // true
+
+// Adding a method to the prototype
+Person.prototype.sayHello = function() {
+  console.log(`Hello, my name is ${this.name}.`);
+};
+
+const person1 = new Person('Alice', 30);
+const person2 = new Person('Bob', 25);
+
+person1.sayHello(); // 'Hello, my name is Alice.'
+person2.sayHello(); // 'Hello, my name is Bob.'
 ```
 
 #### Changing native prototypes
@@ -278,45 +225,8 @@ String.prototype.show = function() {
 };
 "BOOM!".show(); // BOOM!
 ```
-
 If two libraries add a method String.prototype.show, then one of them will be overwriting the method of the other.
 So, generally, modifying a native prototype is considered a bad idea.  
 In modern programming, there is only one case where modifying native prototypes is approved. That’s polyfilling.
 Polyfilling is a term for making a substitute for a method that exists in the JavaScript specification, but is not yet supported by a particular JavaScript engine.
 We may then implement it manually and populate the built-in prototype with it.
-
-#### Borrowing methods from prototypes
-
-```javascript
-let obj = {
-  0: "Hello",
-  1: "world!",
-  length: 2,
-};
-obj.join = Array.prototype.join;
-alert( obj.join(',') ); // Hello,world!
-```
-
-It works because the internal algorithm of the built-in join method only cares about the correct indexes and the length property. It doesn’t check if the object is indeed an array. Many built-in methods are like that.
-
-#### **proto** alternatives
-
-The **proto** is considered outdated and somewhat deprecated (in some browsers, works in node)
-
-```javascript
-// instead use
-Object.create(proto, [descriptors])
-
-//e.g.
-let animal = {
-  eats: true
-};
-let rabbit = Object.create(animal, {
-  jumps: {
-    value: true
-  }
-});
-alert(rabbit.jumps); // true
-alert(rabbit.eats); // true
-//The descriptors are in the same format as described in above section of descriptors
-```
