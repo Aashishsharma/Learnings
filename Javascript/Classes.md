@@ -380,11 +380,14 @@ Design patterns in JavaScript are reusable solutions to common problems in softw
 
 ### 1. Singleton pattern
 
+(static instance to implement singleton)
+
 1. Single Instance: There is only one instance of the Singleton class.
 2. Global Access: The Singleton instance is globally accessible, allowing any part of the code to access it.
 3. Lazy Initialization: The Singleton instance is created only when it's first requested, not necessarily at the beginning of the program.
 
 **Simple example**
+
 ```javascript
 class Singleton {
   constructor() {
@@ -404,10 +407,239 @@ console.log(singleton1.data); // 'Singleton Data'
 console.log(singleton2.data); // 'Singleton Data'
 ```
 
-### 2. Factory pattern
+##### Usecases
+
+1. Logging and monitoring
 
 ```javascript
+const winston = require('winston');
+class Logger {
+  constructor() {
+    if (!Logger.instance) {
+      this.logger = winston.createLogger({
+        level: 'info',
+        format: winston.format.simple(),
+        transports: [
+          new winston.transports.Console()
+        ]
+      });
+      Logger.instance = this;
+    }
+    return Logger.instance;
+  }
+  log(message) {
+    this.logger.info(message);
+  }
+}
+class App {
+  constructor() {
+    this.logger = new Logger(); // Logger instance
+  }
+  run() {
+    this.logger.log('Application started.');
+    // Simulate application activities
+    this.logger.log('Application finished.');
+  }
+}
+// Usage
+const app1 = new App();
+app1.run();
+const app2 = new App();
+app2.run();
+console.log(app1.logger === app2.logger); // true (Logger instances are the same)
+```
 
+2. Creating database connection / pool manager instance which would be used in different parts of the application
+
+```javascript
+const sql = require('mssql');
+class Database {
+  constructor() {
+    if (!Database.instance) {
+      // Configuration for your MSSQL database
+      const config = {
+        user: 'your_username',
+        password: 'your_password',
+        server: 'your_server',
+        database: 'your_database',
+        options: {
+          encrypt: true, // Use if you're connecting to Azure SQL
+        },
+      };
+
+      this.pool = new sql.ConnectionPool(config);
+      this.connected = this.connect();
+
+      Database.instance = this;
+    }
+
+    return Database.instance;
+  }
+  async connect() {
+    try {
+      await this.pool.connect();
+      console.log('Connected to MSSQL database.');
+    } catch (error) {
+      console.error('Error connecting to MSSQL database:', error);
+    }
+  }
+  async query(queryString) {
+    try {
+      const result = await this.pool.request().query(queryString);
+      return result.recordset;
+    } catch (error) {
+      console.error('Error executing SQL query:', error);
+      throw error;
+    }
+  }
+  async close() {
+    try {
+      await this.pool.close();
+      console.log('Database connection closed.');
+    } catch (error) {
+      console.error('Error closing database connection:', error);
+    }
+  }
+}
+// Usage
+async function main() {
+  const db1 = new Database();
+  const db2 = new Database();
+  console.log(db1 === db2); // true (Both instances are the same)
+  try {
+    const results = await db1.query('SELECT * FROM your_table');
+    console.log(results);
+  } catch (error) {
+    // Handle error
+  } finally {
+    db1.close(); // Close the database connection when done
+  }
+}
+main();
+```
+
+### 2. Factory pattern
+
+1. Provides an interface for creating objects but allows subclasses to alter the type of objects that will be created.
+2. Instead of calling a constructor directly to create an object, a factory method is used for this purpose.
+
+**SImple example**
+```javascript
+// Product Interface: Pizza
+class Pizza {
+  constructor() {
+    this.name = "";
+    this.ingredients = [];
+  }
+  prepare() {
+    console.log(`Preparing ${this.name}`);
+  }
+  bake() {
+    console.log(`Baking ${this.name}`);
+  }
+}
+// Concrete Products: CheesePizza and PepperoniPizza
+class CheesePizza extends Pizza {
+  constructor() {
+    super();
+    this.name = "Cheese Pizza";
+    this.ingredients = ["Cheese", "Tomato Sauce"];
+  }
+}
+class PepperoniPizza extends Pizza {
+  constructor() {
+    super();
+    this.name = "Pepperoni Pizza";
+    this.ingredients = ["Pepperoni", "Cheese", "Tomato Sauce"];
+  }
+}
+// Factory Interface: PizzaFactory
+class PizzaFactory {
+  createPizza(pizzaType) {
+    // Factory method for creating pizzas based on pizzaType
+    switch (pizzaType) {
+      case "cheese":
+        return new CheesePizza();
+      case "pepperoni":
+        return new PepperoniPizza();
+      default:
+        throw new Error(`Invalid pizza type: ${pizzaType}`);
+    }
+  }
+}
+// Usage
+const pizzaFactory = new PizzaFactory();
+const cheesePizza = pizzaFactory.createPizza("cheese");
+cheesePizza.prepare();
+cheesePizza.bake();
+const pepperoniPizza = pizzaFactory.createPizza("pepperoni");
+pepperoniPizza.prepare();
+pepperoniPizza.bake();
+```
+
+##### Usecases
+
+1. Creating Database Connections: When working with databases, you might have different types of database connections (e.g., MySQL, PostgreSQL, MongoDB). A factory can create the appropriate database connection object based on the configuration.
+2. Logger creating (dev / prod - do different level of logging)
+3. API Clients: When working with external APIs, you might have multiple endpoints with different configurations. A factory can create API client instances with the appropriate settings.
+4. Data Import/Export: In data processing applications, you might need to import or export data in various formats (e.g., JSON, XML, CSV). A factory can create data exporter/importer objects based on the desired format.
+5. UI component creation
+
+**code for ui component creation**
+create a UI component factory that generates different types of buttons.  
+In AID project types of datagrids - (AID datagrid / StreamAID datagrid / AID datagrid transpose)
+
+```javascript
+// 1. Create individual button components
+// PrimaryButton.js
+import React from 'react';
+const PrimaryButton = () => {
+  return <button className="primary-button">Primary Button</button>;
+};
+export default PrimaryButton;
+
+// 2. create ButtonFactory
+import React from 'react';
+import PrimaryButton from './PrimaryButton';
+import SecondaryButton from './SecondaryButton';
+import DangerButton from './DangerButton';
+function ButtonFactory({ buttonType }) {
+  switch (buttonType) {
+    case 'primary':
+      return <PrimaryButton />;
+    case 'secondary':
+      return <SecondaryButton />;
+    case 'danger':
+      return <DangerButton />;
+    default:
+      return null;
+  }
+}
+export default ButtonFactory;
+
+// 3. Use the ButtonFactory
+import React, { useState } from 'react';
+import ButtonFactory from './ButtonFactory';
+function App() {
+  const [selectedButton, setSelectedButton] = useState('primary');
+  const handleButtonClick = (type) => {
+    setSelectedButton(type);
+  };
+  return (
+    <div>
+      <h1>UI Component Factory Example</h1>  
+      <div>
+        <button onClick={() => handleButtonClick('primary')}>Primary Button</button>
+        <button onClick={() => handleButtonClick('secondary')}>Secondary Button</button>
+        <button onClick={() => handleButtonClick('danger')}>Danger Button</button>
+      </div>
+      <hr />
+      <h2>Selected Button:</h2>
+      <ButtonFactory buttonType={selectedButton} />
+    </div>
+  );
+}
+export default App;
 ```
 
 ### 3. Constructor pattern
@@ -434,4 +666,3 @@ console.log(singleton2.data); // 'Singleton Data'
 
 ```
 
-explain singleton pattern in detail with real-life example and when to use
