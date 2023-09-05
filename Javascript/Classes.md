@@ -1,76 +1,5 @@
-## Index
-1. **Class** - template for creating objects, typeof func, member defined don't require let/const where as in func/objs let.cont required while declaring (should use new className())
-2. **Inheritance** - class Child extends Parent, method overriding - same as Java, constructors should call super
-3. **Static methods** - static abc, static func, belong to the class, not to obj
-4. **Private, protected properties and methods** - using get/set memberName() {}, member must use underscore
-5. **Mixins** - multiple inheriatce not available, hence used, create tempMixin obj, and add all required methods, then - Object.assign(User.prototype, tempMixin)
-6. **ES6 features** - (=>, let/const, template String, destructuring, rest, spread, iterators, generators, modules, map/set, weakmap, weakset)
-
-
 ![alt text](PNG/class.png "Class overview")
 
-## OOP without classes
-#### Using Constructor function with new keyword
-```javascript
-"use strict";
-const Person = function (firstName, birthYear) {
-  // Instance properties
-  this.firstName = firstName;
-  this.birthYear = birthYear;
-  // Never do this because then all the objs will have their own copy of calcAge instaed use protoypal inheritance, where only 1 copy would be created
-  // this.calcAge = function () {
-  
-  console.log(2037 - this.birthYear);
-  // };
-};
-const jonas = new Person ('Jonas', 1991);
-console.log(jonas);
-// 1. New empty obj {} is created
-// 2. function is called, this = new empty obj {}
-// 3. empty obj {} linked to prototype
-// 4. function automatically return {}
-const matilda = new Person( 'Matilda', 2017);
-const jack = new Person ('Jack', 1975);
-console.log(matilda, jack);
-console.log(jonas instanceof Person); // true
-
-Person.prototype.calcAge = function () {
-  console.log(2037 - this.birthYear);
-};
-jonas. calcAge();
-matilda.calcAge();
-
-console.log(jonas.__proto__);
-console.log(jonas.__proto__ === Person.prototype); // true
-Person.prototype. species 'Homo Sapiens';
-console.log(jonas. species, matilda. species);
-console.log(jonas. hasOwn Property('firstName')); // true
-console.log(jonas.hasOwn Property( 'species')); // false
-
-```
-Above exact same code using classes
-```javascript
-// class expression
-// const PersonCl = class {}
-// class declaration
-class Personcl {
-  constructor(firstName, birthYear) {
-  this.firstName = firstName;
-  this.birthYear = = birthYear;
-  }
-  calcAge() {
-  console.log(2037 - this.birthYear);
-  }
-}
-
-const jessica = new Personcl('Jessica', 1996);
-console.log(jessica);
-jessica.calcAge();
-```
-Then which to use - classes or Constructor function with new keyword - based on personal preferences, classes require less code and easy
-## Class
-Template for creating objects, providing initial values for state (member variables) and implementations of behavior (member functions or methods)  
-In JavaScript, a class is a kind of function.
 ```javascript
 // syntax
 class MyClass {
@@ -82,67 +11,218 @@ class MyClass {
   ...
 }
 
-//e.g.
-class User {
-  constructor(name) {
+class Person {
+  constructor(name, age) {
     this.name = name;
+    this.age = age;
   }
-  sayHi() {
-    alert(this.name);
+
+  sayHello() {
+    console.log(`Hello, my name is ${this.name}.`);
   }
 }
-// Usage:
-let user = new User("John");
-user.sayHi();
-// proof: User is a function
-alert(typeof User); // function
-// no commas between class methods
 
-//class expression
-let User = class {
-  sayHi() {
-    alert("Hello");
-  }
-};
+const person1 = new Person('Alice', 30);
+person1.sayHello(); // 'Hello, my name is Alice.'
 
-// "Named Class Expression"
-// (no such term in the spec, but that's similar to Named Function Expression)
-let User = class MyClass {
-  sayHi() {
-    alert(MyClass); // MyClass name is visible only inside the class
-  }
-};
-new User().sayHi(); // works, shows MyClass definition
-alert(MyClass); // error, MyClass name isn't visible outside of the class
+console.log(typeof Person); // 'function' (not 'class' or 'Person')
+console.log(typeof person1); // 'object'
+```
 
-//getter setter - similar to object getter setter
-class User {
-  constructor(name) {
-    // invokes the setter
-    this.name = name;
-  }
-  get name() {
-    return this._name;
-  }
-  set name(value) {
-    if (value.length < 4) {
-      alert("Name is too short.");
-      return;
+Object-oriented programming (OOP) concepts are essential to understand when working with JavaScript classes. Here are some key OOP concepts along with code examples in JavaScript:
+
+1. **Classes and Objects:**
+   - **Class Definition:** In JavaScript, you can define a class using the `class` keyword. A class is a blueprint for creating objects.
+   - **Object Creation:** You can create objects (instances) from a class using the `new` keyword.
+
+   ```javascript
+   class Person {
+     constructor(name, age) {
+       this.name = name;
+       this.age = age;
+     }
+   }
+
+   const person1 = new Person('Alice', 30);
+   ```
+
+2. **Constructor:**
+   - A constructor is a special method inside a class that gets executed when you create an object from the class. It is used to initialize object properties.
+
+   ```javascript
+   class Person {
+     constructor(name, age) {
+       this.name = name;
+       this.age = age;
+     }
+   }
+   ```
+
+3. **Properties:**
+   - Properties are variables associated with objects created from a class.
+   - They are defined inside the constructor and can have default values.
+
+   ```javascript
+   class Person {
+     constructor(name, age) {
+       this.name = name;
+       this.age = age;
+     }
+   }
+   ```
+
+4. **Methods:**
+   - Methods are functions defined inside a class that describe the behavior of objects created from that class.
+
+   ```javascript
+   class Person {
+     constructor(name, age) {
+       this.name = name;
+       this.age = age;
+     }
+
+     sayHello() {
+       console.log(`Hello, my name is ${this.name}.`);
+     }
+   }
+   ```
+
+5. **Inheritance:**
+   - Inheritance allows you to create a new class (subclass) that inherits properties and methods from an existing class (parent class).
+
+   ```javascript
+   class Student extends Person {
+     constructor(name, age, studentId) {
+       super(name, age); // Call the parent class constructor
+       this.studentId = studentId;
+     }
+
+     study() {
+       console.log(`${this.name} is studying.`);
+     }
+   }
+   ```
+
+6. **Encapsulation:**
+   - Encapsulation is the concept of bundling data (properties) and the methods that operate on that data (methods) into a single unit (class).
+   - You can control access to properties by using private or protected variables (not directly supported in JavaScript).
+
+   ```javascript
+   class Circle {
+     constructor(radius) {
+       this._radius = radius; // Convention for a "protected" property
+     }
+
+     getRadius() {
+       return this._radius;
+     }
+
+     setRadius(radius) {
+       if (radius > 0) {
+         this._radius = radius;
+       }
+     }
+
+     calculateArea() {
+       return Math.PI * this._radius ** 2;
+     }
+   }
+   ```
+
+7. **Polymorphism:**
+   - Polymorphism allows objects of different classes to be treated as objects of a common parent class.
+   - It enables method overriding, where a subclass can provide a specific implementation for a method defined in the parent class.
+
+   ```javascript
+   class Shape {
+     calculateArea() {
+       return 0;
+     }
+   }
+
+   class Circle extends Shape {
+     constructor(radius) {
+       super();
+       this.radius = radius;
+     }
+     calculateArea() {
+       return Math.PI * this.radius ** 2;
+     }
+   }
+   class Rectangle extends Shape {
+     constructor(width, height) {
+       super();
+       this.width = width;
+       this.height = height;
+     }
+     calculateArea() {
+       return this.width * this.height;
+     
+     }
     }
-    this._name = value;
-  }
-}
-let user = new User("John");
-alert(user.name); // John
-user = new User(""); // Name is too short.
 
-//class fields
-class User {
-  name = "John";
-  sayHi() {
-    alert(`Hello, ${this.name}!`);
+   ```
+
+These are the fundamental OOP concepts in JavaScript. While JavaScript's OOP is prototype-based, ES6 introduced class syntax that makes it easier to work with classes and objects in a more familiar way for developers coming from traditional OOP backgrounds.
+
+### getters and setters
+They don't directly create private members, they provide a way to implement encapsulation and control how properties are accessed and modified.  
+In ES6, there's also a proposal for private class fields and methods, denoted with a # prefix, which would provide true privacy in classes.   
+
+**Usecases**
+1. Validation
+2. Encapsulation - By controlling access to properties through methods, you can hide the implementation details and provide a clear interface for interacting with the object.
+3. Backward Compatibility - If you initially expose a property directly and later need to add validation or computation
+
+```javascript
+class Circle {
+  constructor(radius) {
+    this._radius = radius; // Convention for a "protected" property
+  }
+
+  get radius() {
+    return this._radius;
+  }
+
+  set radius(newRadius) {
+    // you can add validations here - like radios can't be less than 1
+    if (newRadius > 0) {
+      this._radius = newRadius;
+    }
   }
 }
+
+const myCircle = new Circle(5);
+myCircle.radius = 10; // Setting the radius property using a setter
+console.log(myCircle.radius); // Accessing the radius property after setting
+```
+
+**and now private members can be created using # symbol**
+```javascript
+class Something {
+  #property;
+
+  constructor(){
+    this.#property = "test";
+  }
+
+  #privateMethod() {
+    return 'hello world';
+  }
+
+  getPrivateMessage() {
+      return this.#property;
+  }
+}
+
+const instance = new Something();
+console.log(instance.property); //=> undefined
+console.log(instance.privateMethod); //=> undefined
+console.log(instance.getPrivateMessage()); //=> test
+console.log(instance.#property); //=> Syntax error
+```
+
+```javascript
 new User().sayHi(); // Hello, John!
 //The important difference of class fields is that they are set on individual objects, not User.prototype:
 let user = new User();
