@@ -7,6 +7,7 @@
 5. **Prototypal inheritance** -  (changing natie prototypes) - hidden _proto_ property, obj.hasOwnProperty(key) in for in loop, change native prorotypes - String.prototype.show = function(){} usecase - polyfilling, instead of proto use - Object.create(proto, [descriptors])
 
 ## Objects
+
 Here are the most common ways to create objects in JavaScript:
 
 1. **Object Literal**:
@@ -86,16 +87,44 @@ Here are the most common ways to create objects in JavaScript:
    - Useful when you need to inherit properties and methods from an existing object.
 
    ```javascript
-   const personPrototype = {
-       greet: function() {
-           console.log(`Hello, my name is ${this.firstName}`);
-       }
-   };
 
-   const person = Object.create(personPrototype);
-   person.firstName = 'John';
-   person.lastName = 'Doe';
-   person.age = 30;
+  const animalPrototype = {
+    sound: '',
+    makeSound: function() {
+        console.log(this.sound);
+    }
+  };
+
+  const dog = Object.create(animalPrototype);
+  dog.sound = 'Woof!';
+  dog.makeSound(); // "Woof!"
+
+  const cat = Object.create(animalPrototype);
+  cat.sound = 'Meow!';
+  cat.makeSound(); // "Meow!"
+   ```
+
+   ```javascript
+   const personPrototype = {
+    greet: function() {
+        console.log(`Hello, my name is ${this.firstName}`);
+    }
+  };
+  const person = Object.create(personPrototype, {
+      firstName: {
+          value: 'John',
+          writable: true, // Property can be modified
+          enumerable: true, // Property can be iterated
+          configurable: true // Property can be deleted
+      },
+      lastName: {
+          value: 'Doe',
+          writable: true,
+          enumerable: true,
+          configurable: true
+      }
+  });
+  person.greet(); // "Hello, my name is John"
    ```
 
 7. **Singleton Pattern**:
@@ -121,248 +150,53 @@ Here are the most common ways to create objects in JavaScript:
    })();
    ```
 
-**Accessing obj. values (4 ways)**  
+**Accessing obj. values**  
+| Method                        | Description                                                                                                            | Example                                                | When to Use                                                                                                              |
+| ------------------------------|------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------| ------------------------------------------------------------------------------------------------------------------------|
+| **Dot Notation**              | Access object properties using dot notation.                                                                        | ```const person = { name: 'John' }; person.name; ``` | - Use when the property name is known and a valid identifier. - Typically used for static property access.         |
+| **Bracket Notation**          | Access object properties using square brackets and a string key.                                                     | ```const person = { name: 'John' }; person['name']; ``` | - Use when the property name is dynamic, computed, or includes special characters. - Allows access to properties with non-standard names. |
+| **Object Destructuring**      | Assign object properties to variables with the same name as the property.                                            | ```const person = { name: 'John', age: 30 }; const { name, age } = person; ``` | - Useful when you need to work with multiple properties from an object. - Provides clean and concise variable assignments. |
+| **Object.keys()**             | Retrieve an array of object property names (keys) and then access properties by name.                                | ```const person = { name: 'John', age: 30 }; const keys = Object.keys(person); const name = person[keys[0]]; ``` | - When you want to iterate over object properties or access properties dynamically based on keys. |
+| **Object.values()**           | Retrieve an array of object property values and then access properties by index.                                     | ```const person = { name: 'John', age: 30 }; const values = Object.values(person); const age = values[1]; ``` | - When you need to work with property values and their order is important. - Suitable for extracting all values from an object. |
+| **Object.entries()**          | Retrieve an array of `[key, value]` pairs and then access properties by key or index.                                | ```const person = { name: 'John', age: 30 }; const entries = Object.entries(person); const age = entries[1][1]; const ageByName = entries.find(entry => entry[0] === 'age')[1]; ``` | - Useful for working with both keys and values, especially when you need to find a specific property. |
+| **for...in Loop**             | Iterate over all enumerable properties (including inherited ones) and access each property's value.                   | ```const person = { name: 'John', age: 30 }; for (const key in person) { console.log(person[key]); } ``` | - When you need to iterate over all properties of an object, including inherited ones. - Use with caution as it may iterate over unwanted properties. |
+| **Object.getOwnPropertyNames()** | Retrieve an array of all object property names, including non-enumerable properties, and access properties by name. | ```const person = { name: 'John' }; const keys = Object.getOwnPropertyNames(person); const name = person[keys[0]]; ``` | - When you need to work with non-enumerable properties or access all properties regardless of their enumerability. |
 
-```javascript
-// ECMAScript 3 compatible approaches
-// 1. Dot syntax
-// Set properties
-newObject.someKey = "Hello World"; 
-// Get properties
-var value = newObject.someKey;
 
-// 2. Square bracket syntax
-// Set properties
-newObject["someKey"] = "Hello World"; 
-// Get properties
-var value = newObject["someKey"];
- 
-// ECMAScript 5 only compatible approaches
-// 3. Object.defineProperty
-// Set properties
-Object.defineProperty( newObject, "someKey", {
-    value: "for more control of the property's behavior",
-    writable: true,
-    enumerable: true,
-    configurable: true
-});
-// If the above feels a little difficult to read, a short-hand could
-// be written as follows:
-var defineProp = function ( obj, key, value ){
-  var config = {
-    value: value,
-    writable: true,
-    enumerable: true,
-    configurable: true
-  };
-  Object.defineProperty( obj, key, config );
-};
-// To use, we then create a new empty "person" object
-var person = Object.create( Object.prototype );
-// Populate the object with properties
-defineProp( person, "car", "Delorean" );
-defineProp( person, "dateOfBirth", "1981" );
-defineProp( person, "hasBeard", false );
-console.log(person);
-// Outputs: Object {car: "Delorean", dateOfBirth: "1981", hasBeard: false}
- 
-// 4. Object.defineProperties
-// Set properties
-Object.defineProperties( newObject, {
-  "someKey": {
-    value: "Hello World",
-    writable: true
-  },
-  "anotherKey": {
-    value: "Foo bar",
-    writable: false
-  }
-});
-// Getting properties for 3. and 4. can be done using any of the
-// options in 1. and 2.
+| Aspect                  | Description                                                                                                     |
+|-------------------------|-----------------------------------------------------------------------------------------------------------------|
+| **Key Ordering**        | The order of keys in JavaScript objects is not guaranteed to be the same as the order in which they were added. |
+| **Example**             | ```const myObj = { b: 2, a: 1, c: 3 }; ```                                                        |
+| **Key Iteration Order** | The order in which keys are iterated over in a `for...in` loop is not guaranteed and may vary between engines. |
+| **ECMAScript 6+ Order** | In ECMAScript 6 and later, objects maintain their insertion order for string keys (not guaranteed for numbers). |
+| **Object.keys() Order** | The `Object.keys()` method returns keys in ECMAScript 6+ order.                                                 |
+| **Object.getOwnPropertyNames() Order** | The `Object.getOwnPropertyNames()` method returns keys in ECMAScript 6+ order.                         |
 
-// Usage:
-// Create a race car driver that inherits from the person object
-var driver = Object.create( person );
-// Set some properties for the driver
-defineProp(driver, "topSpeed", "100mph");
-// Get an inherited property (1981)
-console.log( driver.dateOfBirth );
-```  
+In the provided example, `myObj` has keys `'b'`, `'a'`, and `'c'`. While modern JavaScript engines often maintain the order of keys in the same order they were added for string keys, it's essential to note that this behavior is not guaranteed in all situations.
 
-```javascript
-
-// deleting existing property
-delete user.age;
-
-// adding mulriword property
-let user = {
-  name: "John",
-  age: 30,
-  "likes birds": true  // multiword property name must be quoted
-};
-
-// an object declared as const can be modified.
-const user = {
-  name: "John"
-};
-user.name = "Pete"; // (*)
-alert(user.name); // Pete
-// The const would give an error only if we try to set user=... as a whole.
-// There’s another way to make constant object properties
-
-// get property values of the object: using square bracket notation
-// set
-user["likes birds"] = true;
-
-// get
-alert(user["likes birds"]); // true
-
-// delete
-delete user["likes birds"];
-
-// multiword keys work only in square bracket notation and we can use variables in square bracket notation
-let user = {
-  name: "John",
-  age: 30
-};
-let key = prompt("What do you want to know about the user?", "name");
-// access by variable
-alert( user[key] ); // John (if enter "name")
-
-// Property value shorthand
-// we often use existing variables as values for property names
-function makeUser(name, age) {
-  return {
-    name: name,
-    age: age,
-  };
-}
-let user = makeUser("John", 30);
-alert(user.name); // John
-
-// We can use both normal properties and shorthands in the same object:
-let user = {
-  name,  // same as name:name
-  age: 30
-};
-
-// Property existence test, “in” operator
-// Reading a non-existing property just returns undefined. So we can easily test whether the property exists:
-let user = {};
-alert( user.noSuchProperty === undefined ); // true means "no such property"
-
-//There’s also a special operator "in" for that.
-// syntax -> note the quotes around the key
-"key" in object
-
-let user = { name: "John", age: 30 };
-alert( "age" in user ); // true, user.age exists
-alert( "blabla" in user ); // false, user.blabla doesn't exist
-
-// undefined doesn't always work, but in does
-let obj = {
-  test: undefined
-};
-alert( obj.test ); // it's undefined, so - no such property?
-alert( "test" in obj ); // true, the property does exist!
-
-// for in loop for objects
-for (key in object) {
-  // executes the body for each key among object properties
-}
-
-// key order in object
-// integer properties are sorted, others appear in creation order
-let codes = {
-  "49": "Germany",
-  "41": "Switzerland",
-  "44": "Great Britain",
-  // ..,
-  "1": "USA"
-};
-for (let code in codes) {
-  alert(code); // 1, 41, 44, 49
-}
-
-// if the keys are non-integer, then they are listed in the creation order
-let user = {
-  name: "John",
-  surname: "Smith"
-};
-user.age = 25; // add one more
-// non-integer properties are listed in the creation order
-for (let prop in user) {
-  alert( prop ); // name, surname, age
-}
-
-// Array is also an obj in js
-```
+For consistent key ordering, especially when you rely on a specific order, consider using arrays or maps instead of regular objects.
 
 #### Object copying, references
 
-One of the fundamental differences of objects vs primitives is that they are stored and copied “by reference”.
+**Objects Copied by Reference:**
+In JavaScript, objects are reference types. When you assign an object to another variable, you are copying a reference to the same object in memory. As a result, both variables point to the same object, and any changes made through one variable are reflected in the other because they share the same reference.
 
-To copy obj. we can use spread operator, but it will only do a shallow clone, for deep clone we can do JSON.parse(JSON.stringify(obj)), but this is expensive.
-Best way - lodash's clonedeep method
+**Table: Ways to Copy Objects (Reference vs. New Object)**
 
-```var A = _.cloneDeep(obj)```
+| Method                                    | Description                                                                                                                     | Example                                                                                      | Copied by Reference or New Object? |
+|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|------------------------------------|
+| **Assignment (Reference Copy)**           | Assigning an object to another variable copies a reference to the same object. Changes in one variable affect the other.        | `const obj1 = { prop: 'value' }; const obj2 = obj1; obj2.prop = 'new value';`                | Reference                           |
+| **Object.assign() (Shallow Copy)**       | Creates a new object and copies enumerable own properties (shallow copy) from one or more source objects. Nested objects remain referenced. | `const obj1 = { prop: 'value' }; const obj2 = Object.assign({}, obj1); obj2.prop = 'new value';` | New Object (Shallow Copy)           |
+| **Spread Operator (Shallow Copy)**       | Creates a new object and copies enumerable own properties (shallow copy) from an existing object. Nested objects remain referenced.     | `const obj1 = { prop: 'value' }; const obj2 = { ...obj1 }; obj2.prop = 'new value';`         | New Object (Shallow Copy)           |
+| **JSON.parse() and JSON.stringify() (Deep Copy)** | Creates a deep copy of an object by converting it to JSON and then parsing the JSON string back into an object. | `const obj1 = { prop: 'value' }; const obj2 = JSON.parse(JSON.stringify(obj1)); obj2.prop = 'new value';` | New Object (Deep Copy)           |
+| **Object.create() (Empty Object)**       | Creates a new object with the specified prototype object. The new object initially has no properties. Changes in one object do not affect the other. | `const obj1 = { prop: 'value' }; const obj2 = Object.create(obj1); obj2.prop = 'new value';` | New Object                         |
+| **Object.create() (Copied Properties)**   | Creates a new object with the specified prototype object and copies properties from another object. Changes in one object do not affect the other. | `const obj1 = { prop: 'value' }; const obj2 = Object.create(obj1, Object.getOwnPropertyDescriptors(obj1)); obj2.prop = 'new value';` | New Object                         |
 
-Primitive values: strings, numbers, booleans – are assigned/copied “as a whole value”.
+In the table:
 
-```javascript
-let message = "Hello!";
-let phrase = message;
-// As a result we have two independent variables, each one is storing the string "Hello!".
-
-// Objects are not like that.
-// A variable stores not the object itself, but its “address in memory”, in other words “a reference” to it. simlar to pointers in C.
-
-let user = { name: "John" };
-let admin = user; // copy the reference 
-admin.name = 'Pete'; // changed by the "admin" reference
-alert(user.name); // 'Pete', changes are seen from the "user" reference
-
-//objs comparison
-let a = {};
-let b = a; // copy the reference
-alert( a == b ); // true, both variables reference the same object
-alert( a === b ); // true
-
-let a = {};
-let b = {}; // two independent objects
-alert( a == b ); // false
-
-// Cloning and merging, Object.assign
-// if you need to copy obj to another variable
-// can be done manually using for in loop and copying each key
-// using Object.assign
-Object.assign(dest, [src1, src2, src3...])  
-
-let user = { name: "John" };
-let permissions1 = { canView: true };
-let permissions2 = { canEdit: true };
-// copies all properties from permissions1 and permissions2 into user
-Object.assign(user, permissions1, permissions2);
-// now user = { name: "John", canView: true, canEdit: true }
-// If the copied property name already exists, it gets overwritten:
-
-// Object.assign does not work in nested cloning as in nested cloning obj contains another obj and the inner obj gets copied as reference
-let user = {
-  name: "John",
-  sizes: {
-    height: 182,
-    width: 50
-  }
-};
-let clone = Object.assign({}, user); // to create a new variable instead of same reference
-alert( user.sizes === clone.sizes ); // true, same object
-// user and clone share sizes
-user.sizes.width++;       // change a property from one place
-alert(clone.sizes.width); // 51, see the result from the other one
-
-// to solve this use  _.cloneDeep(obj) from the JavaScript library lodash.
-```
+- Methods like assignment (`=`), `Object.assign()`, and the spread operator (`...`) result in references, meaning changes in one variable affect the other.
+- `JSON.parse()` and `JSON.stringify()` create a deep copy by converting the object to a JSON string and then parsing it back, resulting in two separate objects.
+- `Object.create()` can be used to create new objects with specified prototypes. The first variant creates an empty object, while the second variant copies properties from another object, effectively creating a new object with the same properties but not sharing references.
 
 #### Property descriptors
 
@@ -372,142 +206,6 @@ Object properties, besides a value, have three special attributes (so-called “
 2. enumerable – if true, then listed in loops, otherwise not listed.
 3. configurable – if true, the property can be deleted and these attributes can be modified, otherwise not. Making a property non-configurable is a one-way road. We cannot change it back with defineProperty.
 When we create an object “the usual way”, all of them are true. But we also can change them anytime.
-
-##### getting/setting the flags
-
-```javascript
-/// get syntax
-let descriptor = Object.getOwnPropertyDescriptor(obj, propertyName);
-
-//e.g.
-let user = {
-  name: "John"
-};
-let descriptor = Object.getOwnPropertyDescriptor(user, 'name');
-alert( JSON.stringify(descriptor, null, 2 ) );
-/* property descriptor:
-{
-  "value": "John",
-  "writable": true,
-  "enumerable": true,
-  "configurable": true
-}
-*/
-
-//set syntax
-Object.defineProperty(obj, propertyName, descriptor)
-
-//e.g.
-let user = {
-  name: "John"
-};
-Object.defineProperty(user, "name", {
-  writable: false
-});
-user.name = "Pete"; // Error: Cannot assign to read only property 'name'
-```
-
-Errors appear only in strict mode
-In the non-strict mode, no errors occur when writing to non-writable properties and such. But the operation still won’t succeed. Flag-violating actions are just silently ignored in non-strict.
-
-#### Property getters and setters
-
-It’s accessor properties. They are essentially functions that execute on getting and setting a value, but look like regular properties to an external code.
-These are used in object.defineproperty as well  
-
-1. **Using Objects**
-
-```javascript
-//syntax
-let obj = {
-  get propName() {
-    // getter, the code executed on getting obj.propName
-  },
-  set propName(value) {
-    // setter, the code executed on setting obj.propName = value
-  }
-};
-
-//e.g.
-let user = {
-  name: "John",
-  surname: "Smith",
-  get fullName() {
-    return `${this.name} ${this.surname}`;
-  }
-};
-alert(user.fullName); // John Smith
-//user.fullName = "Test"; // Error (property has only a getter)
-//note error only in strict mode otherwise ignored
-```
-
-One of the great uses of accessors is that they allow to take control over a “regular” data property
-
-```javascript
-function User(name, age) {
-  this.name = name;
-  this.age = age;
-}
-let john = new User("John", 25);
-alert( john.age ); // 25
-//But sooner or later, things may change. Instead of age we may decide to store birthday
-// Now what to do with the old code that still uses age property?
-//We can try to find all such places and fix them, but that takes time and can be hard to do if that code is used by many other people
-function User(name, birthday) {
-  this.name = name;
-  this.birthday = birthday;
-  // age is calculated from the current date and birthday
-  Object.defineProperty(this, "age", {
-    get() {
-      let todayYear = new Date().getFullYear();
-      return todayYear - this.birthday.getFullYear();
-    }
-  });
-}
-let john = new User("John", new Date(1992, 6, 1));
-alert( john.birthday ); // birthday is available
-alert( john.age );      // ...as well as the age
-```
-
-2. **Using functions**
-
-```javascript
-function Circel(radius) {
-// with new keyword, new obj is created and this is assigned to it
-// radius is now prop of new obj
-  this.radius = radius;
-// abc is now private member of this func due to closure
-  let abc= 123
-// private
-  Let computeLocations = function(factor) {
-    // code
-  // public
-  this.draw = function() {
-    computeLocations(this.radius)
-    console.log('draw')
-  } 
-
-// getter for privatevmemeber abc
-Object.defineProperty(this, 'abc', {
-// get is special keyword for getter
-  get: function() {
-  return abc
-}})
-}
-let circle = new Circle(5)
-circle.computeLocations(1) // error privatebmemebet
-concole.log(circle.abc) works because of getter
-circle.abc =2 // error because private and no setter found, use set keyword for setter
-set: function(value) {
-//can do some validation
-If(value<2)
-  throw new Error('too small')
-else
-abc=value} 
-
-circle.abc=1 // throws error - too small
-circle.abc=5 // works 
-```
 
 ### Prototypal inheritance
 
