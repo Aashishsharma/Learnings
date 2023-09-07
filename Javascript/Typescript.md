@@ -16,7 +16,8 @@ to run - ```tsc fileName.ts```
 This typescript compiler converts typescript code to javascript. Hence even though typescript has features like private amd protected members like java and in typescript env they work same as java but when the code gets compiled to normal javascript, private members can still be accessed in javascript.
 But when you are working in typescript you would normally not touch the compiled .js files.  
 **Hence TypeScript's private members are enforced primarily at compile time, while Java enforces privacy both at compile time and runtime**  
-**Hence Type annotations never change the runtime behavior of your program.**
+**Hence Type annotations never change the runtime behavior of your program.**  
+**Hence typescript won't change any runtime behavior of javascript**
 
 ### Explit types in typescript
 
