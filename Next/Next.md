@@ -36,3 +36,29 @@ React framework that gives you building blocks to create fast web applications.
 | **Performance Optimization (Post-Load)**   | Less suitable for post-load performance optimization as it involves server rendering. | Ideal for optimizing performance after the initial page load, especially for client-side interactivity. |
 | **Reduced Server Load**                   | Helps distribute the server load by rendering content on the server. | Offloads processing to the client and reduces the server load. |
 | **Single-Page Applications (SPAs)**        | Less common in SPAs where most rendering and routing occur on the client side. | Common in SPAs where client-side rendering is the default. |
+
+## Routing
+Folders are used to define routes. and within each folder there must be a page.tsx as a leaf file  
+Files are used to create UI that is shown for a route segment  
+
+Default root folder is app
+
+![alt text](PNG/routing.png "Class overview")  
+
+#### File conventions
+
+| Type           | Explanation                                      |
+|----------------|--------------------------------------------------|
+| layout         | Layout components that provide a shared user interface for a specific segment of your application and its child components. |
+| page           | Page components represent the unique user interface of a specific route and make those routes publicly accessible. |
+| loading        | Loading components used to display loading indicators or UI while content is being fetched or rendered. |
+| not-found      | Not found components that display user interface elements for when a specific segment or route is not found. |
+| error          | Error components for rendering UI when errors occur within a specific segment or route. |
+| global-error   | Global error components for handling application-wide errors and providing a consistent error UI. |
+| route          | Route components that define server-side API endpoints accessible within your application. |
+| template       | Template components that provide specialized and re-rendered layout user interfaces for specific segments of your application. |
+| default        | Default components used as fallback UI for parallel routes in your application when no other route matches. |
+
+#### Files inside a component
+![alt text](PNG/comp-hierarchy.png "Class overview") 
+
