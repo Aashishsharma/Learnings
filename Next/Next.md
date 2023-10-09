@@ -41,7 +41,8 @@ React framework that gives you building blocks to create fast web applications.
 Folders are used to define routes. and within each folder there must be a page.tsx as a leaf file  
 Files are used to create UI that is shown for a route segment  
 
-Default root folder is app
+Default root folder is app  
+**(every component inside app folder is by default server side component and cannot be publicly accessed)**
 
 ![alt text](PNG/routing.png "Class overview")  
 
@@ -62,3 +63,34 @@ Default root folder is app
 #### Files inside a component
 ![alt text](PNG/comp-hierarchy.png "Class overview") 
 
+![alt text](PNG/public-access.png "Class overview") 
+
+##### Layout
+A layout is UI that is shared between multiple pages. On navigation, layouts preserve state, remain interactive, and do not re-render.  
+2 requirements  
+
+1. Define a layout by default exporting a React component from a layout.js file. 
+2. The component should accept a children prop that will be populated with a child page during rendering.
+
+```typescript
+export default function DashboardLayout({children}:  React.ReactNode) {
+  return (
+    <section>
+      {/* Include shared UI here e.g. a header or sidebar */}
+      <nav></nav>
+ 
+      {children}
+    </section>
+  )
+}
+```
+
+##### Templates
+Similar to layouts but unlike layouts,  
+state is not preserved, and re-renders for each of thier children navigation  
+Use templates when you need features like useEffect (e.g logging page views) and useState (e.g a per-page feedback form).  
+```typescript
+export default function Template({ children }: { children: React.ReactNode }) {
+  return <div>{children}</div>
+}
+```

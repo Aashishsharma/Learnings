@@ -107,6 +107,86 @@ const anotherHundred: bigint = 100n;
 //symbol
 const uniqueSymbol: symbol = Symbol("unique");
 ```
+
+### 4. Arrays and objects
+```typescript
+let test = []
+let bands: string[] = []
+bands.push('Van Halen')
+// Tuple - lock the array positions with specific datatype
+let myTuple: [string, number, boolean] = ['Dave', 42, true]
+let mixed = ['John', 1, false]
+myTuple[0] = 42 //- will throw error because 1st elem of array should be of type string
+myTuple[1] = 42 // this will work
+
+// Objects
+let myObj: object
+myObj = {}
+
+//here ts automatically inferrs the object structure
+const exampleObj = {
+    prop1: 'Dave',
+    prop2: true,
+}
+
+// we can define custom type annotation for objects using type keywoard
+type Guitarist = {
+    name: string,
+    active: boolean,
+    albums: (string | number)[]
+}
+
+let gut1: Guitarist = {
+    name: 'abc',
+    active: true,
+    albums: [12,13, 'abc']
+}
+// we cannot do gut1.newProp = '123'
+// because newProp doesnot exists in type annotation
+// nor can we skip any propery while creating a new object, all props should be present
+// to ommit nay prop we can use ?
+
+// now name prop is optional 
+type Guitarist = {
+    name?: string,
+    active: boolean,
+    albums: (string | number)[]
+}
+interface Guitarist {
+    name?: string,
+    active: boolean,
+    albums: (string | number)[]
+}
+
+let evh: Guitarist = {
+    name: 'Eddie',
+    active: false,
+    albums: [1984, 5150, 'OU812']
+}
+
+let jp: Guitarist = {
+    active: true,
+    albums: ['I', 'II', 'IV']
+}
+
+const greetGuitarist = (guitarist: Guitarist) => {
+    if (guitarist.name) {
+        return `Hello ${guitarist.name.toUpperCase()}!`
+    }
+    return 'Hello!'
+}
+console.log(greetGuitarist(jp))
+// Enums 
+// "Unlike most TypeScript features, Enums are not a type-level addition to JavaScript but something added to the language and runtime."
+enum Grade {
+    U = 1,
+    D,
+    C,
+    B,
+    A,
+}
+console.log(Grade.U)
+```
 ### 4. any 
 
 ```typescript
