@@ -20,558 +20,1027 @@ But when you are working in typescript you would normally not touch the compiled
 **Hence Type annotations never change the runtime behavior of your program.**  
 **Hence typescript won't change any runtime behavior of javascript**
 
-### Explit types in typescript
-
-```typescript
-// add type annotations on person and date
-//we don’t always have to write explicit type annotations. TypeScript can even just infer the types for us even if we omit them.
-// hence annotations are not always mandatory
-function greet(person: string, date: Date) {
-  console.log(`Hello ${person}, today is ${date.toDateString()}!`);
+## .tsconfig.json
+```json
+{
+  "compilerOptions": {
+  "rootDir": "./src", // compile ts file from this dir
+  "outDir": "./build/js", // convert above files to js in this dir
+  "target": "es2016", // compile ts to js in es2016
+  "noEmitOnError": true // if true and if the file has compile error it won't be converted to js file // default = fasle
+  },
+  "include": [
+    "src" // compile only files from src folder
+  ]
 }
-
-//”greet takes a person of type string, and a date of type Date“
 ```
 
-### Downlevelling
+## Basic types
+If we don't provide any data type, ts will implicitly determine the datatype based on the value assigned
 
 ```typescript
-// greet.ts
-function greet(person: string, date: Date) {
-  console.log(`Hello ${person}, today is ${date.toDateString()}!`);
-}
-greet("Maddison", new Date());
-```
-now when we run ```run tsc greet.ts```
-the compiled js file would be
+// basic type
+let myName: string = 'Dave'
+let meaningOfLife: number;
+let isLoading: boolean;
+let album: any;
 
-```javascript
-// greet.js
-"use strict";
-function greet(person, date) {
-    console.log("Hello ".concat(person, ", today is ").concat(date.toDateString(), "!"));
-}
-greet("Maddison", new Date());
-```  
-2 Changes happen -   
-1. annotations gets removed
-2. template string is convertd to normal string with concat  
+myName = 'John'
+meaningOfLife = 42
+isLoading = true
+album = 5150
 
-template string gets converted to concat because by default ts compiler convers code to ES3 (older version of js)  
-to make ts compiler connvert to ES6 js code run ```tsc --target es2015 greet.ts```  
-we should use ES6 since it is supported in most of the browsers  
-
-### Strictness
-We can set the config in suah a way that we can tell ts compiler how strictly to so do the type checking.  
-This can be done either by setting a flag in shile running cli or in tsconfig.json file ```"strict": true```  
-
-Mostly these 2 strictness flags should be on  
-1. noImplicitAny - using type:any is basically going back to older js
-2. strictNullChecks - By default, values like null and undefined are assignable to any other type., to avoid this, enable this flag
-```typescript
-// With strictNullChecks = true
-let name: string = "Alice";
-let age: number = null; // Error: Type 'null' is not assignable to type 'number'
-function greet(person: string) {
-  return "Hello, " + person;
+//functions
+const sum = (a: number, b: string): number => {
+    return a + b
 }
-let result = greet(null); // Error: Argument of type 'null' is not assignable to parameter of type 'string'
-// With strictNullChecks = false (default behavior)
-let name2: string = "Bob";
-let age2: number = null; // No error
-function greet2(person: string) {
-  return "Hello, " + person;
-}
-let result2 = greet2(null); // No error
+
+// union type
+let postId: string | number
+let isActive: number | boolean
+
+// intersection type
+type CombinedType = Type1 & Type2 & Type3;
+// e.g.
+type Person = {
+    name: string;
+    age: number;
+};
+type Employee = {
+    empId: string;
+    jobTitle: string;
+};
+type PersonAndEmployee = Person & Employee;
+//The PersonAndEmployee type now requires an object to have properties from both Person and Employee:
+const john: PersonAndEmployee = {
+    name: 'John',
+    age: 30,
+    empId: 'E123',
+    jobTitle: 'Developer'
+};
+
+//regex type
+let re: RegExp = /\w+/g
 ```
 
-## Types
-
-### 1. Premitives (string, boolean, number)
-
-Type Annotations on Variables
+## Arrays and Objects
 ```typescript
-let myName: string = "Alice";
-```
+// Arrays
+let stringArr = ['one', 'hey', 'Dave'] // let stringArr: string[]
+let guitars = ['Strat', 'Les Paul', 5150] // let guitars: (string | number)[]
+let mixedData = ['EVH', 1984, true] // let mixedData: (string | number | boolean)[]
 
-### 2. Arrays (number[], string[])
+stringArr[0] = 'John'
+stringArr[0] = 42 // error, since numbers can't be assigned to this arr
+stringArr.push('hey')
 
-### 3. uncommon primitives
-bigint and symbol
-```typescript
-// bigint
-const oneHundred: bigint = BigInt(100);
-// Creating a BigInt via the literal syntax
-const anotherHundred: bigint = 100n;
-
-//symbol
-const uniqueSymbol: symbol = Symbol("unique");
-```
-
-### 4. Arrays and objects
-```typescript
-let test = []
-let bands: string[] = []
-bands.push('Van Halen')
-// Tuple - lock the array positions with specific datatype
+// Tuple 
 let myTuple: [string, number, boolean] = ['Dave', 42, true]
+
 let mixed = ['John', 1, false]
-myTuple[0] = 42 //- will throw error because 1st elem of array should be of type string
-myTuple[1] = 42 // this will work
+
+myTuple[1] = 42
+myTuple[1] = 'abc' // error since second elem of tuple needs to be a number
+myTuple[3] = 123 // error since 4 elem is not present in the tuple
+
+mixed = muTuple // works
+myTuple - mized // error
 
 // Objects
 let myObj: object
-myObj = {}
 
-//here ts automatically inferrs the object structure
+// here ts automaticallyy infers the type of prop1 and prop2
 const exampleObj = {
     prop1: 'Dave',
     prop2: true,
 }
+exampleObj.prop1 = 42 // error
 
-// we can define custom type annotation for objects using type keywoard
-type Guitarist = {
-    name: string,
-    active: boolean,
-    albums: (string | number)[]
-}
-
-let gut1: Guitarist = {
-    name: 'abc',
-    active: true,
-    albums: [12,13, 'abc']
-}
-// we cannot do gut1.newProp = '123'
-// because newProp doesnot exists in type annotation
-// nor can we skip any propery while creating a new object, all props should be present
-// to ommit nay prop we can use ?
-
-// now name prop is optional 
-type Guitarist = {
-    name?: string,
-    active: boolean,
-    albums: (string | number)[]
-}
 interface Guitarist {
-    name?: string,
+    name?: string, // this prop can be optional
     active: boolean,
     albums: (string | number)[]
 }
+
+// or we can have a type alises instead of interface = 
+// type Guitarist = {
+//     name?: string, // this prop can be optional
+//     active: boolean,
+//     albums: (string | number)[]
+// }
+
+// whn to use interface vs type
+// see functions section
 
 let evh: Guitarist = {
     name: 'Eddie',
     active: false,
     albums: [1984, 5150, 'OU812']
 }
-
 let jp: Guitarist = {
     active: true,
     albums: ['I', 'II', 'IV']
 }
 
+evh.years = 1942 // error,  cannot add new properties since those are not present in the interface annotation
+
 const greetGuitarist = (guitarist: Guitarist) => {
-    if (guitarist.name) {
+    if (guitarist.name) { // this is called typeguard or narrowing -- see below explaination
         return `Hello ${guitarist.name.toUpperCase()}!`
     }
     return 'Hello!'
 }
 console.log(greetGuitarist(jp))
+// explaination - since name is an optional property that we have defined in the Guitarist interface
+// ans in the function we are calling guitarist.name.toUpperCase() we might get an error
+// cannot read prop toUpperCase() of undefined since name can be undefined based on the obj passed
+// hence ts throws are error if we don't add this typeguuard or narrowing
+// removing errors at development time
+
 // Enums 
-// "Unlike most TypeScript features, Enums are not a type-level addition to JavaScript but something added to the language and runtime."
+//
 enum Grade {
-    U = 1,
+    U,
     D,
     C,
     B,
     A,
 }
-console.log(Grade.U)
+
+console.log(Grade.U) // output = 0, GRADE.D = 1
 ```
-### 4. any 
-
-```typescript
-let obj: any = { x: 0 };
-
-// if type is any then anything can be assigned
-obj.foo();
-obj.bar = 100;
-obj = "hello";
-```
-
-### 5. Functions
-```typescript
-// Parameter type annotation
-function greet(name: string) {
-  console.log("Hello, " + name.toUpperCase() + "!!");
-}
-// Return type annotation
-function getFavoriteNumber(): number {
-  return 26;
-}
-// When return type is promise
-async function getFavoriteNumber(): Promise<number> {
-  return 26;
-}
-// Arrow function
-const numbers: number[] = [1, 2, 3, 4, 5];
-const doubledNumbers: number[] = numbers.map((num: number) => {
-  return num * 2;
-});
-```
-
-### 6. Objects
-
-To define an object type, we simply list its properties and their types.
-
-```typescript
-let pt: { x: number; y: number }
-
-// not if we do pt.z = 123, typescript will break, we need to specify z property while creating an object
-
-// optional properties
-function printName(obj: { first: string; last?: string }) {
-  // ...
-}
-// Both OK
-printName({ first: "Bob" });
-printName({ first: "Alice", last: "Alisson" });
-```
-
-### 7. Unions
-
-allows you to build new types out of existing ones
-
-```typescript
-// type of id can be number or string
-function printId(id: number | string) {
-  console.log("Your ID is: " + id);
-}
-// OK
-printId(101);
-// OK
-printId("202");
-// Error
-printId({ myID: 22342 }); //Argument of type '{ myID: number; }' is not assignable to parameter of type 'string | number'.
-
-// we need to explicitly handle any type of in the printId funtcion
-// if we do id.toUpperCase() and type of id is number, it would break, in that case
-// use typeof operator and do the necessary branching
-```
-
-### 8. Type Aliases
-a name for any new custom type that we create, it is a way to name an object type:
-```typescript
-// create a new Alias
-type Point = {
-  x: number;
-  y: number;
-};
-// here not Point is a new type alias for the object which we have created
-
-// notice we have assigned a new type annotation to pt object
-function printCoord(pt: Point) {
-  console.log("The coordinate's x value is " + pt.x);
-  console.log("The coordinate's y value is " + pt.y);
-}
- 
-printCoord({ x: 100, y: 100 });
-```
-
-### 9. Interface
-
-An interface declaration is another way to name an object type:
-
-```typescript
-// create a new interface / similar to alias we created above
-interface Point {
-  x: number;
-  y: number;
-}
-function printCoord(pt: Point) {
-  console.log("The coordinate's x value is " + pt.x);
-  console.log("The coordinate's y value is " + pt.y);
-}
-printCoord({ x: 100, y: 100 });
-```
-
-**Interface vs type aliases**
-| Aspect                   | Interfaces                      | Type Aliases (Type)                 |
-|--------------------------|---------------------------------|------------------------------------|
-| Inheritance              | Supports extending other interfaces | Can be used to combine types via intersections |
-
-**function signature example**
-```typescript
-interface Calculator {
-  add(x: number, y: number): number;
-  subtract(x: number, y: number): number;
-}
-const calc: Calculator = {
-  add(x, y) {
-    return x + y;
-  },
-  subtract(x, y) {
-    return x - y;
-  },
-};
-const result1 = calc.add(5, 3); // 8
-const result2 = calc.subtract(10, 4); // 6
-```
-
-### 10. Type assertions
-Type assertion in TypeScript is a way to tell the TypeScript compiler that you, the developer, have more information about the type of a value than TypeScript can infer automatically.  
-For example, if you’re using document.getElementById, TypeScript only knows that this will return some kind of HTMLElement, but you might know that your page will always have an HTMLCanvasElement with a given ID  
-
-```typescriptj
-// using as keyword (preferred way)
-const myCanvas = document.getElementById("main_canvas") as HTMLCanvasElement;
-
-// using angled brackets (used in oler ts versions)
-const myCanvas = <HTMLCanvasElement>document.getElementById("main_canvas");
-```
-
-### 11 Literal types
-Literal types in TypeScript allow you to specify exact values that a variable or parameter can have.
-```typescript
-//String literal types allow you to specify exact string values that a variable or parameter can have.
-function printText(s: string, alignment: "left" | "right" | "center") {
-  // ...
-}
-printText("Hello, world", "left");
-printText("G'day, mate", "centre");
-//Argument of type '"centre"' is not assignable to parameter of type '"left" | "right" | "center"'.
-
-// numeric literal types
-function checkQuantity(value: 1 | 2 | 3) {
-  console.log(value);
-}
-checkQuantity(3); // OK
-checkQuantity(4); // Error: Argument of type '4' is not assignable to parameter of type '1 | 2 | 3'.
-```
-
- ([Index](#table-of-contents))
-
-## Narrowing
-1. user defined typeguard
-```typescript
-function isFish(pet: Fish | Bird): pet is Fish {
-  return (pet as Fish).swim !== undefined;
-}
-
-//The is keyword is typically used in user-defined type guard functions
-//The as keyword is used for type assertions
-// e.g. 
-let value: any = "Hello, TypeScript!";
-let length: number = (value as string).length;
-//use the as keyword when you are confident about the actual type of a value and want to inform TypeScript about it.
-```
-
- ([Index](#table-of-contents))
-This is the second section of the document.
 
 ## Functions
+
 ```typescript
-function greeter(fn: (a: string) => void) { // 
-  fn("Hello, World");
-}
-function printToConsole(s: string) {
-  console.log(s);
-}
-greeter(printToConsole);
-//The syntax (a: string) => void means “a function with one parameter, named a, of type string, that doesn’t have a return value”
+// interfaces are used in classes
+// type aliases are used in functions or any other place since 
+// type aliases can be used within type aliases
+// but we can't use interace within interface
 
-//OR
-type GreetFunction = (a: string) => void;
-function greeter(fn: GreetFunction) {
-  // ...
+// Type Aliases 
+type stringOrNumber = string | number // can't do this using an interface
+type stringOrNumberArray = (string | number)[]
+type Guitarist = {
+    name?: string,
+    active: boolean,
+    albums: stringOrNumberArray // here we used a type inside a type, we can do this when using an interface as well
 }
 
-// another example
-type DescribableFunction = {
-  description: string;
-  (someArg: number): boolean;
-};
-function doSomething(fn: DescribableFunction) {
-  console.log(fn.description + " returned " + fn(6));
+type UserId = stringOrNumber
+interface UserID = stringOrNumber // syntac error
+
+// Literal types
+// notice we are uing colon and not = sign
+// while defining a literal type 
+let myName: 'Dave' // this is equal to const
+let myName = 'John' // error
+
+let userName: 'Dave' | 'John' | 'Amy' // more than what const can do
+userName = 'Amy'
+
+// functions 
+const add = (a: number, b: number): number => {
+    return a + b
 }
-function myFunc(someArg: number) {
-  return someArg > 3;
+const logMsg = (message: any): void => {
+    console.log(message)
 }
-myFunc.description = "default description";
-doSomething(myFunc);
-```
+logMsg('Hello!')
+logMsg(add(2, 3))
+logMsg(add('a', 3)) // error
 
-#### 1. Constructor function
-```typescript
-type SomeConstructor = {
-  new (s: string): SomeObject;
-};
-function fn(ctor: SomeConstructor) {
-  return new ctor("hello");
+// without arrow function syntax
+let subtract = function (c: number, d: number): number {
+    return c - d
 }
-```
 
-### 2. Generic functions
-```typescript
-function firstElement<Type>(arr: Type[]): Type | undefined {
-  return arr[0];
+// using type aliases to create a function signature
+type mathFunction = (a: number, b: number) => number
+
+// this can be done using interface as well
+interface mathFunction {
+  (a: number, b: number): number
 }
-// since we have specified <T>, we can pass argunemt of any type ans ensure that
-// the input and output type will always remain same
 
-// we could have done this
-function firstElement(arr: number[]): number {
-  return arr[0];
+// use type aliases intead of defining the function parameters and return type
+let multiply: mathFunction = function (c, d) {
+    return c * d
 }
-// but then we can only pass array of numbers and not array os strings
-// in generic functions we can pass any datatype and ensure input and output type
-// will always be same
-// instead of <Type> we can use <T>
-```
 
-### 3. Adding constraints to generic type parameter
-```typescript
-// constraints are applied using extend keyword in the <Type>
-function longest<Type extends { length: number }>(a: Type, b: Type) {
-  if (a.length >= b.length) {
-    return a;
-  } else {
-    return b;
-  }
+logMsg(multiply(2, 2)) // 4
+
+// optional parameters 
+const addAll = (a: number, b: number, c?: number): number => {
+  // since c param is optional, we need to add a typeguard or ts will throw an error
+    if (typeof c !== 'undefined') {
+        return a + b + c
+    }
+    return a + b
 }
-//Type extends { length: number } means - 
-//that the generic type Type must be a subtype of an object type with a length property of type number.
 
-// longerArray is of type 'number[]'
-const longerArray = longest([1, 2], [1, 2, 3]);
-// longerString is of type 'alice' | 'bob'
-const longerString = longest("alice", "bob");
-// Error! Numbers don't have a 'length' property
-const notOK = longest(10, 100);
-//Argument of type 'number' is not assignable to parameter of type '{ length: number; }'.
-// because the number type doesn’t have a .length property
-```
-
-common errors with generic types
-```typescript
-function minimumLength<Type extends { length: number }>(
-  obj: Type,
-  minimum: number
-): Type {
-  if (obj.length >= minimum) {
-    return obj;
-  } else {
-    return { length: minimum };
-  }
+// default param value
+const sumAll = (a: number = 10, b: number, c: number = 2): number => {
+    return a + b + c
 }
-//Type '{ length: number; }' is not assignable to type 'Type'.
-//'{ length: number; }' is assignable to the constraint of type 'Type', but 'Type' could be instantiated with a different subtype of constraint '{ length: number; }'.
 
-// are returning an object literal { length: minimum }, 
-// which doesn't guarantee that it has all the properties and methods expected for the type Type. 
+logMsg(addAll(2, 3, 2))
+logMsg(addAll(2, 3))
+logMsg(sumAll(2, 3))
+logMsg(sumAll(undefined, 3))
 
-// fix
-return { length: minimum } as Type; 
-// if we are certain that the returned object will behave as expected in the context where it's used
-```
-
-explicitly specifying argument types
-```typescript
-// in earlier example we didn't specify the arg types while calling a function
-// we conly specified generric type while creating a function,
-
-function combine<Type>(arr1: Type[], arr2: Type[]): Type[] {
-  return arr1.concat(arr2);
+// Rest Parameters 
+const total = (a: number, ...nums: number[]): number => {
+    return a + nums.reduce((prev, curr) => prev + curr)
 }
-const arr = combine([1, 2, 3], ["hello"]); // din't specify arg tpyes while calling a func
-//Type 'string' is not assignable to type 'number'.
 
-// optionally we can specify the args type while calling a function
-const arr = combine<string | number>([1, 2, 3], ["hello"]);
-```
+logMsg(total(10, 2, 3)) // 15
 
-### 4. Optional parameters (using ?)
-```typescript
-function f(x?: number) {
-  // ...
+// if a function has infinite loop or throws an error
+// then return type is never
+const createError = (errMsg: string): never => {
+    throw new Error(errMsg)
 }
-f(); // OK
-f(10); // OK
-```
 
-### 5. Function overload
-```typescript
-function makeDate(timestamp: number): Date;
-function makeDate(m: number, d: number, y: number): Date;
-function makeDate(mOrTimestamp: number, d?: number, y?: number): Date {
-  if (d !== undefined && y !== undefined) {
-    return new Date(y, mOrTimestamp, d);
-  } else {
-    return new Date(mOrTimestamp);
-  }
+// custom type guard 
+const isNumber = (value: any): boolean => {
+    return typeof value === 'number'
+        ? true : false
 }
-const d1 = makeDate(12345678);
-const d2 = makeDate(5, 5, 5);
-const d3 = makeDate(1, 3);
-//No overload expects 2 arguments, but overloads do exist that expect either 1 or 3 arguments.
-```
 
-### 6. Other type annotations used in the context of function
-1. void
-```typescript
-// The inferred return type is void
-function noop() {
-  return;
-}
-```
-2. unknown
-```typescript
-// you need to explicitly handle and type-check the return value before using
-function getUserInput(): unknown {
-  // ...
-}
-const userInput = getUserInput();
-const strLength = userInput.length; // this line will throw error - 'userInput' is of type 'unknown'. explicitly handleit
-// since return type is unknow we need to explicitly use typeguard using typeof operator
-if (typeof userInput === "string") {
-  // Type-safe usage
-  const strLength = userInput.length;
-}
-// if return type iof func is any
-const strLength = userInput.length; // this line will not throw error
-```
-3. never
-Use the never type when you want to convey that a function will never return normally, typically because it throws an exception, enters an infinite loop, or is used for exhaustiveness checking in type guards.
-```typescript
-function fail(msg: string): never {
-  throw new Error(msg);
+// use of the never type 
+const numberOrString = (value: number | string): string => {
+    if (typeof value === 'string') return 'string'
+    if (isNumber(value)) return 'number'// using custom typeguard
 }
 ```
 
-4. Function
-You can use the "Function" type to define the type of functions. The syntax looks like this:
+## Type assertion
+
+When you know what the datatype would be which ts can't determine implicitly, we use type assertion
+
 ```typescript
-let myFunction: Function;
-// Example of a function with specific parameters and return type
-let add: Function = (a: number, b: number): number => a + b;
-// Using the function
-let result: number = add(5, 3); // result is 8
+// e.g.
+const htmlElem = document.getElementByID('myCanvas').innerHTML as HTMLCanvasElement
+//using angled bracket syntax
+const htmlElem = <HTMLCanvasElement>document.getElementByID('myCanvas').innerHTML
+// angled bracket syntax can't be used in .jsx files, hence use as keyword
 ```
 
-### Parameter destructuring
 ```typescript
-function sum({ a, b, c }: { a: number; b: number; c: number }) {
-  console.log(a + b + c);
+type One = string
+type Two = string | number // more genric, union type
+type Three = 'hello' // more specific, literal type
+
+// convert to more or less specific 
+let a: One = 'hello'
+let b = a as Two // less specific 
+let c = a as Three // more specific 
+
+// using angled bracket
+let d = <One>'world'
+let e = <string | number>'world'
+
+// usecase of type assertion
+// return type of below func is number | string based on the value for c param (while is a literal type)
+const addOrConcat = (a: number, b: number, c: 'add' | 'concat'): number | string => {
+    if (c === 'add') return a + b
+    return '' + a + b
 }
-//OR
-type ABC = { a: number; b: number; c: number };
-function sum({ a, b, c }: ABC) {
-  console.log(a + b + c);
+
+// here if we don't use type asseriton using as keyword, we will get error
+// type number | string cannot be assigned to type string
+// since we are assigning myVal (string type) the return of addOrConcat function which is string | number
+// hence we used type assertion
+let myVal: string = addOrConcat(2, 2, 'concat') as string
+
+// Be careful! TS sees no problem - but a string is returned
+let nextVal: number = addOrConcat(2, 2, 'concat') as number
+
+// The DOM 
+const img = document.querySelector('img')! // adding ! at the end means it is a null type assertion
+// which means that we know better than ts that this value is not null
+const myImg = document.getElementById('#img') as HTMLImageElement
+const nextImg = <HTMLImageElement>document.getElementById('#img')
+
+
+// if we didn;t use type assertion in above code
+// ts will throw error img is possiblly null and it implicitly infers the type of img as HTMLElement
+// and no prop src exists on HTMLElement since p is also and html elem and it does not have src attribute
+img.src
+
+// now when we use as HTMLImageElement, ts understands that is it not null and has attribute src
+myImg.src
+
+```
+
+## Classes
+Access modifers in ts are same as that in Java, but only at compile time and not at run time
+
+```typescript
+class Coder {
+    // by default, all the class members need to be initialized in constructor
+    // if we don't want that, add the null assertion
+    secondLang!: string
+
+    // we need to specify access modifers for each of the members, if not provided we need to 
+    // add them as class members outside of the constructor
+    // default is public
+    // access modifiers same as java, private, protected not accessible outside clss
+    // protected avaiable to class and derived classes
+    constructor(
+        public readonly name: string,
+        public music: string,
+        private age: number,
+        protected lang: string = 'Typescript' // default value for a variable
+    ) {
+        this.name = name
+        this.music = music
+        this.age = age
+        this.lang = lang
+    }
+
+    public getAge() {
+        return `Hello, I'm ${this.age}`
+    }
 }
-sum({ a: 10, b: 3, c: 9 });
+
+const Dave = new Coder('Dave', 'Rock', 42)
+console.log(Dave.getAge()) // 42
+
+// ts will throw error, cannot access private / protected members outside class
+// but if we have noEmmitOnError = true enabled in .tsconfig
+// below code will work fin when compiled to .js
+// hence set noEmitOnError to true
+console.log(Dave.age) 
+console.log(Dave.lang)
+
+class WebDev extends Coder {
+    constructor(
+        public computer: string,
+        name: string,
+        music: string,
+        age: number,
+    ) {
+        super(name, music, age)
+        this.computer = computer
+    }
+
+    public getLang() {
+        return `I write ${this.lang}`
+    }
+}
+
+const Sara = new WebDev('Mac', 'Sara', 'Lofi', 25)
+console.log(Sara.getLang()) // I write typrscript
+console.log(Sara.age) // error in ts, works in js
+console.log(Sara.lang)
+/////////////////////////////////////
+
+interface Musician {
+    name: string,
+    instrument: string,
+    play(action: string): string
+}
+
+class Guitarist implements Musician {
+    name: string
+    instrument: string
+
+    constructor(name: string, instrument: string) {
+        this.name = name
+        this.instrument = instrument
+    }
+
+    play(action: string) {
+        return `${this.name} ${action} the ${this.instrument}`
+    }
+}
+
+const Page = new Guitarist('Jimmy', 'guitar')
+console.log(Page.play('strums'))
+//////////////////////////////////////
+
+class Peeps {
+    // count is a member of a class and not a member of an instance 
+    static count: number = 0
+
+    static getCount(): number {
+        return Peeps.count
+    }
+
+    public id: number
+
+    constructor(public name: string) {
+        this.name = name
+        this.id = ++Peeps.count
+    }
+}
+
+const John = new Peeps('John')
+const Steve = new Peeps('Steve')
+const Amy = new Peeps('Amy')
+
+console.log(Amy.id) // 3
+console.log(Steve.id) // 2
+console.log(John.id)// 1
+console.log(Peeps.count) // 3
+//////////////////////////////////
+// getters and setters
+// this is same as javascript, nothing new
+// just a reminder that we can use all js functionalities in ts
+class Bands {
+    private dataState: string[]
+
+    constructor() {
+        this.dataState = []
+    }
+
+    // getter - if setter is not present then this prop is readonly
+    public get data(): string[] {
+        return this.dataState
+    }
+
+    public set data(value: string[]) {
+        if (Array.isArray(value) && value.every(el => typeof el === 'string')) {
+            this.dataState = value
+            return
+        } else throw new Error('Param is not an array of strings')
+    }
+}
+
+const MyBands = new Bands()
+// with getters and setters, we can assign and read values as normal - see below
+// here getters and setter are called respectively
+// we can do cutom validations using getters and setters
+MyBands.data = ['Neil Young', 'Led Zep']
+console.log(MyBands.data)
+MyBands.data = [...MyBands.data, 'ZZ Top']
+console.log(MyBands.data)
+MyBands.data = ['Van Halen', 5150] // must be string data
+```
+
+## Index Signatures
+
+1. when we don't know what the obj properties would be  
+2. if an object has dynamic property at runtime 
+3. when we want to access obj properties dynamically
+
+```typescript
+// Index Signatures 
+
+interface TransactionObj {
+    Pizza: number,
+    Books: number,
+    Job: number
+}
+
+const todaysTransactions: TransactionObj = {
+    Pizza: -10,
+    Books: -5,
+    Job: 50,
+}
+
+console.log(todaysTransactions.Pizza) // works
+console.log(todaysTransactions['Pizza']) // works
+
+let prop: string = 'Pizza'
+console.log(todaysTransactions[prop]) // error since we are accessing obj property dynamically
+
+// same error below when we are dynamically accessing obj property using the for in loop to get all the obj keys
+const todaysNet = (transactions: TransactionObj): number => {
+    let total = 0
+    for (const transaction in transactions) {
+        total += transactions[transaction]
+    }
+    return total
+}
+
+// to solve this probelm use index signatures
+// syntax = use square brackets 
+interface TransactionObj {
+  [index: string]: number
+  // all the object properties would be of string datatype 
+  // and all the values of these properties would be of number datatpe
+}
+
+// we can also do
+interface TransactionObj {
+  [index: string | number ]: number | string
+  // all the object properties would be of string / number datatype 
+  // and all the values of these properties would be of number / string datatpe
+}
+console.log(todaysNet(todaysTransactions))
+
+// but then we can have below problem
+// property Dave doesn't exists but ts won't throw error because we use index signatures
+console.log(todaysTransactions['Dave']) // undefined
+
+// if we know that obj will definately have fixed properties and can have more
+interface TransactionObj {
+    [index: string]: number
+    Pizza: number,
+    Books: number,
+    Job: number
+}
+
+///////////////////////////////////
+
+interface Student {
+    //[key: string]: string | number | number[] | undefined
+    // since we have different datattypes of values below, we need to 
+    // specify all the value types in the index signature
+    // this is tedious, and if we dont want to use index signatres
+    // we can use keyOf (see below)
+    name: string,
+    GPA: number,
+    classes?: number[]
+}
+
+const student: Student = {
+    name: "Doug",
+    GPA: 3.5,
+    classes: [100, 200]
+}
+
+// console.log(student.test)
+
+for (const key in student) {
+    console.log(`${key}: ${student[key as keyof Student]}`)
+}
+
+Object.keys(student).map(key => {
+    console.log(student[key as keyof typeof student])
+})
+
+// as we know we need to use index signature to dynamically access
+// obj keys, if we don't want to use index signatures
+// we can use keyOf as below
+const logStudentKey = (student: Student, key: keyof Student): void => {
+    console.log(`Student ${key}: ${student[key]}`)
+}
+
+logStudentKey(student, 'name')
+
+```
+
+## Generics
+
+```typescript
+// syntax
+// 1. syntax for function
+function identity<T>(arg: T): T {
+    return arg;
+}
+// 2. syntx for class
+class GenericClass<T> {
+    value: T;
+    constructor(value: T) {
+        this.value = value;
+    }
+}
+// 3. syntax for generic array
+function reverseArray<T>(array: T[]): T[] {
+    return array.reverse();
+}
+// 4. syntax for generic interface
+interface Pair<T, U> {
+    first: T;
+    second: U;
+}
+
+
+const echo = <T>(arg: T): T => arg
+
+const isObj = <T>(arg: T): boolean => {
+    return (typeof arg === 'object' && !Array.isArray(arg) && arg !== null)
+}
+console.log(isObj([1, 2, 3])) // false
+console.log(isObj({ name: 'John' })) // true
+
+///////////////////////////////////
+
+const isTrue = <T>(arg: T): { arg: T, is: boolean } => {
+    if (Array.isArray(arg) && !arg.length) {
+        return { arg, is: false }
+    }
+    if (isObj(arg) && !Object.keys(arg as keyof T).length) {
+        return { arg, is: false }
+    }
+    return { arg, is: !!arg }
+}
+
+console.log(isTrue(false)) // false is false
+console.log(isTrue(0)) // 0 is false
+console.log(isTrue(true)) // true is true
+console.log(isTrue(1)) // 1 is true
+console.log(isTrue('Dave')) // Dave is true
+console.log(isTrue('')) // '' is false
+console.log(isTrue(null)) // null is false
+console.log(isTrue(undefined)) // undefined is false
+console.log(isTrue({})) // false
+console.log(isTrue({ name: 'Dave' })) // true
+console.log(isTrue([])) // false
+console.log(isTrue([1, 2, 3])) // true
+console.log(isTrue(NaN)) // false
+console.log(isTrue(-0)) // false
+
+// above example using interface
+
+interface BoolCheck<T> {
+    value: T,
+    is: boolean,
+}
+
+const checkBoolValue = <T>(arg: T): BoolCheck<T> => {
+    if (Array.isArray(arg) && !arg.length) {
+        return { value: arg, is: false }
+    }
+    if (isObj(arg) && !Object.keys(arg as keyof T).length) {
+        return { value: arg, is: false }
+    }
+    return { value: arg, is: !!arg }
+}
+
+// using extends keyword we can add constraints to a generic type parameter
+// this is used when a generic type needs to have required properties
+// This is a way to ensure that the generic type parameter meets certain requirements 
+// as shown below
+
+interface HasID {
+    id: number
+}
+
+const processUser = <T extends HasID>(user: T): T => {
+    // process the user with logic here 
+    return user
+}
+console.log(processUser({ id: 1, name: 'Dave' }))
+console.log(processUser({ name: 'Dave'})) // error the object needs to have id property
+
+//Another example of adding constraints to generic type using extends keyword
+// see how we are using more than 1 generic type (T and K)
+// k extends keyOf T means K must be a key of T (added constraints for K using extends keyword)
+
+const getUsersProperty = <T extends HasID, K extends keyof T>(users: T[], key: K): T[K][] => {
+    return users.map(user => user[key])
+}
+
+const usersArray = [
+    {
+        "id": 1,
+        "name": "Leanne Graham",
+        "username": "Bret",
+        "email": "Sincere@april.biz",
+        "address": {
+            "street": "Kulas Light",
+            "suite": "Apt. 556",
+            "city": "Gwenborough",
+            "zipcode": "92998-3874",
+            "geo": {
+                "lat": "-37.3159",
+                "lng": "81.1496"
+            }
+        },
+        "phone": "1-770-736-8031 x56442",
+        "website": "hildegard.org",
+        "company": {
+            "name": "Romaguera-Crona",
+            "catchPhrase": "Multi-layered client-server neural-net",
+            "bs": "harness real-time e-markets"
+        }
+    },
+    {
+        "id": 2,
+        "name": "Ervin Howell",
+        "username": "Antonette",
+        "email": "Shanna@melissa.tv",
+        "address": {
+            "street": "Victor Plains",
+            "suite": "Suite 879",
+            "city": "Wisokyburgh",
+            "zipcode": "90566-7771",
+            "geo": {
+                "lat": "-43.9509",
+                "lng": "-34.4618"
+            }
+        },
+        "phone": "010-692-6593 x09125",
+        "website": "anastasia.net",
+        "company": {
+            "name": "Deckow-Crist",
+            "catchPhrase": "Proactive didactic contingency",
+            "bs": "synergize scalable supply-chains"
+        }
+    },
+]
+
+console.log(getUsersProperty(usersArray, "email")) // return emailIds for all users ["Sincere@april.biz", "Shanna@melissa.tv"]
+console.log(getUsersProperty(usersArray, "username")) // return username for all users
+
+///////////////////////////////////////
+
+class StateObject<T> {
+    private data: T
+
+    constructor(value: T) {
+        this.data = value
+    }
+
+    get state(): T {
+        return this.data
+    }
+
+    set state(value: T) {
+        this.data = value
+    }
+}
+
+const store = new StateObject("John") // this is where now the generic type is string
+console.log(store.state)
+store.state = "Dave" // works
+store.state = 12 // error
+
+// notice here how we can specify the generic type while calling the constructor
+const myState = new StateObject<(string | number | boolean)[]>([15])
+myState.state = ['Dave', 42, true]
+console.log(myState.state)
+
+// see how we created differnt object types from a genric class
+// so in same obj instance, type needs to be same
+// in different obj instance, we define the type since the class is generic
+```
+
+## Utility types
+
+Provides a capability for type transformations.
+Common utility types  
+
+```typescript
+// Utility Types 
+// 1. Partial<T> - creates a new type by making all properties of an existing type T optional
+interface Assignment {
+    studentId: string,
+    title: string,
+    grade: number,
+    verified?: boolean,
+}
+
+// see how in Partial<Assignment> - we don't have to pass entire Assignmnet type object
+const updateAssignment = (assign: Assignment, propsToUpdate: Partial<Assignment>): Assignment => {
+    return { ...assign, ...propsToUpdate }
+}
+
+const assign1: Assignment = {
+    studentId: "compsci123",
+    title: "Final Project",
+    grade: 0,
+}
+console.log(updateAssignment(assign1, { grade: 95 }))
+const assignGraded: Assignment = updateAssignment(assign1, { grade: 95 })
+
+// 2. Required<T> - opposite of Partial. It makes all properties of an existing type T required
+// here all the props of assignemnet objtect type are required
+// we see in the assignment interface above, that verified prop is optional, but when we add required
+// even the verified optional prop becomes required
+const recordAssignment = (assign: Required<Assignment>): Assignment => {
+    // send to database, etc. 
+    return assign
+}
+
+// 3. ReadOnly<T> - creates a new type with all properties of an existing type T marked as read-only, preventing any modifications.
+const assignVerified: Readonly<Assignment> = { ...assignGraded, verified: true }
+assignVerified.grade = 22 // error -readonly
+
+recordAssignment({ ...assignGraded, verified: true })
+
+// 4. Record<K, T> - creates a new type with keys of type K and values of type T. It's useful for creating dictionaries or mapping types.
+const hexColorMap: Record<string, string> = {
+    red: "FF0000",
+    green: "00FF00",
+    blue: "0000FF",
+}
+
+type Students = "Sara" | "Kelly"
+type LetterGrades = "A" | "B" | "C" | "D" | "U"
+
+const finalGrades: Record<Students, LetterGrades> = {
+    Sara: "B",
+    Kelly: "U", // if we give any other grade, ts will throw an error
+}
+
+// record using interface
+interface Grades {
+    assign1: number,
+    assign2: number,
+}
+
+// in the record, keys needs to be of type students
+// and values needs to be of type Grades
+const gradeData: Record<Students, Grades> = {
+    Sara: { assign1: 85, assign2: 93 },
+    Kelly: { assign1: 76, assign2: 15 },
+}
+// 5. Pick<T, K> - creates a new type by selecting a subset of properties from an existing type T specified by the keys K
+// pick studentId and grade from Assignment interface and create this as a new type
+
+type AssignResult = Pick<Assignment, "studentId" | "grade">
+
+const score: AssignResult = {
+    studentId: "k123",
+    grade: 85,
+}
+
+// 6. Omit<T, K> - opposite of Pick
+// Omit grade and verified propss
+type AssignPreview = Omit<Assignment, "grade" | "verified">
+
+const preview: AssignPreview = {
+    studentId: "k123",
+    title: "Final Project",
+}
+
+// 7. Exclude and Extract 
+
+type adjustedGrade = Exclude<LetterGrades, "U">
+
+type highGrades = Extract<LetterGrades, "A" | "B">
+
+//Exclude and Extract are utility types in TypeScript that are designed for specific use cases involving filtering and selecting values from union types. 
+//On the other hand, Pick and Omit are utility types used for selecting and excluding properties from object types. 
+
+// 8. Nonnullable  - omit null and undefined
+
+type AllPossibleGrades = 'Dave' | 'John' | null | undefined
+type NamesOnly = NonNullable<AllPossibleGrades>
+
+// 9. ReturnType - used to extract the return type of a function type
+// useful when working with external libraries where function returns can change on library update
+
+// earlier scenario (before returntype)
+type newAssign = { title: string, points: number }
+
+const createNewAssign = (title: string, points: number): newAssign => {
+    return { title, points }
+}
+// we had to explicitly mention the return type, now if we change the return val of a function
+// we need to modify the newassign type also
+// instead of that use the return type as below
+
+const createNewAssign = (title: string, points: number) => {
+    return { title, points }
+}
+type NewAssign = ReturnType<typeof createNewAssign>
+// here even if we change the return type of a function, everything works no changes required in the types
+const tsAssign: NewAssign = createNewAssign("Utility Types", 100)
+console.log(tsAssign)
+
+// 10. Parameters - used to extract parameters type of a function type
+
+type AssignParams = Parameters<typeof createNewAssign>
+// now AssignParams have the type of createNewAssign functions parameter type
+// this is equivalent to
+type AssignParams = [
+  title: string,
+  points: number
+]
+// so instead of manually creating type for func parameter, we use the Parameter utility function
+
+const assignArgs: AssignParams = ["Generics", 100]
+
+const tsAssign2: NewAssign = createNewAssign(...assignArgs)
+console.log(tsAssign2)
+
+// 11. Awaited - used with the ReturnType of a Promise 
+
+interface User {
+    id: number,
+    name: string,
+    username: string,
+    email: string,
+}
+
+const fetchUsers = async (): Promise<User[]> => {
+
+    const data = await fetch(
+        'https://jsonplaceholder.typicode.com/users'
+    ).then(res => {
+        return res.json()
+    }).catch(err => {
+        if (err instanceof Error) console.log(err.message)
+    })
+    return data
+}
+
+type FetchUsersReturnType = Awaited<ReturnType<typeof fetchUsers>>
+// if we don't add awaited above, the type for FetchUsersReturnType would be Promise<Users[]>
+// after adding awaited the type for FetchUsersReturnType would be Users[]
+fetchUsers().then(users => console.log(users))
 ```
 
 
- ([Index](#table-of-contents))
-In conclusion, this is the end of the document.
+----------------TO-DO-------------------------------------
+Union and Intersection types
+Type aliases
+Type guards
+Type compatibility
+Advanced Types:
 
-## Objects
+Generics
+Mapped types
+Conditional types
+Keyof and Lookup types
+Enums
+
+Decorators:
+
+Class decorators
+Method decorators
+Property decorators
+Parameter decorators
+Modules and Namespaces:
+
+Export and import statements
+Namespace modules
+Inheritance and Interfaces:
+
+Extending classes and interfaces
+Abstract classes
+Implementing interfaces
+Function Overloading
+
+Type Assertion
+
+Type Inference and Compatibility
+
+Async/Await and Promises
+
+Modules and Namespaces:
+
+Working with modules
+Namespace modules
+Decorators:
+
+Class decorators
+Method decorators
+Property decorators
+Parameter decorators
+Error Handling:
+
+Exception handling
+Custom errors
+Declaration Files (.d.ts):
+
+Writing declaration files
+Using existing declaration files
+Tooling:
+
+TypeScript Compiler (tsc)
+tsconfig.json configuration
+TSLint or ESLint with TypeScript
+Advanced Features:
+
+Iterators and Generators
+Symbols
+Iterators and Generators
+Decorators
+Advanced OOP Concepts:
+
+Mixins
+Inversion of Control (IoC)
+Dependency Injection (DI)
+Advanced Techniques:
+
+Cross-compilation and compatibility
+Custom transformers
+Webpack and TypeScript Integration
+
+React with TypeScript
+
+Testing with TypeScript:
+
+Testing frameworks (Jest, Mocha, etc.)
+Type-safe testing
+TypeScript in Node.js:
+
+Writing Node.js applications in TypeScript
+Working with Node.js modules
+TypeScript and Web Development:
+
+Using TypeScript in the browser
+AJAX requests and fetch API
+TypeScript and Popular Frameworks:
+
+Angular with TypeScript
+Vue.js with TypeScript
+TypeScript and Package Managers:
+
+Using npm or Yarn with TypeScript
+Working with Third-Party Libraries:
+
+Using and creating type definitions
+Best Practices and Design Patterns:
+
+Clean code practices
+SOLID principles
+Debugging TypeScript Code
