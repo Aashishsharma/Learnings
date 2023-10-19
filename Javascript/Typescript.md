@@ -480,6 +480,110 @@ console.log(MyBands.data)
 MyBands.data = ['Van Halen', 5150] // must be string data
 ```
 
+## Type Guards
+
+Type guards help ensure that your code is type-safe and make it easier to work with complex type hierarchies and union types  
+1. Typeof typeguard
+2. instanceof typeguard
+3. custom typeguard   
+
+if we don't add typeguards in case ts is not able to identify the type, ts will throw an error
+
+```typescript
+// 1. Typeof Typeguard
+function isNumber(value: any): value is number {
+    // here value is number is a type predicate in ts (see below)
+    return typeof value === "number";
+}
+let x: number | string = 42;
+if (isNumber(x)) {
+    // Here, TypeScript knows that x is a number.
+    x.toFixed(2);
+}
+
+// 2. instanceof typeguard
+class Animal {
+    speak() {
+        console.log("Animal speaks");
+    }
+}
+class Dog extends Animal {
+    bark() {
+        console.log("Dog barks");
+    }
+}
+function speakOrBark(pet: Animal): void {
+    if (pet instanceof Dog) {
+        // TypeScript now knows that pet is a Dog.
+        pet.bark();
+    } else {
+        pet.speak();
+    }
+}
+
+// 3. custom typeguard
+function isStringArray(arr: any[]): arr is string[] {
+    return arr.every(item => typeof item === "string");
+}
+let data: (string | number)[] = ["apple", "banana", 42];
+if (isStringArray(data)) {
+    // TypeScript knows that data is a string array.
+    data.push("cherry");
+}
+
+```
+
+### Type predicate
+
+A type predicate is a function that tells TypeScript to narrow the type of a value.  
+It's like a filter for your variables to be more specific about their types.  
+
+```typescript
+function isNumber(value: any): value is number {
+    return typeof value === "number";
+}
+//isNumber is a user-defined function.
+//value is the variable you want to check the type of.
+//value is number is the return type, indicating that if the function returns true,
+//TypeScript should consider value to be of type number.
+let x: number | string = 42;
+if (isNumber(x)) {
+    // Inside this block, TypeScript knows that x is a number.
+    x.toFixed(2); // You can use number-specific methods.
+} else {
+    // Inside this block, TypeScript knows that x is a string.
+    x.length; // You can use string-specific methods.
+}
+```
+
+### Type compatibility / type inference
+
+It is a feature that determines whether one type is assignable to another type
+
+```typescript
+// 1. Duck typing
+// "If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck." 
+// 
+interface Animal {
+    name: string;
+}
+interface Dog {
+    name: string;
+    breed: string;
+}
+let animal: Animal;
+let dog: Dog;
+animal = dog; // This is valid because Dog has all the properties of Animal.
+
+let a: ("abc" | "pqr"); // literal type
+a="pqr";
+let abc: string;
+abc = "qwe";
+abc = a; // possible due to duck typing
+a=abc // error since more generic type is being assigned to specific type
+
+```
+
 ## Index Signatures
 
 1. when we don't know what the obj properties would be  
@@ -940,13 +1044,8 @@ fetchUsers().then(users => console.log(users))
 
 
 ----------------TO-DO-------------------------------------
-Union and Intersection types
-Type aliases
-Type guards
-Type compatibility
-Advanced Types:
 
-Generics
+
 Mapped types
 Conditional types
 Keyof and Lookup types
@@ -964,14 +1063,10 @@ Export and import statements
 Namespace modules
 Inheritance and Interfaces:
 
-Extending classes and interfaces
 Abstract classes
 Implementing interfaces
 Function Overloading
 
-Type Assertion
-
-Type Inference and Compatibility
 
 Async/Await and Promises
 
@@ -995,10 +1090,6 @@ Writing declaration files
 Using existing declaration files
 Tooling:
 
-TypeScript Compiler (tsc)
-tsconfig.json configuration
-TSLint or ESLint with TypeScript
-Advanced Features:
 
 Iterators and Generators
 Symbols
@@ -1012,16 +1103,8 @@ Dependency Injection (DI)
 Advanced Techniques:
 
 Cross-compilation and compatibility
-Custom transformers
 Webpack and TypeScript Integration
 
-React with TypeScript
-
-Testing with TypeScript:
-
-Testing frameworks (Jest, Mocha, etc.)
-Type-safe testing
-TypeScript in Node.js:
 
 Writing Node.js applications in TypeScript
 Working with Node.js modules
@@ -1031,8 +1114,6 @@ Using TypeScript in the browser
 AJAX requests and fetch API
 TypeScript and Popular Frameworks:
 
-Angular with TypeScript
-Vue.js with TypeScript
 TypeScript and Package Managers:
 
 Using npm or Yarn with TypeScript
@@ -1043,4 +1124,3 @@ Best Practices and Design Patterns:
 
 Clean code practices
 SOLID principles
-Debugging TypeScript Code
