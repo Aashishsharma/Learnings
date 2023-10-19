@@ -561,9 +561,8 @@ if (isNumber(x)) {
 It is a feature that determines whether one type is assignable to another type
 
 ```typescript
-// 1. Duck typing
-// "If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck." 
-// 
+// 1. Structural type compatibility typing
+
 interface Animal {
     name: string;
 }
@@ -581,6 +580,26 @@ let abc: string;
 abc = "qwe";
 abc = a; // possible due to duck typing
 a=abc // error since more generic type is being assigned to specific type
+
+// 2. Duck typing
+// "If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck." 
+// object's type is determined at runtime based on its behavior
+const object1 = { name: "Alice" };
+const object2 = { name: "Bob" };
+
+// Create a function that accesses the 'name' property.
+function greet(obj: { name: string }) {
+    console.log(`Hello, ${obj.name}!`);
+}
+
+// Call the function with both objects.
+greet(object1); // Output: Hello, Alice!
+greet(object2); // Output: Hello, Bob!
+
+// We call the greet function with both object1 and object2, 
+//even though there are no explicit type declarations or interfaces
+// which are explicitly assinged to object1 and object2
+// still ts doesnot complain due to duck typing
 
 ```
 
@@ -1044,6 +1063,7 @@ fetchUsers().then(users => console.log(users))
 
 
 ----------------TO-DO-------------------------------------
+
 
 
 Mapped types
