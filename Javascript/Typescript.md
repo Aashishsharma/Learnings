@@ -896,7 +896,7 @@ console.log(myState.state)
 
 ## Utility types
 
-Provides a capability for type transformations.
+It is a feature in TypeScript that allow you to create new types by transforming the properties of an existing type
 Common utility types  
 
 ```typescript
@@ -1059,17 +1059,66 @@ type FetchUsersReturnType = Awaited<ReturnType<typeof fetchUsers>>
 // if we don't add awaited above, the type for FetchUsersReturnType would be Promise<Users[]>
 // after adding awaited the type for FetchUsersReturnType would be Users[]
 fetchUsers().then(users => console.log(users))
+
+// 12. Conditional -  create types that depend on some condition
+// TypeScript's conditional type operator syntax (T extends U ? X : Y) 
+type ConditionalMappedType<T> = {
+    [K in keyof T]: T[K] extends SomeCondition ? X : Y;
+};
+
+// e.g. fix this code
+type Vehicle = {
+    wheels: number;
+    isElectric: boolean;
+    speed: number;
+};
+type ConvertToMilesPerHour<T> = {
+    [K in keyof T]: K extends "speed" ? T[K] * 0.621371 : T[K];
+};
+type ConvertedVehicle = ConvertToMilesPerHour<Vehicle>;
+const car: ConvertedVehicle = {
+    wheels: 4,
+    isElectric: true,
+    speed: 100, // This property will be converted to miles per hour.
+};
+
+// another working example
+type Product = {
+    [index: string]: string | number;
+    name: string;
+    stockQuantity: number;
+};
+
+type StockStatus<T> = {
+    [K in keyof T]: T[K] extends { stockQuantity: 0 } ? "out of stock" : "available";
+};
+
+type ProductStatus = StockStatus<Product>;
+
+const products: Product[] = [
+    { name: "Product A", stockQuantity: 5 },
+    { name: "Product B", stockQuantity: 0 },
+    { name: "Product C", stockQuantity: 10 },
+];
+
+const productStatus: ProductStatus = products.reduce((result, product, index) => {
+    const key = `product${index + 1}` as keyof ProductStatus;
+    (result as any)[key] = product.stockQuantity === 0 ? "out of stock" : "available";
+    return result;
+}, {} as ProductStatus);
+
+// Log the stock status of each product.
+for (const key in productStatus) {
+    console.log(`Product: ${key}, Stock Status: ${productStatus[key] as any}`);
+}
+
 ```
 
 
 ----------------TO-DO-------------------------------------
 
 
-
-Mapped types
-Conditional types
 Keyof and Lookup types
-Enums
 
 Decorators:
 
