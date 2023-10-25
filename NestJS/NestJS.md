@@ -380,3 +380,97 @@ export class CatsModule {}
 ##### Dynamic Modules
 TO-DO
 
+## Middlewares
+
+Middleware is a function which is called before the route handler.
+
+It can -  
+
+1. execute any code.
+2. make changes to the request and the response objects.
+3. end the request-response cycle.
+4. call the next middleware function in the stack.
+5. if the current middleware function does not end the request-response cycle, it must call next() to pass control to the next middleware function. Otherwise, the request will be left hanging.
+
+Middlewares in Nest can be added to a class or a function with @Injectable() decorator  
+
+**1. Middleware in a class**
+
+```javascript
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
+
+// middleware need to have injectable decorator
+@Injectable()
+// class also need to implement NestMiddleware interface
+export class LoggerMiddleware implements NestMiddleware {
+  use(req: Request, res: Response, next: NextFunction) {
+    console.log('Request...');
+    next();
+  }
+}
+```
+
+To apply the middleware we need to write below code in the modules class
+```javascript
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { CatsModule } from './cats/cats.module';
+
+@Module({
+  imports: [CatsModule],
+})
+
+// implemts NestModule and configure the middleware in the configure() method
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      // to exclude routes
+      .exclude(
+    { path: 'cats', method: RequestMethod.GET },
+    { path: 'cats', method: RequestMethod.POST },
+    'cats/(.*)',
+    )
+      .forRoutes({ path: 'cats', method: RequestMethod.GET }); // applies middleware for all get methods inside cats routes
+      // route wildcards
+      .forRoutes({ path: 'ab*cd', method: RequestMethod.ALL });
+      // can also take a controller
+      .forRoutes(CatsController);
+      // multiple controllers
+      .forRoutes([CatsController, abcdController]);
+  }
+}
+```
+
+**2. Middleware in a function** -   
+```javascript
+//logger.middleware.ts
+import { Request, Response, NextFunction } from 'express';
+
+export function logger(req: Request, res: Response, next: NextFunction) {
+  console.log(`Request...`);
+  next();
+};
+
+// in app.module.ts
+consumer
+  .apply(logger)
+  .forRoutes(CatsController);
+
+//applying multiple middlewares in sequence
+consumer.apply(cors(), helmet(), logger).forRoutes(CatsController);
+
+// global middleware
+const app = await NestFactory.create(AppModule);
+app.use(logger);
+await app.listen(3000);
+
+```
+
+## Exception filters
+
+When an exception is not handled by your application code, it is caught by this layer, which then automatically sends an appropriate user-friendly response.
+
+
+
