@@ -1114,82 +1114,47 @@ for (const key in productStatus) {
 
 ```
 
-
-----------------TO-DO-------------------------------------
-
-
-Keyof and Lookup types
-
-Decorators:
+## Decorators (To Do)
+Addes meta-deta (meta-logic) (meta-programming)  
+Can be added only to classes in TS
 
 Class decorators
 Method decorators
 Property decorators
 Parameter decorators
-Modules and Namespaces:
 
-Export and import statements
-Namespace modules
-Inheritance and Interfaces:
+## Typescript with React
+see react-typescript project
 
-Abstract classes
-Implementing interfaces
-Function Overloading
+## Typescript with ftech api
+```typescript
 
+// Define an interface for the expected response data structure
+interface ApiResponse {
+  userId: number;
+  id: number;
+  title: string;
+  completed: boolean;
+}
 
-Async/Await and Promises
+// Create a function that makes a Fetch request
+async function fetchTodo(id: number): Promise<ApiResponse> {
+  const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`);
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  const data: ApiResponse = await response.json();
+  return data;
+}
 
-Modules and Namespaces:
+// Usage example
+const todoId = 1;
+fetchTodo(todoId)
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 
-Working with modules
-Namespace modules
-Decorators:
-
-Class decorators
-Method decorators
-Property decorators
-Parameter decorators
-Error Handling:
-
-Exception handling
-Custom errors
-Declaration Files (.d.ts):
-
-Writing declaration files
-Using existing declaration files
-Tooling:
-
-
-Iterators and Generators
-Symbols
-Iterators and Generators
-Decorators
-Advanced OOP Concepts:
-
-Mixins
-Inversion of Control (IoC)
-Dependency Injection (DI)
-Advanced Techniques:
-
-Cross-compilation and compatibility
-Webpack and TypeScript Integration
-
-
-Writing Node.js applications in TypeScript
-Working with Node.js modules
-TypeScript and Web Development:
-
-Using TypeScript in the browser
-AJAX requests and fetch API
-TypeScript and Popular Frameworks:
-
-TypeScript and Package Managers:
-
-Using npm or Yarn with TypeScript
-Working with Third-Party Libraries:
-
-Using and creating type definitions
-Best Practices and Design Patterns:
-
-Clean code practices
-SOLID principles
+```
