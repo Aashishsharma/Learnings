@@ -35,12 +35,38 @@ Functional Reactive Programming (FRP) is like collecting drops of water from a r
 | Reactive Systems         | Systems designed to be responsive, resilient, and elastic.  |
 
 **Use Cases for Functional Reactive Programming:**
+
 1. Real-time data processing (e.g., stock market).
 2. Building web applications with responsive and real-time features.
 
+## Installation
+
+node >= 16
+```
+npm i -g @nestjs/cli
+nest new project-name
+```
+
+1. Bootstrap code
+
+```javascript
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  await app.listen(3000);
+}
+bootstrap();
+```
+
 ## Nestjs core concepts
+
 ### 1. Controllers
+
 Controllers in Nest are responsible for handling incoming requests and returning responses to the client. Nest will route incoming requests to handler functions in controller classes. We use the @Controller() decorator to create a controller class.
+
+Using CLI - ```nest g controller [name]```
 
 ```typescript
 import { Controller, Get } from '@nestjs/common';
@@ -53,7 +79,138 @@ return entries;
 }
 ```
 
+**1. Default response** -  
+when a request handler returns a JavaScript object or array, it will automatically be serialized to JSON. When it returns a JavaScript primitive type (e.g., string, number, boolean), however, Nest will send just the value without attempting to serialize it. This makes response handling simple: just return the value, and Nest takes care of the rest.  
+
+**When using libraries like express** -  
+we can use - ```response.status(200).send()```
+
+**2. Request Object** - 
+
+```javascript
+import { Controller, Get, Req } from '@nestjs/common';
+import { Request } from 'express';
+
+@Controller('cats')
+export class CatsController {
+  @Get()
+  findAll(@Req() request: Request): string {
+    return 'This action returns all cats';
+  }
+}
+```
+
+Req obj has all the http req details like body, header, queryparams and we can use decorators to extract these information
+
+```javascript
+import { Controller, Get, Post, Body, Query, Headers, Request, Response } from '@nestjs/common';
+
+@Controller('example')
+export class ExampleController {
+  constructor() {}
+
+  @Get('api-handler-example')
+  apiHandlerExample(
+    @Query() query: any, // @Query('param1') queryParam1: string = 'default1', // to extract param1 queryparam
+    @Body() body: any,
+    @Headers() headers: any, // @Headers('custom-header') customHeader: string = 'default-header', to extract only specific header
+    @Request() request: any,
+    @Response() response: any,
+  ) {
+    const result = {
+      queryParameters: query,
+      requestBody: body,
+      requestHeaders: headers,
+      requestObject: request.headers,
+      customResponse: 'This is a custom response message',
+    };
+    
+    response.status(201).json(result);
+  }
+}
+
+```
+
+**3. Resources**
+@Get(), @Post(), @Put(), @Delete(), @Patch(), @Options(), and @Head().  
+In addition, @All() defines an endpoint that handles all of them.
+
+**4. Route wildcards** -
+
+```javascript
+//will match abcd, ab_cd, abecd
+@Get('ab*cd')
+findAll() {
+  return 'This route uses a wildcard';
+}
+```
+
+The characters ?, +, *, and () may be used in a route path, and are subsets of their regular expression counterparts
+
+**4. Status code** - 
+
+```javascript
+@Post()
+@HttpCode(204)
+create() {
+  return 'This action adds a new cat';
+}
+```
+
+TO dynamically send the status code, we need to use library specific status methods  
+Like in express ```res.status(201).send()```
+
+**5. Headers** - 
+To specify a custom response header, you can either use a @Header() decorator or a library-specific response object (and call res.header() directly).
+
+```javascript
+@Post()
+@Header('Cache-Control', 'none')
+create() {
+  return 'This action adds a new cat';
+}
+```
+
+**6. Redirect** - 
+
+```javascript
+@Get()
+@Redirect('https://nestjs.com', 301)
+```
+
+**7. Route parameters** - 
+
+```javascript
+@Get(':id')
+findOne(@Param() params: any): string {
+  console.log(params.id);
+  return `This action returns a #${params.id} cat`;
+}
+```
+
+**8. Request payloads** - 
+A DTO (Data Transfer Object) schema is an object that defines how the data will be sent over the network. We could determine the DTO schema by using TypeScript interfaces, or by simple classes.
+Always use classes dor DTOs, since  TypeScript interfaces are removed during the transpilation  
+
+```javascript
+// create-cat.dto.ts
+export class CreateCatDto {
+  name: string;
+  age: number;
+  breed: string;
+}
+
+// cats.controller.ts
+@Post()
+async create(@Body() createCatDto: CreateCatDto) {
+  return 'This action adds a new cat';
+}
+```
+This DTO can be used as validation, so if any other property is sent by the client in the request,
+it automatically gets stripped out in the handler
+
 ### 2. Providers
+
 Providers in Nest are used to create services, factories, helpers, and more that
 can be injected into controllers and other providers using Nest’s built-in
 dependency injection. The @Injectable() decorator is used to create a provider
