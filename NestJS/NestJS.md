@@ -470,7 +470,58 @@ await app.listen(3000);
 
 ## Exception filters
 
-When an exception is not handled by your application code, it is caught by this layer, which then automatically sends an appropriate user-friendly response.
+When an exception is not handled by your application code, it is caught by this layer, which then automatically sends an appropriate user-friendly response.  
+All HttpException and subclasses of this excpetion are handeled by Nestjs.  
+When there is any other exception Nest js throws {"statusCode": 500, "message": "Internal server error"}
 
+```javascript
+import {HTTPException, HTTPStatus} from '@nest/common'
 
+@Get()
+async findAll() {
+  throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+}
 
+//api reposne would be
+{
+  "statusCode": 403,
+  "message": "Forbidden"
+}
+
+// the first arg can be on object as well and this class constructor also has optional 3rd arg
+@Get()
+async findAll() {
+  try {
+    await this.service.findAll()
+  } catch (error) { 
+    throw new HttpException({
+      status: HttpStatus.FORBIDDEN,
+      error: 'This is a custom message',
+    }, HttpStatus.FORBIDDEN, {
+      cause: error // 3rd arg - this is only for logging not sent to client
+    });
+  }
+}
+//api respone
+{
+  "status": 403,
+  "error": "This is a custom message"
+}
+```
+
+**Custom exception** - 
+```javascript
+// forbidden.exception.ts
+// should extend HttpException
+export class ForbiddenException extends HttpException {
+  constructor() {
+    super('Forbidden', HttpStatus.FORBIDDEN);
+  }
+}
+
+//cats.controller.ts
+@Get()
+async findAll() {
+  throw new ForbiddenException();
+}
+```
