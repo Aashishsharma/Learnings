@@ -11,21 +11,27 @@ import {
   Header,
   Param,
   ParseIntPipe,
+  UsePipes,
 } from '@nestjs/common';
 
-import { CreateCatDto } from './dto/cat.dto';
+import { CreateCatDto, createCatSchema } from './dto/cat.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './interfaces/cat.interface';
-import { InputTextValidator } from './pipes/input-text.validator';
+import {
+  InputTextValidator,
+  ZodValidationPipe,
+} from './pipes/input-text.validator';
 
 @Controller('cats')
 export class CatsController {
   constructor(private catsService: CatsService) {}
 
   //localhost:3000/cats
+  // using pipes - this ensures that the data passed in the post body exactly matches the catdto object
   @Post()
+  @UsePipes(new ZodValidationPipe(createCatSchema))
   async createCat(@Body() createCatDto: CreateCatDto) {
-    this.catsService.create(createCatDto);
+    this.catsService.create(createCatDto as Cat);
   }
 
   //localhost:3000/cats

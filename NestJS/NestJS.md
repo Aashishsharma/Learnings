@@ -617,7 +617,7 @@ async findOne(
 ```
 
 **Custom pipes** - 
-1. Create a custom pipe
+1. Create a custom pipe class whick implements PipeTransfrom interface
 2. Use it in the handler method
 ```javascript
 // 1. create pipe
@@ -648,7 +648,58 @@ export class InputTextValidator implements PipeTransform<string, string> {
 
 **Schema based validation using Zod** -  
 Schema validation can be done at middleware as well instead of doing it in pipes, but middlewares are dumb meaning middleware is unaware of the execution context, including the handler that will be called next.  
-Pipes are aware about the execution context
+Pipes are aware about the execution context.
 
+1. Create validation class implementing PipeTransform interface
+2. In the constructor provide schema create viz Zod
+3. use schema.parse() to  validate our incoming argument against the provided schema.
 
+```javascript
+import { PipeTransform, ArgumentMetadata, BadRequestException } from '@nestjs/common';
+import { ZodObject } from 'zod';
 
+export class ZodValidationPipe implements PipeTransform {
+  constructor(private schema: ZodObject<any>) {}
+
+  transform(value: unknown, metadata: ArgumentMetadata) {
+    try {
+      this.schema.parse(value);
+    } catch (error) {
+      throw new BadRequestException('Validation failed');
+    }
+    //here we are just returing value
+    //we can alos transform this value
+    //since pipes are also ment to transfor the data
+    return value;
+  }
+}
+```
+
+4. Now bind this pipe to the method handler, 3 steps are required  
+1. Create zodSchema
+2. Crette instance of the schema
+3. use @usePipes() decorator
+
+```javascript
+// step 1 - create zod schema
+// cat.dto.ts
+import { z } from 'zod';
+
+export const createCatSchema = z
+  .object({
+    name: z.string(),
+    age: z.number(),
+    breed: z.string(),
+  })
+  .required();
+
+export type CreateCatDto = z.infer<typeof createCatSchema>;
+
+// Step 2 and 3
+@Post()
+@UsePipes(new ZodValidationPipe(createCatSchema)) // create instance and pass the zodSchema as arg to this instance
+// and use @UsePipes decorator
+async create(@Body() createCatDto: CreateCatDto) {
+  this.catsService.create(createCatDto);
+}
+```
