@@ -616,9 +616,11 @@ async findOne(
 }
 ```
 
-**Custom pipes** - 
+**Custom pipes** -
+
 1. Create a custom pipe class whick implements PipeTransfrom interface
 2. Use it in the handler method
+
 ```javascript
 // 1. create pipe
 import {
@@ -676,6 +678,7 @@ export class ZodValidationPipe implements PipeTransform {
 ```
 
 4. Now bind this pipe to the method handler, 3 steps are required  
+
 1. Create zodSchema
 2. Crette instance of the schema
 3. use @usePipes() decorator
@@ -702,4 +705,15 @@ export type CreateCatDto = z.infer<typeof createCatSchema>;
 async create(@Body() createCatDto: CreateCatDto) {
   this.catsService.create(createCatDto);
 }
+```
+
+**Settiin up validation pipes globally** -
+
+```javascript
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
+  await app.listen(3000);
+}
+bootstrap();
 ```
