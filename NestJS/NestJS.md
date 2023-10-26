@@ -213,7 +213,7 @@ it automatically gets stripped out in the handler
 
 ### 2. Providers
 
-using CLI ``` nest g service cats```
+using CLI ```nest g service cats```
 
 Providers in Nest are used to create services, factories, helpers, and more.  
 The main idea of a provider is that it can be injected as a dependency; this means objects can create various relationships with each other, and the function of "wiring up" these objects can largely be delegated to the Nest runtime system.  
@@ -342,6 +342,7 @@ src
 |-- main.ts
 
 Sharing providers between modules
+
 ```javascript
 //cats.module.ts
 import { Module } from '@nestjs/common';
@@ -378,6 +379,7 @@ export class CatsModule {}
 ```
 
 ##### Dynamic Modules
+
 TO-DO
 
 ## Middlewares
@@ -412,6 +414,7 @@ export class LoggerMiddleware implements NestMiddleware {
 ```
 
 To apply the middleware we need to write below code in the modules class
+
 ```javascript
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
@@ -443,7 +446,8 @@ export class AppModule implements NestModule {
 }
 ```
 
-**2. Middleware in a function** -   
+**2. Middleware in a function** -
+
 ```javascript
 //logger.middleware.ts
 import { Request, Response, NextFunction } from 'express';
@@ -509,7 +513,8 @@ async findAll() {
 }
 ```
 
-**Custom exception** - 
+**Custom exception** -
+
 ```javascript
 // forbidden.exception.ts
 // should extend HttpException
@@ -524,4 +529,74 @@ export class ForbiddenException extends HttpException {
 async findAll() {
   throw new ForbiddenException();
 }
+```
+
+**Built-in HTTP exceptions** -
+
+1. BadRequestException
+2. UnauthorizedException
+3. NotFoundException
+4. ForbiddenException
+5. RequestTimeoutException
+6. MethodNotAllowedException
+7. PreconditionFailedException
+and many more
+
+```javascript
+throw new BadRequestException('Something bad happened', { cause: new Error(), description: 'Some error description' })
+// apoi resopnse
+{
+  "message": "Something bad happened",
+  "error": "Some error description",
+  "statusCode": 400,
+}
+```
+
+**Exception Filters** -  let you control the exact flow of control and the content of the response sent back to the client.
+
+a
+
+## Pipes
+
+@Injectable() decorator, and need to implement PipeTransform interface.  
+
+Pipes are designed for 2 purpose  
+
+1. data transformation
+2. validate input data
+
+A Pipe is executed just before a method is invoked, and the pipe receives the arguments destined for the method and operates on them
+
+Implementations  -
+
+1. Create a pipe or use a built-in pipe
+2. Map the pipe with the route
+
+**Built-in pipes** -
+
+1. ValidationPipe
+2. ParseIntPipe
+3. ParseFloatPipe
+4. ParseBoolPipe
+5. ParseArrayPipe
+6. ParseUUIDPipe
+7. ParseEnumPipe
+8. DefaultValuePipe
+9. ParseFilePipe
+
+To use a pipe, we need to bind an instance of the pipe class to the appropriate context.
+
+```javascript
+@Get(':id')
+async findOne(@Param('id', ParseIntPipe) id: number) {
+  return this.catsService.findOne(id);
+}
+
+// GET localhost:3000/abc
+{
+  "statusCode": 400,
+  "message": "Validation failed (numeric string is expected)",
+  "error": "Bad Request"
+}
+
 ```
