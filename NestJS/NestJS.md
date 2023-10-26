@@ -599,4 +599,56 @@ async findOne(@Param('id', ParseIntPipe) id: number) {
   "error": "Bad Request"
 }
 
+// with querystring parameter
+@Get()
+async findOne(@Query('id', ParseIntPipe) id: number) {
+  return this.catsService.findOne(id);
+}
+
+// send custom http response
+@Get(':id')
+async findOne(
+  //here we are creating new instance of the pipe
+  @Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }))
+  id: number,
+) {
+  return this.catsService.findOne(id);
+}
 ```
+
+**Custom pipes** - 
+1. Create a custom pipe
+2. Use it in the handler method
+```javascript
+// 1. create pipe
+import {
+  PipeTransform,
+  Injectable,
+  ArgumentMetadata,
+  BadRequestException,
+} from '@nestjs/common';
+
+@Injectable()
+export class InputTextValidator implements PipeTransform<string, string> {
+  transform(value: string, metadata: ArgumentMetadata): string {
+    console.log({ metadata });
+    if (!/^[a-zA-Z]+$/.test(value)) {
+      throw new BadRequestException('Invalid input. Only letters are allowed.');
+    }
+    return value;
+  }
+}
+
+// 2. use in the handler
+  @Get('validate/:text')
+  getText(@Param('text', InputTextValidator) text: string) {
+    return `Valid input: ${text}`;
+  }
+```
+
+**Schema based validation using Zod** -  
+Schema validation can be done at middleware as well instead of doing it in pipes, but middlewares are dumb meaning middleware is unaware of the execution context, including the handler that will be called next.  
+Pipes are aware about the execution context
+
+
+
