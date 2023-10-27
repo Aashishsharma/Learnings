@@ -790,6 +790,57 @@ export class AuthGuard implements CanActivate {
 
 **To-do - implement authentication and authorization**
 
+## Interceptors - 
+An interceptor is a class annotated with the @Injectable() decorator and implements the NestInterceptor interface  
+
+1. bind extra logic before / after method execution
+2. extend the basic function behavior
+3. completely override a function depending on specific conditions (e.g., for caching purposes)  
+
+Each interceptor implements the intercept() method, which takes two arguments. 
+1. ExecutionContext : ArgumentHost - adds several new helper methods that provide additional details about the current execution process  
+2. CallHandler - this interface implements the handle() method  
+
+usecase - logging
+
+```javascript
+// logging.interceptor.ts
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+// we use rxjs observable - (need to learn RxJS)
+@Injectable()
+export class LoggingInterceptor implements NestInterceptor {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    console.log('Before API handler...'); // this gets called before the handler function is executed
+
+    const now = Date.now();
+    return next
+      .handle() // we need to call this handle method oterwise the api handler function won't get called
+      // this handle method returns RxJS observable
+      .pipe(
+        tap(() => console.log(`After API handler... ${Date.now() - now}ms`)), // this function gets called after the handler function is executed
+      );
+  }
+}
+
+// now we need to bind this interceptor to a controller or a method of a controller
+@UseInterceptors(LoggingInterceptor)
+export class CatsController {}
+
+// output would be -
+// Before API handler
+// In API handler
+// After API handler - currentDate
+// this way we can log the time taken by the API handler
+
+//global interceptor
+const app = await NestFactory.create(AppModule);
+app.useGlobalInterceptors(new LoggingInterceptor());
+```
+
+
 ## DB connection using TypeORM - 
 
 https://thriveread.com/nestjs-typeorm-mssql/

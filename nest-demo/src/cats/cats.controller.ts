@@ -12,6 +12,7 @@ import {
   Param,
   ParseIntPipe,
   UsePipes,
+  UseInterceptors,
 } from '@nestjs/common';
 
 import { CreateCatDto, createCatSchema } from './dto/cat.dto';
@@ -22,7 +23,10 @@ import {
   ZodValidationPipe,
 } from './pipes/input-text.validator';
 
+import { LoggingInterceptor } from './interceptors/logging.interceptor';
+
 @Controller('cats')
+@UseInterceptors(LoggingInterceptor)
 export class CatsController {
   constructor(private catsService: CatsService) {}
 
