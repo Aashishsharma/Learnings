@@ -766,6 +766,7 @@ bootstrap();
 ```
 
 ## Guards
+
 A guard is a class annotated with the @Injectable() decorator, which implements the CanActivate interface.  
 Guards are mainly used for authorization - which are  used to determine whether a given request will be handled by the route handler or not, depending on certain conditions (like permissions, roles, ACLs, etc.) present at run-time.  
 Authentication can be done in middleware as well but not authorization, since Guards have access to ExecutionContext and thus know exactly what's going to be executed next but middlewares do not.  
@@ -790,14 +791,16 @@ export class AuthGuard implements CanActivate {
 
 **To-do - implement authentication and authorization**
 
-## Interceptors - 
+## Interceptors -
+
 An interceptor is a class annotated with the @Injectable() decorator and implements the NestInterceptor interface  
 
 1. bind extra logic before / after method execution
 2. extend the basic function behavior
 3. completely override a function depending on specific conditions (e.g., for caching purposes)  
 
-Each interceptor implements the intercept() method, which takes two arguments. 
+Each interceptor implements the intercept() method, which takes two arguments.
+
 1. ExecutionContext : ArgumentHost - adds several new helper methods that provide additional details about the current execution process  
 2. CallHandler - this interface implements the handle() method  
 
@@ -840,12 +843,45 @@ const app = await NestFactory.create(AppModule);
 app.useGlobalInterceptors(new LoggingInterceptor());
 ```
 
+## Custom Decorators
 
-## DB connection using TypeORM - 
+In the node.js world, it's common practice to attach properties to the request object. Then you manually extract them in each route handler, using code like the following:  
 
-https://thriveread.com/nestjs-typeorm-mssql/
+```javascript
+const user = req.user;
+```
+
+```javascript
+// step 1 - create a new decorator
+// user.decorator.ts
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+
+// this is a parameter decorator
+export const User = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    // ctx.switchToHttp() is called to switch the execution context to the HTTP context. 
+    // This is necessary because Nest.js supports multiple transport layers, 
+    // and this code is specifically interested in the HTTP context.
+    const request = ctx.switchToHttp().getRequest(); // .getRequest() returns the request object
+    return request.user; // here we are returning the request.user so that this user property of request ia available when this decorator is used
+    // note we are assuming that user property is already availabe in the request object
+  },
+);
+
+// now we can use this decorator
+@Get()
+async findOne(@User() user: UserEntity) {
+  console.log(user);
+}
+
+```
+
+## DB connection using TypeORM -
+
+<https://thriveread.com/nestjs-typeorm-mssql/>
 
 ```npm i mssql typeorm @nest/typeorm --save```
+
 ```javascript
 //step 1 - create ormconfig.ts
 import { SqlServerConnectionOption } from 'typeorm/driver/sqlserver/SqlServerConnectionOption'
