@@ -717,3 +717,129 @@ async function bootstrap() {
 }
 bootstrap();
 ```
+
+## DB connection using TypeORM
+
+```npm i mssql typeorm @nest/typeorm --save```
+```javascript
+//step 1 - create ormconfig.ts
+import { SqlServerConnectionOption } from 'typeorm/driver/sqlserver/SqlServerConnectionOption'
+import {User_Test} from './user/user.entity'
+
+const config: SqlServerConnectionOption = {
+    type: "mssql",
+    host: "AUSPWDGADB07.aus.amer.dell.com",
+    database: "DFS_MKTG",
+    synchronize: false,
+    schema: "DBO",
+    options: {
+      trustServerCertificate: true
+    },
+    authentication: {
+      type: "ntlm",
+      options: {
+        userName: '',
+        password: '',
+        domain: 'americas'
+      }
+    },
+    entities: [User_Test]
+}
+
+// step 2 - configure app module to use TypeORMModule
+import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { UserModule } from './users/users.module';
+import { TypeOrmModule } from '@nest/typeorm';
+import { DataSource } from 'typeorm';
+import config from './ormconfig';
+
+@Module({
+  imports: [TypeOrmModule.forRoot({...config, autoLoadEntities: true}), UserModule],
+})
+export class AppModule implements NestModule {
+
+  // inject the DataSource instance using DI
+  constructor(private dataSource: DataSource)
+}
+
+// step 3 - create user enitity
+// user.entity.ts
+export class User_Test {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column({ name: 'name', length: 60, nullable: false })
+  name: string;
+
+  @Column({ name: 'address', length: 160, nullable: false })
+  address: string;
+
+  @Column({ name: 'grade', type: 'int', nullable: true })
+  grade: number;
+}
+
+// step 4 - configure user.module.ts
+import { TypeOrmModule } from '@nest/typeorm';
+import { User_Test } from './user.entity'
+@Module({
+  imports: [TypeOrmModule.forRoot([User_Test])],
+})
+
+// stpe 5 - make crud operations in user.service.ts
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User_Test } from './user.entity';
+import { Repository } from 'typeorm';
+
+@Injectable()
+export class NotesService {
+  constructor(
+    @InjectRepository(User_Test)
+    private userRepository: Repository<User_Test>,
+  ) {}
+  // You add all CRUD logics here
+
+  // Fetch all users from the database
+  async fetchUsers(): Promise<User_Test[]> {
+    return this.userRepository.find();
+  }
+
+  // Add a new user to the database
+  async addNote(createUserDto): Promise<User_Test> {
+    const { title, content, rating } = createUserDto;
+    const user = this.userRepository.create({
+      name,
+      address,
+      grade
+    });
+    await this.userRepository.save(user);
+    return user;
+  }
+}
+
+// step -6 - call crud methods from the controller
+// user.controller.ts
+
+import { Body, Controller, Get} from '@nestjs/common';
+import { UserService } from './user.service';
+import { User_Test } from './user.entity';
+
+@Controller('users')
+export class UsersController {
+  constructor(private readonly userService: UserService) {}
+
+  // Retrieve all users
+  @Get()
+  getNotes() {
+    return this.userService.fetchUsers();
+  }
+
+  // Create a new user
+  @Post()
+  createNote(@Body() createUser): Promise<User_Test> {
+    return this.userService.addUser(createUser);
+  }
+
+```
