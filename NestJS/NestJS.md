@@ -552,9 +552,56 @@ throw new BadRequestException('Something bad happened', { cause: new Error(), de
 }
 ```
 
-**Exception Filters** -  let you control the exact flow of control and the content of the response sent back to the client.
+**Exception Filters** -  let you control the exact flow of control and the content of the response sent back to the client.  
+These filters have access to the contect object
 
-a
+```javascript
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
+import { Request, Response } from 'express';
+
+// use this decorator which tells Nest hat this particular filter is looking for exceptions of type HttpException and nothing else. 
+//The @Catch() decorator may take a single parameter, or a comma-separated list
+@Catch(HttpException)
+export class HttpExceptionFilter implements ExceptionFilter {
+  // must implement catch method which takes 2 args
+  // exception object
+  // ArgumentHost object which give all the information of the context making it smart unlike middlewares which are dumb
+  catch(exception: HttpException, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
+    const status = exception.getStatus();
+
+    response
+      .status(status)
+      .json({
+        statusCode: status,
+        timestamp: new Date().toISOString(),
+        path: request.url,
+      });
+  }
+}
+
+// now we need to bind this exception to the request handler function
+@Post()
+@UseFilters(new HttpExceptionFilter()) // binding the exception
+async create(@Body() createCatDto: CreateCatDto) {
+  throw new ForbiddenException();
+}
+
+// this can be bound to a class controller as well
+// then all the routes within this controller will use this exception
+@UseFilters(new HttpExceptionFilter())
+export class CatsController {}
+
+// global level exception
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalFilters(new HttpExceptionFilter());
+  await app.listen(3000);
+}
+bootstrap();
+```
 
 ## Pipes
 
@@ -718,7 +765,34 @@ async function bootstrap() {
 bootstrap();
 ```
 
-## DB connection using TypeORM
+## Guards
+A guard is a class annotated with the @Injectable() decorator, which implements the CanActivate interface.  
+Guards are mainly used for authorization - which are  used to determine whether a given request will be handled by the route handler or not, depending on certain conditions (like permissions, roles, ACLs, etc.) present at run-time.  
+Authentication can be done in middleware as well but not authorization, since Guards have access to ExecutionContext and thus know exactly what's going to be executed next but middlewares do not.  
+
+**Guards are executed after all middleware, but before any interceptor or pipe.**  
+
+```javascript
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class AuthGuard implements CanActivate {
+  // canactive function must retrrn a boolean
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const request = context.switchToHttp().getRequest();
+    return validateRequest(request);
+  }
+}
+```
+
+**To-do - implement authentication and authorization**
+
+## DB connection using TypeORM - 
+
+https://thriveread.com/nestjs-typeorm-mssql/
 
 ```npm i mssql typeorm @nest/typeorm --save```
 ```javascript
