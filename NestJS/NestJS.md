@@ -876,6 +876,89 @@ async findOne(@User() user: UserEntity) {
 
 ```
 
+## Execution Context
+We used this context above in guards, pipes  
+These are tility classes that help make it easy to write applications that function across multiple application contexts (e.g., Nest HTTP server-based, microservices and WebSockets application contexts).  
+
+
+Two classes are widely used and Nest provides an instance of these 2 classes in places you may need it, such as in the canActivate() method of a guard and the intercept() method of an interceptor.  
+
+1. ArgumentHost class
+The ArgumentsHost class provides methods for retrieving the arguments being passed to a handler. It allows choosing the appropriate context (e.g., HTTP, RPC (microservice), or WebSockets) to retrieve the arguments from.  
+ArgumentsHost simply acts as an abstraction over a handler's arguments. For example, for HTTP server applications (when @nestjs/platform-express is being used), the host object encapsulates Express's [request, response, next] array, where request is the request object, response is the response object, and next is a function that controls the application's request-response cycle. On the other hand, for GraphQL applications, the host object contains the [root, args, context, info] array.  
+
+When building generic guards, filters, and interceptors which are meant to run across multiple application contexts, we need a way to determine the type of application that our method is currently running in.  
+
+```typescript
+if (host.getType() === 'http') {
+  // do something that is only important in the context of regular HTTP requests (REST)
+} else if (host.getType() === 'rpc') {
+  // do something that is only important in the context of Microservice requests
+} else if (host.getType<GqlContextType>() === 'graphql') {
+  // do something that is only important in the context of GraphQL requests
+}
+
+// then based on the type we can switch the context as below
+
+/**
+ * Switch context to RPC.
+ */
+switchToRpc(): RpcArgumentsHost;
+/**
+ * Switch context to HTTP.
+ */
+switchToHttp(): HttpArgumentsHost;
+/**
+ * Switch context to WebSockets.
+ */
+switchToWs(): WsArgumentsHost;
+
+
+// we used below code in pipe. guards, exception filter etc - 
+const ctx = host.switchToHttp();
+const request = ctx.getRequest<Request>();
+const response = ctx.getResponse<Response>();
+```
+
+2. ExecutionContext class - 
+ExecutionContext extends ArgumentsHost, providing additional details about the current execution process.  
+
+```javascript
+//2 methods wehich can be used to get additional details - 
+const methodKey = ctx.getHandler().name; // returns a reference to the handler about to be invoked. 
+const className = ctx.getClass().name; //  returns the type of the Controller class which this particular handler belongs to
+
+// For example, in an HTTP context, if the currently processed request is a POST request,
+// bound to the create() method on the CatsController, getHandler() returns a reference to the create() method 
+// and getClass() returns the CatsControllertype (not instance).
+
+// IMP  - it gives us the opportunity to access the metadata set through either decorators 
+// this is waht is used in the - roles.guard.ts file in nest-demo example
+
+// cretae your own decorator
+// roles.decorator.ts
+import { SetMetadata } from '@nestjs/common';
+export const Roles = (...roles: string[]) => SetMetadata('roles', roles);
+
+// then use this roles decorator
+@Post()
+@Roles('admin')
+async create(@Body() createCatDto: CreateCatDto) {
+  this.catsService.create(createCatDto);
+}
+
+// and then use the reflector class to get the metadata
+// roles.guard.ts
+@Injectable()
+export class RolesGuard {
+  constructor(private reflector: Reflector) {}
+}
+// use the reflector.get() mthod to read the metadata and then compare with the user role 
+// to determine if the request needs to be passed or rejected
+const roles = this.reflector.get<string[]>('roles', context.getHandler());
+```
+
+
 ## DB connection using TypeORM -
 
 <https://thriveread.com/nestjs-typeorm-mssql/>
@@ -1005,7 +1088,6 @@ export class UsersController {
 
 ```
 
-
 TODO
 
 1. Configuration
@@ -1015,6 +1097,5 @@ TODO
 5. Async providers
 6. Dynamic modules
 7. Circular dep
-8. Execution context
 9. Lifecycle events
 10. https://medium.com/@0xAggelos/building-a-secure-authentication-system-with-nestjs-jwt-and-postgresql-e1b4833b6b4e

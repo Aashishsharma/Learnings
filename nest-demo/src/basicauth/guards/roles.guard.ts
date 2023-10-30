@@ -6,9 +6,11 @@ import { ROLES_KEY } from '../roles.decorator';
 // need to understand the nelow code
 @Injectable()
 export class RolesGuard implements CanActivate {
+  // inject the reflector dependency to read the metadata from our custom decorator
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
+    // use the getAllAndOverride to get all the required roles
     const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -18,7 +20,8 @@ export class RolesGuard implements CanActivate {
     }
     // here we ftech user data from the requet object and check the role
     const { user } = context.switchToHttp().getRequest();
-    console.log({ requiredRoles });
+    console.log({ requiredRoles }); // this will print [admin] if the /profile endpoint is called
+    // and will print [admin, users] if profile-all endpoint is called
     return requiredRoles.some((role) => user.role?.includes(role));
   }
 }
