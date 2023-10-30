@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 
 // This should be a real class/interface representing a user entity
 export type User = any;
 
 @Injectable()
-export class UsersService {
+export class UsersService implements OnModuleInit {
+  onModuleInit() {
+    console.log(`User Service has been initialized.`);
+  }
   private readonly users = [
     {
       userId: 1,

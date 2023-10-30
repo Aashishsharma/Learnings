@@ -1,9 +1,16 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  OnModuleInit,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
-export class BasicauthService {
+export class BasicauthService implements OnModuleInit {
+  onModuleInit() {
+    console.log(`Auth service has been initialized.`);
+  }
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,

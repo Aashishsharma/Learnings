@@ -958,6 +958,52 @@ export class RolesGuard {
 const roles = this.reflector.get<string[]>('roles', context.getHandler());
 ```
 
+## Lifecycle events
+Nest provides lifecycle hooks that give visibility into key lifecycle events, and the ability to act (run registered code on your modules, providers or controllers) when they occur.  
+
+| Lifecycle hook method        | Lifecycle event triggering the hook method call                                             |
+| ---------------------------- | --------------------------------------------------------------------------------------------- |
+| onModuleInit()               | Called once the host module's dependencies have been resolved.                              |
+| onApplicationBootstrap()     | Called once all modules have been initialized, but before listening for connections.        |
+| onModuleDestroy()*           | Called after a termination signal (e.g., SIGTERM) has been received.                          |
+| beforeApplicationShutdown()*  | Called after all onModuleDestroy() handlers have completed (Promises resolved or rejected); once complete (Promises resolved or rejected), all existing connections will be closed (app.close() called). |
+| onApplicationShutdown()*     | Called after connections close (app.close() resolves).                                       |
+
+
+onModuleDestroy, beforeApplicationShutdown and onApplicationShutdown are only triggered if you explicitly call app.close()  
+
+Execution order of onModuleInit() and onApplicationBootstrap() directly depends on the order of module imports, awaiting the previous hook.  
+
+```javascript
+import { Injectable, OnModuleInit } from '@nestjs/common';
+
+@Injectable()
+export class UsersService implements OnModuleInit {
+  onModuleInit() {
+    console.log(`The module has been initialized.`);
+  }
+
+  // async version
+  async onModuleInit(): Promise<void> {
+  await this.fetch();
+}
+}
+
+// for shutdown hooks we need to explicitly enable them - 
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  // Starts listening for shutdown hooks
+  app.enableShutdownHooks();
+
+  await app.listen(3000);
+}
+bootstrap();
+
+// shutdown hooks are often used with Kubernetes to manage containers' lifecycles, by Heroku for dynos or similar services.
+
+```
 
 ## DB connection using TypeORM -
 
