@@ -1143,5 +1143,4 @@ TODO
 5. Async providers
 6. Dynamic modules
 7. Circular dep
-9. Lifecycle events
 10. https://medium.com/@0xAggelos/building-a-secure-authentication-system-with-nestjs-jwt-and-postgresql-e1b4833b6b4e
