@@ -10,6 +10,9 @@ import {
 } from '@nestjs/common';
 import { BasicauthService } from './basicauth.service';
 import { AuthGuard } from './guards/auth.guard';
+import { Roles } from './roles.decorator';
+import { Role } from './roles.enum';
+import { RolesGuard } from './guards/roles.guard';
 
 @Controller('auth')
 export class BasicAuthController {
@@ -57,18 +60,29 @@ export class BasicAuthController {
   // Token = access token from the login endpoint
 
   // Response
-  // {
+  //   {
   //     "sub": 1,
   //     "username": "john",
-  //     "iat": 1698664346,
-  //     "exp": 1698664406
+  //     "role": "admin",
+  //     "iat": 1698670445,
+  //     "exp": 1698670505
   // }
 
   // token expires in 60 sec - see auth.module.ts for this setting
 
-  @UseGuards(AuthGuard)
+  // only admins can access this path
+  @UseGuards(AuthGuard, RolesGuard)
   @Get('profile')
+  @Roles(Role.Admin)
   getProfile(@Request() req) {
+    return req.user;
+  }
+
+  // admin and normal users can access this path
+  @UseGuards(AuthGuard, RolesGuard)
+  @Get('profile-all')
+  @Roles(Role.Admin, Role.User)
+  getProfileforAll(@Request() req) {
     return req.user;
   }
 }
