@@ -1,29 +1,42 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-
-// This should be a real class/interface representing a user entity
-export type User = any;
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/user.dto';
 
 @Injectable()
-export class UsersService implements OnModuleInit {
+export class UsersService {
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+  ) {}
+
   onModuleInit() {
     console.log(`User Service has been initialized.`);
   }
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-      role: 'admin',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-      role: 'user',
-    },
-  ];
+  findAll(): Promise<User[]> {
+    return this.usersRepository.find();
+  }
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.username === username);
+  findOne(username: string): Promise<User | null> {
+    return this.usersRepository.findOneBy({ username });
+  }
+
+  createUser({
+    username,
+    userpassword,
+    role,
+  }: CreateUserDto): Promise<User | null> {
+    const user = new User();
+    user.username = username;
+    user.userpassword = userpassword;
+    user.role = role;
+    user.isActive = true;
+
+    return this.usersRepository.save(user);
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.usersRepository.delete(id);
   }
 }

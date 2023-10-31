@@ -33,8 +33,8 @@ export class BasicAuthController {
   // }
 
   //   body - {
-  //     "username": "john",
-  //     "password": "changeme"
+  //     "username": "Ashish",
+  //     "userpassword": "ashish"
   // }
 
   // response -
@@ -45,7 +45,7 @@ export class BasicAuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.username, signInDto.password);
+    return this.authService.signIn(signInDto.username, signInDto.userpassword);
   }
 
   // http://localhost:3000/auth/profile
@@ -61,8 +61,7 @@ export class BasicAuthController {
 
   // Response
   //   {
-  //     "sub": 1,
-  //     "username": "john",
+  //     "username": "ashish",
   //     "role": "admin",
   //     "iat": 1698670445,
   //     "exp": 1698670505

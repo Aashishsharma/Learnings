@@ -1137,7 +1137,6 @@ export class UsersController {
 TODO
 
 1. Configuration
-2. Validation
 3. Task scheduling
 4. Custom providers
 5. Async providers

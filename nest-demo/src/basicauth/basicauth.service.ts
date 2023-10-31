@@ -18,16 +18,16 @@ export class BasicauthService implements OnModuleInit {
 
   async signIn(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username);
-    if (user?.password !== pass) {
+    if (user?.userpassword !== pass) {
       throw new UnauthorizedException();
     }
-    const { password, ...result } = user;
-    console.log({ password, result });
-    // TODO: Generate a JWT and return it here
-    // instead of the user object
+    const { userpassword, ...result } = user;
+    console.log({ userpassword, result });
 
+    // Generate a JWT and return it here
+    // instead of the user object
     const payload = {
-      sub: user.userId,
+      sub: user.id,
       username: user.username,
       role: user.role,
     };
