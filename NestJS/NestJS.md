@@ -294,6 +294,8 @@ using CLI ```nest g module cats```
 modules are singletons by default
 
 A Nest.js application is organized into modules. Every Nest.js application will have a root module  
+providers defined in a module are visible to other members of the module without the need to export them  
+We need to import/export the services to other modules, when we do this DI (meaning we can inject the instance of a service in the constructor) will work in nestjs 
 The @Module() decorator takes a single object with below properties
 
 | Module Key        | Description                               |
@@ -1005,6 +1007,74 @@ bootstrap();
 
 ```
 
+## Circular dependency
+
+A circular dependency in NestJS occurs when two or more modules or classes depend on each other directly or indirectly.  
+Circular dependnecy can occure in providers(services) or on modules
+
+| Problem                                            | Description                                                                                                       |
+|---------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| Code Organization and Maintainability              | Circular dependencies can make the codebase harder to organize and maintain, leading to confusion for developers.  |
+| Initialization Order                               | Circular dependencies can result in difficulties ensuring the correct order of module initialization.             |
+| Testing Complexity                                 | Writing unit tests for modules with circular dependencies can become more complex and may require mocking.         |
+| Maintaining Separation of Concerns                 | Circular dependencies can blur the separation of concerns between modules, violating good software design practices. |
+
+**Use forward reference to avoid circular dependency issue** - 
+ For example, if CatsService and CommonService depend on each other,  
+
+ ```javascript
+ //cats.service.ts
+ @Injectable()
+export class CatsService {
+  constructor(
+    @Inject(forwardRef(() => CommonService))
+    private commonService: CommonService,
+  ) {}
+}
+
+// common.service.ts
+@Injectable()
+export class CommonService {
+  constructor(
+    @Inject(forwardRef(() => CatsService))
+    private catsService: CatsService,
+  ) {}
+}
+
+// in case of modules
+
+//cats.module.ts
+@Module({
+  imports: [forwardRef(() => CommonModule)],
+})
+export class CatsModule {}
+
+// common.module.ts
+@Module({
+  imports: [forwardRef(() => CatsModule)],
+})
+export class CommonModule {}
+ ```
+
+## Configuration
+In Node.js we use .env files to store configs but as the number of environments and configuration variables grows, it can become increasingly complex and hard to keep track of.
+
+Instead use @nestjs/config package, whcich easily swipes .env files  
+
+```javascript
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+
+@Module({
+  imports: [ConfigModule.forRoot()],
+})
+export class AppModule {}
+```
+
+
+## Dynamic modules
+
+
 ## DB connection using TypeORM -
 
 <https://thriveread.com/nestjs-typeorm-mssql/>
@@ -1140,6 +1210,4 @@ TODO
 3. Task scheduling
 4. Custom providers
 5. Async providers
-6. Dynamic modules
-7. Circular dep
 10. https://medium.com/@0xAggelos/building-a-secure-authentication-system-with-nestjs-jwt-and-postgresql-e1b4833b6b4e
