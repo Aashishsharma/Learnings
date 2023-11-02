@@ -1071,6 +1071,108 @@ import { ConfigModule } from '@nestjs/config';
 export class AppModule {}
 ```
 
+## Custom providers
+
+By default nest js injects dependencies and every time that instance is required, nest js returns the cached version of the injected instance
+but we use custom providers if we want to create a custom instance manually instead of having Nest instantiate (or return a cached instance of) a class  
+
+Till now we have seen a shorthand for providers syntax  
+```javascript
+@Module({
+  controllers: [CatsController],
+  providers: [CatsService], // this is where nestjs know which dependencies to inject
+  // and instance of CatSerrivce is automatically created whereever use use below code
+  //constructor(provate readonly catService: CatService)
+})
+
+// but this is a short haand - providers: [CatsService],
+// full version of above code is 
+providers: [
+  {
+    provide: CatsService, // this is a token
+    useClass: CatsService, // this is a class name which will be instantiated wherever above token is found
+  },
+];
+
+// now instead of providing catsservice object, we can pass a catsServiceMock object in our trsting as below
+
+import { CatsService } from './cats.service';
+
+const mockCatsService = {
+  /* mock implementation
+  ...
+  */
+};
+
+@Module({
+  imports: [CatsModule],
+  providers: [
+    {
+      provide: CatsService,
+      useValue: mockCatsService, //  the CatsService token will resolve to the mockCatsService mock object
+    },
+  ],
+})
+export class AppModule {}
+
+// this means when other part of your application requests an instance of CatsService,
+// Nest will create and provide an instance of the mockCatsService class.
+```
+
+**Non Class based token** - in above example we saw that the token(provide property in the providers array) was also a class, if we don;t want to use a class  
+we can provide a string literal as a token - 
+
+```javascript
+import { connection } from './connection';
+
+@Module({
+  providers: [
+    {
+      provide: 'CONNECTION',
+      useValue: connection,
+    },
+  ],
+})
+export class AppModule {}
+
+// now wherever we need to inject this connection, we need to use the 'CONNECTION' token along with @Injest() decorator
+@Injectable()
+export class CatsRepository {
+  constructor(@Inject('CONNECTION') connection: Connection) {}
+}
+```
+
+**useClass** - instead of using useValue as a property in the providers array, we can use useClass property to dynamically pick a class which needs to be injected  -
+
+```javascript
+const configServiceProvider = {
+  provide: ConfigService,
+  useClass:
+    process.env.NODE_ENV === 'development'
+      ? DevelopmentConfigService
+      : ProductionConfigService,
+};
+
+@Module({
+  providers: [configServiceProvider],
+})
+export class AppModule {}
+// For any class that depends on ConfigService,
+// Nest will inject an instance of the provided class (DevelopmentConfigService or ProductionConfigService) 
+```
+
+**useFactory** - The useFactory syntax allows for creating providers dynamically.
+Instead of hardcoding the class in the useClass property we can write a function as below  
+
+```javascript
+{
+  provide: 'ASYNC_CONNECTION',
+  useFactory: async () => { // this is an async provider, thus the nest app won;t be started unless the DB connection is established
+    const connection = await createConnection(options);
+    return connection;
+  },
+}
+```
 
 ## Dynamic modules
 
@@ -1208,6 +1310,4 @@ TODO
 
 1. Configuration
 3. Task scheduling
-4. Custom providers
-5. Async providers
 10. https://medium.com/@0xAggelos/building-a-secure-authentication-system-with-nestjs-jwt-and-postgresql-e1b4833b6b4e
