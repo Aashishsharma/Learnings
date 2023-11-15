@@ -23,7 +23,8 @@ Importing css in a css, possible only in css3
 | Tag Selector  | `div`             | Targets all elements of a specific HTML tag, such as `<div>`, `<p>`, or `<h1>`.                        |
 | Class Selector| `.myClass`        | Targets elements with a specific class attribute, like `<div class="myClass">`.                        |
 | Multiple Selector      | `div, p`              | Selects all `<div>` and `<p>` elements                                           |
-| Multiple Selector      | `div#intro.test`              | Selects all `<div>` elements who have id=intro and class=test (see specificity)                                           |
+| Multiple Selector      | `ul.important`              | ul.important selects all ul elements that have class="important"                |
+| Multiple selector      | `bento orange.small` |                                                                                        |
 | Descendant Selector      | `div p`              | Selects all `<p>` elements inside of a `<div>` element. (direct / indirect, all p elems are selected)                                           |
 | Child Selector           | `div > p`            | Selects all `<p>` elements that are direct children of a `<div>` element. (indirect p elems are not selected)                                        |
 | Adjacent Sibling Selector | `h2 + p`            | Selects only the first `<p>` element that immediately follows an `<h2>` element and have same parent                                           |
@@ -35,6 +36,83 @@ Importing css in a css, possible only in css3
 | :not() Selector        | `input:not([type="submit"])`  | Targets elements that do not match the provided selector inside the `:not()` pseudo-class.                    |
 | :nth-child() Selector  | `li:nth-child(odd)`           | Targets elements that are specified numeric positions within their parent, using the `:nth-child()` pseudo-class. |
 | :nth-of-type() Selector| `div:nth-of-type(3)`          | Targets elements of a specific type that are specified numeric positions within their parent.               |
+
+
+```html
+<!-- Challenge 1 -->
+<div class="table">
+  <bento>
+    <orange />
+  </bento>
+  <orange class="small" />   <!-- ANS - `bento orange.small` -->
+  <bento>
+    <orange class="small" />
+  </bento>
+  <bento>
+    <apple class="small" />
+  </bento>
+  <bento>
+    <orange class="small" />  <!-- ANS - `bento orange.small` -->
+  </bento>
+</div>
+
+<!-- Challenge 2 -->
+<div class="table">
+  <bento>
+    <apple class="small" />
+  </bento>
+  <plate />
+  <apple class="small" /> <!-- ANS - `plate + apple` -->
+  <plate />
+  <apple /> <!-- and this -->
+  <apple class="small" />
+  <apple class="small" />
+</div>
+
+<!-- Challenge 3 -->
+<div class="table">
+  <plate>
+    <apple />  <!-- ANS - `plate > apple, plate > pickle` -->
+  </plate>
+  <plate>
+    <pickle /> <!-- and this -->
+  </plate>
+  <bento>
+    <pickle />
+  </bento>
+  <plate>
+    <orange class="small" />
+    <orange />
+  </plate>
+  <pickle class="small" />
+</div>
+
+<!-- Challenge 4 -->
+<div class="table">
+  <plate />
+  <plate />
+  <plate /> <!-- ANS - :nth-child(3) -->
+  <plate id="fancy" />
+</div>
+
+<!-- Challenge 5 -->
+<div class="table">
+  <plate id="fancy">
+    <apple class="small" />
+  </plate>
+  <plate>
+    <apple /> <!-- ANS - `apple:not(.small)` -->
+  </plate>
+  <apple /> <!-- and this -->
+  <plate>
+    <orange class="small" />
+  </plate>
+  <pickle class="small" />
+</div>
+
+```
+
+
 
 **Types of units in css**  
 | Unit Type | Example              | Description                                                                                          |
@@ -427,3 +505,65 @@ transform: skew(20deg, -10deg) // skew (<x-angle>, <y-angle>) -  tilts the eleme
 3. animation-delay: 2s /-2s, when -ve means 2 secs already covered in animation
 4. animation-iteration-count: 2/infinite
 5. animation-direction: normal(default - from 0% to 100%), reverse (100 to 0), alternate (forward then backword), alternate-reverse 
+
+  
+Flexbox
+CSS Grid
+Positioning (static, relative, absolute, fixed)
+Responsive Design:
+
+Media queries
+Typography:
+
+Font properties
+Text alignment and spacing
+Web fonts and icon fonts
+Colors and Backgrounds:
+
+Color properties and values
+Backgrounds and gradients
+Transitions and Animations:
+
+CSS transitions
+Animations
+Transforms:
+
+2D and 3D transforms
+Flexbox:
+
+flex-direction, justify-content, align-items
+Grid:
+
+grid-template-columns, grid-template-rows
+Responsive Images:
+
+Making images responsive
+CSS Variables:
+
+Variable usage
+Pseudo-classes and Pseudo-elements:
+
+:hover, :nth-child
+::before, ::after
+Transparency and Opacity:
+
+Working with transparency
+CSS Pre-processors:
+
+Sass, Less
+Browser Developer Tools:
+
+Debugging and testing
+Version Control:
+
+Git usage
+CSS Frameworks:
+
+Bootstrap, Tailwind CSS
+CSS Methodologies:
+
+BEM (Block Element Modifier)
+Browser Compatibility:
+
+Cross-browser compatibility
+Performance Optimization:

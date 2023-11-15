@@ -1059,7 +1059,9 @@ export class CommonModule {}
 ## Configuration
 In Node.js we use .env files to store configs but as the number of environments and configuration variables grows, it can become increasingly complex and hard to keep track of.
 
-Instead use @nestjs/config package, whcich easily swipes .env files  
+Instead use @nestjs/config package, which easily swipes .env files 
+
+#### Step 1 - set the config module
 
 ```javascript
 import { Module } from '@nestjs/common';
@@ -1069,6 +1071,99 @@ import { ConfigModule } from '@nestjs/config';
   imports: [ConfigModule.forRoot()],
 })
 export class AppModule {}
+
+// You can also specify multiple paths for .env files like this:
+ConfigModule.forRoot({
+  envFilePath: ['.env.development.local', '.env.development'],
+});
+// If a variable is found in multiple files, the first one takes precedence.
+
+
+// to make the configModule available globally
+ConfigModule.forRoot({
+  isGlobal: true,
+  cache: true, // As accessing process.env can be slow, you can set the cache property
+});
+
+
+```
+The above code -  
+`. Loads and parses a .env file from the project root directory.
+2. Merges key/value pairs from .env file with process.env environment variables.
+3. Stores the merged configuration in a private structure.
+4. Access to the configuration data is provided through the ConfigService.
+
+
+#### Step 2 - use the config service
+
+```javascript
+// import the module if  isGlobal: true, is not set
+@Module({
+  imports: [ConfigModule],
+  // ...
+})
+
+// then inject it using standard constructor injection:
+// The ConfigService is imported from the @nestjs/config package.
+constructor(private configService: ConfigService) {}
+
+// get an environment variable
+const dbUser = this.configService.get<string>('DATABASE_USER');
+
+// get a custom configuration value
+const dbHost = this.configService.get<string>('database.host');
+```
+
+**.env variables schema validation** -  
+It is standard practice to throw an exception during application startup if required environment variables haven't been provided or if they don't meet certain validation rules  
+
+```javascript
+//env.validation.ts
+import { plainToInstance } from 'class-transformer';
+import { IsEnum, IsNumber, validateSync } from 'class-validator';
+
+enum Environment {
+  Development = "development",
+  Production = "production",
+  Test = "test",
+  Provision = "provision",
+}
+
+// this should be the structure of of the config objct
+class EnvironmentVariables {
+  @IsEnum(Environment)
+  NODE_ENV: Environment;
+
+  @IsNumber()
+  PORT: number;
+}
+
+export function validate(config: Record<string, unknown>) {
+  const validatedConfig = plainToInstance(  // plainToInstance transform the input config object into an instance of the EnvironmentVariables 
+    EnvironmentVariables,
+    config,
+    { enableImplicitConversion: true }, // option allows for implicit type conversion during the transformation.
+  );
+  const errors = validateSync(validatedConfig, { skipMissingProperties: false }); // validate the validatedConfig against the validation rules defined in the EnvironmentVariables class.
+
+  if (errors.length > 0) {
+    throw new Error(errors.toString());
+  }
+  return validatedConfig;
+}
+
+// app.module.ts
+import { validate } from './env.validation';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      validate,
+    }),
+  ],
+})
+export class AppModule {}
+
 ```
 
 ## Custom providers
@@ -1308,6 +1403,5 @@ export class UsersController {
 
 TODO
 
-1. Configuration
 3. Task scheduling
 10. https://medium.com/@0xAggelos/building-a-secure-authentication-system-with-nestjs-jwt-and-postgresql-e1b4833b6b4e

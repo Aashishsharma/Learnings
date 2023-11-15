@@ -11,7 +11,7 @@ import { AuthGuard } from 'src/basicauth/guards/auth.guard';
 import { RolesGuard } from 'src/basicauth/guards/roles.guard';
 import { Roles } from 'src/basicauth/roles.decorator';
 import { Role } from 'src/basicauth/roles.enum';
-import { CreateUserDto } from './dto/user.dto';
+import { CreateUserDto } from './dtos/user.dto';
 
 @Controller('users')
 @UseGuards(AuthGuard)

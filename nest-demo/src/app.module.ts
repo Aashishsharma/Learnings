@@ -15,6 +15,8 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DbusersService } from './dbusers/dbusers.service';
 import { DbusersModule } from './dbusers/dbusers.module';
+import { ConfigModule } from '@nestjs/config';
+import { validate } from 'env.valiadtion';
 
 @Module({
   imports: [
@@ -35,6 +37,12 @@ import { DbusersModule } from './dbusers/dbusers.module';
       synchronize: true, // shouldn't be used in production - otherwise you can lose production data
     }),
     DbusersModule,
+    ConfigModule.forRoot({
+      envFilePath: ['.env.development.local', '.env.development'],
+      isGlobal: true,
+      cache: true, // As accessing process.env can be slow, you can set the cache property
+      validate,
+    }),
   ],
   controllers: [AppController, CatsController],
   providers: [AppService, CatsService, DbusersService],
