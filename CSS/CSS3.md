@@ -49,9 +49,9 @@ Importing css in a css, possible only in css3
   <bento>
     <orange />
   </bento>
-  <orange class="small" />   <!-- ANS - `bento orange.small` -->
+  <orange class="small" />   
   <bento>
-    <orange class="small" />
+    <orange class="small" /> <!-- ANS - `bento orange.small` -->
   </bento>
   <bento>
     <apple class="small" />
