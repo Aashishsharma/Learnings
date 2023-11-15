@@ -165,6 +165,11 @@ font-family: "lato", "sarabun", sans-serif
 Block elements have line break, so every block element comes to new line.  
 BLock elements have display: block/none, and inline have display: inline/none  
 
+**inline block elements** - display: inline-block  
+ - elements appear alongside them on the same line (similar to inline elements)  
+ - elements can have dimensions (width and height), margins, paddings, and borders applied to them, (similar to block elements) 
+
+
 **postioning**  
 | Positioning Type | Description                                   | Impact on Viewport                       | Differences from Normal Flow        | When to Use                                             |
 |------------------|-----------------------------------------------|-----------------------------------------|------------------------------------|--------------------------------------------------------|
