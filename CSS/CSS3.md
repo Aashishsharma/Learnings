@@ -1,6 +1,7 @@
 ## Index
+
 1. **CSS3** - new (media queries, @import)
-2. **Styling** - (8) 2 tags(h1, h2), all tags(star), all inside div(div star), class(.nm), id(#nm), all class in p(p.nm), only id and ol (#id ol), all p with specific class (p[.nm]) 
+2. **Styling** - (8) 2 tags(h1, h2), all tags(star), all inside div(div star), class(.nm), id(#nm), all class in p(p.nm), only id and ol (#id ol), all p with specific class (p[.nm])
 3. **Combinators + pseudo** - (4) - descendent(div p - all p in div), child(div > p - only direct child), adjacent(div + p - all p immediately after p), sibling(div ~ p - all p with same parent as div), pseudo element - (to style a part of the elem - p::first-line/frst-letter), pseudo classes (to style specific state of the elem - a:link/hover.visited, for input - checked/focused/enabled)
 4. **Positioning** -  (5) - block vs inline - (line break), 1. static (default), 2. relative (relative to static), 3. fixed (not moved even if scrolled), 4. absoulte (relative to parent but removes elem from normal doc flow (bad thing)), 5. sticky - (b/w first relative, when offset met, becomes fixed - (pos:sticky; top:0), top:0 is offeset), for all 5 types syntax - (position: (1 of 5), top/right/bottom/left:0px)
 5. **Specificity** - tells which style would apply (when 2 styles target same elem, style with highest specificity no. is applied), 4 digit no. (in order) [1 1 3 1], [inline(T/F), no. of Ids, no of classes/pseduo-classes, no. of tags/pseudo-elem]
@@ -10,10 +11,13 @@
 9. **Animations** - **ani** - gradually changing from one set of CSS styles to another using keyframes, syntax - .class-name{animation-name:name;ani-duration:4s;ani-delay:2s;}, @keyframe name {0% {color: white;} 25%, 50/75/100%}, **Trans** - user action required, .class-name{tran-property: width/height(any prop that needs to be trans), when to trans(onhover)- class-name:hover{wd/ht: Xpx;}  
 
 ## CSS
+
 **Diff between CSS2 and CSS3**
-1. CSS3 introduces media queries 
+
+1. CSS3 introduces media queries
 
 ## CSS2 and CSS3
+
 Importing css in a css, possible only in css3  
 @import "heading.css"  
 
@@ -36,7 +40,6 @@ Importing css in a css, possible only in css3
 | :not() Selector        | `input:not([type="submit"])`  | Targets elements that do not match the provided selector inside the `:not()` pseudo-class.                    |
 | :nth-child() Selector  | `li:nth-child(odd)`           | Targets elements that are specified numeric positions within their parent, using the `:nth-child()` pseudo-class. |
 | :nth-of-type() Selector| `div:nth-of-type(3)`          | Targets elements of a specific type that are specified numeric positions within their parent.               |
-
 
 ```html
 <!-- Challenge 1 -->
@@ -112,8 +115,6 @@ Importing css in a css, possible only in css3
 
 ```
 
-
-
 **Types of units in css**  
 | Unit Type | Example              | Description                                                                                          |
 |-----------|----------------------|------------------------------------------------------------------------------------------------------|
@@ -127,7 +128,6 @@ Importing css in a css, possible only in css3
 |           | `%`                  | Represents a percentage of a parent element's property (like width or height).                     |
 | Flexible  | `fr`                 | Represents a fraction of available space in a **CSS Grid layout**.                                      |
 |           | `auto`               | Represents a value that is automatically calculated based on context (e.g., element text content).      |
-
 
 ### CSS Text Properties
 
@@ -152,9 +152,11 @@ Other common available - times new roman, aerial on users computer font-family: 
 
 External fonts -
 Fonts.google.com
+
 1. Add link tag to <head> before your custom css file links, or else you can use external font if they are loaded after your styles are set
 2. Add styling
 font-family: "lato", "sarabun", sans-serif
+
 - use font family as lato, if not available (no internet, external site down) use sarabun, if not available use sans-serif
 
 **Block vs Inline elements**
@@ -168,13 +170,14 @@ BLock elements have display: block/none, and inline have display: inline/none
 | `relative`       | Positioned relative to its normal position. | May affect other content, but respects document flow. | Slight shift, respects flow.      | Minor adjustments while keeping document flow.        |
 | `absolute`       | Positioned relative to nearest positioned ancestor. | Can overlap content.                     | Removed from flow, overlaps others. | To create overlays, tooltips, popups within a container. |
 | `fixed`          | Positioned relative to the viewport.         | Stays fixed while scrolling.             | Removed from flow, fixed on screen. | Sticky headers, navigation bars, fixed elements.      |
-| `sticky ` `top: 0`         | Toggles between relative and fixed      | Temporarily sticks, then becomes relative. | Switches between `relative` and `fixed`. | Sticky headers, navigation, sidebars, table headers.   |
+| `sticky` `top: 0`         | Toggles between relative and fixed      | Temporarily sticks, then becomes relative. | Switches between `relative` and `fixed`. | Sticky headers, navigation, sidebars, table headers.   |
 
 All postion type should have top, right, bottom, left parameters, or at lest one of them  
 
 #### Specificty
+
 CSS specificity is a set of rules that determine which styles are applied to elements when there are conflicting style declarations.  
-specificty value is a b c d 
+specificty value is a b c d
 where  
 
 | Part | Description                                                         | Example                      |
@@ -183,7 +186,6 @@ where
 | `b`  | The number of ID selectors in the selector. If none, it's 0.        | `#intro`                     |
 | `c`  | The number of class selectors, pseudo-classes, and attribute selectors in the selector. If none, it's 0. | `.text:hover`                |
 | `d`  | The number of element selectors and pseudo-elements in the selector. If none, it's 0. | `p::before`                  |
-
 
 ```html
 <!DOCTYPE html>
@@ -219,7 +221,8 @@ where
 </html>
 
 ```
-Output 
+
+Output
 | Selector          | Style Rule          | Specificity  | Applied Color |
 |-------------------|---------------------|--------------|---------------|
 | `p`               | `color: red;`       | 0,0,1,0      | Red           |
@@ -230,8 +233,8 @@ Output
 
 **Note** - p#intro means target p elems where id = intro, similaly p.text#intro = p elem with id = intro and class = text, hence no color is applied
 
-
 #### CSS naming conventions
+
 **Use BEM (Block-Element-Modifier) standard**  
 | Type      | Description                                                             | Example                     |
 |-----------|-------------------------------------------------------------------------|-----------------------------|
@@ -246,6 +249,7 @@ notice when to use - and _ and how many times
 #### CSS layouts  
 
 #### 1. CSS Box Model  
+
 describes how elements in a web page are structured and how their dimensions are calculated  
 
 ![alt text](PNG/css-box-model.png "Title")  
@@ -253,17 +257,18 @@ describes how elements in a web page are structured and how their dimensions are
 Padding - space between border and content
 Margin - soace between border and other elems
 padding/margin : 10px
-(If one arg, then top, right, bottom and left, same padding/margin applied, if 2 args- 1st arg for top-bottom, if 4 args, from top to left) 
+(If one arg, then top, right, bottom and left, same padding/margin applied, if 2 args- 1st arg for top-bottom, if 4 args, from top to left)
 
 ### 2. Flex-box (for navbars, card grids ets)
+
 Is a one-dimensional layout model where as css-grid layout is 2 dimensional  
 (Flexible box) used to layout a page
- 
 
-Set dispaly:flex - to parent div/any other elem to start with flexbox 
+Set dispaly:flex - to parent div/any other elem to start with flexbox
 
 #### 1. Containers properties
-(add wd/ht to entire container by default all items are stretched to container ht) 
+
+(add wd/ht to entire container by default all items are stretched to container ht)
 
 | Property         | Values and Description                                     | Possible Values                                   |
 |------------------|------------------------------------------------------------|---------------------------------------------------|
@@ -282,9 +287,10 @@ justify-content: center - horizontal center align-items:  center - vertical cen
 So basically
 .abc {
 display: flex, justify-content and align-items to center
-} 
+}
 
 #### 2. Items properties
+
 | Property         | Description                                            | Possible Values                        |
 |------------------|--------------------------------------------------------|----------------------------------------|
 | `order`          | Specifies the order of the flex item.                 | Integer (default: 0)                   |
@@ -294,8 +300,8 @@ display: flex, justify-content and align-items to center
 | `flex`           | Shorthand for `flex-grow`, `flex-shrink`, and `flex-basis`. | Combination of values (default: 0 1 auto) |
 | `align-self`     | Overrides the alignment set by the container.         | `auto`, `flex-start`, `flex-end`, `center`, `baseline`, `stretch` |
 
-
 #### 3. CSS GRID
+
 Grid vs flexbox
 | Use Case                | Flexbox | CSS Grid |
 |-------------------------|---------|----------|
@@ -312,7 +318,8 @@ Grid vs flexbox
 
 ### Grid -
 
-### 1. Container properties 
+### 1. Container properties
+
 Container (add wd/ht to entire container, by default all items are stretched to container ht)
 | Property             | Values and Description                                        | Possible Values and Examples          |
 |----------------------|---------------------------------------------------------------|--------------------------------------|
@@ -332,6 +339,7 @@ Container (add wd/ht to entire container, by default all items are stretched to 
 | `place-items`        | Shorthand for `align-items` and `justify-items`.             | `start end`, `center stretch`       |
 
 grid-template-area example
+
 ```html
 -- Note we need to use grid-template-columns and gird-template-rows property as well
 -- below creates a 2 cols 3 rows 2 X 3 layout with named areas
@@ -370,7 +378,7 @@ grid-template-area example
 
 ```
 
-### 2. Item properties 
+### 2. Item properties
 
 | Property Name     | Description                                          | CSS Syntax and Possible Values             |
 |-------------------|------------------------------------------------------|--------------------------------------------|
@@ -381,10 +389,11 @@ grid-template-area example
 | `grid-column-end`   | Ending column line for item's placement.         | `grid-column-end: <line>;`<br>e.g., `grid-column-end: 4;`   |
 | `grid-row-start`    | Starting row line for item's placement.          | `grid-row-start: <line>;`<br>e.g., `grid-row-start: 1;`      |
 | `grid-row-end`      | Ending row line for item's placement.            | `grid-row-end: <line>;`<br>e.g., `grid-row-end: 3;`        |
-| `justify-self`      | Alignment within grid cell along inline axis.   | `justify-self: start | end | center | stretch;`<br>e.g., `justify-self: center;` |
-| `align-self`        | Alignment within grid cell along block axis.    | `align-self: start | end | center | stretch;`<br>e.g., `align-self: stretch;` |
+| `justify-self`      | Alignment within grid cell along inline axis.   | `justify-self: start | end | center | stretch;`<br>e.g.,`justify-self: center;` |
+| `align-self`        | Alignment within grid cell along block axis.    | `align-self: start | end | center | stretch;`<br>e.g.,`align-self: stretch;` |
 
 #### Media queries
+
 The @media rule, introduced in CSS2, made it possible to define different style rules for different media types (like for computer screen, tv, mobile).  
 CSS 3 introduces Media Queries  
 
@@ -399,39 +408,40 @@ Media queries in CSS3 extended the CSS2 media types idea: Instead of looking for
 ```css
 e.g. 1 - it will execute when screen size is less than 500px
 @media screen and (max-width: 500px) {
-	body {
-		color: red;
-	}
+ body {
+  color: red;
+ }
 } 
 screen & and words can be omitted fomr above as all is default
 
 e.g. 2
 @media (orientation: landscape) {
-	body {
-		color: blue;
-	}
+ body {
+  color: blue;
+ }
 }
 use landscape/portrait
 
 e.g. combinations
 @media (orientation: portrait) and (max-width: 500px) {
-	body {
-		color: red
-	}
+ body {
+  color: red
+ }
 }
 // to use or -  replace and with ,
 
 // tu use between
 @media screen and (max-width: 500px) and (min-width: 400px){
-	body {
-		color: red;
-	}
+ body {
+  color: red;
+ }
 } 
 ```
 
 #### CSS Transitions
+
 1. Transition
-Transition is applied on the base selector, and which property to transition is applied on the pseudo selector 
+Transition is applied on the base selector, and which property to transition is applied on the pseudo selector
 
 | Property Name             | Description                                          | Possible Values                 |
 |---------------------------|------------------------------------------------------|---------------------------------|
@@ -464,19 +474,24 @@ Transition is applied on the base selector, and which property to transition is 
 ```
 
 #### Transform function
+
 Transformations include translations, rotations, scalings, and more  
 syntax
+
 ```css
 selector {
   transform: <transform-function> <optional-transform-function>;
 }
 ```
+
 transfrom: rotate(+-deg)
-transfrom: scale(2.5) maked it 2.5 times bigger - makes sense to use on pseudo selectors 
+transfrom: scale(2.5) maked it 2.5 times bigger - makes sense to use on pseudo selectors
 transform: skew(20deg, -10deg) // skew (<x-angle>, <y-angle>) -  tilts the element either horizontally or vertically or both
 
 #### Css animation
+
 2 step process - 1. define animation using keyframes, 2 - use it in css selectors
+
 ```html
 <style>
   @keyframes moveRight {
@@ -504,9 +519,8 @@ transform: skew(20deg, -10deg) // skew (<x-angle>, <y-angle>) -  tilts the eleme
 2. animation-timing-function: ease/linear/ease-in-out
 3. animation-delay: 2s /-2s, when -ve means 2 secs already covered in animation
 4. animation-iteration-count: 2/infinite
-5. animation-direction: normal(default - from 0% to 100%), reverse (100 to 0), alternate (forward then backword), alternate-reverse 
+5. animation-direction: normal(default - from 0% to 100%), reverse (100 to 0), alternate (forward then backword), alternate-reverse
 
-  
 Flexbox
 CSS Grid
 Positioning (static, relative, absolute, fixed)
