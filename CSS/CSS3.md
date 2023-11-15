@@ -40,6 +40,8 @@ Importing css in a css, possible only in css3
 | :not() Selector        | `input:not([type="submit"])`  | Targets elements that do not match the provided selector inside the `:not()` pseudo-class.                    |
 | :nth-child() Selector  | `li:nth-child(odd)`           | Targets elements that are specified numeric positions within their parent, using the `:nth-child()` pseudo-class. |
 | :nth-of-type() Selector| `div:nth-of-type(3)`          | Targets elements of a specific type that are specified numeric positions within their parent.               |
+| `::before`               | `p::before { content: "Read this: "; }` | Inserts content before the paragraph element. (this way we can add content to a webpage using only css) |
+| `::after`               | `p::after { content: "Read this: "; }` | Inserts content after the paragraph element. (this way we can add content to a webpage using only css) |
 
 ```html
 <!-- Challenge 1 -->
@@ -173,6 +175,52 @@ BLock elements have display: block/none, and inline have display: inline/none
 | `sticky` `top: 0`         | Toggles between relative and fixed      | Temporarily sticks, then becomes relative. | Switches between `relative` and `fixed`. | Sticky headers, navigation, sidebars, table headers.   |
 
 All postion type should have top, right, bottom, left parameters, or at lest one of them  
+
+#### Variables aka custom properties
+Define custom variables in :roor (this means global space)
+```css
+:root {
+  --main-color: #3498db;
+  --background-color: #ecf0f1;
+}
+```
+
+Then use the variable
+```css
+body {
+  background-color: var(--background-color);
+}
+
+.header {
+  color: var(--main-color);
+}
+```
+
+Fallback values - if --main-color variable is not defined, use the fllback value
+```css
+.element {
+  color: var(--main-color, #3498db);
+}
+```
+
+variables can be changes using javascript
+```javascript
+document.documentElement.style.setProperty('--main-color', '#ff5733');
+```
+
+**variable scope** - 
+```css
+:root {
+  --main-color: #3498db; // this is avaialble globally
+}
+
+.container {
+  --background-color: #ecf0f1; // this variable is available only for styles inside container class
+
+  background-color: var(--background-color);
+}
+
+```
 
 #### Specificty
 
@@ -521,63 +569,11 @@ transform: skew(20deg, -10deg) // skew (<x-angle>, <y-angle>) -  tilts the eleme
 4. animation-iteration-count: 2/infinite
 5. animation-direction: normal(default - from 0% to 100%), reverse (100 to 0), alternate (forward then backword), alternate-reverse
 
-Flexbox
-CSS Grid
-Positioning (static, relative, absolute, fixed)
-Responsive Design:
 
-Media queries
-Typography:
+#### Performance Optimization
 
-Font properties
-Text alignment and spacing
-Web fonts and icon fonts
-Colors and Backgrounds:
+1. Css minification
+2. Inline critical styles directly into the HTML to render the essential content faster.
+3. Externalize non-critical styles to load them asynchronously. using the defer attribute
+4. Use <link rel="preload"> to preload critical stylesheets, fonts, or other resources.
 
-Color properties and values
-Backgrounds and gradients
-Transitions and Animations:
-
-CSS transitions
-Animations
-Transforms:
-
-2D and 3D transforms
-Flexbox:
-
-flex-direction, justify-content, align-items
-Grid:
-
-grid-template-columns, grid-template-rows
-Responsive Images:
-
-Making images responsive
-CSS Variables:
-
-Variable usage
-Pseudo-classes and Pseudo-elements:
-
-:hover, :nth-child
-::before, ::after
-Transparency and Opacity:
-
-Working with transparency
-CSS Pre-processors:
-
-Sass, Less
-Browser Developer Tools:
-
-Debugging and testing
-Version Control:
-
-Git usage
-CSS Frameworks:
-
-Bootstrap, Tailwind CSS
-CSS Methodologies:
-
-BEM (Block Element Modifier)
-Browser Compatibility:
-
-Cross-browser compatibility
-Performance Optimization:
