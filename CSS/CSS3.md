@@ -166,23 +166,27 @@ Block elements have line break, so every block element comes to new line.
 BLock elements have display: block/none, and inline have display: inline/none  
 
 **inline block elements** - display: inline-block  
- - elements appear alongside them on the same line (similar to inline elements)  
- - elements can have dimensions (width and height), margins, paddings, and borders applied to them, (similar to block elements) 
 
+- elements appear alongside them on the same line (similar to inline elements)  
+- elements can have dimensions (width and height), margins, paddings, and borders applied to them, (similar to block elements)
 
 **postioning**  
 | Positioning Type | Description                                   | Impact on Viewport                       | Differences from Normal Flow        | When to Use                                             |
 |------------------|-----------------------------------------------|-----------------------------------------|------------------------------------|--------------------------------------------------------|
 | `static`         | Default positioning. Follows normal flow.    | No impact.                             | No difference, remains in flow.    | Default. Elements are placed based on document flow.   |
 | `relative`       | Positioned relative to its normal position. | May affect other content, but respects document flow. | Slight shift, respects flow.      | Minor adjustments while keeping document flow.        |
-| `absolute`       | Positioned relative to nearest positioned ancestor. | Can overlap content.                     | Removed from flow, overlaps others. | To create overlays, tooltips, popups within a container. |
+| `absolute`       | Positioned relative to nearest positioned ancestor (means the nearest ancestor element that also has a position property set to a value other than the default value, if no parent has position property set, then it is relative to the root HTML element). | Can overlap content.                     | Removed from flow, overlaps others. | To create overlays, tooltips, popups within a container. |
 | `fixed`          | Positioned relative to the viewport.         | Stays fixed while scrolling.             | Removed from flow, fixed on screen. | Sticky headers, navigation bars, fixed elements.      |
 | `sticky` `top: 0`         | Toggles between relative and fixed      | Temporarily sticks, then becomes relative. | Switches between `relative` and `fixed`. | Sticky headers, navigation, sidebars, table headers.   |
 
-All postion type should have top, right, bottom, left parameters, or at lest one of them  
+All postion type should have top, right, bottom, left parameters, or at lest one of them
+Absoulte vs fixed -
+Unlike absolute positioning, a fixed-positioned element remains fixed relative to the viewport. It doesn't move when the page is scrolled.  
 
 #### Variables aka custom properties
+
 Define custom variables in :roor (this means global space)
+
 ```css
 :root {
   --main-color: #3498db;
@@ -191,6 +195,7 @@ Define custom variables in :roor (this means global space)
 ```
 
 Then use the variable
+
 ```css
 body {
   background-color: var(--background-color);
@@ -202,6 +207,7 @@ body {
 ```
 
 Fallback values - if --main-color variable is not defined, use the fllback value
+
 ```css
 .element {
   color: var(--main-color, #3498db);
@@ -209,11 +215,13 @@ Fallback values - if --main-color variable is not defined, use the fllback value
 ```
 
 variables can be changes using javascript
+
 ```javascript
 document.documentElement.style.setProperty('--main-color', '#ff5733');
 ```
 
-**variable scope** - 
+**variable scope** -
+
 ```css
 :root {
   --main-color: #3498db; // this is avaialble globally
@@ -445,7 +453,10 @@ grid-template-area example
 | `justify-self`      | Alignment within grid cell along inline axis.   | `justify-self: start | end | center | stretch;`<br>e.g.,`justify-self: center;` |
 | `align-self`        | Alignment within grid cell along block axis.    | `align-self: start | end | center | stretch;`<br>e.g.,`align-self: stretch;` |
 
-#### Media queries
+#### Media queries  
+
+For media queries to work, we need to add this link in html  
+```<meta name="viewport" content="width=device-width,initial-scale=1">```
 
 The @media rule, introduced in CSS2, made it possible to define different style rules for different media types (like for computer screen, tv, mobile).  
 CSS 3 introduces Media Queries  
@@ -574,11 +585,9 @@ transform: skew(20deg, -10deg) // skew (<x-angle>, <y-angle>) -  tilts the eleme
 4. animation-iteration-count: 2/infinite
 5. animation-direction: normal(default - from 0% to 100%), reverse (100 to 0), alternate (forward then backword), alternate-reverse
 
-
 #### Performance Optimization
 
 1. Css minification
 2. Inline critical styles directly into the HTML to render the essential content faster.
 3. Externalize non-critical styles to load them asynchronously. using the defer attribute
 4. Use <link rel="preload"> to preload critical stylesheets, fonts, or other resources.
-
