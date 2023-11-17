@@ -40,12 +40,156 @@ let debounce = (apiCallFunc, debounceLimit) => {
 
 let debouncedApiCall = debounce(apiCall, 2000);
 
-let i=1;
-let abc = setInterval(async () => {
-    clearInterval(abc) //- if ww don't clear the interval
-    // api call is made evry 1 second and debounce limit is not met hence api is never called
-    console.log(i)
-    i++;
-    let response = await debouncedApiCall(i);
-    console.log({response})
-}, 1000)
+// ideally needs to be called with event listeners
+
+// (async () => {
+//     // we call debounced call 4 times ata a time, but apiCall is made only once
+//      debouncedApiCall(1).then((res) => {
+//         console.log({res})
+//     })
+//     debouncedApiCall(2).then((res) => {
+//         console.log({res})
+//     })
+//     debouncedApiCall(3).then((res) => {
+//         console.log({res})
+//     })
+//     debouncedApiCall(4).then((res) => {
+//         console.log({res})
+//     }) // only this will be printed - console.log('api call made with arg ', 4)
+ 
+// })()
+
+///////////////////////////////////////////////////////////////////////////
+
+//Throttling
+// step 2 - create a throttled function
+// this is like higer order func, will take a func and return a func
+// so first create a func signature, take a func and return a new func in this func
+
+let throttle = (funcCall, throttleLimit) => {
+    let dateNow = new Date();
+
+    return async function () {
+        let me = this;
+        let args = arguments;
+
+        if(new Date() - dateNow > throttleLimit) {
+            return await funcCall.apply(me, args)
+        }
+    }
+
+}
+let throttledApiCall = throttle(apiCall, 2000);
+
+// (async () => {
+//     // we call throttled call 4 times ata a time, but apiCall is made only once after the throttlelimit is made
+//     throttledApiCall(1).then((res) => {
+//         console.log({res})
+//     })
+//     throttledApiCall(2).then((res) => {
+//         console.log({res})
+//     })
+//     throttledApiCall(3).then((res) => {
+//         console.log({res})
+//     })
+   
+//     setTimeout(() =>  {throttledApiCall(4).then((res) => {
+//         console.log({res})
+//     })} // only this will be printed - console.log('api call made with arg ', 4)
+//     , 3000)
+ 
+// })()
+
+///////////////////////////////////////////////////////
+
+// Iterables (requirements)
+//1. need to have Symbol.iterator method assigned to a object
+// 2. that method should return obj which should have next() method init
+
+// for objects
+
+let iterableObj = {
+    firstName: "Ashish",
+    lastName: "Sharma"
+}
+
+iterableObj[Symbol.iterator] = function() {
+    const keys = Object.keys(this);
+    let index = 0;
+    return {
+        next: () => {
+            if(index < keys.length) {
+                return {value: [keys[index], this[keys[index++]]], done: false}
+                
+            }
+            return {done: true}
+        }
+    }
+}
+
+for (let key of iterableObj) {
+    console.log({key})
+}
+
+// real use case for classes
+// we want to create custom iterator to iterate through our custom class datastrcuture
+// point to note - iterator class should be array, set, map of some other object which needs to be iterable
+class Students {
+    constructor() {
+        this.students = [];
+    }
+
+    addStudents(name, rollNo, grade) {
+        this.students.push({name, rollNo, grade})
+    }
+
+    // note how we need to add squre brackets to avoid syntax error
+    [Symbol.iterator] = function () {
+        let studentsLength = this.students.length;
+        let index = 0;
+
+        return {
+            next: () => {
+
+                if(studentsLength > index) {
+                    return {value: this.students[index++], done: false};
+                }
+
+                return {done: true}
+
+            }
+        }
+    }
+}
+
+let stu = new Students();
+stu.addStudents('Ashish', 1, 'B')
+stu.addStudents('Sharma', 2, 'A')
+
+// if we don't add the iterable method then we get an error
+// stu is not iterable
+for (student of stu) {
+    console.log(student)
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////
+
+// generators
+// step 1 - create generator func
+// in arrow funcs, generator is not possible
+
+let genFunc = function* ()  {
+    let i =0;
+    while (1)
+        yield i++
+}
+
+// step 2- call the generator func to get the iterator
+let iterator = genFunc();
+for (let i of iterator) {
+    console.log(i) // will generatir infifnte seqeunce
+}
+
+
