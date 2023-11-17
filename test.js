@@ -168,9 +168,9 @@ stu.addStudents('Sharma', 2, 'A')
 
 // if we don't add the iterable method then we get an error
 // stu is not iterable
-for (student of stu) {
-    console.log(student)
-}
+// for (student of stu) {
+//     console.log(student)
+// }
 
 
 
@@ -188,8 +188,85 @@ let genFunc = function* ()  {
 
 // step 2- call the generator func to get the iterator
 let iterator = genFunc();
-for (let i of iterator) {
-    console.log(i) // will generatir infifnte seqeunce
+// for (let i of iterator) {
+//     console.log(i) // will generatir infifnte seqeunce
+// }
+
+
+/////////////////////////////////////////////////
+
+// promise
+
+let arr = [1, 2, 3, 4, 5];
+
+// creating a promise
+let promArr = (item) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if(item === 1)
+              reject(item)
+            resolve(item)
+        }, 1000*item)
+    })
+
 }
 
+// (async () => {
+    
+//     //parallel promise
+//     Promise.all(arr.map((item) => promArr(item))).then((res) => {
+//         console.log({res})
+//     })
+
+//     //retunrn first promise (doesn't matter resolved or rejected)
+//     Promise.race(arr.map((item) => promArr(item))).then((res) => {
+//         console.log({res})
+//     })
+
+//     //retunrn first resolved promise (if first promise is rejected, then continue till first promise is settled)
+//     Promise.any(arr.map((item) => promArr(item))).then((res) => {
+//         console.log({res})
+//     })
+
+//     //sequential promise
+//     for await (i of arr) {
+//         console.log(await promArr(i))
+//     }
+// })()
+
+
+/// create your own Promise.all
+// promsie.all takes array of promises and return a single promise with resolve (all results) or rejected
+
+let promiseAllMyVersion = (arrodPromises) => {
+
+    if(!Array.isArray(arrodPromises))
+      throw new Error('Invalid args')
+  
+    let resolvedPromiseCnt = 0;
+    let totalPromise = arrodPromises.length;
+    let promArrResult = []
+    console.log({arrodPromises})
+
+    return new Promise((resove, reject) => {
+        arrodPromises.forEach((element) => {
+            if(!(typeof(element) === 'object')) 
+                reject('invalid args')
+            element.then((res) => {
+                promArrResult.push(res)
+                resolvedPromiseCnt++;
+                if(resolvedPromiseCnt === totalPromise)
+                  resove(promArrResult)
+            }).catch((e) => {
+                reject(e)
+            })
+        });
+    })
+
+}
+
+// below output is same as that of Promise.all()
+promiseAllMyVersion(arr.map((item) => promArr(item))).then((res) => {
+    console.log({res})
+})
 
