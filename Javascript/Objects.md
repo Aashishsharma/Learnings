@@ -178,7 +178,7 @@ In JavaScript, objects are reference types. When you assign an object to another
 | Method                                    | Description                                                                                                                     | Example                                                                                      | Copied by Reference or New Object? |
 |-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|------------------------------------|
 | **Assignment (Reference Copy)**           | Assigning an object to another variable copies a reference to the same object. Changes in one variable affect the other.        | `const obj1 = { prop: 'value' }; const obj2 = obj1; obj2.prop = 'new value';`                | Reference                           |
-| **Object.assign() (Shallow Copy)**       | Creates a new object and copies enumerable own properties (shallow copy) from one or more source objects. Nested objects remain referenced. | `const obj1 = { prop: 'value' }; const obj2 = Object.assign({}, obj1); obj2.prop = 'new value';` | New Object (Shallow Copy)           |
+| **Object.assign() (Shallow Copy)**       | Creates a new object and copies enumerable own properties (shallow copy) from one or more source objects. Nested objects remain referenced. | `const obj1 = { prop: 'value' }; const obj2 = Object.assign({}, obj1); obj2.prop = 'new value';` | Reference          |
 | **Spread Operator (Shallow Copy)**       | Creates a new object and copies enumerable own properties (shallow copy) from an existing object. Nested objects remain referenced.     | `const obj1 = { prop: 'value' }; const obj2 = { ...obj1 }; obj2.prop = 'new value';`         | New Object (Shallow Copy)           |
 | **JSON.parse() and JSON.stringify() (Deep Copy)** | Creates a deep copy of an object by converting it to JSON and then parsing the JSON string back into an object. | `const obj1 = { prop: 'value' }; const obj2 = JSON.parse(JSON.stringify(obj1)); obj2.prop = 'new value';` | New Object (Deep Copy)           |
 | **Object.create() (Empty Object)**       | Creates a new object with the specified prototype object. The new object initially has no properties. Changes in one object do not affect the other. | `const obj1 = { prop: 'value' }; const obj2 = Object.create(obj1); obj2.prop = 'new value';` | New Object                         |
@@ -186,7 +186,7 @@ In JavaScript, objects are reference types. When you assign an object to another
 
 In the table:
 
-- Methods like assignment (`=`), `Object.assign()`, and the spread operator (`...`) result in references, meaning changes in one variable affect the other.
+- Methods like assignment (`=`), `Object.assign()`, result in references, meaning changes in one variable affect the other.
 - `JSON.parse()` and `JSON.stringify()` create a deep copy by converting the object to a JSON string and then parsing it back, resulting in two separate objects.
 - `Object.create()` can be used to create new objects with specified prototypes. The first variant creates an empty object, while the second variant copies properties from another object, effectively creating a new object with the same properties but not sharing references.
 

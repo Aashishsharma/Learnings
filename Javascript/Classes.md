@@ -105,29 +105,35 @@ Object-oriented programming (OOP) concepts are essential to understand when work
 
 6. **Encapsulation:**
    - Encapsulation is the concept of bundling data (properties) and the methods that operate on that data (methods) into a single unit (class).
-   - You can control access to properties by using private or protected variables (not directly supported in JavaScript).
+   - You can control access to properties by using # symbol (below code wotks in nodejs).
 
    ```javascript
-   class Circle {
-     constructor(radius) {
-       this._radius = radius; // Convention for a "protected" property
-     }
+   class Something {
 
-     getRadius() {
-       return this._radius;
-     }
+  #property; // private properties need to be declared in the class and
+  // they cannot be initialized directly in the constructor as opposed to other normal variables
 
-     setRadius(radius) {
-       if (radius > 0) {
-         this._radius = radius;
-       }
-     }
+  constructor(){
+    this.#property = "test";
+  }
 
-     calculateArea() {
-       return Math.PI * this._radius ** 2;
-     }
-   }
+  #privateMethod() {
+    return 'hello world';
+  }
+
+  getPrivateMessage() {
+      return this.#property;
+  }
+  }
+
+  const instance = new Something();
+  console.log(instance.property); //=> undefined
+  console.log(instance.privateMethod); //=> undefined
+  console.log(instance.getPrivateMessage()); //=> test
+  console.log(instance.#property); //=> Syntax error
+
    ```
+  
 
 7. **Polymorphism:**
    - Polymorphism allows objects of different classes to be treated as objects of a common parent class.
@@ -166,10 +172,12 @@ Object-oriented programming (OOP) concepts are essential to understand when work
 These are the fundamental OOP concepts in JavaScript. While JavaScript's OOP is prototype-based, ES6 introduced class syntax that makes it easier to work with classes and objects in a more familiar way for developers coming from traditional OOP backgrounds.
 
 ### getters and setters
+
 They don't directly create private members, they provide a way to implement encapsulation and control how properties are accessed and modified.  
-In ES6, there's also a proposal for private class fields and methods, denoted with a # prefix, which would provide true privacy in classes.   
+In ES6, there's also a proposal for private class fields and methods, denoted with a # prefix, which would provide true privacy in classes.
 
 **Usecases**
+
 1. Validation
 2. Encapsulation - By controlling access to properties through methods, you can hide the implementation details and provide a clear interface for interacting with the object.
 3. Backward Compatibility - If you initially expose a property directly and later need to add validation or computation
@@ -197,34 +205,11 @@ myCircle.radius = 10; // Setting the radius property using a setter
 console.log(myCircle.radius); // Accessing the radius property after setting
 ```
 
-**and now private members can be created using # symbol**
-```javascript
-class Something {
-  #property;
-
-  constructor(){
-    this.#property = "test";
-  }
-
-  #privateMethod() {
-    return 'hello world';
-  }
-
-  getPrivateMessage() {
-      return this.#property;
-  }
-}
-
-const instance = new Something();
-console.log(instance.property); //=> undefined
-console.log(instance.privateMethod); //=> undefined
-console.log(instance.getPrivateMessage()); //=> test
-console.log(instance.#property); //=> Syntax error
-```
-
 ### Static properties and methods
+
 All the properites in the class are at instance level and can be declared in the class / construcor or any other class method using **this** keyword  
 static methods are used to implement functions/properties that belong to the class, but not to any particular object of it. same as java
+
 ```javascript
 class MyClass {
   static staticProperty = 'I am a static property';
@@ -241,11 +226,14 @@ console.log(obj1.staticProperty); // 'I am a static property'
 console.log(obj2.staticProperty); // 'I am a static property'
 
 ```
+
 inheritance works both for regular and static methods/properties.
 But when a buil-in class (Array, Map) is inherited, in this case, it's static methods/fields are not inherited. it is an exception
 
 ##### Usecases of static methods
+
 1. Utility functions
+
 ```javascript
 class MathUtils {
   static add(x, y) {
@@ -260,6 +248,7 @@ const difference = MathUtils.subtract(10, 4); // 6
 ```
 
 2. To create factory methods - factory methods are responsible for creating instances of classes but provide more control over the object creation process than a typical constructor
+
 ```javascript
 class Person {
   constructor(name, age) {
@@ -273,7 +262,9 @@ class Person {
 }
 const adult = Person.createAdult('John');
 ```
+
 3. For valiadtion while creating instance
+
 ```javascript
 class Email {
   constructor(address) {
@@ -292,10 +283,12 @@ const validEmail = new Email('john@example.com');
 ```
 
 ### Mixins
+
 In JavaScript we can only inherit from a single object. i.e, multiple inheritance not possible, same as java.  
 To solve this, JS has a concept of Mixins.  
 A mixin is a class containing methods that can be used by other classes without a need to inherit from it.  
 Mixins are created using Object.assign method
+
 ```javascript
 // object.assign syntax
 Object.assign(target, ...sources)
@@ -339,6 +332,7 @@ duck.fly();  // Outputs: Flying...
 ```
 
 ### ES6 features
+
 1. Arrow functions
 2. Classes
 3. Let const
@@ -348,13 +342,16 @@ duck.fly();  // Outputs: Flying...
 The rest parameter syntax allows us to represent an indefinite number of arguments as an array.  
 Rest parameter must be the last argument.  
 The arguments object is not a real array, while rest parameters are Array instances, meaning methods like sort, map, forEach or pop can be applied on it directly;  
+
 ```javascript
 function f(a, b, ...theArgs) {
   // ...
 }
 ```  
+
 Spread syntax (...) allows an iterable such as an array expression or string to be expanded in places where zero or more arguments (for function calls) or elements (for array literals) are expected  
 A better way to concatenate arrays  
+
 ```javascript
 myFunction(...iterableObj);
 
@@ -369,13 +366,14 @@ arr1 = [...arr1, ...arr2];
 //  arr1 is now [0, 1, 2, 3, 4, 5]
 // if we de arr2 = [1,2, arr1] we get nested array
 ```
+
 7. Iterators
 8. Generators
 9. Modules
 10. map + set + weakmap + weakset
 
-
 ## Design patterns in JS
+
 Design patterns in JavaScript are reusable solutions to common problems in software design.
 
 ### 1. Singleton pattern
@@ -524,6 +522,7 @@ main();
 2. Instead of calling a constructor directly to create an object, a factory method is used for this purpose.
 
 **SImple example**
+
 ```javascript
 // Product Interface: Pizza
 class Pizza {
@@ -665,4 +664,3 @@ export default App;
 ```javascript
 
 ```
-
