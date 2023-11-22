@@ -1,227 +1,163 @@
 ## Index
+
 1. **Functions** - like objs bt typeof - func, properties-(name, length for polymorphism, custom(fun.proprName) like static, this)
 2. **This in functions** - this behavior - arrow/constructor/normal-func - no/like-java/based-on-invocation, invoke - (method - like java, func-invocation - this porints to global), loosing this - method-invoke to func-invoke (set-timeout e.g), bind - to not loose this (boundFunc = func.bind(context))
 3. **Function as a value (callback)** - Like objects, can be assigned to variables, passed to other funcs and returned from functions.
 4. **Named function expression** - let sayHi = function func(){}, usecase - not visible outside of the function
 5. **New function syntax** - let func = new Function ([arg1, ...argN], functionBody) - function is created literally from a string, no lexical scoping, can access only global variables, usecase - executable code sent by server
 6. **Constructor functions** - create an empty this at the start and return the populated one at the end
-7. **Decorators** - takes a function and alters its behavior, caching e.g.- (slow = cachingDecorator(slow), call - slow(1), cache result in a Map), takes and returns func, cachingdec declares Map and *then* returns func include (Map.has(slow-parma), return amp.get(x), else call actual func(x)), The idea is that we can call cachingDecorator for any function, and it will return the caching wrapper, 
+7. **Decorators** - takes a function and alters its behavior, caching e.g.- (slow = cachingDecorator(slow), call - slow(1), cache result in a Map), takes and returns func, cachingdec declares Map and *then* returns func include (Map.has(slow-parma), return amp.get(x), else call actual func(x)), The idea is that we can call cachingDecorator for any function, and it will return the caching wrapper,
 8. **call, apply and partial func** - func.call(context, Nargs), func.apply(context, args[]), use bind when context is know before hand else use call/apply, partial - func = func.bind(context, [Nargs]) - use - send(from(fixed), to, text)
 9. **Arrow functions** - 3 variations, no this, no new, no super
 10. **Currying** - f(a,b,c) to f(a)(b)(c), function (x) {return function (y){return function (z){return x+y+z}}}, logNow('Info', 'message') - similar to partial func (diff - partial func returns the result right away, curry doesn't)
-11. **Generators** - return/yield multiple values, function* gen(){yield 1, yield N} let g = gen(), JSON.stringify(g.next()), are iterable (available in for of), yield is a two-way street, usecase - paginated data with async generators (no performance gain, just elegant), generate 1..N infinite numbers 
+11. **Generators** - return/yield multiple values, function* gen(){yield 1, yield N} let g = gen(), JSON.stringify(g.next()), are iterable (available in for of), yield is a two-way street, usecase - paginated data with async generators (no performance gain, just elegant), generate 1..N infinite numbers
 
 ## Functions
+
 A function in JavaScript is a value.  
 Functions, in JavaScript, are essentially objects. Like objects they can be assigned to variables, passed to other functions and returned from functions.  
 As functions are objs, thay have properties
-1. **name** property
-```javascript
-function sayHi() {
-  alert("Hi");
-}
-alert(sayHi.name); // sayHi
-```
-2. **length** property
-```javascript
-function f1(a) {}
-function f2(a, b) {}
-function many(a, b, ...more) {}
-alert(f1.length); // 1
-alert(f2.length); // 2
-alert(many.length); // 2
-// Here we can see that rest parameters are not counted.
+| Property              | Description                                                                           | Example Use                                                                                           |
+|-----------------------|---------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `name`                | Returns the name of the function.                                                    | `console.log(myFunction.name);`                                                                     |
+| `length`              | Returns the number of parameters expected by the function.                            | `console.log(myFunction.length);`                                                                   |
+| `prototype`           | Allows adding properties and methods to all instances of a function when used as a constructor. | `MyConstructor.prototype.newMethod = function() {...};`                                             |
+| `toString()`          | Returns a string representation of the function. (gives the entire func code base in string).This can be used in debugging, or while creating documentation                                      | `const functionString = myFunction.toString();`                                                    |
+| `arguments`           | An array-like object containing the arguments passed to the function.                   | `console.log(arguments[0]);`                                                                        |
 
-//polymorphism achieved via length property
-function ask(question, ...handlers) {
-  let isYes = confirm(question);
-  for(let handler of handlers) {
-    if (handler.length == 0) {
-      if (isYes) handler();
-    } else {
-      handler(isYes);
-    }
-  }
-}
-// for positive answer, both handlers are called
-// for negative answer, only the second one
-ask("Question?", () => alert('You said yes'), result => alert(result));
-```
-3. custom properties
-```javascript
-//similar to static class members in java
-function sayHi() {
-  alert("Hi");
-  // let's count how many times we run
-  sayHi.counter++;
-}
-sayHi.counter = 0; // initial value
-sayHi(); // Hi
-sayHi(); // Hi
-alert( `Called ${sayHi.counter} times` ); // Called 2 times
+In addtion we also have call, apply and this, which is discussed below
 
-//Function properties can replace closures sometimes
-```
-4. **this** property
-when used inside a function this‘s value will change depending on 
-1. how that function is defined (arrow, no arrow or constructor function)  
-arrow has no this, constructor functions this works as normal java this, for no arrow, depends on how ot is invoked
-2. how it is invoked and
-    1. Function invocation
-    ```javascript
-     function doSomething(a, b) { 
-       // adds a propone property to the Window object 
-        this.propone = "test value";  
-    }  
-    // function invocation 
-    doSomething();  
-    document.write(window.propone); // test value
-    // this will refer to global obj, in strict mode o/p would be undefined
-    ```
-    2. Method invocation
-    In this case this refers to the obj. using which it is called like obj.func(), this will refer to obj.
-3. the default execution context.
-first will search in function context, then in global context  
+4. **this** property  -
+The this keyword in JavaScript refers to the object to which the current function belongs or is invoked  
 
-**value for this**  
-1. IF func is a method, this belongs to obj
-2. If func is func, then this belong to global window obj
-3. Called with new - a new empty obj is created and returned
-4. Arrow func, no this 
+when used inside a function this‘s value will change depending on
+| Invocation Type        | Description                                                                           | Example                                           |
+|------------------------|---------------------------------------------------------------------------------------|---------------------------------------------------|
+| **Global Context**     | Outside of any function or object, `this` refers to the global object.                | `console.log(this); // refers to the global object`|
+| **Function Context**   | In a regular function, `this` refers to the global object unless it's a method of an object. | `obj.method(); // this refers to the obj object`   |
+| **Method Invocation**  | When a function is a method of an object and is invoked using dot notation, `this` refers to the object on which the method was called. | `obj.method(); // this refers to the obj object`   |
+| **Constructor Invocation** | When a function is used as a constructor (invoked with `new`), `this` refers to the newly created instance of the object. | `const instance = new ConstructorFunction();`       |
+| **Event Handler**      | In an event handler, such as a click event, `this` often refers to the element that triggered the event. | ```javascript document.getElementById('myButton').addEventListener('click', function() { console.log(this); // this refers to the button element }); ``` |
+| **Arrow Functions**    | Arrow functions inherit `this` from the surrounding lexical scope.                     | ```javascript const obj = { arrowFunction: () => { console.log(this); // this refers to the outer context (lexical scope) } }; obj.arrowFunction(); ``` |
+| **Explicit Binding**   | `this` can be explicitly set using methods like `call()`, `apply()`, or `bind()`.     | ```javascript const explicitObj = { name: 'Explicit Object' }; explicitFunction.call(explicitObj); // this refers to explicitObj ``` |
+
+**this keyword example and explaination** - 
+Remember all the above rules
+
 ```javascript
+
 function video() {
-  title='abc'
-  tags=[1,2,3],
-  showtags() {
-    this.tags.forEach(function (tag) {
-       console.log(this.title,tag) // o/p undefined 1,2,3 since cb func inside foreach is func invocation and this then belongs to window obj, to solve use arrow func, or let context=this  above foreach and then context.title instead of this.title in foreach 
+  console.log(this) // here since this function is called as function invocation
+  // this refers to the global object
+    var title='abc' // any variables defined in this function using let, var, const, are not part 
+    // any this
+    // don;t define varibales like below (should always have let, car, const assigned)
+     tags=[1,2,3]; // here there is not let, var, const hence
+     // tags varibale is assgined to global this
+    function showTag() {
+      // here this again refers to global object
+    this.tags.forEach(function (tag) { // in this anonymous function as well
+    // this refers to global object because it is normal func invocation
+     console.log(this.title,tag) // this.tile would be undefined, becuase title is not part of global this
+     // tag would be printed    
+    })
 
+    let abc = () => {
+      console.log(this.title) // undefined since this refers to global object, 
+      // because arrow functions this refers to outer functions this, and in this case
+      // outer functions (video) this refers to global object
+    }
+    abc()
+    
 }
-Hence never use arrow funcions in objects as methods -
-let abc() {
-  A=2
-abc = () =>  {
-  console.log(this.A) // ain't gonna work
+showTag()
 }
-}
+
+// below function is function invocation
+// hence this will refer to global object
+video()
+
+let abc = () => {
+      console.log('this = ', this.title) // output - this = {}
+      // since array functions have no this and abc is a seprate function and not a nested function
+      // if it was a nested function, this = surrounding function
+      // if it was not a arrow function, this = global in node and this = window in browser
+    }
 ```
 
 ##### losing this
-```javascript
-let user = {
-  firstName: "John",
-  sayHi() {
-    alert(`Hello, ${this.firstName}!`);
-  }
-};
-setTimeout(user.sayHi, 1000); // Hello, undefined!
 
-//above code becomes
-let f = user.sayHi;
-setTimeout(f, 1000); // lost user context becuase func f is called as func invocation instead of method invocation and saHI() does not have firstName property, so will check for global obj, here also not found, then undefined
-```
-to not loose context of this, we use bind
 ```javascript
+const obj = {
+    data: 'some data',
+    method: function() {
+        setTimeout(function() {
+          // here we loose this since not this refers to global object
+            console.log(this.data); // 'this' refers to the global object (or undefined in strict mode)
+            // to avoid this scenario use array func ot store this in outer func like context = this or use bind, call, apply methods
+        }, 1000);
+    }
+};
+
+obj.method();
+
+```
+
+#### Call, Apply and Bind methods
+```javascript
+// 1. Call -
+// The call() method is used to invoke a function with a specified this value and individual arguments.
+// syntax
+function.call(thisArg, arg1, arg2, ...);
+// thisArg: The value to use as this when calling the function.`
+function greet(message) {
+    console.log(`${message}, ${this.name}!`);
+}
+const person = { name: 'John' };
+greet.call(person, 'Hello');
+// Output: Hello, John!
+
+// 2. apply
+//The apply() method is similar to call(), but it takes an array-like object as the second argument instead of individual arguments.
 //syntax
-let boundFunc = func.bind(context);
+function.apply(thisArg, [arg1, arg2, ...]);
 
-//Here func.bind(user) as a “bound variant” of func, with fixed this=use
-let user = {
-  firstName: "John"
-};
-function func(phrase) {
-  alert(phrase + ', ' + this.firstName);
+function greet(message, punctuation) {
+    console.log(`${message}, ${this.name}${punctuation}`);
 }
-// bind this to user
-let funcUser = func.bind(user);
-funcUser("Hello"); // Hello, John (argument "Hello" is passed, and this=user)
+const person = { name: 'Alice' };
+greet.apply(person, ['Hi', '!']);
+// Output: Hi, Alice!
 
-//with method invocation
-let user = {
-  firstName: "John",
-  sayHi() {
-    alert(`Hello, ${this.firstName}!`);
-  }
-};
-let sayHi = user.sayHi.bind(user); // (*)
-// can run it without an object
-sayHi(); // Hello, John!
-setTimeout(sayHi, 1000); // Hello, John!
+// 3. bind
+// The bind() method creates a new function that, when called, has its this value set to a specific value,
+// and returns a new function with the same body as the original function.
+// syntax
+function.bind(thisArg, arg1, arg2, ...);
 
-//bindAll
- bindAll(object, methodNames)
- // binds all methodnames to same object
-```
-#### Function as a value
-Function in js is also treated as an object, thus you see below in js
-```javascript
-function ask(question, yes, no) {
-  if (confirm(question)) yes()
-  else no();
+function greet(message) {
+    console.log(`${message}, ${this.name}!`);
 }
+const person = { name: 'Bob' };
+const greetBob = greet.bind(person);
+greetBob('Hola');
+// Output: Hola, Bob!
 
-function showOk() {
-  alert( "You agreed." );
-}
-
-function showCancel() {
-  alert( "You canceled the execution." );
-}
-
-// Call 1 -> usage: functions showOk, showCancel are passed as arguments to ask
-ask("Do you agree?", showOk, showCancel);
-
-// Call 2 -> anonymous functions
-ask(
-  "Do you agree?",
-  function() { alert("You agreed."); },
-  function() { alert("You canceled the execution."); }
-);
+// call and apply vs bind
+// call() and apply() are used to invoke the function immediately.
+// bind() is used to create a new function with a specified this value, but it doesn't invoke the function immediately. The bound function needs to be called separately.
 ```
 
-### Named function expression
-```javascript
-let sayHi = function(who) {
-  alert(`Hello, ${who}`);
-};
-
-let sayHi = function func(who) {
-  alert(`Hello, ${who}`);
-};
-// What’s the purpose of that additional "func" name?
-```
-1. It allows the function to reference itself internally.
-2. It is not visible outside of the function.
-```javascript
-let sayHi = function func(who) {
-  if (who) {
-    alert(`Hello, ${who}`);
-  } else {
-    func("Guest"); // use func to re-call itself
-  }
-};
-sayHi(); // Hello, Guest
-// But this won't work:
-func(); // Error, func is not defined (not visible outside of the function)
-
-//Why do we use func? Maybe just use sayHi for the nested call?
-// in this case it won't work
-let sayHi = function(who) {
-  if (who) {
-    alert(`Hello, ${who}`);
-  } else {
-    sayHi("Guest"); // Error: sayHi is not a function
-  }
-};
-let welcome = sayHi;
-sayHi = null;
-welcome(); // Error, the nested sayHi call doesn't work any more!
-```
+**The arrow => doesn’t create any binding as bind requires this, and arrow funcs have no this**  
+**Can’t be called with new**  
+**They also don’t have super**
+**Arrow functions also don't have arguments property**
 
 ### The "new Function" syntax
+
 There’s one more way to create a function. It’s rarely used, but sometimes there’s no alternative.
+
 ```javascript
-// syntax
 let func = new Function ([arg1, arg2, ...argN], functionBody);
 
 //e.g.
@@ -250,102 +186,51 @@ function getFunc() {
 }
 getFunc()(); // error: value is not defined
 ```
-#### constructor functions
-1. Constructor functions or, briefly, constructors, are regular functions, but there’s a common agreement to name them with capital letter first.
-2. Constructor functions should only be called using new. Such a call implies a creation of empty this at the start and returning the populated one at the end.
-```javascript
-function User(name) {
-  // this = {};  (implicitly)
-
-  // add properties to this
-  this.name = name;
-  this.isAdmin = false;
-
-  // return this;  (implicitly)
-}
-let user = new User("Jack")
-
-// Inside a function, we can check whether it was called with new or without it, using a special new.target property.
-function User() {
-  alert(new.target);
-}
-// without "new":
-User(); // undefined
-// with "new":
-new User(); // function User { ... }
-
-// we can omit parentheses after new, if it has no arguments:
-let user = new User; // <-- no parentheses
-// same as
-let user = new User();
-```
 
 ### Decorators
+
 Decorator a special function that takes another function and alters its behavior.
+
 ```javascript
 // slow is a function and cachingdecorator adds caching ability to slow function
-function slow(x) {
-  // there can be a heavy CPU-intensive job here
-  alert(`Called with ${x}`);
-  return x;
+let abc = (a) => {
+    console.log('sloq compute ', a)
 }
-function cachingDecorator(func) {
-  let cache = new Map();
-  return function(x) {
-    if (cache.has(x)) {    // if there's such key in cache
-      return cache.get(x); // read the result from it
+
+let decorator = (func) => {
+
+    let map = new Map();
+    return function() { // here we can;t return arrow function
+    // because they do not have this and arguments object, need to return a normal function only
+        let me = this;
+        let args = arguments[0];
+        console.log(args)
+        if (map.has(args)) {
+            console.log(' not calling slow compute')
+            return map.get(args)
+        }
+        let res = func.call(me, args);
+        map.set(args, res)
+        return res
     }
-    let result = func(x);  // otherwise call func
-    cache.set(x, result);  // and cache (remember) the result
-    return result;
-  };
 }
-slow = cachingDecorator(slow);
-alert( slow(1) ); // slow(1) is cached
-alert( "Again: " + slow(1) ); // the same
-alert( slow(2) ); // slow(2) is cached
-alert( "Again: " + slow(2) ); // the same as the previous line
+
+let pqr = decorator(abc);
+pqr(1)
+pqr(1)
+pqr(2)
 
 //The idea is that we can call cachingDecorator for any function, and it will return the caching wrapper
 //all we need to do is to apply cachingDecorator to them.
 // like slow2 = cachingDecorator(slow2)
 ```
 
-#### func.call
-Decorators don't work well with obj methods  
-we use func.call(context, …args) that allows to call a function explicitly setting this.
-```javascript
-//syntax
-func.call(context, arg1, arg2, ...)
-// these two calls do almost the same:
-func(1, 2, 3);
-func.call(obj, 1, 2, 3)
-
-//e.g.
-function sayHi() {
-  alert(this.name);
-}
-let user = { name: "John" };
-let admin = { name: "Admin" };
-// use call to pass different objects as "this"
-sayHi.call( user ); // John
-sayHi.call( admin ); // Admin
-```
-
-#### func.apply
-same as func.call, The only syntax difference between call and apply is that call expects a list of arguments, while apply takes an array-like object with them.
-```javascript
-func.call(context, ...args); // pass an array as list with spread syntax
-func.apply(context, args);   // is same as using call
-```
-
-**bind vs call/apply**  
-Use .bind() when you want that function to later be called with a certain context, useful in events. Use .call() or .apply() when you want to invoke the function immediately, and modify the context.
-
 #### partial function
+
 partial function – we create a new function by fixing some parameters of the existing one  
 extension of bind  
 We can bind not only this, but also arguments
+
 ```javascript
 let bound = func.bind(context, [arg1], [arg2], ...);
 
@@ -359,52 +244,19 @@ alert( double(4) ); // = mul(2, 4) = 8
 alert( double(5) ); // = mul(2, 5) = 10
 // The call to mul.bind(null, 2) creates a new function double that passes calls to mul, fixing null as the context and 2 as the first argument. Further arguments are passed “as is”
 ```
+
 When to use?  
 partial application is useful when we have a very generic function and want a less universal variant of it for convenience.
 For instance, we have a function send(from, to, text). Then, inside a user object we may want to use a partial variant of it: sendTo(to, text) that sends from the current user
 
-### Arrow functions
-```javascript
-// variation 1
-let sum = (a, b) => a + b;
-alert(sum(1, 2)); // 3
-
-// variation2 -> only 1 arg do not require curly braces, when 0 args it is required
-let double = n => n * 2;
-alert(double(3)); // 6
-
-// variation 3 -> above 2 had 1 liner function body so no curly braces and also do not required return statement, the expression is returned
-let sum = (a, b) => {  // the curly brace opens a multiline function
-  let result = a + b;
-  return result; // if we use curly braces, then we need an explicit "return"
-};
-
-alert( sum(1, 2) ); // 3
-```
-**Arrow functions have no “this”**
-```javascript
-let group = {
-  title: "Our Group",
-  students: ["John", "Pete", "Alice"],
-  showList() {
-    this.students.forEach(
-      student => alert(this.title + ': ' + student)
-    );
-  }
-};
-group.showList();
-//if we used normal func we would get Error: Cannot read property 'title' of undefined
-// because forEach is taking anonymous func, and it is invoked as func invocation instead of method invocation, so this points to global context, for more info see "this" section above
-```
-**The arrow => doesn’t create any binding as bind requires this, and arrow funcs have no this**  
-**Can’t be called with new**  
-**They also don’t have super**
-
 ------------------------------------------------------------------------------
+
 ## Currying
+
 Currying is an advanced technique of working with functions.  
 Currying is a transformation of functions that translates a function from callable as f(a, b, c) into callable as f(a)(b)(c).
 Currying doesn’t call a function. It just transforms it.
+
 ```javascript
 function curry(f) { // curry(f) does the currying transform
   return function(a) {
@@ -433,6 +285,7 @@ alert( curriedSum(1)(2) ); // 3, called partially
 ```
 
 When can it be used?
+
 ```javascript
 // For instance, we have the logging function log(date, importance, message) that formats and outputs the information.
 function log(date, importance, message) {
@@ -453,19 +306,21 @@ logNow("INFO", "message"); // [HH:mm] INFO message
 let debugNow = logNow("DEBUG");
 debugNow("message"); // [HH:mm] DEBUG message
 ```
+
 curry is not same as default parameters in a function, as default value can have only one value.  
 close to partial functions but not exactly same  
 
 Implement currying function for n arguments
+
 ```javascript
 // currying for n args
-const curryN = (x, n=0) => {
-  return (y) => {
-  if(!y)
-    return n+x;
-  return curryN(y, n+x)
-  }
+let fun = (x) => {
+    return (y) => {
+        if(!y) {
+            return x;
+        }
+        return fun(x+y)
+    }
 }
-console.log(curryN(1)(2)(3)(4)(5)())
-//O/P - 15
+console.log(fun(1)(2)(3)(4)(5)(6)()) // 21
 ```
