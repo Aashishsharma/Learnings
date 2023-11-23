@@ -33,12 +33,12 @@ The this keyword in JavaScript refers to the object to which the current functio
 when used inside a function this‘s value will change depending on
 | Invocation Type        | Description                                                                           | Example                                           |
 |------------------------|---------------------------------------------------------------------------------------|---------------------------------------------------|
-| **Global Context**     | Outside of any function or object, `this` refers to the global object.                | `console.log(this); // refers to the global object`|
+| **Global Context**     | Outside of any function or object, `this` is empty.                | `console.log(this); // output {}`|
 | **Function Context**   | In a regular function, `this` refers to the global object unless it's a method of an object. | `obj.method(); // this refers to the obj object`   |
 | **Method Invocation**  | When a function is a method of an object and is invoked using dot notation, `this` refers to the object on which the method was called. | `obj.method(); // this refers to the obj object`   |
 | **Constructor Invocation** | When a function is used as a constructor (invoked with `new`), `this` refers to the newly created instance of the object. | `const instance = new ConstructorFunction();`       |
 | **Event Handler**      | In an event handler, such as a click event, `this` often refers to the element that triggered the event. | ```javascript document.getElementById('myButton').addEventListener('click', function() { console.log(this); // this refers to the button element }); ``` |
-| **Arrow Functions**    | Arrow functions inherit `this` from the surrounding lexical scope.                     | ```javascript const obj = { arrowFunction: () => { console.log(this); // this refers to the outer context (lexical scope) } }; obj.arrowFunction(); ``` |
+| **Arrow Functions**    | Arrow functions inherit `this` from the surrounding lexical scope. If there is no surrounding function for arrow func this is empty {}                     | ```javascript const obj = { arrowFunction: () => { console.log(this); // this refers to the outer context (lexical scope) } }; obj.arrowFunction(); ``` |
 | **Explicit Binding**   | `this` can be explicitly set using methods like `call()`, `apply()`, or `bind()`.     | ```javascript const explicitObj = { name: 'Explicit Object' }; explicitFunction.call(explicitObj); // this refers to explicitObj ``` |
 
 **this keyword example and explaination** - 

@@ -270,4 +270,8 @@ promiseAllMyVersion(arr.map((item) => promArr(item))).then((res) => {
     console.log({res})
 })
 
-
+function abc() {
+    console.log(this)
+}
+abc()
+console.log(this)
