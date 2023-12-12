@@ -15,14 +15,11 @@
 Hooks
 Higher-Order Components (HOCs)
 Render Props
-Error Boundaries
 React Fragments
 Portals
 Server-Side Rendering (SSR) and Static Site Generation (SSG)
-TypeScript with React
 Optimizing Performance
 Hooks Best Practices
-Context Providers
 React Router
 Webpack and Babel
 
@@ -86,7 +83,7 @@ Behind the scenes React uses webpack for code splitting
 
 ------------------------------------------------------------------------------
 
-## CONTEXT
+## CONTEXT API
 
 Context provides a way to pass data through the component tree without having to pass props down manually at every level.
 
@@ -154,18 +151,23 @@ Apply it sparingly because it makes component reuse more difficult.
 
 ------------------------------------------------------------------------------
 ## ERROR BOUNDARIES
+
 Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.
 
 Error boundaries do not catch errors for:
 
 1. Event handlers (learn more)
 2. Asynchronous code (e.g. setTimeout or requestAnimationFrame callbacks)
-3. Server side rendering
-4. Errors thrown in the error boundary itself (rather than its children)
-   If you need to catch an error inside event handler, use the regular JavaScript try / catch statement:
-   Then why not use try-catch instead of error boundaries?
-   try-catch is imperative and error-boundaries are declaritive, since react is declarative we use...
-A class component becomes an error boundary if it defines either (or both) of the lifecycle methods static getDerivedStateFromError() or componentDidCatch(). Use static getDerivedStateFromError() to render a fallback UI after an error has been thrown. Use componentDidCatch() to log error information.
+If you need to catch an error inside event handler, use the regular JavaScript try / catch statement:
+Then why not use try-catch instead of error boundaries?
+try-catch is imperative and error-boundaries are declaritive, since react is declarative we use...
+
+Error boundary feature is currently available only class components as of noe
+A class component becomes an error boundary if it defines either (or both) of the lifecycle methods static getDerivedStateFromError() or componentDidCatch().  
+
+1.  Use static getDerivedStateFromError() to render a fallback UI after an error has been thrown.  
+2.  Use componentDidCatch() to log error information.
+
 ```javascript
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -197,8 +199,6 @@ class ErrorBoundary extends React.Component {
   <MyWidget />
 </ErrorBoundary>
 ```
-Only class components can be error boundaries.
-As of React 16, errors that were not caught by any error boundary will result in unmounting of the whole React component tree.
 
 ------------------------------------------------------------------------------
 ## REFS and the DOM
