@@ -1,4 +1,5 @@
 ## Index
+
 1. **React** - JS lib by FB, why - (flexi, popular, performance(reconciliation), one-way-databinding, separation odf concerns(JSX), inversion of control) creating app- npx(tool to exec node packages) create-react-app **app-name**
 2. **ReactDOM** - lib that does reconcialitation - (map virtual dom to real), diffing algo (compare root elem, if DOM elem of diff. type, rebuild entire tree, else - only update attributes, components of same type - instance remain same)
 3. **JSX** - syntax extension to JS, separation of concerns (ui+business logic in same code), prevents cross site scripting (XSS)
@@ -27,13 +28,15 @@ Context Providers
 React Router
 Webpack and Babel
 
-
 ## REACT?
+
  A javascript library.
  Js's most popular library on github, by facebook
 
 ------------------------------------------------------------------------------
+
 ## WHY REACT? / Advantages
+
 1. flexibility
 2. popular
 3. html in js and not vice versa
@@ -44,6 +47,7 @@ Webpack and Babel
 8. inversion of control
 
 ------------------------------------------------------------------------------
+
 ## CREATING A REACT APP
 
 npx create-react-app **app-name** || npm init react-app **app-name**
@@ -54,16 +58,23 @@ Because create-react-app needs a template to be passed
 create-react-app needs Node >=8.10
 
 ------------------------------------------------------------------------------
+
 ## NPX?
+
  A tool for executing Node packages. (npX - Execute)
 
 ------------------------------------------------------------------------------
+
 ## ReactDOM
+
  It is a library which keeps the ideal/virtual DOM in memory and then syncs it with Real DOM
 Reconcialition
 The process that ReactDOM does is called as Reconcialition
+
 #### How Reconcialition works internally?
+
 ###### Using the Diffing Algorithm
+
 When diffing two trees, React first compares the two root elements. The behavior is different depending on the types of the root elements.
 
 1. Elements Of Different Types
@@ -82,20 +93,25 @@ No, they are different. The Shadow DOM is a browser technology designed primaril
 The virtual DOM is a concept implemented by libraries in JavaScript on top of browser APIs
 
 ------------------------------------------------------------------------------
+
 ## JSX (it is not mandatory)
- it is a syntax extension to JavaScript 
+
+ it is a syntax extension to JavaScript
+
 ```javascript
 const element = <h1>Hello, world!</h1>; 
 ```
+
 neither html nor js
 Why? Adv?
- Instead of artificially separating technologies by putting markup and logic in separate files, 
+ Instead of artificially separating technologies by putting markup and logic in separate files,
 React separates concerns with loosely coupled units called “components” that contain both
  JSX Prevents Injection Attacks
 By default, React DOM escapes any values embedded in JSX before rendering them
 Everything is converted to a string before being rendered. This helps prevent XSS (cross-site-scripting) attacks.
 
-e.g. JSX 
+e.g. JSX
+
  ```javascript
  const element = <div tabIndex="0"></div>;
  const element = <img src={user.avatarUrl} />;
@@ -103,32 +119,42 @@ e.g. JSX
  ```
 
 While using jsx, React must be in scope (i.e, import React from 'react'), why, because jsx transpiles down to React.createElement(<elem_nm>, <elem_props>, <html_child>)
- 
+
 ------------------------------------------------------------------------------
+
 ## REACT ELEMENTS
+
   smallest building blocks of React apps, they are plain objects
 e.g.  
+
 ```javascript
 const element = <h1>Hello, world</h1>;
 ```
+
 rendering an element  
+
 ```javascript
 const element = <h1>Hello, world</h1>;
     ReactDOM.render(element, document.getElementById('root'));
 ```
+
 React elements are immutable. Once you create an element, you can’t change its children or attributes
 
 ------------------------------------------------------------------------------
+
 ## COMPONENTS
- components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements 
+
+ components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements
 describing what should appear on the screen.
 
 1. Function components
+
   ```javascript
   Function Welcome(props) {
     return <h1>Hello, {props.name}</h1>;
   }
 ```
+
 2. Class components
 
 ```javascript
@@ -138,26 +164,34 @@ describing what should appear on the screen.
   }
 }
 ```
+
 Note: Always start component names with a capital letter.
       All React components must act like pure functions with respect to their props.
 
   Components can be stored in js variables  
+
   ```javascript
   button = <LogoutButton onClick={this.handleLogoutClick} />;
   ```
+
     and can be used in render as {button}
 ------------------------------------------------------------------------------
+
 ## CLASS COMPONENTS
+
  setting state
+
    ```javascript
    this.setState({comment: 'Hello'});
    ```
+
 The only place where you can assign this.state is the constructor.
 
 React may batch multiple setState() calls into a single update for performance.
 
 Because this.props and this.state may be updated asynchronously,
 you should not rely on their values for calculating the next state
+
 ```javascript
 // Wrong
 this.setState({
@@ -169,11 +203,13 @@ this.setState((state, props) => ({
   counter: state.counter + props.increment
 }));
 ```
+
 [Lifecycle](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
 
 ------------------------------------------------------------------------------
 
 ## Order of execution when a component redners or gets updated
+
 1. fist functional body is executed
 2. then the render method
 3. anything inside useeffect
@@ -214,6 +250,7 @@ console.log('Output No. 1')
 ```
 
 ## Updating props
+
 1. updating props causes the component to re-render only if the prop is updated in the parent component
 2. they say the props are immutable in the child component, it means it is a convention, you can mutate the prop in the child component as well, but it will not cause the child component to re-redner and there is no use of updating the prop in the child component
 
@@ -267,15 +304,25 @@ export default ChildComponent;
 
 ```
 
+#### State vs props
+
+1. use state in whichever components required
+2. if multiple components required same state, lift the state to closest parent
+3. if a value can be derieved from both state and props, it should always be props
+
 ## HANDLING EVENTS
+
  very similar to handling events on DOM elements
+
 ```javascript
 HTML ->
  <button onclick="handleClick()">
           Activate Lasers
         </button>
 ```
+
 In DOM you need to call addEventListener to add listeners to a DOM element after it is created
+
 ```javascript
 REACT  
 <button onClick={handleClick}>
@@ -285,78 +332,108 @@ Arrow syntax   <button onClick={() => this.handleClick()}>
                   Click me
                  </button>
 ```
-In React to add event listeners   
+
+In React to add event listeners
+
 ```javascript
 this.handleClick = this.handleClick.bind(this);
 ```
-Passing argument to event handler 
+
+Passing argument to event handler
+
 ```javascript
 <button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>
  Arrow syntax  <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
 ```
+
+#### How to lift state up?
+
+by making a component “controlled”. Just like the DOM <input> accepts both a value and an onChange prop
+
+```javascript
+In child component - 
+  <input value={temperature} onChange={handleChange} />
+  handleChange(e) {
+  props.onTemperatureChange(e.target.value);
+  }
+In Parent component - 
+  <TemperatureInput
+      temperature={celsius}
+      onTemperatureChange={handleCelsiusChange} />
+```
+
 ------------------------------------------------------------------------------
+
 ## FORMS IN REACT
- default HTML form behaviour is available, but generally not used
- techniques for implementing input forms
-  #### 1. Controlled components -> form element whose value is controlled by React
+
+default HTML form behaviour is available, but generally not used
+techniques for implementing input forms
+
+#### 1. Controlled components -> form element whose value is controlled by React
 
 Full example
+
 ```javascript
-  class NameForm extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {value: ''};
+  import React, { useEffect, useState } from 'react';
 
-      this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
+const ChildComponent = ({ propFromParent }) => {
+  const [state, setState] = useState({value: ''})
+
+    const handleChange = (event) => {
+      setState({value: event.target.value});
     }
 
-    handleChange(event) {
-      this.setState({value: event.target.value});
-    }
-
-    handleSubmit(event) {
-      alert('A name was submitted: ' + this.state.value);
+    const handleSubmit = (event) => {
+      alert('A name was submitted: ' + state.value);
       event.preventDefault();
     }
-
-    render() {
-      return (
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name:
-            <input type="text" value={this.state.value} onChange={this.handleChange} />
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-      );
-    }
-  }
+    return (
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name:
+          <input type="text" value={state.value} onChange={handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  
+};
+export default ChildComponent;
 ```
-  ###### 2. Uncontrolled components -> not contolled by react
 
-------------------------------------------------------------------------------
-## LIFTING STATE UP (RULES)
-1. use state in whichever components required
-2. if multiple components required same state, lift the state to closest parent
-3. if a value can be derieved from both state and props, it should always be props
+###### 2. Uncontrolled components -> not contolled by react
 
-######  How to lift state up?
-    by making a component “controlled”. Just like the DOM <input> accepts both a value and an onChange prop
-   ```javascript
-    In child component - 
-      <input value={temperature} onChange={this.handleChange} />
-      handleChange(e) {
-      this.props.onTemperatureChange(e.target.value);
-      }
-    In Parent component - 
-      <TemperatureInput
-          temperature={celsius}
-          onTemperatureChange={this.handleCelsiusChange} />
+Uncontrolled components in React are those where form data is handled by the DOM itself, rather than by React state. Uncontrolled components are typically used when you need to integrate React with non-React code  
+For uncontrolled form elements, you don't use the value prop; instead, you let the DOM handle the input's value **using useRef hook**.
+
+```javascript
+import React, { useRef } from 'react';
+
+const UncontrolledForm = () => {
+  const inputRef = useRef(null);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Input Value:', inputRef.current.value);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* Ref is used to access the DOM element */}
+      <input type="text" ref={inputRef} />
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+
+export default UncontrolledForm;
 ```
 ------------------------------------------------------------------------------
+
 ## COMPOSITION VS INHERITANCE
-######  COMPOSITION recommended over INHERITANCE
+
+###### COMPOSITION recommended over INHERITANCE
+
 ```javascript
   function SplitPane(props) {
     return (
@@ -387,13 +464,16 @@ Full example
     );
   }
   ```
+
 React elements like <Contacts /> and <Chat /> are just objects, so you can pass them as props like any other data.
 
-
 ## React render phase
+
 (Note - while re-rendering, all the funcs inside the components are also re-created)
 React code get converted to DOM in 2 phases (Render phase and commit phase)
-### 1. On inital render 
+
+### 1. On inital render
+
 1. Render Phase
   a. Start from root, goto the leaf components
   b. for each component conver jsx into react elements using React.createElement() method
@@ -402,6 +482,7 @@ React code get converted to DOM in 2 phases (Render phase and commit phase)
   a. React dom package converts react elems to dom elements
 
 ### 2. On re-render
+
 1. Render phase
   a. Start from root, goto the leaf components
   b. find all flagged components which needs to be re-render
@@ -411,24 +492,29 @@ React code get converted to DOM in 2 phases (Render phase and commit phase)
 **<React.StrictMode> - double invokes the function component body in dev mode. Hence we always see logs printed twice in browser when concole.log is added in the func comp body**
 
 ### Re-render cases
+
 1. If we setState same value as initial val, omponent won't re-render
-2. Same val set in setState after re-render, react will re-render that component one more time (as a saftey measure) and after that is still same val, it will not re-render 
+2. Same val set in setState after re-render, react will re-render that component one more time (as a saftey measure) and after that is still same val, it will not re-render
 
 #### 1. Array and objects
+
 React won't re-render if we mutate arrays or objects, we need to create a new reference to array / objs and then use it in setState to cause the re-render  
 
 **Using arrays and objects as state variables**  
-Usestate for array use spread operator to update array as state 
+Usestate for array use spread operator to update array as state
+
 1. Add at end [...oldarr, newItem]  
 2. Add at start [newItem, ...oldarr]  
-3. Add in between [...oldarr.slice(0,index), newItem, oldarr.slice(index)]   
+3. Add in between [...oldarr.slice(0,index), newItem, oldarr.slice(index)]
 
 Remove array elem  
+
 1. remove first - Use slice(1)
 2. remove last - slice(0, len-1)
-3. remove inbetween [...oldarr.slice(0, index), ...oldarr.slice(index+1) 
+3. remove inbetween [...oldarr.slice(0, index), ...oldarr.slice(index+1)
 
 #### 2. Parent and Child
+
 1. When new state in parent is different than the old state  
 Both parent and child are re-renders
 2. New state is same as old state
@@ -436,14 +522,18 @@ parent and child don't re-render
 3. New state is same as old state after initial render (React re-render one more time as a safety measure)  
 Only parent component is re-rendered
 
-
 ------------------------------------------------------------------------------
+
 ## THINKING IN REACT
 
 #### 1. Break The UI Into A Component Hierarchy
+
 #### 2. Build A Static Version in React
+
 build a static version of your app that renders your data model **don’t use state at all**
+
 #### 3. Identify The Minimal (but complete) Representation Of UI State
+
 Figure out the absolute minimal representation of the state your application needs and compute everything else you need on-demand. For example, if you’re building a TODO list, keep an array of the TODO items around; don’t keep a separate state variable for the count. Instead, when you want to render the TODO count, take the length of the TODO items array.
 
 Ask three questions about each piece of data:
@@ -453,6 +543,7 @@ Ask three questions about each piece of data:
 3. Can you compute it based on any other state or props in your component? If so, it isn’t state.
 
 #### 4. Identify Where Your State Should Live
+
 For each piece of state in your application:
 
 1. Identify every component that renders something based on that state.
@@ -461,5 +552,6 @@ For each piece of state in your application:
 4. If you can’t find a component where it makes sense to own the state, create a new component solely for holding the state and add it somewhere in the hierarchy above the common owner component.
 
 #### 5. Add Inverse Data Flow
+
 Now we need to pass data from bottom to top component.
 We can use the onChange event on the inputs to be notified of it.
