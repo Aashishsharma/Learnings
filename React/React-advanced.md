@@ -12,18 +12,36 @@
 11. **Proptypes** - basic prop types checking - (import PropTypes from 'prop-types', comp.propTypes = {name: PropTypes.string})
 12. **React Router** - link(to), route(path/component), switch(route), browser-route for historys
 
+Hooks
+Higher-Order Components (HOCs)
+Render Props
+Error Boundaries
+React Fragments
+Portals
+Server-Side Rendering (SSR) and Static Site Generation (SSG)
+TypeScript with React
+Optimizing Performance
+Hooks Best Practices
+Context Providers
+React Router
+Webpack and Babel
+
 ## CODE SPLITTING
-Bundling is great, but as your app grows, your bundle will grow too.  
-So we use code splitting  
-The best way to introduce code-splitting into your app is using React.lazy using dynamic import  
-see lazy loading
-#### Lazy loading
+
+Loading all this code upfront can lead to slower initial page loads. Code splitting allows developers to split the application into smaller pieces and load them on-demand.  
+Overly aggressive code splitting may lead to increased network requests, potentially negating the performance gains.  
+
+2 ways to introduce code splitting in react app -  
+
+#### 1. Using Dynamic import + React suspense
+
 With Code splitting, the bundle can be split to smaller chunks where the most important chunk can be loaded first and then every other secondary one lazily loaded.  
+
 ```javascript
 import React, {lazy, Suspense, useEffect, useState} from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
-const Feed = lazy(() => import("./routes/Feed"));
+const Feed = lazy(() => import("./routes/Feed")); // dynamic import
 const Profile = lazy(() => import("./routes/Profile"));
 const Home = lazy(() => import("./routes/Home"));
 const Settings = lazy(() => import("./routes/Settings"));
@@ -47,52 +65,91 @@ const Settings = lazy(() => import("./routes/Settings"));
   />
 </Switch>
 ```
+
 So when home is opened only that js is pulled from the split bundle, same case when feed is opened
 
-------------------------------------------------------------------------------
-## CONTEXT
-Context provides a way to pass data through the component tree without having to pass props down manually at every level.
+#### 2. Using Dynamic import + React router
+
 ```javascript
-// Context lets us pass a value deep into the component tree
-// without explicitly threading it through every component.
-// Create a context for the current theme (with "light" as the default).
-const ThemeContext = React.createContext('light');
+const HomePage = React.lazy(() => import('./HomePage'));
+const AboutPage = React.lazy(() => import('./AboutPage'));
 
-class App extends React.Component {
-  render() {
-    // Use a Provider to pass the current theme to the tree below.
-    // Any component can read it, no matter how deep it is.
-    // In this example, we're passing "dark" as the current value.
-    return (
-      <ThemeContext.Provider value="dark">
-        <Toolbar />
-      </ThemeContext.Provider>
-    );
-  }
-}
+// React Router setup
+<Switch>
+  <Route path="/home" component={HomePage} />
+  <Route path="/about" component={AboutPage} />
+</Switch>
 
-// A component in the middle doesn't have to
-// pass the theme down explicitly anymore.
-function Toolbar() {
+```
+
+Behind the scenes React uses webpack for code splitting
+
+------------------------------------------------------------------------------
+
+## CONTEXT
+
+Context provides a way to pass data through the component tree without having to pass props down manually at every level.
+
+```javascript
+import React, { createContext, useState, useContext } from 'react';
+
+// Step 1: Create a Context
+const ThemeContext = createContext();
+// Step 2: Create a Provider
+const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState('light');
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
   return (
-    <div>
-      <ThemedButton />
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+export { ThemeContext, ThemeProvider };
+
+// Step 3: Create a Component that Consumes the Context
+import { ThemeContext } from './ThemeContextProvider';
+const ThemedComponent = () => {
+  // Consume the context using useContext hook
+  const { theme, toggleTheme } = useContext(ThemeContext); // import the ThemeContext
+
+  //When the toggleTheme function is called in the below code, it will cause a re-render of the components that are consuming the theme from the ThemeContext
+  // also note, re-rendering means all the function body, and render method and useEffects would be executed
+  return (
+    <div style={{ background: theme === 'light' ? '#f0f0f0' : '#333', color: theme === 'light' ? '#333' : '#f0f0f0', padding: '20px' }}>
+      <h2>Themed Component</h2>
+      <p>Current Theme: {theme}</p>
+      <button onClick={toggleTheme}>Toggle Theme</button>
+      
     </div>
   );
-}
+};
+// Step 4: Use the Provider to Wrap Your App
+const App = () => {
+  return (
+    // Wrap your components with the Provider
+    <ThemeProvider>
+      <div>
+        <h1>Theme Switcher App</h1>
+        <ThemedComponent />
+      </div>
+    </ThemeProvider>
+  );
+};
+export default App;
 
-class ThemedButton extends React.Component {
-  // Assign a contextType to read the current theme context.
-  // React will find the closest theme Provider above and use its value.
-  // In this example, the current theme is "dark".
-  static contextType = ThemeContext;
-  render() {
-    return <Button theme={this.context} />;
-  }
-}
 ```
-If you only want to avoid passing some props through many levels, component composition is often a simpler solution than context.
-Common examples where using context might be simpler than the alternatives include managing the current locale, theme, or a data cache  
+
+**Usecase for context api** = 
+
+- **Theme:** Setting a theme for an entire application.
+- **User Authentication:** Sharing authentication status across components.
+- **Localization:** Managing the preferred language for an app.
+
 Apply it sparingly because it makes component reuse more difficult.
 
 ------------------------------------------------------------------------------

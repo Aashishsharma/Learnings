@@ -10,24 +10,6 @@
 8. **Composition over inheritance** - pass other components as props, Strategy design pattern
 9. **Thinking in React** - (1. draw component hierarchy 2. build static version 3. identify min. state required 4. identify where state should live 5. add inverse data flow)
 
-Hooks
-Forms
-Context API
-State Management (Redux, MobX)
-Higher-Order Components (HOCs)
-Render Props
-Error Boundaries
-React Fragments
-Portals
-Server-Side Rendering (SSR) and Static Site Generation (SSG)
-TypeScript with React
-Optimizing Performance
-Code Splitting
-Hooks Best Practices
-Context Providers
-React Router
-Webpack and Babel
-
 ## REACT?
 
  A javascript library.
