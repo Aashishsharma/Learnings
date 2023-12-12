@@ -67,30 +67,17 @@ create-react-app needs Node >=8.10
 
 ## ReactDOM
 
- It is a library which keeps the ideal/virtual DOM in memory and then syncs it with Real DOM
+It is a library which renders React components to the HTML DOM 
 Reconcialition
 The process that ReactDOM does is called as Reconcialition
 
 #### How Reconcialition works internally?
 
+1. React's reconciliation process is designed for efficiency, reducing the number of actual DOM manipulations to enhance performance.
+2. The Virtual DOM serves as an intermediary, allowing React to make intelligent decisions about updating the actual DOM while abstracting direct DOM manipulations.
+3. Strategies like element diffing, key-based optimizations, and batched updates contribute to React's ability to optimize UI updates.
+
 ###### Using the Diffing Algorithm
-
-When diffing two trees, React first compares the two root elements. The behavior is different depending on the types of the root elements.
-
-1. Elements Of Different Types
-Whenever the root elements have different types, React will tear down the old tree and build the new tree from scratch.
-
-When tearing down a tree, old DOM nodes are destroyed. Component instances receive componentWillUnmount(). When building up a new tree, new DOM nodes are inserted into the DOM. Component instances receive componentWillMount() and then componentDidMount(). Any state associated with the old tree is lost.
-
-2. DOM Elements Of The Same Type
-React looks at the attributes of both, keeps the same underlying DOM node, and only updates the changed attributes.
-
-3. Component Elements Of The Same Type
-When a component updates, the instance stays the same, so that state is maintained across renders. React updates the props of the underlying component instance to match the new element, and calls componentWillReceiveProps() and componentWillUpdate() on the underlying instance.
-
-Is the Shadow DOM the same as the Virtual DOM?
-No, they are different. The Shadow DOM is a browser technology designed primarily for scoping variables and CSS in web components.
-The virtual DOM is a concept implemented by libraries in JavaScript on top of browser APIs
 
 ------------------------------------------------------------------------------
 
@@ -248,6 +235,30 @@ export function App(props) {
 console.log('Output No. 1')
 
 ```
+
+### Re-render cases
+
+1. If we setState same value as previous val, component won't re-render
+
+#### 1. Array and objects
+
+React won't re-render if we mutate arrays or objects, we need to create a new reference to array / objs and then use it in setState to cause the re-render  
+
+**Using arrays and objects as state variables**  
+Usestate for array use spread operator to update array as state
+
+1. Add at end [...oldarr, newItem]  
+2. Add at start [newItem, ...oldarr]  
+3. Add in between [...oldarr.slice(0,index), newItem, oldarr.slice(index)]
+
+**if we do array.push() in the state variable, the state varibale gets updated but the compoent is not re-renderd**
+
+Remove array elem  
+
+1. remove first - Use slice(1)
+2. remove last - slice(0, len-1)
+3. remove inbetween [...oldarr.slice(0, index), ...oldarr.slice(index+1)
+
 
 ## Updating props
 
@@ -432,6 +443,7 @@ const UncontrolledForm = () => {
 
 export default UncontrolledForm;
 ```
+
 ------------------------------------------------------------------------------
 
 ## COMPOSITION VS INHERITANCE
@@ -493,28 +505,6 @@ React code get converted to DOM in 2 phases (Render phase and commit phase)
   c. for each component conver jsx into react elements using React.createElement() method
   d. compare old react elem tree when newly generated tree and send only the elems which are different to the commit phase
 
-
-### Re-render cases
-
-1. If we setState same value as initial val, omponent won't re-render
-2. Same val set in setState after re-render, react will re-render that component one more time (as a saftey measure) and after that is still same val, it will not re-render
-
-#### 1. Array and objects
-
-React won't re-render if we mutate arrays or objects, we need to create a new reference to array / objs and then use it in setState to cause the re-render  
-
-**Using arrays and objects as state variables**  
-Usestate for array use spread operator to update array as state
-
-1. Add at end [...oldarr, newItem]  
-2. Add at start [newItem, ...oldarr]  
-3. Add in between [...oldarr.slice(0,index), newItem, oldarr.slice(index)]
-
-Remove array elem  
-
-1. remove first - Use slice(1)
-2. remove last - slice(0, len-1)
-3. remove inbetween [...oldarr.slice(0, index), ...oldarr.slice(index+1)
 
 ------------------------------------------------------------------------------
 
