@@ -17,7 +17,7 @@ div::before { content: "Read this: "; }
   </style>
 </head>
 <body>
-  <h1>Prime Number Calculator</h1>
+  <h1 id="abc">Prime Number Calculator</h1>
   <input type="number" id="rangeStart" placeholder="Start">
   <input type="number" id="rangeEnd" placeholder="End">
   <button id="calculate">Calculate Primes</button>
@@ -26,6 +26,12 @@ div::before { content: "Read this: "; }
 
   <script>
 
+
+
+let pqr = document.createElement('div')
+pqr.textContent = 'PQR';
+
+document.getElementById('abc').before(pqr);
 const workerScript = `
   self.onmessage = function(event) {
   const rangeStart = event.data.rangeStart;

@@ -9,6 +9,25 @@
 8. **Composition over inheritance** - pass other components as props, Strategy design pattern
 9. **Thinking in React** - (1. draw component hierarchy 2. build static version 3. identify min. state required 4. identify where state should live 5. add inverse data flow)
 
+Hooks
+Forms
+Context API
+State Management (Redux, MobX)
+Higher-Order Components (HOCs)
+Render Props
+Error Boundaries
+React Fragments
+Portals
+Server-Side Rendering (SSR) and Static Site Generation (SSG)
+TypeScript with React
+Optimizing Performance
+Code Splitting
+Hooks Best Practices
+Context Providers
+React Router
+Webpack and Babel
+
+
 ## REACT?
  A javascript library.
  Js's most popular library on github, by facebook
@@ -100,7 +119,7 @@ const element = <h1>Hello, world</h1>;
 React elements are immutable. Once you create an element, you can’t change its children or attributes
 
 ------------------------------------------------------------------------------
-## COMPONENTS AND PROPS
+## COMPONENTS
  components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements 
 describing what should appear on the screen.
 
@@ -153,6 +172,101 @@ this.setState((state, props) => ({
 [Lifecycle](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
 
 ------------------------------------------------------------------------------
+
+## Order of execution when a component redners or gets updated
+1. fist functional body is executed
+2. then the render method
+3. anything inside useeffect
+
+```javascript
+import React, {useEffect, useState} from 'react';
+
+export function App(props) {
+  // 2
+  console.log('Output No. 2')
+  const [state, setState] = useState(1)
+
+  useEffect(() => {
+    // 4
+    console.log('Output No. 4')
+    setTimeout(() => {
+      setState(state + 1)
+    },1000)
+    // on state update, i.e after every 1 sec in above code
+    // output 2, 3, 4 would be console logged in sequence
+    // that means, on state update, the function body (output 2) is also executed
+  },[state])
+  return (
+
+    <div className='App'>
+    {// 3
+      console.log('Output No. 3')
+    }
+      <h1>Hello React.</h1>
+      <h2>Start editing to see some magic happen!</h2>
+    </div>
+  );
+}
+
+// 1
+console.log('Output No. 1')
+
+```
+
+## Updating props
+1. updating props causes the component to re-render only if the prop is updated in the parent component
+2. they say the props are immutable in the child component, it means it is a convention, you can mutate the prop in the child component as well, but it will not cause the child component to re-redner and there is no use of updating the prop in the child component
+
+```javascript
+// ParentComponent.js
+import React, { useState } from 'react';
+import ChildComponent from './ChildComponent';
+
+const ParentComponent = () => {
+  const [value, setValue] = useState(0);
+  const handleUpdate = () => {
+    setValue(value + 1);
+  };
+  return (
+    <div>
+      <button onClick={handleUpdate}>Update Parent</button>
+      <ChildComponent propFromParent={value} />
+    </div>
+  );
+};
+export default ParentComponent;
+
+// ChildComponent.js
+import React, { useEffect } from 'react';
+
+const ChildComponent = ({ propFromParent }) => {
+  useEffect(() => {
+    // when update button is clicked in the parent component
+    // props changes and useEffect and render method of this child component is called
+    console.log('ChildComponent has re-rendered');
+  }, [propFromParent]);
+  // even if his propFromParent dependency is not present in the use Effect
+  // the console log in the below render method gets called when the prop changes
+
+  const handleUpdate = () => {
+    // when uodate child button ic clicked, we can still update the propFromParent value as shown below
+    propFromParent = 123;
+    // but this will not trigger useEffect or the render mehtod of this child component
+  }
+
+  return (
+    <div>
+    {console.log('ChildComponent has re-rendered');}
+      <p>Prop from Parent: {propFromParent}</p>
+      <button onClick={handleUpdate}>Update Child</button>
+    </div>
+  );
+};
+
+export default ChildComponent;
+
+```
+
 ## HANDLING EVENTS
  very similar to handling events on DOM elements
 ```javascript

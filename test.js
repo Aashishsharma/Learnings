@@ -269,9 +269,8 @@ let promiseAllMyVersion = (arrodPromises) => {
 promiseAllMyVersion(arr.map((item) => promArr(item))).then((res) => {
     console.log({res})
 })
-
-function abc() {
-    console.log(this)
+function greet(message, punctuation) {
+    console.log(`${message}, ${this.name}${punctuation}`);
 }
-abc()
-console.log(this)
+const person = { name: 'Alice' };
+greet.apply(person, ['Hi', '!']);
