@@ -15,7 +15,6 @@
 Hooks
 Higher-Order Components (HOCs)
 Render Props
-React Fragments
 Portals
 Server-Side Rendering (SSR) and Static Site Generation (SSG)
 Optimizing Performance
@@ -160,7 +159,12 @@ Error boundaries do not catch errors for:
 2. Asynchronous code (e.g. setTimeout or requestAnimationFrame callbacks)
 If you need to catch an error inside event handler, use the regular JavaScript try / catch statement:
 Then why not use try-catch instead of error boundaries?
-try-catch is imperative and error-boundaries are declaritive, since react is declarative we use...
+try-catch is imperative and error-boundaries are declaritive, since react is declarative we use...  
+
+**Declarative programming** - 
+Declarative programming is a style of programming where you describe what you want to achieve without specifying the exact steps to get there.  
+React is declarative, meaning we just say the component needs to be updated, we doon't specify how react changes the DOM to achieve this  
+Similarly Error boundaries are also declarative
 
 Error boundary feature is currently available only class components as of noe
 A class component becomes an error boundary if it defines either (or both) of the lifecycle methods static getDerivedStateFromError() or componentDidCatch().  
@@ -201,72 +205,24 @@ class ErrorBoundary extends React.Component {
 ```
 
 ------------------------------------------------------------------------------
-## REFS and the DOM
-Refs provide a way to access DOM nodes or React elements created in the render method.
-In the typical React dataflow, props are the only way that parent components interact with their children. To modify a child, you re-render it with new props. However, there are a few cases where you need to imperatively modify a child outside of the typical dataflow e.g. Managing focus, text selection, or media playback.
 
-Avoid using refs for anything that can be done declaratively.
+## Fragments 
 
-For example, instead of exposing open() and close() methods on a Dialog component, pass an isOpen prop to it.
+In react the render method can return only one element and not multiple
+Fragments avoid unnecessary wrapper elements when you want to return multiple elements from a component.
 
-Don’t Overuse Refs.
-
-#### Creating refs
 ```javascript
-class MyComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
-  }
-  render() {
-    return <div ref={this.myRef} />;
-  }
-}
+const MyComponent = () => (
+  <>
+    <ChildComponent1 />
+    <ChildComponent2 />
+  </>
+  //above is a shorthand syntax,
+  //we can replace <></> with <React.Fragment>...</React.Fragment>
+);
 
-//Accessing refs
-const node = this.myRef.current;
-
-//adding refs to class component
-class AutoFocusTextInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.textInput = React.createRef();
-  }
-
-  componentDidMount() {
-    this.textInput.current.focusTextInput();
-  }
-
-  render() {
-    return (
-      <CustomTextInput ref={this.textInput} />
-    );
-  }
-}
-// Note that this only works if CustomTextInput is declared as a class
 ```
-If you want to allow people to take a ref to your function component, you can use forwardRef.
-You can, however, use the ref attribute inside a function component as long as you refer to a DOM element or a class component:
 
-------------------------------------------------------------------------------
-## Fragments
-Fragments let you group a list of children without adding extra nodes to the DOM.
-```javascript
-render() {
-  return (
-    <React.Fragment>
-      <ChildA />
-      <ChildB />
-      <ChildC />
-    </React.Fragment>
-  );
-}
-
-// Use short syntax instead, to do replace 
-<React.Fragment>...</React.Fragment>
-with
-<>...</>
-```
 usecase render multiple <td> but react comp can return only one elem, so wrap in div, but then td can't be in div so fragment  
 
 ------------------------------------------------------------------------------
