@@ -390,91 +390,11 @@ const App = () => {
 export default App;
 ```
 
-Using Render props
+**Render props vs HOC** - 
 
-```javascript
-class MouseTracker extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleMouseMove = this.handleMouseMove.bind(this);
-    this.state = { x: 0, y: 0 };
-  }
-
-  handleMouseMove(event) {
-    this.setState({
-      x: event.clientX,
-      y: event.clientY
-    });
-  }
-
-  render() {
-    return (
-      <div style={{ height: '100vh' }} onMouseMove={this.handleMouseMove}>
-        <h1>Move the mouse around!</h1>
-        {/*
-          Instead of providing a static representation of what <Mouse> renders,
-          use the `render` prop to dynamically determine what to render.
-        */}
-        {this.props.render(this.state)}
- 
-      </div>
-    );
-  }
-}
-
-// it's parent component
-<MouseTracker render={(mouse) => (
-         <div>The current mouse position is ({mouse.x}, {mouse.y})</div>
-         /// here we can render
-        )}/>
-
-
-```
-
-#### Another example of render props where apart from sharing jsx, we also share the logic
-
-```javascript
-//click
-import React from 'react'
-export const Click = (props) => {
-  return (
-    <button onClick={props.handleChange}> Button clicked {props.count} times </button>
-    )
-}
-//hover
-export const Hover = (props) => {
-  return (
-    <h1 onHover={props.handleChange}> H1 hovered {props.count} times </h1>
-    )
-}
-```
-
-Counter
-
-```javascript
-//counter
-import React, {useState} from 'react'
-export const Counter = (props) => {
-  const [count, setCount] = useState(0)
-  const handleChange = () => {
-    setCount((prevCount) => prevCount +1)
-  }
-
-  return (
-    <div>
-    {props.render(count, handleChange)}
-    </div>
-  )
-}
-```
-
-App.js
-
-```javascript
-  <Counter render={(count, handleChange) => <Click count={count} handleChange={handleChange}/>}
-  <Counter render={(count, handleChange) => <Hover count={count} handleChange={handleChange}/>}
-
-```
+1. In both render props and HOC, we can share the reusable logic as well as share reusable JSX
+2. If you need more dynamic and conditional rendering logic, Render Props may be a better fit
+3. HOCs are more readable and maintainable
 
 ----------------------------------------------------------------------------------------
 
