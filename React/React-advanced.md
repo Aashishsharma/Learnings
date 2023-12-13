@@ -13,13 +13,14 @@
 11. **Proptypes** - basic prop types checking - (import PropTypes from 'prop-types', comp.propTypes = {name: PropTypes.string})
 12. **React Router** - link(to), route(path/component), switch(route), browser-route for historys
 
-Hooks
 Portals
-Server-Side Rendering (SSR) and Static Site Generation (SSG)
-Optimizing Performance
-Hooks Best Practices
 React Router
+Hooks
+Hooks Best Practices
+Optimizing Performance
 Webpack and Babel
+Server-Side Rendering (SSR) and Static Site Generation (SSG)
+
 
 ## CODE SPLITTING
 
@@ -335,6 +336,9 @@ which the component then calls to render its content
   <h1>Hello {data.target}</h1>
 )}/>
 ```
+
+**Usecase -** - Toggle components, adding tooltip to multiple components  
+In the toolip example - all the tooltip styling will be in reusable component and the tooltip text which would be different for different component would be paased as prop and then again paased as prop in the render function
 
 **Steps to create a render prop** - 
 
