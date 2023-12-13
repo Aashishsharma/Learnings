@@ -241,86 +241,74 @@ const EnhancedComponent = higherOrderComponent(WrappedComponent);
 HOCs are used for Cross-Cutting Concerns
 **Concerns-** term that refers to a part of the system divided on the basis of the functionality e.g. business logic is a concern
 **Cross-Cutting Concerns-** a concern which is applicable throughout the application and it affects the entire application.
-e.g. logging, security
+e.g. logging, security, loader
 
- e.g. use
-Below example requirement - implement button and count the click, implement hover and count the hover  
-common functionality is to count - withCounter whose code would be used in both click and hover components  
-Same example is used in render props  
+HOC names often start with "with" (e.g., withLogger, withLoader).  
+
+**Render props and hooks are possible alternatives for HOCs**
+
 ```javascript
-//syntax
-import React from 'react';
-// Take in a component as argument WrappedComponent
-const higherOrderComponent = (WrappedComponent) => {
-// And return another component
-// this can be a functional component
-  class HOC extends React.Component {
-    render() {
-      return <WrappedComponent />;
-    }
-  }
-  return HOC;
+//HOC syntax
+const withEnhancement = (WrappedComponent) => {
+  // ... HOC logic and enhancements ...
+  return EnhancedComponent;
+};
+```
+
+```javascript
+import React, { useState, useEffect } from 'react';
+
+// HOC for adding a loader
+const withLoader = (WrappedComponent, urItoFetchData) => {
+  return function WithLoader(props) {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      // Simulating an asynchronous operation (e.g., fetching data)
+      const fetchData = async () => {
+        try {
+          // Simulate delay
+          await fetch(urItoFetchData)
+
+          // Once data is fetched, set loading to false
+          setLoading(false);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          setLoading(false); // Set loading to false even in case of an error
+        }
+      };
+
+      // Trigger the data fetching function
+      fetchData();
+    }, []); // Empty dependency array ensures this effect runs only once (componentDidMount)
+
+    // Render the loader while loading, or the wrapped component when loading is complete
+    return loading ? <div>Loading...</div> : <WrappedComponent {...props} />;
+  };
 };
 
-```
-```javascript
-//click
-// import withCounter
-import React from 'react'
-export const Click = (props) => {
+// Example Component
+const MyComponent = ({ data }) => {
   return (
-  /// this counter variable is coming from HOC
-  /// we can also use props.handleClick - see HOC
-    <button onClick={props.handleChange}> Button clicked {props.count} times </button>
-    )
-}
-/// and to make HOC more configurable, we can pass additional paramaeters as second arg 
+    <div>
+      <h1>Data Loaded:</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+};
 
-export dedault withCounter(Click, incrementBy5)
+// Wrap MyComponent with the loader HOC - and also pass the fetchUrl to this component
+const MyComponentWithLoader = withLoader(MyComponent, urItoFetchData);
 
-///hover
-// import withCounter
-const Hover = (props) => {
-  return (
-    <h1 onHover={props.handleChange}> H1 hovered {props.count} times </h1>
-    )
-}
+// Usage
+const App = () => {
+  // Simulating data passed as a prop
+  const data = { message: 'Hello, World!' };
 
-/// notcie secnod arg is not passed, so increment by 1 by default
-export default withCounter(Hover)
-
-/// HOC - withCounter
-import React from 'react'
-export const Click = (WrappedComponent, incrementBy = 1) => {
-  return withCounter = (props) => {
-    // you can add all useState, hooks functionlaity here which would be reaused in all 
-    // components that are wrapped in HOC
-    // this is the power of HOC - sharing logic 
-    // e.g. this counter variable is now available everywhere
-    // and we don't need ot copy handleclick everywhere
-    // it would be avaialble for those components as props, just need to call it
-    const [count, setCount] = useState(0)
-    const handleChange = () => {
-      // click will be incremented by 5
-      // hover will be incremented by 1
-      setCount((prevCount) => prevCount + incrementBy)
-    }
-
-    return (<>
-      <div>Here we can add any reusable jsx</div>
-      /// it is imp to pass {...props} otherwise when we call wrapped component with props, those 
-      // would be lost in HOC and won't be available in the wrapped component
-      // and we can pass additional props from HOC
-      <WrappedComponent {...props} counter={count} handleChange={handleChange} />
-      </>
-    )
-  }
-}
-
-/// in app.js
-<Click />
-<Hover />
-
+  // Render the enhanced component
+  return <MyComponentWithLoader data={data} />;
+};
+export default App;
 ```
 
 A HOC is a pure function with zero side-effects.
