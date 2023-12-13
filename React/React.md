@@ -87,7 +87,25 @@ e.g. JSX
 
  ```
 
-While using jsx, React must be in scope (i.e, import React from 'react'), why, because jsx transpiles down to React.createElement(<elem_nm>, <elem_props>, <html_child>)
+```javascript
+<MyButton color="blue" shadowSize={2}>
+  Click Me
+</MyButton>
+
+//compiles to 
+React.createElement(
+  MyButton,
+  {color: 'blue', shadowSize: 2},
+  'Click Me'
+)
+// thus react must be in scope i.e, import React from 'react'
+```
+User-Defined Components Must Be Capitalized.
+#### Children in JSX
+```javascript
+<MyComponent>Hello world!</MyComponent>
+```
+This is valid JSX, and props.children in MyComponent will simply be the string "Hello world!". 
 
 ------------------------------------------------------------------------------
 

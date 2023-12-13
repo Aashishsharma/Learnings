@@ -226,9 +226,10 @@ const MyComponent = () => (
 usecase render multiple <td> but react comp can return only one elem, so wrap in div, but then td can't be in div so fragment  
 
 ------------------------------------------------------------------------------
+
 ## Higher-Order Components
-A higher-order component (HOC) is an advanced technique in React for reusing component logic.
-A higher-order component is a function that takes a component and returns a new component.
+A higher-order component is a function that takes a component and returns a new component.  
+HOCs provide a way to reuse component logic
 
 Hoc - normal comp - takes props and returns ui for that prop  
 Hoc - takes comp and props and return new comp - almost always, hooks can replace hocs   
@@ -324,27 +325,6 @@ export const Click = (WrappedComponent, incrementBy = 1) => {
 
 A HOC is a pure function with zero side-effects.
 
-------------------------------------------------------------------------------
-## JSX in depth
-```javascript
-<MyButton color="blue" shadowSize={2}>
-  Click Me
-</MyButton>
-
-//compiles to 
-React.createElement(
-  MyButton,
-  {color: 'blue', shadowSize: 2},
-  'Click Me'
-)
-// thus react must be in scope i.e, import React from 'react'
-```
-User-Defined Components Must Be Capitalized.
-#### Children in JSX
-```javascript
-<MyComponent>Hello world!</MyComponent>
-```
-This is valid JSX, and props.children in MyComponent will simply be the string "Hello world!". 
 
 ------------------------------------------------------------------------------
 ## Optimizing performance
@@ -458,9 +438,6 @@ class Component extends React.PureComponent {
   }
 }
 ```
-
-#### 6. Using React memo
-see useCallback section in hooks
 
 ------------------------------------------------------------------------------
 ## Portals
