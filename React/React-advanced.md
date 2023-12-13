@@ -557,15 +557,6 @@ export const PortalDemo = () => {
 
 ------------------------------------------------------------------------------
 
-## Static Type Checking
-
-Static type checkers like Flow and TypeScript identify certain types of problems before you even run your code. They can also improve developer workflow by adding features like auto-completion. For this reason, we recommend using Flow or TypeScript instead of PropTypes for larger code bases.
-
-Typescript/Flow can be added to react app
-**npx create-react-app my-app --template typescript**
-
-------------------------------------------------------------------------------
-
 ## Strict Mode
 
 StrictMode is a tool for highlighting potential problems in an application. Like Fragment, StrictMode does not render any visible UI. It activates additional checks and warnings for its descendants.
@@ -641,48 +632,4 @@ Greeting.defaultProps = {
 
 ------------------------------------------------------------------------------
 
-## Uncontrolled components
 
-When form data is handled by the DOM itself, and not by React
-
-instead of writing an event handler for every state update, you can use a ref to get form values from the DOM
-
-```javascript
-class NameForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.input = React.createRef();
-  }
-
-  handleSubmit(event) {
-    alert('A name was submitted: ' + this.input.current.value);
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <input type="text" ref={this.input} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-    );
-  }
-}
-
-// if you forgot, below is the controlled component
-<input value={someValue} onChange={handleChange} />
-```
-
-You can also make a controlled component as uncontrolled by removing event handler and adding ref. (in above code, I have made input tag both controlled and uncontrolled)
-But this is not recommended.
-File input tag is always uncontrolled component, as only DOM (user) can control it's value.
-
-------------------------------------------------------------------------------
-
-## Web Components
-
-Nai aata kuch :stuck_out_tongue:
