@@ -13,7 +13,6 @@
 11. **Proptypes** - basic prop types checking - (import PropTypes from 'prop-types', comp.propTypes = {name: PropTypes.string})
 12. **React Router** - link(to), route(path/component), switch(route), browser-route for historys
 
-Portals
 React Router
 Hooks
 Hooks Best Practices
