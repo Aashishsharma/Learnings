@@ -241,7 +241,7 @@ const EnhancedComponent = higherOrderComponent(WrappedComponent);
 HOCs are used for Cross-Cutting Concerns
 **Concerns-** term that refers to a part of the system divided on the basis of the functionality e.g. business logic is a concern
 **Cross-Cutting Concerns-** a concern which is applicable throughout the application and it affects the entire application.
-e.g. logging, security, loader
+e.g. logging, security, loader, manipulating props
 
 HOC names often start with "with" (e.g., withLogger, withLoader).  
 
@@ -255,20 +255,30 @@ const withEnhancement = (WrappedComponent) => {
 };
 ```
 
+**Steps to create HOC** - 
+1. Create a normal component which would need to use the HOC logic (WrappedComponent)
+2. Create HOC function - pass the wrapped component as arg in HOC
+3. return a new component from HOC, make sure to pass the props as args in this newly returned component
+4. Add reusable logic in HOC and render the wrapped component in HOC
+5. Call HOC and get a new component, then use this new component 
+6. Now in the wrapped component you can use new props passed from HOC (manipulating props)
+
 ```javascript
 import React, { useState, useEffect } from 'react';
 
-// HOC for adding a loader
-const withLoader = (WrappedComponent, urItoFetchData) => {
+// STEP - 2 - Create HOC function - pass the wrapped component as arg in HOC
+const withLoader = (WrappedComponent) => {
+  // STEP - 3 -return a new component from HOC, make sure to pass the props as args in this newly returned component
   return function WithLoader(props) {
     const [loading, setLoading] = useState(true);
 
+    // STEP - 4 - Below is the reusable logic in HOC 
     useEffect(() => {
       // Simulating an asynchronous operation (e.g., fetching data)
       const fetchData = async () => {
         try {
           // Simulate delay
-          await fetch(urItoFetchData)
+          await fetch(props.urItoFetchData)
 
           // Once data is fetched, set loading to false
           setLoading(false);
@@ -278,35 +288,33 @@ const withLoader = (WrappedComponent, urItoFetchData) => {
         }
       };
 
-      // Trigger the data fetching function
       fetchData();
     }, []); // Empty dependency array ensures this effect runs only once (componentDidMount)
 
-    // Render the loader while loading, or the wrapped component when loading is complete
-    return loading ? <div>Loading...</div> : <WrappedComponent {...props} />;
+    // STEP 4- Render wrapped component
+    return loading ? <div>Loading...</div> : <WrappedComponent {...props} propsFromHOC={apiData}/>;
   };
 };
 
-// Example Component
-const MyComponent = ({ data }) => {
-  return (
+// STEP 1. Create a normal component which would need to use the HOC logic (WrappedComponent)
+import React, { useEffect, useContext } from 'react';
+const TableComponentAPI = ({ propFromParent, propsFromHOC }) => {
+  // here we load the tbale jsx - render the table
+  // STEP 6 -note we can use propsFromHOC which would be the data from HOC (returned from API call in HOC)
+  return (  
     <div>
-      <h1>Data Loaded:</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <p>Prop from Parent: {propFromParent}</p>
+      // inside table render 
     </div>
   );
-};
+};export default TableComponentAPI;
 
-// Wrap MyComponent with the loader HOC - and also pass the fetchUrl to this component
-const MyComponentWithLoader = withLoader(MyComponent, urItoFetchData);
+// STEP 5 - Call HOC and get a new component, then use this new component
+const MyComponentWithLoader = withLoader(MyComponent);
 
-// Usage
 const App = () => {
-  // Simulating data passed as a prop
-  const data = { message: 'Hello, World!' };
-
   // Render the enhanced component
-  return <MyComponentWithLoader data={data} />;
+  return <MyComponentWithLoader propFromParent={table-name apiUR-to-fetch-table-data} />;
 };
 export default App;
 ```
