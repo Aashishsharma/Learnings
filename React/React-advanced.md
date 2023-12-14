@@ -13,9 +13,6 @@
 11. **Proptypes** - basic prop types checking - (import PropTypes from 'prop-types', comp.propTypes = {name: PropTypes.string})
 12. **React Router** - link(to), route(path/component), switch(route), browser-route for historys
 
-React Router
-Hooks
-Hooks Best Practices
 Optimizing Performance
 Webpack and Babel
 Server-Side Rendering (SSR) and Static Site Generation (SSG)
@@ -630,5 +627,38 @@ Greeting.defaultProps = {
 ```
 
 ------------------------------------------------------------------------------
+
+## React router
+It enables client side routing  
+Why client side routing is needed - because in server side routing when new route is navigated all the content would be fetched from the server, as opposed to client side routing, where the layout content is already available at the client side and api call is made only for the desired component hence enabling faster user experiences because the browser doesn't need to request an entirely new document or re-evaluate CSS.
+
+```npm install react-router-dom```  
+
+**3 main components**  
+
+1. BrowserRouter - Wrapper
+2. Route - Renders UI when a path matches the current location.
+3. Link - Renders an anchor tag to navigate between routes
+
+```javascript
+import { BrowserRouter as Router } from 'react-router-dom';
+
+function App() {
+  return (
+    <Router>
+      <Route path="/" component={Home} />
+      
+    </Router>
+  );
+}
+
+// Link component - 
+<Link to="/">Home</Link>
+// Route parameters
+<Route path="/user/:userId" component={UserProfile} />
+
+
+```
+
 
 

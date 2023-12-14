@@ -7,6 +7,10 @@
 6. **State vs props** -  both trigger render update, state changed in comp, props changed by parent, props preferred
 7. **Commonly used hooks**- **1. Usecontext** -same as context, only usage part is diff (theme = useContext('light')) **2. useReducer** - alternative to useState, syntax fun red(state, action) => {switch/case(action.type) return newState}, preferred over useState when you have complex state logic that involves multiple sub-values (instead of using useState 10 times, add all usestae vars in a single Obj), usage - let [state, dispatch] = useReducer(red, intiVal), onClick={()=> dispatch({type: actionType})}, useCnt e.g. **3. useMemo** - const memval = useMemo(() => slowFun(a, b), [a, b]), sometimes react may re-render even if a,b are same **4.useCallback**- let cb = useCallback(() => {doSomething(a, b);},[a, b],), useMemo remembers returned val, useCallback remembes actual func, why remember func - to avoid purecomp based child to re-render when parent re-renders (see code) 5. **useRef** - let inputEl = useRef(initVal(refers to this dom elem)), <'inp' ref={inputEl}></'inp'>, access - inputEl.current.focus(), ref vs useRef - ref can only be used for DOM elements
 
+Hooks
+Hooks Best Practices
+
+## # TODO - using useEffect the wrong way, mistakes while using hooks
 ## HOOKS
 Let you use state and other React features without writing a class. They are a function.
 
@@ -20,7 +24,7 @@ Components might perform some data fetching in componentDidMount and componentDi
 2. Classes don’t minify very well, and they make hot reloading flaky and unreliable.
 
 There are no plans to remove classes from React.
-You can’t use Hooks inside a class componen
+You can’t use Hooks inside a class component
 
 ------------------------------------------------------------------------------
 ## Using the State Hook
@@ -65,6 +69,55 @@ setState({firstName: 'abc2'})
 setState({...state, state.firstName: 'abc2'})
 ``` 
 
+**Using single state variable vs multiple state variables**
+
+```javascript
+// use this for better performance of unrelated state
+const [count, setCount] = useState(0);
+const [text, setText] = useState('');
+
+
+// use this when
+// state variables are closely related.
+// can cause unnecessary re-renders
+const [state, setState] = useState({
+  count: 0,
+  text: '',
+});
+
+// e.g. of how 1st approach is better for unrelated state
+// but when the state is related - club them into a signle object
+// related state means when 1 attribute of the state changes, 
+// other attributes also change with that
+import React, { useState } from 'react';
+
+function MultipleStateVariablesExample() {
+  const [count, setCount] = useState(0);
+  const [text, setText] = useState('');
+  const increment = () => {
+    setCount(count + 1);
+  };
+  const handleChange = (event) => {
+    setText(event.target.value);
+  };
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+
+      <p>Text: {text}</p>
+      <input type="text" value={text} onChange={handleChange} />
+    </div>
+  );
+}
+export default MultipleStateVariablesExample;
+
+//  if you click the "Increment" button, only the part of the component
+// displaying the count will re-render. The text input, being controlled
+// by a different state variable, remains unaffected. 
+// This targeted re-rendering improves performance, especially in larger components
+```
 
 ------------------------------------------------------------------------------
 ## Using the Effect Hook
