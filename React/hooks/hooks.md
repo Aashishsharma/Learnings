@@ -120,11 +120,12 @@ export default MultipleStateVariablesExample;
 ```
 
 ------------------------------------------------------------------------------
+
 ## Using the Effect Hook
 The Effect Hook lets you perform side effects in function components.
 Data fetching, setting up a subscription, and manually changing the DOM in React components are all examples of side effects.
 You can think of useEffect Hook as componentDidMount, componentDidUpdate, and componentWillUnmount combined.  
-Func inside useeffect will run even if dom is manipulated, if second arg in useeffect func is not passed  
+
 ```javascript
 import React, { useState, useEffect } from 'react';
 
@@ -168,6 +169,15 @@ useEffect(() => {
 }, [count]); // Only re-run the effect if count changes
 // similar to componentShouldUpdate()
 ```
+
+**second arg in useEffect**  
+
+1. if not passed - use effect will run on every component re-render (component did mount + component did update)
+2. If empty array is passed - [] - will only run once (component did mount)
+3. If some value is passed - [count] - will get called when count value is changed (shouldComponentUpdate)
+ - count should be a state variable, or coming from props - props.count
+
+
 **order of execution**  
 1. State initializations
 2. Render method
