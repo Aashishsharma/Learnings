@@ -1,23 +1,31 @@
 ﻿## Index
+
 1. **Hooks** why- (hard to use stateful logic in classes, classes don't menify very well and make hot reloding unreliable, unrelated logic in lifecycle methods)
 2. **State hook** - [count, setCount] = useState(0), setCount((prev.state)-> {})
 3. **Effect hook** - useEffect(()=>{},[]), ([]-didMount, [somevar]-didUpdate, return fun()-willUnMount()), multiple Effects to Separate Concerns
-4. **Rules of hooks** - 1. Only Call Hooks at the Top Level, not even in if/loop(react updates depend on ordering), Only Call Hooks from React Functions 
-5. **Custom hooks** - for reusing STATEFUL logic (code that uses state is shared), in case of normal functions, only logic can be reused, but not stateful logic, change in state varaible inside custom hooks, re-renders components using that hook. syntax (let useCnt = (initcnt=0,incdecby=1) => {statehook init, return statehook vars}), starts with use and uses atleast 1/more inbuilt/custom hook, usage - let [a,b,c] = useCnt(return of useCnt) 
+4. **Rules of hooks** - 1. Only Call Hooks at the Top Level, not even in if/loop(react updates depend on ordering), Only Call Hooks from React Functions
+5. **Custom hooks** - for reusing STATEFUL logic (code that uses state is shared), in case of normal functions, only logic can be reused, but not stateful logic, change in state varaible inside custom hooks, re-renders components using that hook. syntax (let useCnt = (initcnt=0,incdecby=1) => {statehook init, return statehook vars}), starts with use and uses atleast 1/more inbuilt/custom hook, usage - let [a,b,c] = useCnt(return of useCnt)
 6. **State vs props** -  both trigger render update, state changed in comp, props changed by parent, props preferred
 7. **Commonly used hooks**- **1. Usecontext** -same as context, only usage part is diff (theme = useContext('light')) **2. useReducer** - alternative to useState, syntax fun red(state, action) => {switch/case(action.type) return newState}, preferred over useState when you have complex state logic that involves multiple sub-values (instead of using useState 10 times, add all usestae vars in a single Obj), usage - let [state, dispatch] = useReducer(red, intiVal), onClick={()=> dispatch({type: actionType})}, useCnt e.g. **3. useMemo** - const memval = useMemo(() => slowFun(a, b), [a, b]), sometimes react may re-render even if a,b are same **4.useCallback**- let cb = useCallback(() => {doSomething(a, b);},[a, b],), useMemo remembers returned val, useCallback remembes actual func, why remember func - to avoid purecomp based child to re-render when parent re-renders (see code) 5. **useRef** - let inputEl = useRef(initVal(refers to this dom elem)), <'inp' ref={inputEl}></'inp'>, access - inputEl.current.focus(), ref vs useRef - ref can only be used for DOM elements
 
-
 ## # TODO - using useEffect the wrong way, mistakes while using hooks
+
 ## HOOKS
+
 Let you use state and other React features without writing a class. They are a function.
 
 ## Problem with classes / Why Hooks?
+
 #### 1. It’s hard to reuse stateful logic between components
+
 Render props and higher-order components that try to solve this. But these patterns require you to restructure your components
+
 #### 2. Complex components become hard to understand
+
 Components might perform some data fetching in componentDidMount and componentDidUpdate. However, the same componentDidMount method might also contain some unrelated logic that sets up event listeners, with cleanup performed in componentWillUnmount. Mutually related code that changes together gets split apart, but completely unrelated code ends up combined in a single method.
+
 #### 3. Classes confuse both people and machines
+
 1. Class components can encourage unintentional patterns that make these optimizations fall back to a slower path
 2. Classes don’t minify very well, and they make hot reloading flaky and unreliable.
 
@@ -25,7 +33,9 @@ There are no plans to remove classes from React.
 You can’t use Hooks inside a class component
 
 ------------------------------------------------------------------------------
+
 ## Using the State Hook
+
 ```javascript
 1:  import React, { useState } from 'react';
  2:
@@ -45,12 +55,13 @@ You can’t use Hooks inside a class component
 ```
 
 Normally, variables “disappear” when the function exits but state variables are preserved by React.  
-Group logically making sense of all states into one state object   
+Group logically making sense of all states into one state object
 
 **use previous state value** -  
 use functional form of setstate -- setCnt(cnt => cnt+1)  
 setState here is different from the class componente's setState method, classe setState method merges the state, where is in useState, stats aren't merged.  
 e.g.
+
 ```javascript
 useObj = {
   firstName: 'abc',
@@ -65,7 +76,7 @@ setState({firstName: 'abc2'})
 // updates firstName, but lastName is lost it will give undefined
 // instaed to this
 setState({...state, state.firstName: 'abc2'})
-``` 
+```
 
 **Using single state variable vs multiple state variables**
 
@@ -120,6 +131,7 @@ export default MultipleStateVariablesExample;
 ------------------------------------------------------------------------------
 
 ## Using the Effect Hook
+
 The Effect Hook lets you perform side effects in function components.
 Data fetching, setting up a subscription, and manually changing the DOM in React components are all examples of side effects.
 You can think of useEffect Hook as componentDidMount, componentDidUpdate, and componentWillUnmount combined.  
@@ -146,7 +158,9 @@ function Example() {
   );
 }
 ```
+
 If your effect returns a function, React will run it when it is time to clean up:
+
 ```javascript
 useEffect(() => {
     function handleStatusChange(status) {
@@ -159,8 +173,11 @@ useEffect(() => {
     };
   });
 ```
+
 #### Tip: Use Multiple Effects to Separate Concerns
+
 #### Tip: Optimizing Performance by Skipping Effects
+
 ```javascript
 useEffect(() => {
   document.title = `You clicked ${count} times`;
@@ -173,19 +190,24 @@ useEffect(() => {
 1. if not passed - use effect will run on every component re-render (component did mount + component did update)
 2. If empty array is passed - [] - will only run once (component did mount)
 3. If some value is passed - [count] - will get called when count value is changed (shouldComponentUpdate)
- - count should be a state variable, or coming from props - props.count
 
+- count should be a state variable, or coming from props - props.count
 
 **order of execution**  
+
 1. State initializations - component body is executed
 2. Render method
 3. UseEffect func  
 
 ------------------------------------------------------------------------------
+
 ## Rules of Hooks
+
 #### 1. Only Call Hooks at the Top Level
+
 Don't use inside a condition or a loop
 But why?
+
 ```javascript
 function Form() {
   // 1. Use the name state variable
@@ -207,26 +229,34 @@ function Form() {
   // ...
 }
 ```
-So how does React know which state corresponds to which useState call? 
+
+So how does React know which state corresponds to which useState call?
 The answer is that React relies on the order in which Hooks are called.  
 Bassically, hook rely on a call index. React doesn't know what a given useState() returned
 Our example works because the order of the Hook calls is the same on every render
 (if rendered in condition or in a loop, order might change):
 
 #### 2. Only Call Hooks from React Functions
+
 Don’t call Hooks from regular JavaScript functions. Instead, you can:
 
 ✅ Call Hooks from React function components.
 ✅ Call Hooks from custom Hooks
 
-ESLint plugin called eslint-plugin-react-hooks enforces these two rules. 
+ESLint plugin called eslint-plugin-react-hooks enforces these two rules.
 This plugin is included by default in Create React App.
 
 ------------------------------------------------------------------------------
-## Building Your Own Hooks
-You can of course just have functions to reuse functionality, but hooks come with the advantage of being able to ‘hook’ into things like component lifecycle and state. This makes them much more valuable in the React world than regular functions  
 
-**What is stateful logic?**  
+## Building Your Own Hooks
+
+Custom hooks are used to reuse Stateful logic -
+**What is stateful logic?**  - stateful logic includes the use of state management hooks like useState, useEffect, useReducer, or a combination of them. The goal is to abstract away the complexity of managing state within a component and provide a clean interface for components to use that logic.
+
+**HOC vs Custom hooks** -
+
+1. custom hooks are more readable
+2. When you want to reuse JSX code use HOC - in example of withLoader
 
 1. useApiData
 
@@ -294,7 +324,6 @@ const useLocalStorage = (key, initialVal ) => {
 };
 export default useLocalStorage;
 
-
 import React, {useState} from 'react';
 import useLocalStorage from './useLocalStorage'; 
 export function App(props) {
@@ -308,54 +337,85 @@ export function App(props) {
 }
 ```
 
-
-
 ------------------------------------------------------------------------------
+
 ## Other Commonly used hooks  
-### 1. useContext - same as context in React  
-A component calling useContext will always re-render when the context value changes. If re-rendering the component is expensive, you can optimize it by using memoization.  
+
+### 1. useContext - same as context API in React  
+
+Context provides a way to pass data through the component tree without having to pass props down manually at every level.
+
 ```javascript
-const themes = {
-  light: {
-    foreground: "#000000",
-    background: "#eeeeee"
-  },
-  dark: {
-    foreground: "#ffffff",
-    background: "#222222"
-  }
-};
-const ThemeContext = React.createContext(themes.light);
-function App() {
+import React, { createContext, useState, useContext } from 'react';
+
+// Step 1: Create a Context
+const ThemeContext = createContext();
+// Step 2: Create a Provider
+const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState('light');
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
   return (
-    <ThemeContext.Provider value={themes.dark}>
-      <Toolbar />
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
     </ThemeContext.Provider>
   );
-}
-function Toolbar(props) {
+};
+export { ThemeContext, ThemeProvider };
+
+// Step 3: Create a Component that Consumes the Context
+import { ThemeContext } from './ThemeContextProvider';
+const ThemedComponent = () => {
+  // Consume the context using useContext hook
+  const { theme, toggleTheme } = useContext(ThemeContext); // import the ThemeContext
+
+  //When the toggleTheme function is called in the below code, it will cause a re-render of the components that are consuming the theme from the ThemeContext
+  // also note, re-rendering means all the function body, and render method and useEffects would be executed
   return (
-    <div>
-      <ThemedButton />
+    <div style={{ background: theme === 'light' ? '#f0f0f0' : '#333', color: theme === 'light' ? '#333' : '#f0f0f0', padding: '20px' }}>
+      <h2>Themed Component</h2>
+      <p>Current Theme: {theme}</p>
+      <button onClick={toggleTheme}>Toggle Theme</button>
+      
     </div>
   );
-}
-function ThemedButton() {
-  const theme = useContext(ThemeContext);
+};
+// Step 4: Use the Provider to Wrap Your App
+const App = () => {
   return (
-    <button style={{ background: theme.background, color: theme.foreground }}>
-      I am styled by theme context!
-    </button>
+    // Wrap your components with the Provider
+    <ThemeProvider>
+      <div>
+        <h1>Theme Switcher App</h1>
+        <ThemedComponent />
+      </div>
+    </ThemeProvider>
   );
-}
+};
+export default App;
+
 ```
 
+**Usecase for context api** =
+
+- **Theme:** Setting a theme for an entire application.
+- **User Authentication:** Sharing authentication status across components.
+- **Localization:** Managing the preferred language for an app.
+
+Apply it sparingly because it makes component reuse more difficult.
+
 ### 2. useReducer
-An alternative to useState. Accepts a reducer of type (state, action) => newState, and returns the current state paired with a dispatch method.   
-useReducer is usually preferable to useState when 
-1. you have complex state logic that 
+
+An alternative to useState. Accepts a reducer of type (state, action) => newState, and returns the current state paired with a dispatch method.
+useReducer is usually preferable to useState when
+
+1. you have complex state logic that
 2. State is a complex obj, and not a plain string or a nummber
 3. your logic have related state tranistions (setLoading(false), setError(false), setData(data))
+
 ```javascript
 const initialState = {count: 0};
 function reducer(state, action) {
@@ -379,8 +439,10 @@ function Counter() {
   );
 }
 ```
+
 Usecase - in case of comples state object  
 How not to do  
+
 ```javascript
 // local variables
   const MODAL_TYPES = {
@@ -399,10 +461,12 @@ How not to do
     )
   }
 ```
-The problem 
+
+The problem
 Reducers allow pieces of state that depend on each other to be updated predictably (whereas multiple useState’s might not)  
 
 How to do  
+
 ```javascript
 // local variables
   const MODAL_TYPES = {
@@ -468,7 +532,9 @@ How to do
 ```
 
 ### 3. useMemo
+
 Returns a memoized callback.  
+
 ```javascript
 import React, { useState, useMemo } from 'react'
 function Counter() {
@@ -499,30 +565,27 @@ function Counter() {
 }
 export default Counter
 ```  
-If we don't use useMemo - 
+
+If we don't use useMemo -
 If we click on counter One - UI update slowly  
 If we click on counter Two - UI still updates slowly (which we don't want)
 
-If we use useMemo - 
+If we use useMemo -
 If we click on counter One - UI update slowly  
 If we click on counter Two - UI updates fast as expected  
 
 **Explaination if we don't use useMemo**
+
 1. If you click on Counter Two - state is updates
 2. State update will cause - component re-render
 3. Componet re-render - new isEven function created which is called in the render method in the span tag, hence it cause slowness
 4. If we use useMemo, the return value of the isEven function is cached and the function will only run if the counter one state is changed
 
-
 ### 4. useCallback()
+
 Returns a memoized callback.
 This is useful when passing callbacks functions to optimized child components that rely on reference equality to prevent unnecessary renders.  
 
-***Component re-renders steps**  
-1. First all the hooks / functions are run
-2. then the render method is called
-
-See below code
 ```javascript
 function ParentComponent() {
   const [age, setAge] = useState(25)
@@ -548,7 +611,9 @@ function ParentComponent() {
 }
 export default ParentComponent
 ```
+
 In above code if we don't use useCallback na dclick on any button below is what would hapen
+
 1. Button click will update the state
 2. State update would trigger a component re-render
 3. Component re-render would mean all the methods inside the component would be re-created (incrementAge/Salary)
@@ -565,6 +630,7 @@ useMemo will remember the returned value from your function.
 useCallback will remember your actual function.  
 
 By default in react, when parent component is re-rendered, child component is also re-rendered, even if we don't want it to, React.memo (is a HOC) when applied to a react component will cause component re-render only when it's props are changed. So in child component
+
 ```javascript
 import React from 'react'
 
@@ -581,7 +647,9 @@ Then why not use React.memo() for all components - Shallow comparions aren't fre
 So in cases when props change almost all the time, we will anyhow need to re-render, but react will do the shallow comparison every time and do a re-render which is detrimental
 
 ### 5. useRef
+
 A common use case is to access a child imperatively:  
+
 ```javascript
 function TextInputWithFocusButton() {
   const inputEl = useRef(null);
@@ -597,11 +665,13 @@ function TextInputWithFocusButton() {
   );
 }
 ```
+
 Essentially, useRef is like a “box” that can hold a mutable value in its .current property.  
 **Ref vs useRef**  
 ref can only be used for DOM elements  
  useRef() Hook isn’t just for DOM refs. The “ref” object is a generic container whose current property is mutable and can hold any value, similar to an instance property on a class.  
- ```javascript
+
+```javascript
 function HookTimer() {
   const [timer, setTimer] = useState(0)
   const interValRef = useRef()
@@ -627,14 +697,17 @@ function HookTimer() {
   )
 }
 export default HookTimer
- ``` 
+ ```
 
 ### 6. useReducer + useContext
+
 In smaller apps we don't need Redux we can achieve same Redux functionality using useReducer and useContext hooks  
-**Steps**  
+**Steps**
+
 1. Created Reducer function and the initial state, in the most parent component
 2. Create context variable in the most parent component
 3. Pass the state and dispatch values in the context provider so that any child can use the state variable and can dispact the actions
+
 ```javascript
 // Step 1
 const initialState = 0
@@ -689,15 +762,17 @@ export default ComponentF
 ```
 
 ## FAQs
+
 1. Do Hooks cover all use cases for classes?
  There are no Hook equivalents to the uncommon getSnapshotBeforeUpdate, getDerivedStateFromError and componentDidCatch lifecycles yet, but would be added soon.
 
 2. State vs Props
-  - Similarities
+
+- Similarities
     1. Both props and state are plain JS objects
     2. Both state and props changes trigger a render update
-  - Differences
+- Differences
     1. State is mutable, props are not
     2. Component cannot change it's props, state can be changed
-  - Which to use when
+- Which to use when
     If a Component needs to alter one of its attributes at some point in time, that attribute should be part of its state, otherwise it should  just be a prop for that Component.

@@ -1,7 +1,7 @@
 ## Index
 
 1. **Code splitting & lazy loading** - CS via dynamic import (import {add} from './math'), LL (loaded at last {suspens} from React, React.lazy(() => import('./comp'))), <Suspense fallback={react elem}><Comp></Sus>
-2. **Context** - pass props b/w child(let c = React.createContext('light'), <c.Provider value="dark">, using theme - {this.comtext}), managing theme/locale/cache, makes component reuse more difficult
+2. ABC
 3. **Error boundaries** - getDerivedStateFromError()+componentDidCatch(), donot catch errors in(envt handlers, server side rendering)
 4. **Refs and Doms** - another way to alter child component apart from props, (myRef = React.createRef(), accessing {this.myref}) (managing focus/uncontrolled elements)
 5. **Fragment** - <></>, return multiple elems from single component, less dom nodes created
@@ -16,7 +16,6 @@
 Optimizing Performance
 Webpack and Babel
 Server-Side Rendering (SSR) and Static Site Generation (SSG)
-
 
 ## CODE SPLITTING
 
@@ -75,74 +74,6 @@ const AboutPage = React.lazy(() => import('./AboutPage'));
 ```
 
 Behind the scenes React uses webpack for code splitting
-
-------------------------------------------------------------------------------
-
-## CONTEXT API
-
-Context provides a way to pass data through the component tree without having to pass props down manually at every level.
-
-```javascript
-import React, { createContext, useState, useContext } from 'react';
-
-// Step 1: Create a Context
-const ThemeContext = createContext();
-// Step 2: Create a Provider
-const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
-
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
-  };
-
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
-export { ThemeContext, ThemeProvider };
-
-// Step 3: Create a Component that Consumes the Context
-import { ThemeContext } from './ThemeContextProvider';
-const ThemedComponent = () => {
-  // Consume the context using useContext hook
-  const { theme, toggleTheme } = useContext(ThemeContext); // import the ThemeContext
-
-  //When the toggleTheme function is called in the below code, it will cause a re-render of the components that are consuming the theme from the ThemeContext
-  // also note, re-rendering means all the function body, and render method and useEffects would be executed
-  return (
-    <div style={{ background: theme === 'light' ? '#f0f0f0' : '#333', color: theme === 'light' ? '#333' : '#f0f0f0', padding: '20px' }}>
-      <h2>Themed Component</h2>
-      <p>Current Theme: {theme}</p>
-      <button onClick={toggleTheme}>Toggle Theme</button>
-      
-    </div>
-  );
-};
-// Step 4: Use the Provider to Wrap Your App
-const App = () => {
-  return (
-    // Wrap your components with the Provider
-    <ThemeProvider>
-      <div>
-        <h1>Theme Switcher App</h1>
-        <ThemedComponent />
-      </div>
-    </ThemeProvider>
-  );
-};
-export default App;
-
-```
-
-**Usecase for context api** =
-
-- **Theme:** Setting a theme for an entire application.
-- **User Authentication:** Sharing authentication status across components.
-- **Localization:** Managing the preferred language for an app.
-
-Apply it sparingly because it makes component reuse more difficult.
 
 ------------------------------------------------------------------------------
 
@@ -336,7 +267,7 @@ which the component then calls to render its content
 **Usecase -** - Toggle components, adding tooltip to multiple components  
 In the toolip example - all the tooltip styling will be in reusable component and the tooltip text which would be different for different component would be paased as prop and then again paased as prop in the render function
 
-**Steps to create a render prop** - 
+**Steps to create a render prop** -
 
 1. Cretae a component which would render a renderprop
 2. Add reusable functionality to this component
@@ -390,7 +321,7 @@ const App = () => {
 export default App;
 ```
 
-**Render props vs HOC** - 
+**Render props vs HOC** -
 
 1. In both render props and HOC, we can share the reusable logic as well as share reusable JSX
 2. If you need more dynamic and conditional rendering logic, Render Props may be a better fit
@@ -629,6 +560,7 @@ Greeting.defaultProps = {
 ------------------------------------------------------------------------------
 
 ## React router
+
 It enables client side routing  
 Why client side routing is needed - because in server side routing when new route is navigated all the content would be fetched from the server, as opposed to client side routing, where the layout content is already available at the client side and api call is made only for the desired component hence enabling faster user experiences because the browser doesn't need to request an entirely new document or re-evaluate CSS.
 
@@ -659,6 +591,3 @@ function App() {
 
 
 ```
-
-
-
