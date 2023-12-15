@@ -7,8 +7,6 @@
 6. **State vs props** -  both trigger render update, state changed in comp, props changed by parent, props preferred
 7. **Commonly used hooks**- **1. Usecontext** -same as context, only usage part is diff (theme = useContext('light')) **2. useReducer** - alternative to useState, syntax fun red(state, action) => {switch/case(action.type) return newState}, preferred over useState when you have complex state logic that involves multiple sub-values (instead of using useState 10 times, add all usestae vars in a single Obj), usage - let [state, dispatch] = useReducer(red, intiVal), onClick={()=> dispatch({type: actionType})}, useCnt e.g. **3. useMemo** - const memval = useMemo(() => slowFun(a, b), [a, b]), sometimes react may re-render even if a,b are same **4.useCallback**- let cb = useCallback(() => {doSomething(a, b);},[a, b],), useMemo remembers returned val, useCallback remembes actual func, why remember func - to avoid purecomp based child to re-render when parent re-renders (see code) 5. **useRef** - let inputEl = useRef(initVal(refers to this dom elem)), <'inp' ref={inputEl}></'inp'>, access - inputEl.current.focus(), ref vs useRef - ref can only be used for DOM elements
 
-Hooks
-Hooks Best Practices
 
 ## # TODO - using useEffect the wrong way, mistakes while using hooks
 ## HOOKS
@@ -179,17 +177,9 @@ useEffect(() => {
 
 
 **order of execution**  
-1. State initializations
+1. State initializations - component body is executed
 2. Render method
 3. UseEffect func  
-
-**Edge case**  
-```javascript
-UseEffect(()=》setinterval(setcnt(cnt+1), 1000) retutn clearinterval() , [])
-```  
-every time new function is passed in usestate, [], if cnt is missing in [], then closure for cnt is created in setinterval, since the effect is run only once, setcnt doesn't get new staye val, since useeffect func isn't running on new render, if cnt is added in [], then clear interval called everytime, ideally shoild ne called once, 
-Solve - use functional form of setstate --
-Setcnt(cnt => cnt+1)
 
 ------------------------------------------------------------------------------
 ## Rules of Hooks
@@ -237,6 +227,87 @@ This plugin is included by default in Create React App.
 You can of course just have functions to reuse functionality, but hooks come with the advantage of being able to ‘hook’ into things like component lifecycle and state. This makes them much more valuable in the React world than regular functions  
 
 **What is stateful logic?**  
+
+1. useApiData
+
+```javascript
+// custom hook - useApiData.js
+import { useState, useEffect } from 'react';
+function useApiData(apiEndpoint) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(apiEndpoint);
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [apiEndpoint]);
+  return { data, loading, error };
+}
+export default useApiData;
+
+// using the custom hook
+import useApiData from './useApiData';
+function MyComponent() {
+  const apiEndpoint = 'https://api.example.com/data';
+  const { data, loading, error } = useApiData(apiEndpoint);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+  return (
+    <div>
+      <h1>Data from API - {data}</h1>
+    </div>
+  );
+}
+
+```
+
+2. useLocalStorage
+
+```javascript
+import { useEffect, useState } from 'react';
+const setInitialVal = (key, initialVal) => {
+  if(localStorage.getItem(key)) {
+    return (localStorage.getItem(key))
+  } 
+  return initialVal
+}
+const useLocalStorage = (key, initialVal ) => {
+  const [value, setValue] = useState(() => setInitialVal(key, initialVal))
+  useEffect(() => {
+    localStorage.setItem(key, initialVal);
+  }, [value]); 
+  return [value, setValue];
+};
+export default useLocalStorage;
+
+
+import React, {useState} from 'react';
+import useLocalStorage from './useLocalStorage'; 
+export function App(props) {
+  let [state, setState] = useLocalStorage('abc', 123);
+  let [state2, setState2] = useLocalStorage('abc2', 1232);
+  console.log({state}); console.log({state2})
+  return (<>
+    <button onClick={() => setState((state) => state+1)}>Abc</button> 
+    <button onClick={() => setState2((state) => state+1)}>Pqr</button>
+  </>);
+}
+```
+
 
 
 ------------------------------------------------------------------------------
