@@ -409,7 +409,7 @@ Apply it sparingly because it makes component reuse more difficult.
 
 ### 2. useReducer
 
-An alternative to useState. Accepts a reducer of type (state, action) => newState, and returns the current state paired with a dispatch method.
+An alternative to useState. Accepts a reducer of type (state, action) => newState, and returns the current state paired with a dispatch method.  
 useReducer is usually preferable to useState when
 
 1. you have complex state logic that
@@ -576,12 +576,12 @@ If we click on counter Two - UI updates fast as expected
 
 **Explaination if we don't use useMemo**
 
-1. If you click on Counter Two - state is updates
+1. If you click on Counter Two - state is updated
 2. State update will cause - component re-render
 3. Componet re-render - new isEven function created which is called in the render method in the span tag, hence it cause slowness
 4. If we use useMemo, the return value of the isEven function is cached and the function will only run if the counter one state is changed
 
-### 4. useCallback()
+### 4. useCallback() - use when making a component controlled (passing the handleCLick functions to parent component)
 
 Returns a memoized callback.
 This is useful when passing callbacks functions to optimized child components that rely on reference equality to prevent unnecessary renders.  
@@ -612,7 +612,7 @@ function ParentComponent() {
 export default ParentComponent
 ```
 
-In above code if we don't use useCallback na dclick on any button below is what would hapen
+In above code if we don't use useCallback and click on any button below is what would hapen
 
 1. Button click will update the state
 2. State update would trigger a component re-render
@@ -622,10 +622,7 @@ In above code if we don't use useCallback na dclick on any button below is what 
 6. Even if we add React.memo in child components - techinciall the props have changed even if the function is same it is recreated and the older reference is lost
 7. To avoid this us useCallback
 
-**useMemo vs useCallback vs React.memo**
-useMemo and useCallback use memoization.  
-I like to think of memoization as remembering something.  
-While both useMemo and useCallback remember something between renders until the dependancies change, the difference is just what they remember.  
+**useMemo vs useCallback vs React.memo**  
 useMemo will remember the returned value from your function.  
 useCallback will remember your actual function.  
 
@@ -667,37 +664,8 @@ function TextInputWithFocusButton() {
 ```
 
 Essentially, useRef is like a “box” that can hold a mutable value in its .current property.  
-**Ref vs useRef**  
-ref can only be used for DOM elements  
- useRef() Hook isn’t just for DOM refs. The “ref” object is a generic container whose current property is mutable and can hold any value, similar to an instance property on a class.  
 
-```javascript
-function HookTimer() {
-  const [timer, setTimer] = useState(0)
-  const interValRef = useRef()
-  useEffect(() => {
-    //If we don't use useRef, then setInterval would be store in the variable  
-    // like let abc = setInterval(...)
-    interValRef.current = setInterval(() => {
-      setTimer(timer => timer + 1)
-    }, 1000)
-    // here in the return function we would be able to access abc
-    return () => {
-      clearInterval(interValRef.current)
-    }
-  }, [])
-  return (
-    <div>
-      HookTimer - {timer} -
-      // but here in the onclick we wouldn't have been able to access abc
-      // hence useRef us used
-      // This can't be done with refs where we get ref only of dom nodes
-      <button onClick={() => clearInterval(interValRef.current)}>Clear Timer</button>
-    </div>
-  )
-}
-export default HookTimer
- ```
+**They are used to handle uncontrolled components**
 
 ### 6. useReducer + useContext
 
@@ -770,9 +738,9 @@ export default ComponentF
 
 - Similarities
     1. Both props and state are plain JS objects
-    2. Both state and props changes trigger a render update
+    2. Both state and props changes trigger a render update - (only is the prop is changed in the parent component, then only child-rerenders, if prop is changed in child component, child component doesn't re-render)
 - Differences
-    1. State is mutable, props are not
-    2. Component cannot change it's props, state can be changed
+    1. State is mutable, props are not - 
+    2. Component cannot change it's props, state can be changed - (both can be changed, but updaing props in child component doesn't cause re-render)
 - Which to use when
     If a Component needs to alter one of its attributes at some point in time, that attribute should be part of its state, otherwise it should  just be a prop for that Component.
