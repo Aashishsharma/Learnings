@@ -1,4 +1,4 @@
-# Webpack
+# Webpack and Babel
 
 Webpack is a module bundler that allows you to bundle and optimize your web application's assets, including JavaScript, CSS, and images. It operates on a configuration file where you define various settings, plugins, and loaders to control the bundling process. 
 
@@ -87,3 +87,45 @@ module.exports = {
 ## 5. Tree shaking
 
 Tree shaking is a technique that eliminates dead code from your final bundle. It removes unused exports, reducing the bundle size.
+
+
+# Babel
+
+used to convert ECMAScript 2015+ code into a backwards compatible version of JavaScript.  
+
+```javascript
+// Babel Input: ES2015 arrow function
+[1, 2, 3].map(n => n + 1);
+
+// Babel Output: ES5 equivalent
+[1, 2, 3].map(function(n) {
+  return n + 1;
+});
+```
+
+### 3 steps to use babel
+
+1. Install babel ```npm install --save-dev @babel/core @babel/cli @babel/preset-env```
+2. babel.config.json  
+
+```json
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "edge": "17",
+          "firefox": "60",
+          "chrome": "67",
+          "safari": "11.1"
+        },
+        "useBuiltIns": "usage",
+        "corejs": "3.6.5"
+      }
+    ]
+  ]
+}
+```
+
+3. ```./node_modules/.bin/babel src --out-dir lib```
