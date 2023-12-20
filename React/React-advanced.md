@@ -13,7 +13,6 @@
 11. **Proptypes** - basic prop types checking - (import PropTypes from 'prop-types', comp.propTypes = {name: PropTypes.string})
 12. **React Router** - link(to), route(path/component), switch(route), browser-route for historys
 
-Optimizing Performance
 Webpack and Babel
 Server-Side Rendering (SSR) and Static Site Generation (SSG)
 
@@ -452,6 +451,30 @@ class Component extends React.PureComponent {
     return <b>Counter Value: {this.state.counter}</b>
   }
 }
+```
+
+#### 6. Use react-window library
+It is used for efficiently rendering large lists and tabular data.  
+useful when dealing with long lists of items where rendering all items at once could lead to performance issues.  
+
+1. React Window implements virtualization, a technique that involves rendering only the items currently in the view, rather than rendering the entire list
+
+```javascript
+import { FixedSizeList } from 'react-window';
+
+const MyList = () => (
+  <FixedSizeList
+    height={400} // total height of the container (FixedSizeList component) in px
+    width={300} // width of the component
+    itemSize={50} // height of ech item in px, this means this list will render 8 items in it's view (400/50)
+    itemCount={1000} // total items in the list
+  >
+    {({ index, style }) => (
+      <div style={style}>Item {index}</div>
+    )}
+  </FixedSizeList>
+);
+
 ```
 
 ------------------------------------------------------------------------------
