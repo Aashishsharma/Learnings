@@ -1,9 +1,12 @@
 ## Redis
+
 Open source in memory data structure store. can be used as DB (to save data to disk) or as a cache or message broker  
 Key-value store  
 
 ### Redis commands and DS types
+
 #### 1. SET, GET, DEL, EXISTS (STRINGS)
+
 1. SET name ashish
 2. GET name // o/p - ashish
 3. DEL name
@@ -14,23 +17,25 @@ Key-value store
 8. SETEX name 10 ashish - set name to ashish with ttl - 10s
 
 #### 2. Arrays (use in messaging apps to show 5 recent messages of users)
+
 1. LPUSH friends ashish - add at start of array
 2. LRANGE friends 0 -1 // from index 0 to last item
 3. RPUSH freinds sharma - add at end of array
 4. LPOP / RPOP - remove elems from array
 
 #### 3. Sets
+
 1. SADD hobbies 'weight lifting'
-2. SMEMBERS hobbies - print all memebers 
+2. SMEMBERS hobbies - print all memebers
 3. SREM hobbies 'weight lifting'
 
 #### 4. Hashes
+
 1. HSET person name ashish - create hash DS person, and hash elem has name as key and ashish as value
 2. HGET person name - ashish
 3. HGETALL person - get all hash elems of person
 4. HDEL person
 5. HEXISTS person name
-
 
 ```javascript
 // syntax
@@ -63,13 +68,13 @@ const DEFAULT_EXPIRATION = 3600 // 1 hr
 
 function getOrSetCache(key, cb) {
   return new Promise((resolve, reject) => {
-  	// first try and get data from redis based on key
+   // first try and get data from redis based on key
     redisClient.get(key, async (error, data) => {
-	  if (error) return reject(error)
-	  // if data found in redis cache, return cached data
+   if (error) return reject(error)
+   // if data found in redis cache, return cached data
       if (data != null) return resolve (JSON.parse(data))
       // data not is redis
-  	  // call the api/db, using cb function passed, due to this getOrSetCache func becomes generic
+     // call the api/db, using cb function passed, due to this getOrSetCache func becomes generic
       const freshData = await cb()
       // once actual data is got set in cache and return the data
       // setex - set the key with expiration
@@ -83,7 +88,7 @@ app.get("/photos/:id", async (req, res) => {
   // make sure that key is unique by appending id queryparam to the key
   const photo = await getorSetCache('photos:${req.params.id}', async () => {
   const {data} = await axios.get('https://jsonplaceholder.typicode.com/photos/${req.params.id}')
-	return data
+ return data
   })
   res.json(photo);
 
@@ -92,4 +97,3 @@ app.get("/photos/:id", async (req, res) => {
 })
 
 ```
-

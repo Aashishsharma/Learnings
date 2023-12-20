@@ -13,9 +13,6 @@
 11. **Proptypes** - basic prop types checking - (import PropTypes from 'prop-types', comp.propTypes = {name: PropTypes.string})
 12. **React Router** - link(to), route(path/component), switch(route), browser-route for historys
 
-Webpack and Babel
-Server-Side Rendering (SSR) and Static Site Generation (SSG)
-
 ## CODE SPLITTING
 
 Loading all this code upfront can lead to slower initial page loads. Code splitting allows developers to split the application into smaller pieces and load them on-demand.  
