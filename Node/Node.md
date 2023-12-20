@@ -65,71 +65,14 @@ readline.on(`line`, name => {
 
 ```
 
-#### 1. Require
+## Nodejs import export
 
-require are used to consume modules
-
-```javascript
-const fs = require('fs');
-```
-
-The require function will look for files in the following order:
-
-1. Built-in core Node.js modules (like fs)
-2. NPM Modules. It will look in the node_modules folder.
-3. Local Modules. If the module name has a ./, / or ../, it will look for the directory/file in the given path. It matches the file extensions: .js, .json.
-
-#### 2. Exports
-
-The exports keyword gives you the chance to “export” your objects and methods
-
-```javascript
-const PI = 3.14159265359;
-
-exports.area = radius => (radius ** 2) * PI;
-exports.circumference = radius => 2 * radius * PI;
-// PI is not available outside module
-
-//using it in other module
-const circle = require('./circle');
-
-const r = 3;
-console.log(`Circle with radius ${r} has
-  area: ${circle.area(r)};
-  circumference: ${circle.circumference(r)}`);
-
-```
-
-**exports vs module.exports**
-module is a plain JavaScript object with an exports property. exports is a plain JavaScript variable that happens to be set to module.exports. At the end of your file, node.js will basically 'return' module.exports to the require function.
-
-If you set a property on exports, like exports.a = 9;, that will set module.exports.a as well
-
-If you assign anything to module.exports, exports is not no longer a reference to it, and exports loses all its power.
-
-So module.exports always wins.  
-When you are exporting obj, use exports, when exporting a function use module.export
-
-#### 3. Imports
-
-This is yet experimental (ES6)
-
-```javascript
-import { area, circumference } from './circle.mjs';
-
-//To use this circle.mjs should use ES6's export
-// e.g. export area = function() {} //ES6 export
-// and not exports.area = function() {} common js export
-```
-
-**Require vs Import**
-In CommonJS - require & module.exports
-
-In ES6 - import export
-
-1. You can't selectively load only the pieces you need with require but with imports, you can selectively load only the pieces you need. That can save memory.
-
-2. Loading is synchronous(step by step) for require on the other hand import can be asynchronous(without waiting for previous import) so it can perform a little better than require
+| Type of Export             | Export Example                           | Import Example                                | Export Description                                   | When to Use this Kind of Export               |
+|----------------------------|------------------------------------------|-----------------------------------------------|------------------------------------------------------|-----------------------------------------------|
+| Named Export (Function)    | `export function myFunction() { ... }`   | `import { myFunction } from './module';`     | Exports a named function.                            | When exporting specific functions.             |
+| Named Export (Object)      | `export { variable1, variable2 };`      | `import { variable1, variable2 } from './module';` | Exports multiple variables, functions, or classes. | When exporting multiple entities.              |
+| Default Export             | `export default variableName;`          | `import variableName from './module';`       | Exports a default variable, function, or class.      | When a module has a primary entity to export. |
+| Default Export (Function)  | `export default function() { ... }`     | `import myFunction from './module';`         | Exports a default function.                          | When a module is primarily a function.         |
 
 ------------------------------------------------------------------------------
 
