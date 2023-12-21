@@ -137,7 +137,6 @@ process.nextTick(() => {
   //do something
 })
 
-
 ```
 
 When to use process.nextTick()?  
@@ -156,32 +155,56 @@ setImmediate(() => {
 
 ##### setImmediate vs setTimeout(fn, 0)?
 
-setImmediate callbacks are called after I/O Queue callbacks are finished or timed out.  
-setImmediate callbacks are placed in Check Queue, which are processed after I/O Queue.  
-
-setTimeout(fn, 0) callbacks are placed in Timer Queue and will be called after I/O callbacks as well as Check Queue callbacks. As event loop, process the timer queue first in each iteration, so which one will be executed first depends on which phase event loop is.
+setImmediate has a higher priority than setTimeout, meaning its callback will be executed before the one scheduled by setTimeout **in the same cycle**.
 
 ------------------------------------------------------------------------------
 
 ## Working with Event Emitters
 
-1. It is an in-built module that establishes communication between objects in node
-2. Many node in-built modules inherit from event emitters  
-Concept - Emitter objects emit named events that cause listeners to be called  
-emitter object have two main features 1. emit events and registering listeners
+It is an in-built module that implements **observer pattern** in Nodejs.
+
+**Why to use event-emitters**
+
+1. Decoupling components - components can communicate without needing direct references to each other
+2. Async communication
+3. useful in scenarios where you want to notify multiple components about a specific state change or action
 
 ```javascript
 // 5 steps
 const EventEmitter = require('events'); // 1. import
-const logger extends EventEmitter // 2. extend
-const logger = new logger() // 3. init
-logger.emit('event', data); // 4. emit events
-logger.on('event', listenerFunc(data)); // 5. register listeners
-// event emitters a=can be sync and async
+const logger = new EventEmitter() // 2. init
+logger.on('event', (data) => console.log({data})); // 4. register listeners
+logger.emit('event', {data: 123}); // 3. emit events
+
+//Note - you first need to register the listeners before emiting the event, otherwise the listeners won't be called
+
+
+// handling event once - 
+myEmitter.once('onceEvent', () => {
+  console.log('This will only happen once!');
+});
+myEmitter.emit('onceEvent');
+myEmitter.emit('onceEvent'); // This won't trigger the event again
+
 ```
 
-1. same as callbacks, but they trigger multiple listeners at once. this can also be achieved in callback but with more logic in the callback function  
-2. Use EventEmitters for applications to allow multiple external plugins to build functionality on top of the application's core.
+**event emitter functions**
+
+| Method                        | Description                                                                                     |
+| ----------------------------- | ----------------------------------------------------------------------------------------------- |
+| `on(eventName, listener)`     | Adds a listener function to the specified event.                                               |
+| `addListener(eventName, listener)` | Alias for `on`.                                                                           |
+| `once(eventName, listener)`   | Adds a one-time listener function for the specified event. The listener is removed after it's called once. |
+| `emit(eventName, [arg1], [arg2], [...])` | Emits the specified event, triggering all attached listeners. Additional arguments can be passed to the listeners. |
+| `removeListener(eventName, listener)` | Removes a specific listener for the specified event.                                       |
+| `removeAllListeners([eventName])` | Removes all listeners for the specified event. If no event is provided, it removes all listeners for all events. |
+| `setMaxListeners(n)`          | Sets the maximum number of listeners that can be added to an event. Default is unlimited.      |
+| `listeners(eventName)`        | Returns an array of listeners for the specified event.                                        |
+| `eventNames()`                | Returns an array of event names to which listeners are attached.                               |
+| `listenerCount(eventName)`    | Returns the number of listeners for the specified event.                                       |
+
+
+1. similar to callbacks, but they trigger multiple listeners at once. 
 
 ------------------------------------------------------------------------------
 

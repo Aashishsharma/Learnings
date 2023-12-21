@@ -265,7 +265,7 @@ let promiseAllMyVersion = (arrodPromises) => {
 
 }
 
-// below output is same as that of Promise.all()
+//below output is same as that of Promise.all()
 promiseAllMyVersion(arr.map((item) => promArr(item))).then((res) => {
     console.log({res})
 })
