@@ -204,7 +204,7 @@ let promArr = (item) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             if(item === 1)
-              reject(item)
+              resolve(item)
             resolve(item)
         }, 1000*item)
     })
@@ -274,3 +274,38 @@ function greet(message, punctuation) {
 }
 const person = { name: 'Alice' };
 greet.apply(person, ['Hi', '!']);
+
+const { stdout } = require('process');
+const { Transform } = require('stream');
+
+class MyTransformStream extends Transform {
+  constructor(options) {
+    super(options);
+    // Additional setup if needed
+  }
+
+  _transform(chunk, encoding, callback) {
+    // Transform the data (convert to uppercase in this example)
+    const transformedData = chunk.toString().toUpperCase();
+    
+    // Push the transformed data to the writable destination
+    this.push(transformedData);
+    //console.log(transformedData);
+    
+    // Call the callback to indicate that the transformation is complete
+    callback();
+  }
+}
+
+// Example Usage
+const myTransformStream = new MyTransformStream();
+
+// Write data to the transform stream
+myTransformStream.write('Hello, ');
+myTransformStream.write('world!');
+
+myTransformStream.end(); // Indicate the end of the transform stream
+myTransformStream.on('data', (transformedData) => {
+    console.log(`Transformed data: ${transformedData}`);
+  });
+

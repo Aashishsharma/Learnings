@@ -212,6 +212,15 @@ myEmitter.emit('onceEvent'); // This won't trigger the event again
 
 It is a collection of data that might not br available all at once and don't have to fit in memory.  
 
+types of streams 
+
+| Stream Type     | Example Code                                | Description                                                      | Key Methods                             |
+|------------------|---------------------------------------------|------------------------------------------------------------------|-----------------------------------------|
+| Readable Streams | `fs.createReadStream('file.txt').pipe(writableStream);` | Represents a source of data that can be read.                   | `read()`, `on('data')`, `on('end')`, `on('error')` |
+| Writable Streams | `readableStream.pipe(fs.createWriteStream('output.txt'));` | Represents a destination for data to be written.                | `write()`, `end()`, `on('finish')`, `on('error')` |
+| Duplex Streams   | `const duplexStream = net.connect(3000, 'localhost');`   | Represents a stream that is both readable and writable.         | Combination of readable and writable stream methods |
+| Transform Streams| `readableStream.pipe(transformStream).pipe(writableStream);` | A type of duplex stream for data modification as it is written and read. | `transform(chunk, encoding, callback)`, `flush(callback)` |
+
 ```javascript
 //e.g. serving file from a server
 const fs = require('fs')
@@ -222,9 +231,96 @@ server.on('request', (req, res) => {
   //     res.end(data);
   // })
   const src = fs.createReadStream('./big.file');
+  
+  // you can send the data to response stream as below
   src.pipe(res);
+
+  // or read the data
+  src.on('data', (chunk) => {
+  console.log(`Received chunk: ${chunk}`);
+})
+src.on('end', () => {
+  console.log('No more data to read.');
+});
 });
 server.listen(8000);
+```
+
+**Creating your own stream**
+
+```javascript
+// in above examples, the fs.createReadStream gives us the readble stream
+// to create our own streams
+
+// 1. Readable Stream
+const { Readable } = require('stream');
+class MyReadableStream extends Readable {
+  constructor(options) {
+    super(options);
+  }
+  // The read method gets executed each time the consumer is ready to consume more data
+  // untill this.push(null) is called
+  _read(size) {
+    // in the read method we need to push the data
+    // which would then be available in the on('data) event 
+    // Push each piece of data into the stream
+    this.push(data);
+    // this data can be anything, maybe a chunk from file or external datasource
+    
+    // at the end we need to push null, to notify that the stream has ended
+    this.push(null);
+    // if we don't push null, the read function would keep on running continuously since
+    //read function is called by the stream implementation when the consumer is ready to receive more data
+  }
+}
+// above data puched in this.push(data) would be available here
+const myStream = new MyReadableStream();
+myStream.on('data', (chunk) => {
+  console.log(`Received chunk: ${chunk}`);
+});
+
+
+// 2. Writable stream
+const { Writable } = require('stream');
+class MyWritableStream extends Writable {
+  constructor(options) {
+    super(options);
+  }
+  // The write method gets executed each time data is written to the transform stream
+  _write(chunk, encoding, callback) {
+    // Simulate writing data to some destination
+    console.log(`Writing data: ${chunk.toString()}`); 
+    // Call the callback to indicate that the write operation is complete
+    callback();
+  }
+}
+const myWritableStream = new MyWritableStream();
+myWritableStream.write('Hello, ');
+myWritableStream.write('world!');
+myWritableStream.end(); // Indicate the end of the writable stream
+
+
+// 3. Transform Stream
+const { Transform } = require('stream');
+class MyTransformStream extends Transform {
+  constructor(options) {
+    super(options);
+  }
+  // The _transform method gets executed each time data is written to the transform stream
+  _transform(chunk, encoding, callback) {
+    // Transform the data (convert to uppercase in this example)
+    const transformedData = chunk.toString().toUpperCase(); 
+    // Push the transformed data to the writable destination
+    this.push(transformedData);
+    // this data is available in the on('data') cb handler
+    // Call the callback to indicate that the transformation is complete
+    callback();
+  }
+}
+
+myTransformStream.on('data', (transformedData) => {
+  console.log(`Transformed data: ${transformedData}`);
+});
 ```
 
 Commented code is normal code, i.e, read file and send response, uncommented code is using streams.  
