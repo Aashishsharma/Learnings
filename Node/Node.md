@@ -218,7 +218,7 @@ types of streams
 |------------------|---------------------------------------------|------------------------------------------------------------------|-----------------------------------------|
 | Readable Streams | `fs.createReadStream('file.txt').pipe(writableStream);` | Represents a source of data that can be read.                   | `read()`, `on('data')`, `on('end')`, `on('error')` |
 | Writable Streams | `readableStream.pipe(fs.createWriteStream('output.txt'));` | Represents a destination for data to be written.                | `write()`, `end()`, `on('finish')`, `on('error')` |
-| Duplex Streams   | `const duplexStream = net.connect(3000, 'localhost');`   | Represents a stream that is both readable and writable.         | Combination of readable and writable stream methods |
+| Duplex Streams (socket)   | `const duplexStream = net.connect(3000, 'localhost');`   | Represents a stream that is both readable and writable.         | Combination of readable and writable stream methods |
 | Transform Streams| `readableStream.pipe(transformStream).pipe(writableStream);` | A type of duplex stream for data modification as it is written and read. | `transform(chunk, encoding, callback)`, `flush(callback)` |
 
 ```javascript
@@ -230,6 +230,14 @@ server.on('request', (req, res) => {
   //   if (err) throw err;
   //     res.end(data);
   // })
+
+  // commented code is normal code and
+  // 1. If the file is in GB and node does not have that much memory, commented code will throw memory error
+   // 2. Both fs and res can be converted into streams and thus, 
+   // no matter how big the file is, data is sent in streams so chunk of data is stored in memory,
+   // so it never goes out of memory.
+
+
   const src = fs.createReadStream('./big.file');
   
   // you can send the data to response stream as below
@@ -323,98 +331,84 @@ myTransformStream.on('data', (transformedData) => {
 });
 ```
 
-Commented code is normal code, i.e, read file and send response, uncommented code is using streams.  
+#### Stream video file from server to the client
 
-1. If the file is in GB and node does not have that much memory, commented code will throw memory error
-2. Both fs and res can be converted into streams and thus, no matter how big the file is, data is sent in streams so chunk of data is stored in memory, so it never goes out of memory.
-
-#### Types of Streams
-
-1. Readable  
-e.g. fs.createReadStream()
-2. Writable  
-e.g. fx.createWriteStream();
-3. Duplex  
-e.g. Socket(), both read and write can be done on these streams
-4. Transform  
-Duplex stream that can be used to transfrom/modify the data  
-  
-Streams can be used with 1. event emmitters, 2. methods like pipe.
-All streams are instances of Event Emmitters, events are used to read/wrire data to a stream.  
-mostly used -> src.pipe(dist), dist is the writable stream, src is a readable stream, or they can be duplex streams  
-If we are using pipe method, ther is no need of event emmitters
-
-Pipe multiple streams -> a.pipe(b).pipe(c).pipe(d), where b and c are duplex streams  
-  
-If using event emmitters, events are as follows  
-
-1. for readable -> data, end, error, close
-2. for writable -> drain  finish, error, close
-  
-if using pipe functions
-
-1. for readable -> pipe(), unpipe(), read(), resume()
-2. for writable -> write(), end()
+1. Server code 
 
 ```javascript
-// using stream (built-in node module) to create streams
-// create writable stream
-const {Writable} = require('stream');
-// create writable obj, usin new
-const outStream = new Writable({
-  // default method available
-  write(chunk, encoding, callback) {
-    console.log(chunk.toString());
-    callback();
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+
+const app = express();
+const port = 3000;
+
+app.get('/video', (req, res) => {
+  // Specify the path to the video file
+  const videoPath = path.join(__dirname, 'path_to_your_video.mp4');
+  
+  // Retrieve file stats, including size
+  const stat = fs.statSync(videoPath);
+  const fileSize = stat.size;
+  
+  // Retrieve the 'Range' header from the request
+  const range = req.headers.range;
+  // this range header is sent automatically from the client
+  // if the html tag used is <video> in the client side
+
+  if (range) {
+    // Parse the 'Range' header to get the start and end byte positions
+    const parts = range.replace(/bytes=/, '').split('-');
+    const start = parseInt(parts[0], 10);
+    const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+    // Calculate the size of the data chunk to be sent
+    const chunkSize = end - start + 1;
+    // Create a readable stream for the specified range of the video file
+    const file = fs.createReadStream(videoPath, { start, end });
+    // Set response headers for a partial content response
+    const head = {
+      'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+      'Accept-Ranges': 'bytes',
+      'Content-Length': chunkSize,
+      'Content-Type': 'video/mp4',
+    };
+    // Respond with a 206 (Partial Content) status code and send the data chunk
+    res.writeHead(206, head);
+    file.pipe(res);
+  } else {
+    // If no 'Range' header is present, send the entire video file
+    const head = {
+      'Content-Length': fileSize,
+      'Content-Type': 'video/mp4',
+    };
+    // Respond with a 200 (OK) status code and send the entire file
+    res.writeHead(200, head);
+    fs.createReadStream(videoPath).pipe(res);
   }
 });
-process.stdin.pipe(outStream);
-
-// create readable stream
-const {Readable} = require('stream');
-const readStream = new Readable({
-  // default method available
-  read(size) {
-    this.push(String.fromCharCode(this.currentCHarCode++));
-    if(this.currentCHarCode > 90)
-      this.push(null) //indicate the end of stream
-    }
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
 });
-readStream.currentCHarCode = 65;
-readStream.pipe(process.stdout);
+```
 
-//create Duplex stream
-// it need to implemet both read and write functions
-const {Duplex} = require('stream');
-// create writable obj, usin new
-const inoutStream = new Duplex({
-  // default method available
-  write(chunk, encoding, callback) {
-    console.log(chunk.toString());
-    callback();
-  }
-  read(size) {
-    this.push(String.fromCharCode(this.currentCHarCode++));
-    if(this.currentCHarCode > 90)
-      this.push(null) //indicate the end of stream
-    }
-});
-inoutStream.currentCHarCode = 65;
-process.stdin.pipe(inoutStream).pipe(process.stdout);
+2. Client code
 
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Streaming Example</title>
+</head>
+<body>
+  <video width="640" height="360" controls>
+    <source src="http://localhost:3000/video" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</body>
+</html>
 
-//create transform stream
-// just transform method needs to be implemented
-const {Transform} = require('stream');
-// create writable obj, usin new
-const transStream = new Transform({
-  // default method available
-  transform(chunk, encoding, callback) {
-    this.push(chunk.toString().toUpperCase())
-    callback();
-  }
-});
-process.stdin.pipe(transStream).pipe(process.stdout);
 ```
 
 ------------------------------------------------------------------------------
