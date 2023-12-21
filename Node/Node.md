@@ -355,6 +355,9 @@ app.get('/video', (req, res) => {
   const range = req.headers.range;
   // this range header is sent automatically from the client
   // if the html tag used is <video> in the client side
+  // the value of range variable looks like this
+  // bytes=102400-204799
+  // bytes=startposition-endposition
 
   if (range) {
     // Parse the 'Range' header to get the start and end byte positions
