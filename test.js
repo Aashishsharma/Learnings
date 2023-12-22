@@ -308,4 +308,25 @@ myTransformStream.end(); // Indicate the end of the transform stream
 myTransformStream.on('data', (transformedData) => {
     console.log(`Transformed data: ${transformedData}`);
   });
+  
+
+  const { spawn } = require('child_process');
+
+  const childProcess = spawn('dir', {shell: true})
+
+
+childProcess.stdout.on('data', (data) => {
+  console.log(`stdout: ${data}`);
+});
+
+childProcess.stderr.on('data', (data) => {
+  console.error(`stderr: ${data}`);
+});
+
+childProcess.on('close', (code) => {
+  console.log(`child process exited with code ${code}`);
+});
+
+const os = require('os');
+console.log('no of cors ', os.cpus().length)
 

@@ -422,7 +422,7 @@ app.listen(port, () => {
 
 to scale node app, using multiple processes is the only option
 use the cores that are provided by operating system
-os modules - os.cpu().lrnght gives is no. of cores in the operating system
+os modules - os.cpu().length gives is no. of cores in the operating system
 
 child process module - inbuild module in node - this module enables us to use os functionality by running system command inside child process  
 4 ways to create a child process
@@ -488,7 +488,6 @@ setInterval(() => {
 // process.on('message', function(msg) {})
 ```
 
-e.g. let's say we have an endpoint and that endpoint does a complex computation whivh takes lot of time, in this case if another endpoint req, is made beofre the task is complete, it will go in queue, instead use fork, spawn new process and let that process execute long task, and in main will not be blocked and next request can be consumed
 Note - you can only fork the no. of processes as much as cpu cores are present in the operating system
 
 ## cluster module - buil-in module - enable load balancing where os has more than cpu cores
@@ -500,28 +499,58 @@ CLuster module behind the scenes uses child_process module's fork api
 
 ```javascript
 const cluster = require('cluster');
-const os = require('os');
-  if(cluster.isMaster) {
-    // master cluster - when frst time this file is run it is master
-  const cpus = os.cpus().length;
-  for(let i=0; i<cpusl i++) {
+const http = require('http');
+const numCPUs = require('os').cpus().length;
+if (cluster.isMaster) {
+  // Fork workers
+  for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
-  } else {
-    // worker cluster
-    require('./server.js') 
-    // server.js is the file where http/express server is started and endpoints are defined
-    // no. of request this server can handle per second increases based on no. of cores
   }
-}
-// to handle restart and process crash
-if(cluster.isMaster) {
-    // master cluster - when frst time this file is run it is master
-  const cpus = os.cpus().length;
-  for(let i=0; i<cpusl i++) {
+  // Listen for dying workers and fork a new one
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`Worker ${worker.process.pid} died. Forking a new one...`);
     cluster.fork();
-  } 
-  cluster.on('exit') // create another fork
-  else {
+  });
+} else {
+  // Workers can share any TCP connection
+  // In this case, it's an HTTP server
+  http.createServer((req, res) => {
+    res.writeHead(200);
+    res.end('Hello, World!');
+  }).listen(3000);
+
+  console.log(`Worker ${process.pid} started`);
+}
+
+```
+
+**communication between mater and worker processes** 
+
+```javascript
+//Sending Messages to Workers:
+if (cluster.isMaster) {
+  const worker = cluster.fork();
+  worker.send({ message: 'Hello, worker!' });
+}
+
+//Receiving Messages in Workers:
+if (cluster.isWorker) {
+  process.on('message', (msg) => {
+    console.log(`Message from master: ${msg}`);
+  });
+}
+
+//Sending Messages to Master:
+if (cluster.isWorker) {
+  process.send({ message: 'Hello, master!' });
+}
+
+//Receiving Messages in Master:
+if (cluster.isMaster) {
+  cluster.on('message', (worker, msg) => {
+    console.log(`Message from worker ${worker.process.pid}: ${msg}`);
+  });
+}
 ```
 
 **problem with cluster**
