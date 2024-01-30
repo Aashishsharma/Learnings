@@ -104,3 +104,41 @@ Users cannot directly work with DB, they use any one of the DBMS
 | SHOW COLUMNS FROM table_name;                                                            |
 | SHOW CREATE TABLE table_name;                                                            |
 | DROP TABLE table_name;                                                                   |
+
+### Constraints
+
+![alt text](PNG/db4.PNG "Title") 
+Foreign key refers to primary key of another table
+
+![alt text](PNG/db5.PNG "Title")
+
+![alt text](PNG/db6.PNG "Title")
+
+###### Primary key syntax
+
+```SQL
+CREATE TABLE table_name (
+    column1 datatype PRIMARY KEY,
+    column2 datatype,   
+);
+CREATE TABLE table_name (
+    column1 datatype,
+    column2 datatype,
+    PRIMARY KEY (column1, column2)
+);
+ALTER TABLE table_name
+ADD PRIMARY KEY (column1);
+ALTER TABLE table_name
+DROP PRIMARY KEY;
+```
+
+![alt text](PNG/db7.PNG "Title")
+
+
+![alt text](PNG/db8.PNG "Title")
+![alt text](PNG/db9.PNG "Title")
+![alt text](PNG/db10.PNG "Title")
+![alt text](PNG/db11.PNG "Title")
+![alt text](PNG/db12.PNG "Title")
+![alt text](PNG/db13.PNG "Title")
+
