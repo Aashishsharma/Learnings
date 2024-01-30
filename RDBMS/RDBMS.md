@@ -136,7 +136,27 @@ DROP PRIMARY KEY;
 
 
 ![alt text](PNG/db8.PNG "Title")
+
+### Select clause
+| Keyword/Function    | Description                                                      | Example                                                              |
+|---------------------|------------------------------------------------------------------|----------------------------------------------------------------------|
+| Column Names        | Select specific columns from a table.                            | `SELECT column1, column2 FROM table_name;`                           |
+| \* (Asterisk)      | Select all columns from a table.                                 | `SELECT * FROM table_name;`                                          |
+| DISTINCT            | Return unique values in the result set.                           | `SELECT DISTINCT column_name FROM table_name;`                       |
+| AS                  | Alias column names or expressions.                               | `SELECT column_name AS alias_name FROM table_name;`                  |
+| CONCAT              | Concatenate strings.                                             | `SELECT CONCAT(column1, column2) AS concatenated_column FROM table_name;` |
+| Mathematical Operators | Perform arithmetic operations.                                 | `SELECT column1 + column2 AS sum FROM table_name;`                   |
+| Aggregate Functions | Perform calculations on a set of values.                         | `SELECT COUNT(column1) AS count FROM table_name;`                    |
+
+If multiple columns are used in DISTINCT like `select distinct rollno, name`, then the combination of rollno and name would be unique
+
+### Where Clause
+
 ![alt text](PNG/db9.PNG "Title")
+
+All and ANY Compares a value to each value returned by a subquery.  
+Example: `column_name = ANY (subquery), column_name > ALL (subquery)`
+
 ![alt text](PNG/db10.PNG "Title")
 ![alt text](PNG/db11.PNG "Title")
 ![alt text](PNG/db12.PNG "Title")
