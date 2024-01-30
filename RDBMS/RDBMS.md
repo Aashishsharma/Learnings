@@ -157,7 +157,67 @@ If multiple columns are used in DISTINCT like `select distinct rollno, name`, th
 All and ANY Compares a value to each value returned by a subquery.  
 Example: `column_name = ANY (subquery), column_name > ALL (subquery)`
 
-![alt text](PNG/db10.PNG "Title")
+## Aggregate funcs
+
+1. MIN
+2. MAX
+3. COUNT
+4. AVG
+5. SUM
+
+```SQL
+select MAX(marks) from students;
+```
+
+#### Question - Get nth highest / lowest salary
+
+Logic - get top n employees salary in a subquery  
+use this query as a table (which is called subquery) and on that data to Min / Max
+
+```SQL
+-- get 3rd highest salary
+-- in MySql
+select MIN(emp.salary) from (
+select salary
+from employee
+order by salary desc
+limit 3) as emp;
+
+-- in Sql server
+SELECT MIN(emp.salary)
+FROM (
+    SELECT TOP 3 salary
+    FROM employee
+    ORDER BY salary DESC
+) AS emp;
+```
+
+### Group by clause
+
+It groups the result of the query based on the the columns listed in group by clause then on thet grouped columns aggregate functions are run
+
+```SQL
+select city, count(name)
+from students
+group by city
+``` 
+
+In above query, all the tuples having same city name are grouped and on that group count func is run  
+
+**Note - all the columns listed in select clause apart from aggregate functions need to be listed in the group by clause (see below query)**  -
+
+```SQL
+select city, name, count(name)
+from students
+group by city, name
+```
+
+In above query, thr tuples returned from the students table are grouped based on city and name column, meaning  
+![alt text](PNG/db10.PNG "Title")  
+So if there are 2 Anils in Pune city, the count of frst row would be 2
+
+
+
 ![alt text](PNG/db11.PNG "Title")
 ![alt text](PNG/db12.PNG "Title")
 ![alt text](PNG/db13.PNG "Title")
