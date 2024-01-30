@@ -221,9 +221,14 @@ So if there are 2 Anils in Pune city, the count of frst row would be 2
 We frst need to understamd order of ececution of SQL query  
 
 1. **from clause** is run to get the initial data from the table
-2. **where clause** is run to filter the data
-3. **group by clause** is run to further reduce the tuples by grouping them
-4. **having clause** is run to further filter the grouped data
+2. **join** is run if data is to be retireved from multiple tables
+3. **where clause** is run to filter the data
+4. **group by clause** is run to further reduce the tuples by grouping them
+5. **having clause** is run to further filter the grouped data
+6. **select clause** is run to determine which columns to include in the result
+7. **distinct** to further filter the data by removing duplicate rows
+8. **order by**
+9. **limit**
 
 so basically having cluase is similar to where clause but where clause is run at the start to get the initial data set, and having clause is run after the data is filterd from where and group conditions
 
