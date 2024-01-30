@@ -75,7 +75,32 @@ Users cannot directly work with DB, they use any one of the DBMS
 | geometry           | Spatial data representing points, lines, and polygons |
 | hierarchyid        | Represents a position in a hierarchy         |
 
+![alt text](PNG/db2.PNG "Title")
 
+### DB related queries
 
+| Query Syntax                                       |
+|----------------------------------------------------|
+| CREATE DATABASE IF NOT EXISTS database_name;                     |
+| DROP DATABASE IF NOT EXISTS database_name;                       |
+| USE database_name;                                 |
 
+### Table related queries
 
+| Query Syntax                                           |
+|--------------------------------------------------------|
+| CREATE TABLE table_name (column1 datatype, column2 datatype, ...);                                      |
+| ALTER TABLE table_name ADD column_name datatype;                                       |
+| ALTER TABLE table_name DROP COLUMN column_name;                                        |
+| ALTER TABLE table_name MODIFY COLUMN column_name datatype;                              |
+| ALTER TABLE table_name RENAME TO new_table_name;                                        |
+| ALTER TABLE table_name ADD CONSTRAINT constraint_name PRIMARY KEY (column_name);          |
+| ALTER TABLE table_name DROP PRIMARY KEY;                                                 |
+| ALTER TABLE table_name ADD INDEX index_name (column_name);                                |
+| ALTER TABLE table_name DROP INDEX index_name;                                             |
+| ALTER TABLE table_name ADD FOREIGN KEY (column_name) REFERENCES other_table(other_column); |
+| ALTER TABLE table_name DROP FOREIGN KEY fk_name;                                          |
+| SHOW TABLES;                                                                             |
+| SHOW COLUMNS FROM table_name;                                                            |
+| SHOW CREATE TABLE table_name;                                                            |
+| DROP TABLE table_name;                                                                   |
