@@ -204,7 +204,7 @@ group by city
 
 In above query, all the tuples having same city name are grouped and on that group count func is run  
 
-**Note - all the columns listed in select clause apart from aggregate functions need to be listed in the group by clause (see below query)**  -
+**Multiple columns group by Note - all the columns listed in select clause apart from aggregate functions need to be listed in the group by clause (see below query)**  -
 
 ```SQL
 select city, name, count(name)
@@ -212,10 +212,20 @@ from students
 group by city, name
 ```
 
-In above query, thr tuples returned from the students table are grouped based on city and name column, meaning  
+In above query, the tuples returned from the students table are grouped based on city and name column as a new group,  
+**Understand this** - (So if there are 2 unique cities and 2 unique names, then the group by wil return 2 raise to 2 = 4 rows, if 3 unique names for 2 cities then 2 raise to 3 = 8 rows)  
 ![alt text](PNG/db10.PNG "Title")  
 So if there are 2 Anils in Pune city, the count of frst row would be 2
 
+### Having clause
+We frst need to understamd order of ececution of SQL query  
+
+1. **from clause** is run to get the initial data from the table
+2. **where clause** is run to filter the data
+3. **group by clause** is run to further reduce the tuples by grouping them
+4. **having clause** is run to further filter the grouped data
+
+so basically having cluase is similar to where clause but where clause is run at the start to get the initial data set, and having clause is run after the data is filterd from where and group conditions
 
 
 ![alt text](PNG/db11.PNG "Title")
