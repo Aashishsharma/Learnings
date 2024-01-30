@@ -230,10 +230,19 @@ We frst need to understamd order of ececution of SQL query
 8. **order by**
 9. **limit**
 
-so basically having cluase is similar to where clause but where clause is run at the start to get the initial data set, and having clause is run after the data is filterd from where and group conditions
-
-
+so basically having cluase is similar to where clause but where clause is run at the start to get the initial data set, and having clause apply condition on the grouped results  
+**(Note - don't assume that having condition needs to have columns from group by clause)**
 ![alt text](PNG/db11.PNG "Title")
+
+
 ![alt text](PNG/db12.PNG "Title")
 ![alt text](PNG/db13.PNG "Title")
+![alt text](PNG/db14.PNG "Title")
+![alt text](PNG/db15.PNG "Title")
+![alt text](PNG/db16.PNG "Title")
+![alt text](PNG/db17.PNG "Title")
+![alt text](PNG/db18.PNG "Title")
+![alt text](PNG/db19.PNG "Title")
+![alt text](PNG/db20.PNG "Title")
+![alt text](PNG/db21.PNG "Title")
 
