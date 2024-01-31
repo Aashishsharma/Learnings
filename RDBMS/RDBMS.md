@@ -301,8 +301,11 @@ TRUNCATE TABLE TABLE_NAME
 
 ![alt text](PNG/db17.PNG "Title")
 
-
+**In MySQL we don't have FULL OUTER JOIN functionality by default**  -
+(Workaround)  - First do left join then right join in 2 tables then do union (see below image)
 ![alt text](PNG/db18.PNG "Title")
+
+
 ![alt text](PNG/db19.PNG "Title")
 ![alt text](PNG/db20.PNG "Title")
 ![alt text](PNG/db21.PNG "Title")
