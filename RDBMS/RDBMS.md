@@ -274,11 +274,24 @@ We can use above workaround in DELETE query as well
 ### 3. Alter - to change table schema
 
 ![alt text](PNG/db13.PNG "Title")
-
-
-
-
 ![alt text](PNG/db14.PNG "Title")
+
+
+### 4. Truncate
+
+```SQL
+TRUNCATE TABLE TABLE_NAME
+```
+
+**Drop table** - deletes entire table  
+**truncate table** - deletes all the data of the table and not the table
+
+**delete from table (without where clause) vs truncate table** -  
+
+1. DELETE FROM table can be rolled back using a transaction if the database supports it, TRUNCATE TABLE cannot be rolled back.
+2. Truncate removes all rows from a table but does not log individual row deletions, making it faster than DELETE FROM table  
+3. Truncate is DDL and delete is DML
+
 ![alt text](PNG/db15.PNG "Title")
 ![alt text](PNG/db16.PNG "Title")
 ![alt text](PNG/db17.PNG "Title")
