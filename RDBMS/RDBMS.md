@@ -318,7 +318,30 @@ on t1.col1 = t2.col2
 sp to get employee name and manager name from the same table  
 ![alt text](PNG/db19.PNG "Title")
 
-**instead of b.name as managerName, it would be a.name as managerName in above screenshot**
+**instead of b.name as managerName, it would be a.name as managerName in above screenshot**  
+
+Same functionality using subquery -  
+
+```SQL
+SELECT
+    (SELECT name FROM employee WHERE id = b.mgrID) AS managerName,
+    b.name AS empName
+FROM
+    employee AS b;
+```
+
+using my thinking
+
+```SQL
+with mgrDetails as(
+select a.name, a.id
+from emp a
+where a.id in (select mgrId from emp))
+
+select b.name, mgrDetails.name as MGRNAME from
+emp b, mgrDetails
+where b.mgrId = mgrDetails.id;
+```
 
 
 ### Union
@@ -327,5 +350,43 @@ sp to get employee name and manager name from the same table
 
 Union removes duplicate records from tableA and tableB, if we want duplicate records use **UNION ALL**
 
-![alt text](PNG/db21.PNG "Title")
+### Sub queries
+
+Subqueries can be written inside select, from and where clause (mostly written inside where clause)  
+
+### With and View
+
+#### 1. With
+
+1. WITH clauses, also known as Common Table Expressions (CTEs), are temporary result sets.
+2. exist only for the duration of the query execution.
+3. used to improve the readability and maintainability of complex queries
+
+```SQL
+with mgrDetails as(
+select a.name, a.id
+from emp a
+where a.id in (select mgrId from emp))
+
+select b.name, mgrDetails.name as MGRNAME from
+emp b, mgrDetails
+where b.mgrId = mgrDetails.id;
+```
+
+#### 2. View
+
+1. Views are virtual tables that are defined by a query and stored permanently in the database.
+2. Views can be queried, updated, and deleted just like tables, but the underlying data is not stored separately from the tables it references
+3. Views are useful for enforcing security policies
+
+```SQL
+CREATE VIEW SalesByRegion AS
+SELECT Region, SUM(SalesAmount) AS TotalSales
+FROM Sales
+GROUP BY Region;
+
+SELECT * FROM SalesByRegion;
+
+DROP VIEW SalesByRegion -- to permanently remove the view
+```
 
