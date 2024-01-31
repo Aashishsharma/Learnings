@@ -234,6 +234,29 @@ so basically having cluase is similar to where clause but where clause applies c
 **(Note - don't assume that having condition needs to have columns from group by clause)**
 ![alt text](PNG/db11.PNG "Title")
 
+## Table realted queries
+
+### 1. Update
+
+```SQL
+UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition;
+```
+
+GROUP BY and HAVING clauses are not directly supported in the UPDATE statement  
+**workaround - use subqueries**
+
+```SQL
+UPDATE table_name
+SET column1 = value1
+WHERE id IN (
+    SELECT id
+    FROM table_name
+    GROUP BY column2
+    HAVING COUNT(*) > 1
+);
+```
 
 ![alt text](PNG/db12.PNG "Title")
 ![alt text](PNG/db13.PNG "Title")
