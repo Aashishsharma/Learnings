@@ -271,8 +271,13 @@ WHERE condition;
 
 We can use above workaround in DELETE query as well
 
+### 3. Alter - to change table schema
 
 ![alt text](PNG/db13.PNG "Title")
+
+
+
+
 ![alt text](PNG/db14.PNG "Title")
 ![alt text](PNG/db15.PNG "Title")
 ![alt text](PNG/db16.PNG "Title")
