@@ -134,6 +134,10 @@ DROP PRIMARY KEY;
 
 ![alt text](PNG/db7.PNG "Title")
 
+###### Cascading foreign keys
+
+![alt text](PNG/db12.PNG "Title")
+
 
 ![alt text](PNG/db8.PNG "Title")
 
@@ -244,7 +248,7 @@ SET column1 = value1, column2 = value2, ...
 WHERE condition;
 ```
 
-GROUP BY and HAVING clauses are not directly supported in the UPDATE statement  
+GROUP BY and HAVING clauses are not directly supported in the UPDATE / DELETE statement  
 **workaround - use subqueries**
 
 ```SQL
@@ -258,7 +262,16 @@ WHERE id IN (
 );
 ```
 
-![alt text](PNG/db12.PNG "Title")
+### 2. Delete
+
+```SQL
+DELETE FROM table_name
+WHERE condition;
+```
+
+We can use above workaround in DELETE query as well
+
+
 ![alt text](PNG/db13.PNG "Title")
 ![alt text](PNG/db14.PNG "Title")
 ![alt text](PNG/db15.PNG "Title")
