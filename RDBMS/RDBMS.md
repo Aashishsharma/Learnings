@@ -276,6 +276,10 @@ We can use above workaround in DELETE query as well
 ![alt text](PNG/db13.PNG "Title")
 ![alt text](PNG/db14.PNG "Title")
 
+If we modify the datatype of a column  
+
+1. If the datatype is compatible (changing from int to BigInt - works, BigInt to Int - data loss)
+2. If datatpe if incompatible (varchar to int) - modify command will fail, need to manually address the datatype conversion
 
 ### 4. Truncate
 
