@@ -320,6 +320,12 @@ sp to get employee name and manager name from the same table
 
 **instead of b.name as managerName, it would be a.name as managerName in above screenshot**
 
+
+### Union
+
 ![alt text](PNG/db20.PNG "Title")
+
+Union removes duplicate records from tableA and tableB, if we want duplicate records use **UNION ALL**
+
 ![alt text](PNG/db21.PNG "Title")
 
