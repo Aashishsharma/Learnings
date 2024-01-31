@@ -314,8 +314,12 @@ full outer join table t2
 on t1.col1 = t2.col2
 ```
 
-
+**Self join** - if we want to get data in different form from a single table e.g (emp table has emp badgeId, emp name and mgr badgeId), but again mgr is also an employee,  
+sp to get employee name and manager name from the same table  
 ![alt text](PNG/db19.PNG "Title")
+
+**instead of b.name as managerName, it would be a.name as managerName in above screenshot**
+
 ![alt text](PNG/db20.PNG "Title")
 ![alt text](PNG/db21.PNG "Title")
 
