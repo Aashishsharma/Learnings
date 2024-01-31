@@ -394,3 +394,8 @@ SELECT * FROM SalesByRegion;
 DROP VIEW SalesByRegion -- to permanently remove the view
 ```
 
+### TODO
+
+1. Stored procedure
+2. Calling stored procs from nodejs and nestjs
+
