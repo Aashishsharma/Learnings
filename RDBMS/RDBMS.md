@@ -305,6 +305,15 @@ TRUNCATE TABLE TABLE_NAME
 (Workaround)  - First do left join then right join in 2 tables then do union (see below image)
 ![alt text](PNG/db18.PNG "Title")
 
+in SqlServer we have full outer join  -  
+
+```SQL
+select t1.col1, t2.col2
+from table1 t1
+full outer join table t2
+on t1.col1 = t2.col2
+```
+
 
 ![alt text](PNG/db19.PNG "Title")
 ![alt text](PNG/db20.PNG "Title")
