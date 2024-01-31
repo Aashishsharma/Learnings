@@ -292,9 +292,16 @@ TRUNCATE TABLE TABLE_NAME
 2. Truncate removes all rows from a table but does not log individual row deletions, making it faster than DELETE FROM table  
 3. Truncate is DDL and delete is DML
 
+### SQL Joins
+
 ![alt text](PNG/db15.PNG "Title")
 ![alt text](PNG/db16.PNG "Title")
+
+**LEFT JOIN** - Remember the table used in from is the left table, and table used in left join is the right table, so all values from table A and common values from table A and B would be returned.  
+
 ![alt text](PNG/db17.PNG "Title")
+
+
 ![alt text](PNG/db18.PNG "Title")
 ![alt text](PNG/db19.PNG "Title")
 ![alt text](PNG/db20.PNG "Title")
