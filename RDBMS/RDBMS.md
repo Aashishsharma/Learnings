@@ -394,8 +394,44 @@ SELECT * FROM SalesByRegion;
 DROP VIEW SalesByRegion -- to permanently remove the view
 ```
 
+## Stored procedures
+
+```SQL
+-- in MySQL
+-- we need to use Delimiter toindicte end of stroed procedure
+DELIMITER //
+CREATE PROCEDURE GetEmployee(IN emp_id INT, OUT EMPNAME varchar(50))
+BEGIN
+    SELECT name into EMPNAME FROM emp WHERE id = emp_id;
+END // 
+DELIMITER ;
+
+-- calling SP
+call GetEmployee(3, @empname);
+-- empName variable will have name of employee whose id is 3 
+select @empName;
+
+
+-- in SQL server
+CREATE PROCEDURE GetEmployee
+    @emp_id INT
+AS
+BEGIN
+    SELECT * FROM employees WHERE employee_id = @emp_id;
+END
+
+
+```
+
+
 ### TODO
 
 1. Stored procedure
 2. Calling stored procs from nodejs and nestjs
+3. CTE
+4. Window funcs
+5. Misc like case, concat
+6. query indexing
+7. query optimization tecnhinques
+8. query optimization plan
 
