@@ -107,7 +107,7 @@ Users cannot directly work with DB, they use any one of the DBMS
 
 ### Constraints
 
-![alt text](PNG/db4.PNG "Title") 
+![alt text](PNG/db4.PNG "Title")
 Foreign key refers to primary key of another table
 
 ![alt text](PNG/db5.PNG "Title")
@@ -138,10 +138,10 @@ DROP PRIMARY KEY;
 
 ![alt text](PNG/db12.PNG "Title")
 
-
 ![alt text](PNG/db8.PNG "Title")
 
 ### Select clause
+
 | Keyword/Function    | Description                                                      | Example                                                              |
 |---------------------|------------------------------------------------------------------|----------------------------------------------------------------------|
 | Column Names        | Select specific columns from a table.                            | `SELECT column1, column2 FROM table_name;`                           |
@@ -173,6 +173,10 @@ Example: `column_name = ANY (subquery), column_name > ALL (subquery)`
 select MAX(marks) from students;
 ```
 
+### Sub queries
+
+Subqueries can be written inside select, from and where clause (mostly written inside where clause)  
+
 #### Question - Get nth highest / lowest salary
 
 Logic - get top n employees salary in a subquery  
@@ -181,6 +185,7 @@ use this query as a table (which is called subquery) and on that data to Min / M
 ```SQL
 -- get 3rd highest salary
 -- in MySql
+-- note how we are using subquery in the from caluse, mostly ued in where clause
 select MIN(emp.salary) from (
 select salary
 from employee
@@ -204,7 +209,7 @@ It groups the result of the query based on the the columns listed in group by cl
 select city, count(name)
 from students
 group by city
-``` 
+```
 
 In above query, all the tuples having same city name are grouped and on that group count func is run  
 
@@ -217,11 +222,15 @@ group by city, name
 ```
 
 In above query, the tuples returned from the students table are grouped based on city and name column as a new group,  
-**Understand this** - (So if there are 2 unique cities and 2 unique names, then the group by wil return 2 raise to 2 = 4 rows, if 3 unique names for 2 cities then 2 raise to 3 = 8 rows)  
+**Understand this** - (So if there are 2 unique cities and 2 unique names, then the group by wil return 2 raise to 2 = 4 rows, if 3 unique names for 2 cities then 2 raise to 3 = 8 rows)
+
+**basically - each unique combination of name and city would be a new group**
+
 ![alt text](PNG/db10.PNG "Title")  
 So if there are 2 Anils in Pune city, the count of frst row would be 2
 
 ### Having clause
+
 We frst need to understamd order of ececution of SQL query  
 
 1. **from clause** is run to get the initial data from the table
@@ -347,16 +356,11 @@ emp b, mgrDetails
 where b.mgrId = mgrDetails.id;
 ```
 
-
 ### Union
 
 ![alt text](PNG/db20.PNG "Title")
 
 Union removes duplicate records from tableA and tableB, if we want duplicate records use **UNION ALL**
-
-### Sub queries
-
-Subqueries can be written inside select, from and where clause (mostly written inside where clause)  
 
 ### With and View
 
@@ -419,19 +423,32 @@ AS
 BEGIN
     SELECT * FROM employees WHERE employee_id = @emp_id;
 END
-
-
 ```
+
+## Window functions
+
+Add aggreage / window functions as a column to all the rows
+
+1. Calculate total sales for each country
+
+```SQL
+select COUNTRY, SUM(SALES)
+from ABC
+GROUP BY COUNTRY
+```
+
+but what if we want this SUM as a separete column in a result set along with all the exiting columns of a given table?  
+
+We need to add columns in select as well as in groupby, becasue columns in select must be in group by, and as we know about group by, each unique combination of columns listed in groupby will create a new group.  
+
+
 
 
 ### TODO
 
-1. Stored procedure
 2. Calling stored procs from nodejs and nestjs
-3. CTE
 4. Window funcs
 5. Misc like case, concat
 6. query indexing
 7. query optimization tecnhinques
 8. query optimization plan
-
