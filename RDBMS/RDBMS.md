@@ -441,8 +441,54 @@ but what if we want this SUM as a separete column in a result set along with all
 
 We need to add columns in select as well as in groupby, becasue columns in select must be in group by, and as we know about group by, each unique combination of columns listed in groupby will create a new group.  
 
+**Using window functions is like giving each row its own little bubble(window) to do math (using aggregate / window functions) in**
 
 
+```SQL
+-- syntax
+window_function() OVER (
+    [PARTITION BY partition_column1, partition_column2, ...]
+    [ORDER BY order_column [ASC|DESC]]
+    [ROWS | RANGE frame_definition]
+)
+```
+
+#### Working of window functions
+
+1. Data us fetched from tables - from cluase
+2. If window function as partiton by (it is optional btw), then group are created based on partition column listed (aka window frame)
+3. Sorting - if order by is there then it is applied in that window frame (based on partiton by)
+4. Window function calc is done, for each row
+
+
+#### E.g.
+
+1. Calculate nth highest / lowest mark / salary of students / employee
+
+```SQL
+select * from (
+(select s.*, row_number() over( order by marks desc) as sturank1
+from student s
+)) as win
+where win.sturank1 = 2;
+
+-- focus on subquery, we are using row_number window func, which will assign
+-- row number to each row along with all the columns in descending order of marks
+-- so student with highest mrk 90 will have row_num (sturank1 alias) = 1 and student with mark 88 = 2
+-- and now in outer query we get details of student where row-num = 2, this way we got second (nth) highest
+
+
+-- Q - Calculate nth highest / lowest marks of student for each dept
+-- use partition by which works similar to group by inside a window
+select * from (
+(select s.*, row_number() over( partition by deptId order by marks desc) as sturank1
+from student s
+)) as win
+where win.sturank1 = 2;
+-- 
+-- here we will get second highest mark student for each dept
+
+```
 
 ### TODO
 
