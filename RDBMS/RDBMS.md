@@ -553,7 +553,10 @@ see below image
 
 ![alt text](PNG/q11.PNG "Title")  
 
-**optional arguments for lead and lag** - lag(<columnName>, 2, 0) - 2 indicates pick column value of previous to previous row - 0 indicates default value (in case of lag(<colmnName, 2, 0>), the frst 2 rows will have value of 0 since there is no previous and previous to previous records )
+**optional arguments for lead and lag** - lag(<columnName>, 2, 0) - 2 indicates pick column value of previous to previous row - 0 indicates default value (in case of lag(<colmnName, 2, 0>), the frst 2 rows will have value of 0 since there is no previous and previous to previous records )  
+
+**Q. Find the salary of the employee is higher, lower or equal to previous employee for each dept** - 
+![alt text](PNG/q12.PNG "Title")  
 
 ### TODO
 
