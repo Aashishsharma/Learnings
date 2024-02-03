@@ -471,6 +471,7 @@ window_function() OVER (
 7. first_value()
 8. last_value()
 9. nth_value()
+10. ntile()
 
 #### E.g.
 
@@ -598,6 +599,26 @@ from student s
 window w as (partition by deptId order by marks desc range between unbounded preceding and unbounded following)
 -- also see how nth_value() function is used
 ```
+
+**ntile()** - is used to divide a result set into a specified number of "buckets."
+
+```SQL
+-- syntax
+ntile(3) -- here 3 indicates number of buckets that we need to create
+```
+
+below query creates 3 buckets based on students marks - 
+
+![alt text](PNG/q14.PNG "Title") - 
+
+If we want buckets for each department
+
+![alt text](PNG/q15.PNG "Title") - 
+here 3 buckets are created for each dept, we have 3 depts so total 9 buckets
+
+**Q. Categorize students as toppers, average students and back benchers**
+
+![alt text](PNG/q16.PNG "Title") - 
 
 ### TODO
 
