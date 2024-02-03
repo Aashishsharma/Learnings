@@ -460,6 +460,14 @@ window_function() OVER (
 3. Sorting - if order by is there then it is applied in that window frame (based on partiton by)
 4. Window function calc is done, for each row
 
+**commonly used window functions**  
+
+1. row_number()
+2. rank()
+3. dense_rank()
+4. lead()
+5. lag()
+6. all aggregate functions can be used as window function
 
 #### E.g.
 
@@ -536,6 +544,17 @@ where win.sturank1 < 3
 see below image - 
 
 ![alt text](PNG/q10.PNG "Title")
+
+**lag and lead**  -
+
+1. lag(<columnName>) - it will give previous row's column value listed in the lag() function
+2. lead(<columnName>) - it will give next row's column value listed in the lead() function  
+see below image 
+
+![alt text](PNG/q11.PNG "Title")  
+
+**optional arguments for lead and lag** - lag(<columnName>, 2, 0) - 2 indicates pick column value of previous to previous row - 0 indicates default value (in case of lag(<colmnName, 2, 0>), the frst 2 rows will have value of 0 since there is no previous and previous to previous records )
+
 ### TODO
 
 2. Calling stored procs from nodejs and nestjs
