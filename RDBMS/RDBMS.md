@@ -507,15 +507,15 @@ where s.sturank1 < 3
 -- and use this query in form clause and in outside query we can apply sin.sturank1 < 3 condition
 ```
 
-O/P of inner subquery from above query -  
+O/P of inner subquery from above query - 
+
 ```SQL
 (select s.*, row_number() over( partition by deptId order by marks desc) as sturank1
 from student s
 )
 ```
-![alt text](PNG/db20.PNG "Title")
 
-
+![alt text](PNG/9.PNG "Title")
 
 Q. Select top 3 students from each dept with highest marks
 
@@ -525,9 +525,17 @@ select * from
 from student s
 ) as win
 where win.sturank1 < 3
-
-
 ```
+
+**rank() vs dense_rank() vs row_number()**  -   
+
+1. row_number() - alaways increment evene if values are same for the column listed in the order by clause (marks in our example)
+2. rank() - assign same rank if the values are same for the column listed in the order by clause (marks in our example), but will skip a value for every duplicate value
+3. dense_rank() - same as rank(), but won't skip value for duplicate values  
+
+see below image - 
+
+![alt text](PNG/q10.PNG "Title")
 ### TODO
 
 2. Calling stored procs from nodejs and nestjs
