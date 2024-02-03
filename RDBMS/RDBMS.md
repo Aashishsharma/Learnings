@@ -588,6 +588,13 @@ from student s;
 first_value(name) over( partition by deptId order by marks asc) as back_bencher
 -- use first value, but sort marks in ascending order
 -- but to understand frame, we used above query
+
+-- instaed of writing the over cluase and fram clause again and again, we can use this shortcut
+select s.*, row_number() over w as sturank1,
+first_value(name) over w as First_ranker,
+last_value(name) over w as back_bencher
+from student s
+window w as (partition by deptId order by marks desc range between unbounded preceding and unbounded following)
 ```
 
 ### TODO
