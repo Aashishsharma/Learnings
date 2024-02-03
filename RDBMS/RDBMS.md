@@ -468,6 +468,9 @@ window_function() OVER (
 4. lead()
 5. lag()
 6. all aggregate functions can be used as window function
+7. first_value()
+8. last_value()
+9. nth_value()
 
 #### E.g.
 
@@ -557,6 +560,35 @@ see below image
 
 **Q. Find the salary of the employee is higher, lower or equal to previous employee for each dept** - 
 ![alt text](PNG/q12.PNG "Title")  
+
+**first_value(), last_value(),  nth_value and frame** - 
+
+1. Frame - we know a window is a partition (subset of results), frame is a partition of a window, so basically window of a window
+
+![alt text](PNG/q12.PNG "Title")   -  
+
+In the output, first ranker is clear but we you look at the results from back_bencher, output is incorrect, for dept 1, back_bencher should have been David Martienez.  
+This is because of Frames, bu default for last_value() and nth_value() functions, How SQL engine evaluates the query is after partition and sorting, for 1st row, it is also the last row, for second row, the last value is calculated between 1st and 2nd row, for third row last value is calculated betwwn 1,2, and 3rd row, but his is incorrect,  
+hence we need to modify the frame - so the SQL query to get correct backbencher would be
+
+```SQL
+select s.*, row_number() over( partition by deptId order by marks desc) as sturank1,
+first_value(name) over( partition by deptId order by marks desc) as First_ranker,
+last_value(name) over( partition by deptId order by marks desc range between unbounded preceding and unbounded following) as back_bencher
+from student s;
+
+-- range between unbounded preceding and unbounded following
+-- this is the frame condition, it says
+-- within a given window, run the window function from start to end of the partition
+
+-- default frame is
+-- range between unbounded preceding and current row
+
+-- of course another way to solve the problem would be 
+first_value(name) over( partition by deptId order by marks asc) as back_bencher
+-- use first value, but sort marks in ascending order
+-- but to understand frame, we used above query
+```
 
 ### TODO
 
