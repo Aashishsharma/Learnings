@@ -463,7 +463,8 @@ window_function() OVER (
 
 #### E.g.
 
-1. Calculate nth highest / lowest mark / salary of students / employee
+1. Calculate nth highest / lowest mark / salary of students / employee  
+this can be done using normal sub queries we saw above
 
 ```SQL
 select * from (
@@ -478,18 +479,55 @@ where win.sturank1 = 2;
 -- and now in outer query we get details of student where row-num = 2, this way we got second (nth) highest
 
 
--- Q - Calculate nth highest / lowest marks of student for each dept
+-- Q - Calculate nth highest / lowest marks of student for each dept,
+-- each dept means group by, but using group by finding nth highest will create a very complex query
 -- use partition by which works similar to group by inside a window
 select * from (
 (select s.*, row_number() over( partition by deptId order by marks desc) as sturank1
 from student s
 )) as win
 where win.sturank1 = 2;
--- 
 -- here we will get second highest mark student for each dept
 
+-- instaead of nth highest, if top 3 / 4 is asked then
+
+select * from 
+(select s.*, rank() over( partition by deptId order by marks desc) as sturank1
+from student s
+) as win
+where win.sturank1 < 3
+
+-- note in above query I was doing
+(select s.*, rank() over( partition by deptId order by marks desc) as sturank1
+from student s
+where s.sturank1 < 3
+);
+-- nut in where cluase s.sturank1 column not found, since it is an alias in the select clause and
+-- select clause is executed after where clause, hence wrap the output in a subqeury
+-- and use this query in form clause and in outside query we can apply sin.sturank1 < 3 condition
 ```
 
+O/P of inner subquery from above query -  
+```SQL
+(select s.*, row_number() over( partition by deptId order by marks desc) as sturank1
+from student s
+)
+```
+![alt text](PNG/db20.PNG "Title")
+
+
+
+Q. Select top 3 students from each dept with highest marks
+
+```SQL
+select * from 
+(select s.*, rank() over( partition by deptId order by marks desc) as sturank1
+from student s
+) as win
+where win.sturank1 < 3
+
+
+```
 ### TODO
 
 2. Calling stored procs from nodejs and nestjs
