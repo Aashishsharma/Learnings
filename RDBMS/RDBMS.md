@@ -620,11 +620,37 @@ here 3 buckets are created for each dept, we have 3 depts so total 9 buckets
 
 ![alt text](PNG/q16.PNG "Title") - 
 
+
+## Recursion 
+
+**Syntax** - 
+![alt text](PNG/q17.PNG "Title")
+
+note we need to call select * from cte to complete the recursion syntax or else syntax error is thrown
+
+```SQL
+-- Q Display numbers from 1 to n
+with recursive oneton as (
+  select 1 as n
+  union
+  select n+1 as n from
+  oneton
+  where n < 10
+)
+select * from oneton -- we need to call the recursion to complete the recursion syntax
+
+```
+
+**Q. find hierarchy**
+![alt text](PNG/q18.PNG "Title")
+![alt text](PNG/q19.PNG "Title")
+
+
 ### TODO
 
 2. Calling stored procs from nodejs and nestjs
-4. Window funcs
 5. Misc like case, concat
 6. query indexing
 7. query optimization tecnhinques
 8. query optimization plan
+9. Techniques for handling large volumes of data efficiently. / Using partitioning and sharding for scalability.
