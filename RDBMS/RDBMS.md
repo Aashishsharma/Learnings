@@ -676,6 +676,20 @@ select * from oneton -- we need to call the recursion to complete the recursion 
 ![alt text](PNG/q19.PNG "Title")
 
 
+## Indexing
+
+1. Improves performance for read queries
+2. But slows down insert / update queries
+
+```SQL
+create index myIndex on employee(empId);
+
+alter table employee drop index myIndex;
+
+-- creating index on multiple columns
+create index myIndex on employee(empId, name);
+```
+
 ### TODO
 
 2. Calling stored procs from nodejs and nestjs
