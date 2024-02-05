@@ -467,6 +467,25 @@ instead of firing multiple queries (in this case node js will make multiple DB c
 
 ```SQL
 
+create table products
+(
+	product_code			varchar(20) primary key,
+	product_name			varchar(100),
+	price					float,
+	quantity_remaining		int,
+	quantity_sold			int
+);
+
+create table sales
+(
+	order_id			int auto_increment primary key,
+	order_date			date,
+	product_code		varchar(20) references products(product_code),
+	quantity_ordered	int,
+	sale_price			float
+);
+
+
 create procedure pr_buy_products (p_product_name varchar(50), p_quantity int)
 begin
 	declare v_cnt           int;
