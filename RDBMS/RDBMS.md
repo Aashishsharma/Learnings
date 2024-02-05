@@ -695,6 +695,25 @@ select * from oneton -- we need to call the recursion to complete the recursion 
 ![alt text](PNG/q19.PNG "Title")
 
 
+## SQL MISC functions in MySQL
+
+| Function              | Description                                                                                       | Example                                  |
+|-----------------------|---------------------------------------------------------------------------------------------------|------------------------------------------|
+| `LEN()`               | Returns the length of a string.                                                                   | `LEN('hello')` returns `5`              |
+| `CONCAT()`            | Concatenates two or more strings.                                                                 | `CONCAT('hello', 'world')` returns `'helloworld'` |
+| `NOW()`               | Returns the current date and time.                                                                | `NOW()` returns `'YYYY-MM-DD HH:MM:SS'` |
+| `CURDATE()`           | Returns the current date.                                                                         | `CURDATE()` returns `'YYYY-MM-DD'`      |
+| `CURTIME()`           | Returns the current time.                                                                         | `CURTIME()` returns `'HH:MM:SS'`        |
+| `DATE_FORMAT()`       | Formats a date value as specified.                                                                | `DATE_FORMAT(NOW(), '%Y-%m-%d')` returns `'YYYY-MM-DD'` |
+| `UPPER()`             | Converts a string to uppercase.                                                                   | `UPPER('hello')` returns `'HELLO'`      |
+| `LOWER()`             | Converts a string to lowercase.                                                                   | `LOWER('HELLO')` returns `'hello'`      |
+| `TRIM()`              | Removes leading and trailing spaces from a string.                                                 | `TRIM('  hello  ')` returns `'hello'`   |
+| `SUBSTRING()`         | Returns a substring from a string.                                                                | `SUBSTRING('hello', 2, 3)` returns `'ell'` |
+| `REPLACE()`           | Replaces occurrences of a specified string with another string.                                    | `REPLACE('hello world', 'world', 'there')` returns `'hello there'` |
+| `ROUND()`             | Rounds a numeric value to a specified number of decimal places.                                    | `ROUND(3.14159, 2)` returns `3.14`      |
+| `ABS()`               | Returns the absolute value of a number.                                                           | `ABS(-10)` returns `10`                 |
+
+
 ## Indexing
 
 1. Improves performance for read queries
@@ -743,7 +762,6 @@ select * from EMPLOYEE where MATCH(name) against('John doe'); -- this will retur
 ### TODO
 
 2. Calling stored procs from nodejs and nestjs
-5. Misc like case, concat
 7. query optimization tecnhinques
 8. query optimization plan
 9. Techniques for handling large volumes of data efficiently. / Using partitioning and sharding for scalability.
