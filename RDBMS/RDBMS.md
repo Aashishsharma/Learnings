@@ -681,13 +681,20 @@ select * from oneton -- we need to call the recursion to complete the recursion 
 1. Improves performance for read queries
 2. But slows down insert / update queries
 
+**Hoew indexing work** - 
+
+1. the column on which indexing is applied, the DB engine physically sorts the data based on the column to be indexed
+2. Then DB uses binary search algo to get search results faster
+
 ```SQL
 create index myIndex on employee(empId);
 
 alter table employee drop index myIndex;
 
--- creating index on multiple columns
+-- (composite index) creating index on multiple columns
 create index myIndex on employee(empId, name);
+
+-- (fulltext index)
 ```
 
 ### TODO
