@@ -430,13 +430,14 @@ DROP VIEW SalesByRegion -- to permanently remove the view
 
 ```SQL
 -- in MySQL
--- we need to use Delimiter toindicte end of stroed procedure
+-- we need to use Delimiter to indicte end of stroed procedure
 DELIMITER //
-CREATE PROCEDURE GetEmployee(IN emp_id INT, OUT EMPNAME varchar(50))
+CREATE PROCEDURE GetEmployee(IN emp_id INT, OUT EMPNAME varchar(50)) -- if IN / OUT is not provided then default is IN
 BEGIN
+    declare newVariable int; -- declaring new variables
     SELECT name into EMPNAME FROM emp WHERE id = emp_id;
 END // 
-DELIMITER ;
+DELIMITER ; -- change back delimiter to semicolon
 
 -- calling SP
 call GetEmployee(3, @empname);
@@ -451,6 +452,57 @@ AS
 BEGIN
     SELECT * FROM employees WHERE employee_id = @emp_id;
 END
+```
+
+We can write if else statements in stored variables.  
+We can do write multiple queries in stored procedures which is not possible without SP  
+
+E.g. - you have 2 tables, products and sales, when user click on buy iphone in UI, 
+we need to check if the product quantity is available in products table, if yes, 
+
+1. Query 1 - subtract the product quantity with the requested quaniity
+2. Query 2 - add record in sales table (order id, product_id, ord_dt) 
+
+instead of firing multiple queries (in this case node js will make multiple DB calls), this flow can be achieved in single SP
+
+```SQL
+
+create procedure pr_buy_products (p_product_name varchar(50), p_quantity int)
+begin
+	declare v_cnt           int;
+	declare v_product_code  varchar(20);
+	declare v_price         int;
+
+    -- first get product count from product table
+    select count(*)
+    into v_cnt
+    from products
+    where product_name = p_product_name
+    and quantity_remaining >= p_quantity;
+
+    -- if product count > requestd count
+    if v_cnt > 0
+    then
+        select product_code, price
+        into v_product_code, v_price -- store product details in variables (these details are to be inserted in the sales table)
+        from products
+        where product_name = p_product_name
+        and quantity_remaining >= p_quantity;
+
+        insert into sales (order_date,product_code,quantity_ordered,sale_price)
+			values (cast(now() as date), v_product_code, p_quantity, (v_price * p_quantity));
+
+        update products
+        set quantity_remaining = (quantity_remaining - p_quantity)
+        , quantity_sold = (quantity_sold + p_quantity)
+        where product_code = v_product_code;
+
+        select 'Product sold!';
+    else
+        select 'Insufficient Quantity!';
+    end if;
+end$$
+call pr_buy_products('AirPods Pro', 10) -- output - product sold
 ```
 
 ## Window functions
@@ -808,11 +860,18 @@ inner join department d on e.deptId = d.deptId
 
 -- to read start from the inner most leaf of the tree
 ```
-### TODO
 
- query execution plan steps
+## Thinking in interview
+
+1. Understand problem statement, understand how the calculation / output comes
+2. Write steps / build logic on how to arrive to output
+3. FOr cach step write CTE and build the query
+
+### TODO
 
 functions
 transactions
+triggers
+cursors
 2. Calling stored procs from nodejs and nestjs
-9. Techniques for handling large volumes of data efficiently. / Using partitioning and sharding for scalability.
+9. Techniques for handling large volumes of data efficiently. / Using partitioning and sharding for scalability. (to do in scalibility)
