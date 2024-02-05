@@ -630,7 +630,8 @@ window w as (partition by deptId order by marks desc range between unbounded pre
 -- also see how nth_value() function is used
 ```
 
-**ntile()** - is used to divide a result set into a specified number of "buckets."
+**ntile()** - is used to divide a result set into a specified number of "buckets."  
+NTILE distributes rows based on the order specified in the ORDER BY clause
 
 ```SQL
 -- syntax
@@ -649,6 +650,24 @@ here 3 buckets are created for each dept, we have 3 depts so total 9 buckets
 **Q. Categorize students as toppers, average students and back benchers**
 
 ![alt text](PNG/q16.PNG "Title") - 
+
+Bu default NTILE() will create buckets and also which rows should go in which bucket based on numner of rows. If there are 10 rows and 3 buckets, 4 roes will go in frst bucket and 3 rows in remainign 2 buckets.  
+If we want to create buckets based on some condition,  
+
+```SQL
+SELECT *,
+       ROW_NUMBER() OVER (PARTITION BY partition_condition ORDER BY some_column) AS row_num
+FROM (
+    SELECT *,
+           CASE 
+               WHEN condition_column <= 10 THEN 'Bucket 1'
+               WHEN condition_column <= 20 THEN 'Bucket 2'
+               WHEN condition_column <= 30 THEN 'Bucket 3'
+               ELSE 'Bucket 4'
+           END AS partition_condition
+    FROM your_table
+) AS subquery;
+```
 
 
 ## Recursion 
@@ -725,7 +744,6 @@ select * from EMPLOYEE where MATCH(name) against('John doe'); -- this will retur
 
 2. Calling stored procs from nodejs and nestjs
 5. Misc like case, concat
-6. query indexing
 7. query optimization tecnhinques
 8. query optimization plan
 9. Techniques for handling large volumes of data efficiently. / Using partitioning and sharding for scalability.
