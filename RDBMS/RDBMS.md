@@ -331,7 +331,9 @@ on t1.col1 = t2.col2
 sp to get employee name and manager name from the same table  
 ![alt text](PNG/db19.PNG "Title")
 
-**instead of b.name as managerName, it would be a.name as managerName in above screenshot**  
+**instead of b.name as managerName, it would be a.name as managerName in above screenshot**    
+
+Note - in self join, self is not a keyword, self join is mostly ussed with inner join, or can be used woth any other join, self join only means joining with the same table, it is more of a terminology in SQL than a feature
 
 Same functionality using subquery -  
 
