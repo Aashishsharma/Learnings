@@ -356,6 +356,32 @@ emp b, mgrDetails
 where b.mgrId = mgrDetails.id;
 ```
 
+**corss join** - it returns the cartesion product of 2 tables, hence no on condition is required in this join
+
+![alt text](PNG/q20.PNG "Title")  
+
+Both employee and dept tables have 10 records each, so output of cross join = 10 * 10 = 100;
+the first table with every row from the second table, resulting in a potentially large number of rows in the output.  
+
+**usecase for cross joins** - mostly used if a table has one record and it needs to be added in the result set  
+![alt text](PNG/q20.PNG "Title")   
+In above query company table has only one row, and we need to add it in the result set
+
+**natural join** -  
+1. in natural join SQL determines on which column/s the join should happen (hence no on condition to be added in natural join)
+2. it works as inner join if the column name is same in the tow tables that are beinged join
+3. if there are more that 1 columns which have same name in both the tables, then inner join will happen and in on condtion all the same columns would be added
+4. the there is no column with same name in both the tables, natural join will work as cross join
+
+```SQL
+select * 
+from employee
+natural join department -- notice no on condtion is required, since SQL will determine
+```
+
+
+
+
 ### Union
 
 ![alt text](PNG/db20.PNG "Title")
@@ -383,7 +409,7 @@ where b.mgrId = mgrDetails.id;
 
 #### 2. View
 
-1. Views are virtual tables that are defined by a query and stored permanently in the database.
+1. Views are virtual tables that are defined by a query and stored (**note the result that view returns is not stored, only view schema is stored**) permanently in the database.
 2. Views can be queried, updated, and deleted just like tables, but the underlying data is not stored separately from the tables it references
 3. Views are useful for enforcing security policies
 
@@ -397,6 +423,8 @@ SELECT * FROM SalesByRegion;
 
 DROP VIEW SalesByRegion -- to permanently remove the view
 ```
+
+**In DBs like postgres sql, we have materialized view, which stores the result of the query in memory even after the query is executed, similar to caching in nodejs**
 
 ## Stored procedures
 
