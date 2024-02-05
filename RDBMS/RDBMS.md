@@ -331,7 +331,7 @@ on t1.col1 = t2.col2
 sp to get employee name and manager name from the same table  
 ![alt text](PNG/db19.PNG "Title")
 
-**instead of b.name as managerName, it would be a.name as managerName in above screenshot**    
+**instead of b.name as managerName, it would be a.name as managerName in above screenshot**
 
 Note - in self join, self is not a keyword, self join is mostly ussed with inner join, or can be used woth any other join, self join only means joining with the same table, it is more of a terminology in SQL than a feature
 
@@ -366,10 +366,11 @@ Both employee and dept tables have 10 records each, so output of cross join = 10
 the first table with every row from the second table, resulting in a potentially large number of rows in the output.  
 
 **usecase for cross joins** - mostly used if a table has one record and it needs to be added in the result set  
-![alt text](PNG/q20.PNG "Title")   
+![alt text](PNG/q20.PNG "Title")
 In above query company table has only one row, and we need to add it in the result set
 
 **natural join** -  
+
 1. in natural join SQL determines on which column/s the join should happen (hence no on condition to be added in natural join)
 2. it works as inner join if the column name is same in the tow tables that are beinged join
 3. if there are more that 1 columns which have same name in both the tables, then inner join will happen and in on condtion all the same columns would be added
@@ -380,9 +381,6 @@ select *
 from employee
 natural join department -- notice no on condtion is required, since SQL will determine
 ```
-
-
-
 
 ### Union
 
@@ -473,7 +471,6 @@ We need to add columns in select as well as in groupby, becasue columns in selec
 
 **Using window functions is like giving each row its own little bubble(window) to do math (using aggregate / window functions) in**
 
-
 ```SQL
 -- syntax
 window_function() OVER (
@@ -503,7 +500,7 @@ window_function() OVER (
 9. nth_value()
 10. ntile()
 
-#### E.g.
+#### E.g
 
 1. Calculate nth highest / lowest mark / salary of students / employee  
 this can be done using normal sub queries we saw above
@@ -549,7 +546,7 @@ where s.sturank1 < 3
 -- and use this query in form clause and in outside query we can apply sin.sturank1 < 3 condition
 ```
 
-O/P of inner subquery from above query - 
+O/P of inner subquery from above query -
 
 ```SQL
 (select s.*, row_number() over( partition by deptId order by marks desc) as sturank1
@@ -569,13 +566,13 @@ from student s
 where win.sturank1 < 3
 ```
 
-**rank() vs dense_rank() vs row_number()**  -   
+**rank() vs dense_rank() vs row_number()**  -
 
 1. row_number() - alaways increment evene if values are same for the column listed in the order by clause (marks in our example)
 2. rank() - assign same rank if the values are same for the column listed in the order by clause (marks in our example), but will skip a value for every duplicate value
 3. dense_rank() - same as rank(), but won't skip value for duplicate values  
 
-see below image - 
+see below image -
 
 ![alt text](PNG/q10.PNG "Title")
 
@@ -583,16 +580,16 @@ see below image -
 
 1. lag(<columnName>) - it will give previous row's column value listed in the lag() function
 2. lead(<columnName>) - it will give next row's column value listed in the lead() function  
-see below image 
+see below image
 
 ![alt text](PNG/q11.PNG "Title")  
 
 **optional arguments for lead and lag** - lag(<columnName>, 2, 0) - 2 indicates pick column value of previous to previous row - 0 indicates default value (in case of lag(<colmnName, 2, 0>), the frst 2 rows will have value of 0 since there is no previous and previous to previous records )  
 
-**Q. Find the salary of the employee is higher, lower or equal to previous employee for each dept** - 
+**Q. Find the salary of the employee is higher, lower or equal to previous employee for each dept** -
 ![alt text](PNG/q12.PNG "Title")  
 
-**first_value(), last_value(),  nth_value and frame** - 
+**first_value(), last_value(),  nth_value and frame** -
 
 1. Frame - we know a window is a partition (subset of results), frame is a partition of a window, so basically window of a window
 
@@ -638,18 +635,18 @@ NTILE distributes rows based on the order specified in the ORDER BY clause
 ntile(3) -- here 3 indicates number of buckets that we need to create
 ```
 
-below query creates 3 buckets based on students marks - 
+below query creates 3 buckets based on students marks -
 
-![alt text](PNG/q14.PNG "Title") - 
+![alt text](PNG/q14.PNG "Title") -
 
 If we want buckets for each department
 
-![alt text](PNG/q15.PNG "Title") - 
+![alt text](PNG/q15.PNG "Title") -
 here 3 buckets are created for each dept, we have 3 depts so total 9 buckets
 
 **Q. Categorize students as toppers, average students and back benchers**
 
-![alt text](PNG/q16.PNG "Title") - 
+![alt text](PNG/q16.PNG "Title") -
 
 Bu default NTILE() will create buckets and also which rows should go in which bucket based on numner of rows. If there are 10 rows and 3 buckets, 4 roes will go in frst bucket and 3 rows in remainign 2 buckets.  
 If we want to create buckets based on some condition,  
@@ -669,10 +666,9 @@ FROM (
 ) AS subquery;
 ```
 
+## Recursion
 
-## Recursion 
-
-**Syntax** - 
+**Syntax** -
 ![alt text](PNG/q17.PNG "Title")
 
 note we need to call select * from cte to complete the recursion syntax or else syntax error is thrown
@@ -694,7 +690,6 @@ select * from oneton -- we need to call the recursion to complete the recursion 
 ![alt text](PNG/q18.PNG "Title")
 ![alt text](PNG/q19.PNG "Title")
 
-
 ## SQL MISC functions in MySQL
 
 | Function              | Description                                                                                       | Example                                  |
@@ -713,13 +708,12 @@ select * from oneton -- we need to call the recursion to complete the recursion 
 | `ROUND()`             | Rounds a numeric value to a specified number of decimal places.                                    | `ROUND(3.14159, 2)` returns `3.14`      |
 | `ABS()`               | Returns the absolute value of a number.                                                           | `ABS(-10)` returns `10`                 |
 
-
 ## Indexing
 
 1. Improves performance for read queries
 2. But slows down insert / update queries
 
-**Hoew indexing work** - 
+**Hoew indexing work** -
 
 1. the column on which indexing is applied, the DB engine physically sorts the data based on the column to be indexed
 2. Then DB uses binary search algo to get search results faster
@@ -753,15 +747,52 @@ select * from EMPLOYEE where MATCH(name) against('John doe'); -- this will retur
 
 ```
 
-**Clusterd vs non clustered index** - 
+**Clusterd vs non clustered index** -
 
 1. Clustered - A clustered index determines the physical order of rows in a table.
 2. Non-clustered - It is a separate data structure from the actual table data. It consists of index pages containing pointers to the corresponding data rows in the table
 
+## Query optimzation techniques
+
+##### 1. Use indexes
+
+##### 2. Optimizing Joins
+
+1. If we create index for columns which are in join condtion, join will work faster
+2. Avoid cartesian (cross joins)
+3. Filter before joining to reduce number of intermediate rows used in query execution
+
+
+```SQL
+-- instaed of this
+SELECT *
+FROM table1
+INNER JOIN table2 ON table1.join_column = table2.join_column
+where table1.condition1
+
+-- Filter before joining
+SELECT *
+FROM (
+    SELECT *
+    FROM table1
+    WHERE condition1
+) AS filtered_table1
+INNER JOIN table2 ON filtered_table1.join_column = table2.join_column;
+```
+
+##### 3. Predicate pushdown
+
+check more on this
+
+##### 4. Pre aggregation
+
+##### 5. Limiting reault set using (limit / top clause)
+
+##### 6. Analysing query exection plan
 
 ### TODO
 
+ query execution plan steps
+
 2. Calling stored procs from nodejs and nestjs
-7. query optimization tecnhinques
-8. query optimization plan
 9. Techniques for handling large volumes of data efficiently. / Using partitioning and sharding for scalability.
