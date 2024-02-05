@@ -786,13 +786,33 @@ check more on this
 
 ##### 4. Pre aggregation
 
+Calculate aggreagte values and store them in the summary table
+
 ##### 5. Limiting reault set using (limit / top clause)
 
 ##### 6. Analysing query exection plan
 
+explains how query is being executed by DB engine with estimated and actual cost in terms of milliseconds
+
+```SQL
+-- to run analyze by adding explain analyze keyword
+explain analyze select *
+from employee e
+inner join department d on e.deptId = d.deptId
+
+-- ouput would be trre like data
+
+-- -> Nested loop inner join  (cost=4.75 rows=10) (actual time=0.0488..0.0853 rows=10 loops=1)
+--     -> Filter: (student.deptID is not null)  (cost=1.25 rows=10) (actual time=0.0345..0.0437 rows=10 loops=1)
+--         -> Table scan on student  (cost=1.25 rows=10...    (START READING FROM HERE)
+
+-- to read start from the inner most leaf of the tree
+```
 ### TODO
 
  query execution plan steps
 
+functions
+transactions
 2. Calling stored procs from nodejs and nestjs
 9. Techniques for handling large volumes of data efficiently. / Using partitioning and sharding for scalability.
