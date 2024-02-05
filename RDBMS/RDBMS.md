@@ -695,7 +695,31 @@ alter table employee drop index myIndex;
 create index myIndex on employee(empId, name);
 
 -- (fulltext index)
+--  Full-text indexing enables efficient searching of textual data based on keywords, phrases
+
+create fulltext  index myIndex on employee(name);
+-- once fulltext index is created, we can use MATCH() and AGAINST() to utilize full text indexing capabilites
+-- if we use like operator, indexing won't be in use
+select * from EMPLOYEE where MATCH(name) against('John');
+-- note above query will only retrun data when in against we specify a word / phrase
+select * from EMPLOYEE where MATCH(name) against('Jo');
+-- this will not return any data because comparison is done at word or phrase leve, not at character level
+select * from EMPLOYEE where MATCH(name) against('John doe'); -- this will return records
+
+--  Full-text indexing is commonly used in document management systems to 
+-- allow users to search and retrieve documents based on their content.
+
+-- working on full text index
+-- DB breakes the text content into words aka tokens
+-- this tokens are indexed salong with their position inside the text
+
 ```
+
+**Clusterd vs non clustered index** - 
+
+1. Clustered - A clustered index determines the physical order of rows in a table.
+2. Non-clustered - It is a separate data structure from the actual table data. It consists of index pages containing pointers to the corresponding data rows in the table
+
 
 ### TODO
 
