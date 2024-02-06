@@ -964,7 +964,6 @@ inner join department d on e.deptId = d.deptId
 
 ### TODO
 
-transactions
 triggers
 cursors
 2. Calling stored procs from nodejs and nestjs
