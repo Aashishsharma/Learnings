@@ -559,6 +559,36 @@ SELECT get_employee_name1(1);
 
 ```
 
+## Transcation
+
+They adhere to ACID properties
+
+Transactions in SQL don't have a body like stored procedures or functions. Instead, to initiate a transaction, you use the START TRANSACTION statement. All subsequent SQL statements executed until a COMMIT or ROLLBACK statement are considered part of the transaction.  
+
+MySQL won't automatcially rollback a transaction, programmers have to do it manually
+
+```SQL
+-- Start a transaction
+START TRANSACTION; -- instead of START TRANSACTION, we can also use BEGIN keyword
+-- Deduct funds from account 1
+UPDATE accounts SET balance = balance - 500 WHERE account_id = 1;
+-- Add funds to account 2
+UPDATE accounts SET balance = balance + 500 WHERE account_id = 2;
+-- Commit the transaction if all updates are successful
+COMMIT;
+-- check if both accounts are updated
+select * from accounts;
+
+-- even if we don not commit the changes can be seen in the accounts tbale, but changes are not permanently saved to the database,
+-- they can still affect the data within the current session or transaction.
+-- Other sessions or transactions will not see these changes until they are committed
+
+-- if first update runs successfully and SQL query fails for second update
+-- for exmple syntax error or runtime error, the transaction will still get commited since we are using COMMIT
+-- always use rollback / commit based on if condition
+
+```
+
 ## Window functions
 
 Add aggreage / window functions as a column to all the rows
@@ -930,11 +960,10 @@ inner join department d on e.deptId = d.deptId
 
 1. Understand problem statement, understand how the calculation / output comes
 2. Write steps / build logic on how to arrive to output
-3. FOr cach step write CTE and build the query
+3. For cach step write CTE and build the query
 
 ### TODO
 
-functions
 transactions
 triggers
 cursors
