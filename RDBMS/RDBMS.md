@@ -575,17 +575,55 @@ UPDATE accounts SET balance = balance - 500 WHERE account_id = 1;
 -- Add funds to account 2
 UPDATE accounts SET balance = balance + 500 WHERE account_id = 2;
 -- Commit the transaction if all updates are successful
-COMMIT;
+COMMIT; -- or rollback based on business logic
 -- check if both accounts are updated
 select * from accounts;
 
--- even if we don not commit the changes can be seen in the accounts tbale, but changes are not permanently saved to the database,
+-- even if we do not commit the changes can be seen in the accounts tbale, but changes are not permanently saved to the database,
 -- they can still affect the data within the current session or transaction.
 -- Other sessions or transactions will not see these changes until they are committed
 
 -- if first update runs successfully and SQL query fails for second update
--- for exmple syntax error or runtime error, the transaction will still get commited since we are using COMMIT
+-- for exmple syntax error or runtime error, the transaction will still get commited since we are using COMMIT at the end
 -- always use rollback / commit based on if condition
+
+```
+
+Transaction in nodejs mssql
+
+```javascript
+const sql = require('mssql');
+async function executeTransaction() {
+    try {
+        // Create connection pool
+        await sql.connect('connectionString');
+
+        // Start transaction
+        const transaction = new sql.Transaction();
+        await transaction.begin();
+        try {
+            // Execute SQL statements within the transaction
+            await sql.query`UPDATE your_table SET column1 = value1 WHERE condition`;
+            await sql.query`UPDATE your_table SET column2 = value2 WHERE condition`;
+
+            // Commit the transaction
+            await transaction.commit();
+
+            console.log('Transaction committed successfully.');
+        } catch (error) {
+            // Rollback the transaction if an error occurs
+            await transaction.rollback();
+            console.error('Transaction rolled back:', error.message);
+        }
+    } catch (error) {
+        console.error('Error:', error.message);
+    } finally {
+        // Close connection pool
+        await sql.close();
+    }
+}
+// Call the function to execute the transaction
+executeTransaction();
 
 ```
 
