@@ -457,11 +457,11 @@ END
 We can write if else statements in stored variables.  
 We can do write multiple queries in stored procedures which is not possible without SP  
 
-E.g. - you have 2 tables, products and sales, when user click on buy iphone in UI, 
-we need to check if the product quantity is available in products table, if yes, 
+E.g. - you have 2 tables, products and sales, when user click on buy iphone in UI,
+we need to check if the product quantity is available in products table, if yes,
 
 1. Query 1 - subtract the product quantity with the requested quaniity
-2. Query 2 - add record in sales table (order id, product_id, ord_dt) 
+2. Query 2 - add record in sales table (order id, product_id, ord_dt)
 
 instead of firing multiple queries (in this case node js will make multiple DB calls), this flow can be achieved in single SP
 
@@ -469,28 +469,28 @@ instead of firing multiple queries (in this case node js will make multiple DB c
 
 create table products
 (
-	product_code			varchar(20) primary key,
-	product_name			varchar(100),
-	price					float,
-	quantity_remaining		int,
-	quantity_sold			int
+ product_code   varchar(20) primary key,
+ product_name   varchar(100),
+ price     float,
+ quantity_remaining  int,
+ quantity_sold   int
 );
 
 create table sales
 (
-	order_id			int auto_increment primary key,
-	order_date			date,
-	product_code		varchar(20) references products(product_code),
-	quantity_ordered	int,
-	sale_price			float
+ order_id   int auto_increment primary key,
+ order_date   date,
+ product_code  varchar(20) references products(product_code),
+ quantity_ordered int,
+ sale_price   float
 );
 
 
 create procedure pr_buy_products (p_product_name varchar(50), p_quantity int)
 begin
-	declare v_cnt           int;
-	declare v_product_code  varchar(20);
-	declare v_price         int;
+ declare v_cnt           int;
+ declare v_product_code  varchar(20);
+ declare v_price         int;
 
     -- first get product count from product table
     select count(*)
@@ -504,12 +504,12 @@ begin
     then
         select product_code, price
         into v_product_code, v_price -- store product details in variables (these details are to be inserted in the sales table)
-        from products
+        from products 
         where product_name = p_product_name
         and quantity_remaining >= p_quantity;
 
         insert into sales (order_date,product_code,quantity_ordered,sale_price)
-			values (cast(now() as date), v_product_code, p_quantity, (v_price * p_quantity));
+  values (cast(now() as date), v_product_code, p_quantity, (v_price * p_quantity));
 
         update products
         set quantity_remaining = (quantity_remaining - p_quantity)
@@ -522,6 +522,41 @@ begin
     end if;
 end$$
 call pr_buy_products('AirPods Pro', 10) -- output - product sold
+```
+
+## Functions in SQL
+
+Similar to SP they are DB objects  
+
+Differences with stored procedured  
+
+1. SP can have select as well as DML (insert, update, delete) queries, but functions can have only select statement
+2. SP can return resultsets (more than 1 rows), function can return only one row
+3. functions can be used in select, where caluse inside a SQL query, SP can't be used inside query
+4. use functions mostly for math problems
+
+```SQL
+-- creating a function
+DELIMITER //
+CREATE FUNCTION get_employee_name1(emp_id INT)
+RETURNS VARCHAR(100)
+-- we need to specify what the function is going to do
+-- it can do 1 of 3 things - 1. READS SQL DATA 2. DETERMINISTIC - for same input, same output 3. NO SQL
+-- one of the above 3 values need to be added after returns statement
+READS SQL DATA 
+BEGIN
+    DECLARE emp_name VARCHAR(100);
+    -- Execute the SQL query to fetch the employee name
+    SELECT name INTO emp_name FROM employee WHERE empId = emp_id LIMIT 1;
+    -- Return the employee name
+    RETURN emp_name;
+END//
+DELIMITER ;
+
+SELECT get_employee_name1(1);
+-- note now we can use this function in select / where clause
+-- SP's can't do this
+
 ```
 
 ## Window functions
@@ -612,7 +647,7 @@ where win.sturank1 < 3
 from student s
 where s.sturank1 < 3
 );
--- nut in where cluase s.sturank1 column not found, since it is an alias in the select clause and
+-- but in where cluase s.sturank1 column not found, since it is an alias in the select clause and
 -- select clause is executed after where clause, hence wrap the output in a subqeury
 -- and use this query in form clause and in outside query we can apply sin.sturank1 < 3 condition
 ```
@@ -737,6 +772,18 @@ FROM (
 ) AS subquery;
 ```
 
+**Q. remove duplicate rows from table**
+
+```SQL
+WITH CTE AS (
+    SELECT *,
+           ROW_NUMBER() OVER (PARTITION BY column1, column2, ... ORDER BY column1) AS row_num
+    FROM your_table
+)
+DELETE FROM CTE WHERE row_num > 1;
+
+```
+
 ## Recursion
 
 **Syntax** -
@@ -832,7 +879,6 @@ select * from EMPLOYEE where MATCH(name) against('John doe'); -- this will retur
 1. If we create index for columns which are in join condtion, join will work faster
 2. Avoid cartesian (cross joins)
 3. Filter before joining to reduce number of intermediate rows used in query execution
-
 
 ```SQL
 -- instaed of this
