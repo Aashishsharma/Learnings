@@ -654,6 +654,29 @@ window_function() OVER (
 )
 ```
 
+## Trigers
+
+```SQL
+-- syntax
+-- create trigger trigger name
+-- before / after insert / update / delete on <table_name>
+-- for each row
+-- sql statements
+
+CREATE TRIGGER orders_insert_trigger
+AFTER INSERT ON orders
+FOR EACH ROW
+    INSERT INTO order_logs (action, order_id, new_total_amount)
+    VALUES ('INSERT', NEW.order_id, NEW.total_amount); -- notice NEW keyword here - New.orderId
+
+-- here we can use 2 keywords - NEW / OLD
+
+-- In insert triggers - NEW contains the values being inserted into the table. OLD is not available
+-- in update triggers - OLD contains the values of the row before the UPDATE operation. NEW contains the new values that will be or have been updated in the table.
+-- in delete triggers - OLD contains the values of the row before it was deleted., NEW not available
+
+```
+
 #### Working of window functions
 
 1. Data us fetched from tables - from cluase
