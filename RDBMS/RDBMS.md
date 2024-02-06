@@ -663,6 +663,8 @@ window_function() OVER (
 -- for each row
 -- sql statements
 
+
+-- auditing usecase
 CREATE TRIGGER orders_insert_trigger
 AFTER INSERT ON orders
 FOR EACH ROW
@@ -675,6 +677,33 @@ FOR EACH ROW
 -- in update triggers - OLD contains the values of the row before the UPDATE operation. NEW contains the new values that will be or have been updated in the table.
 -- in delete triggers - OLD contains the values of the row before it was deleted., NEW not available
 
+```
+
+#### Trigger usecase
+
+1. Auditing -  Triggers can log changes made to database tables, providing an audit trail of who made the changes, when they were made, and what the changes were.
+2. Data integrity user-defined checks
+
+```SQL
+-- data integrity user defined checks
+DELIMITER //
+CREATE TRIGGER enforce_order_amount_threshold
+BEFORE INSERT ON orders
+FOR EACH ROW
+BEGIN
+    DECLARE total_amount DECIMAL(10, 2);
+    -- Calculate the total amount of the new order
+    SET total_amount = NEW.total_amount;
+    -- Check if the total amount exceeds the threshold
+    IF total_amount > 1000 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Order total amount exceeds the threshold of $1000';
+    END IF;
+END;
+//
+DELIMITER ;
+insert into orders (order_id, customer_id, order_date, total_amount) values (2, 1, NOW(), 2000);
+-- above insert query will throw error set in MESSAGE_TEXT
 ```
 
 #### Working of window functions
