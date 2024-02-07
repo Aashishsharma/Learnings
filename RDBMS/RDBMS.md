@@ -524,6 +524,73 @@ end$$
 call pr_buy_products('AirPods Pro', 10) -- output - product sold
 ```
 
+**loops in SP**
+
+```SQL
+CREATE PROCEDURE procedure_name()
+BEGIN
+    -- Declare variables
+    DECLARE counter INT DEFAULT 0;
+    -- Loop statement
+    loop_label: LOOP
+        -- Loop body
+        -- Increment counter
+        SET counter = counter + 1;
+        -- Check loop termination condition
+        IF counter > 10 THEN
+            LEAVE loop_label;
+        END IF;
+        -- Continue to next iteration
+        ITERATE loop_label;
+    END LOOP loop_label;
+    -- Additional statements after the loop
+END;
+```
+
+## CURSORS
+
+In DB the output that er get is resultset, it is a set, meaning set of records, the operation that we do in SQL queries is on set od records, but if we want to deal with individaul records from the resultset, we use cursors  
+
+Cursors provide a way to process individual rows returned by a query and are commonly used within stored procedures or scripts to perform row-level operations, such as data manipulation, validation
+
+Steps to create and use cursor 
+
+```SQL
+-- 1. Declare cursor
+DECLARE cursor_name CURSOR FOR SELECT column1, column2 FROM table_name WHERE condition;
+
+-- 2. Open cursor
+OPEN cursor_name;
+
+-- 3. fetch cursor
+FETCH cursor_name INTO variable1, variable2;
+--variable1, variable2: Variables to store the values of the columns fetched from the current row.
+
+-- 4. Process all records
+loop_label: LOOP
+    FETCH cursor_name INTO variable1, variable2;
+    -- Check if there are no more rows to fetch
+    IF <condition_to_exit_loop> THEN
+        LEAVE loop_label;
+    END IF;
+    -- Process the fetched row
+    -- Perform operations on variable1 and variable2
+END LOOP loop_label;
+
+
+-- 5. close curosr
+CLOSE cursor_name;
+
+-- 6. deallocate cursor to free up the memory
+DEALLOCATE cursor_name;
+```
+
+**cursors are mostly used in SP**
+
+```SQL
+
+```
+
 ## Functions in SQL
 
 Similar to SP they are DB objects  
@@ -682,7 +749,8 @@ FOR EACH ROW
 #### Trigger usecase
 
 1. Auditing -  Triggers can log changes made to database tables, providing an audit trail of who made the changes, when they were made, and what the changes were.
-2. Data integrity user-defined checks
+2. A table as employee pay on hourly basis (10$ per hour), so at the month end supervisor will just add horus worked for a month, and then we will have a trigger when hours are logged, salary gets updated based on hour log and employee's hourly pay
+3. Data integrity user-defined checks
 
 ```SQL
 -- data integrity user defined checks
