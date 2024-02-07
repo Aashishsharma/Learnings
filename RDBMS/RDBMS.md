@@ -587,9 +587,38 @@ DEALLOCATE cursor_name;
 
 **cursors are mostly used in SP**
 
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 ```SQL
+DELIMITER //
 
+CREATE PROCEDURE process_data()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE column1_data INT;
+    DECLARE column2_data VARCHAR(255);
+
+    DECLARE data_cursor CURSOR FOR SELECT column1, column2 FROM table_name;
+     -- Declare continue handler for cursor
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    OPEN data_cursor;
+
+    data_loop: LOOP
+        FETCH data_cursor INTO column1_data, column2_data;
+        IF done THEN
+            LEAVE data_loop;
+        END IF;
+
+        -- Process the fetched row
+        -- Perform operations on column1_data and column2_data
+    END LOOP data_loop;
+
+    CLOSE data_cursor;
+    DEALLOCATE data_cursor;
+END //
+DELIMITER ;
 ```
+
+**Cusror usecase** - might have some uses in report generation or mail merges, but it's probably more efficient to do the cursor-like work in an application that talks to the database, letting the database engine do what it does best
 
 ## Functions in SQL
 
@@ -1122,7 +1151,5 @@ inner join department d on e.deptId = d.deptId
 
 ### TODO
 
-triggers
-cursors
-2. Calling stored procs from nodejs and nestjs
-9. Techniques for handling large volumes of data efficiently. / Using partitioning and sharding for scalability. (to do in scalibility)
+1. Calling stored procs from nodejs and nestjs
+2. Techniques for handling large volumes of data efficiently. / Using partitioning and sharding for scalability. (to do in scalibility)
