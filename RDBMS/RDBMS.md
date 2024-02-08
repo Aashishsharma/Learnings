@@ -1153,3 +1153,4 @@ inner join department d on e.deptId = d.deptId
 
 1. Calling stored procs from nodejs and nestjs
 2. Techniques for handling large volumes of data efficiently. / Using partitioning and sharding for scalability. (to do in scalibility)
+3. DB design - ER diagram to draw in system design
