@@ -1,10 +1,11 @@
 # Understanding requirements
 
-## Capacity planning
+## Resource estimation
 
 1. Calculate RPS for 1 web/app server
 2. Calculate no of web / app servers required based on no of daily active users
-3. Calculate no. of storage servers required
+3. Calculate storage requirements
+4. Calcualte Bandwidth requirements
 
 
 ### Step 1. Calculate RPS for server with 240 GB RAM and 72 CPU cores
@@ -61,6 +62,41 @@ No. of daily requests = (DAU) * daily request per user = 500M * 20 = 1 Billion
 No. of request / sec = 1 Billion / 24 * 60 * 60 = 115K
 
 No. of servers = req per sec / RPS 1 server can handle = 115K / 360 (from step 1) = 320 servers
+
+### Step 3 - Calculate storage requirements (mostly calcualted for a year)
+
+Given: (twitter)
+- DAU  = 250 M
+- Daily tweets 3
+- Image tweets = 10% of daily tweets (avg image size = 200KB)
+- Video tweets = 5% of daily tweets (avg video size = 3MB)
+- Text tweets (avg size = 250B)
+
+### Calculation:
+
+1. Daily tweets = 250 * 3 = 750 M
+2. Image tweets = 750M * 10% = 75M * 200KB = 15,000 GB = 15TB
+3. Video tweets = 750M * 5% = 37.5M * 3 MB = 112,500 GB = 112.5TB
+4. Text tweets = 750M * 85% = 637.5 M * 250 B = 159 GB = 0.15TB
+
+Total storage per day = (15 + 112 + 0.15) = 128TB  
+Total storage per yesr = 365 * 128 TB = 46.72 PB (peta bytes)
+
+### Step 4 - Bandwidth requirements
+ 
+ Given: no given, we already know 128 TB of data is stroed every day in twitter so,
+
+1. Incoming traffic bandwidth = 128 TB / 24 * 60 * 6O = 96GBps / 8 = 12 Gbps (bandwidth measured in bits not bytes)
+2. Outgoing traffic bandwidth = single user view 5- tweets per day (10 % image tweets, 5 % video tweets)
+
+1. DAU = 250M, 
+2. total tweets viewed per second = 250M * 50 (daily tweet views) / 24 * 60 * 60 = 145 K
+3. Bandwidth for tweets = 250M * 50 * 85% / 86400 = 0.3Gbps
+4. SImilarly bandwidth for images = 23 Gbps, for videos = 174 Gbps
+
+Total outgoing bandwidth = 209 Gbps
+
+
 
 Understanding Requirements:
 
