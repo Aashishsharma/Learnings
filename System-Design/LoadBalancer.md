@@ -44,3 +44,11 @@ Mostly combination of L4 and L7 is used in large sace system
 1. Hardware LBs - fast bu expensive, Hard to configre are hardware level hence rarely used
 2. Software LBs - Programatically configured
 3. Cloud LBs - Cloud owners (AWS) provide LBs
+
+## LB algorithms
+
+1. **Round robin**
+2. **Weighted round robin** - If some end-servers have a higher capability of serving clients’ requests, higher the weight, higher the number of requests redirected
+3. **Least connections** -  LBs keep a state of the number and mapping of existing connections and whichever server has least active connection, client request is redirected
+4. **Least response time** - 
+5. **IP/URL hash**
