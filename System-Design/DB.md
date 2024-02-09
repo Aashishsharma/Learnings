@@ -1,0 +1,157 @@
+# DB
+
+## NoSQL
+
+1. It is not NoSQL but is it Not Only SQL
+2. It is a non relational DB (no Tables)
+3. Flexible DB used in big data and real-time web apps
+
+## SQL vs NoSQL
+
+| Aspect                              | SQL                                                          | NoSQL                                                       |
+|-------------------------------------|--------------------------------------------------------------|--------------------------------------------------------------|
+| Uses fixed tables                   | Uses separate tables with foreign keys for related data.     | Uses JSON objects to store data, allowing for flexible schemas. |
+| Referential integrity for data consistency    | Yes                                                | No    |
+| Insert and retrieval                | Requires joins to retrieve all required data.                | Retrieval is straightforward without the need for joins.     |
+| Adding new columns                  | Expensive, requires locking the database to make changes.   | Easy due to the flexible schema.                            |
+| ACID properties                     | Follows ACID properties, ensuring consistency.              | ACID properties not guaranteed, updates may cause inconsistencies. |
+| Usage                               | Commonly used in financial systems and transactional databases. | Preferred for systems prioritizing availability over consistency. |
+| Read efficiency                     | Efficient for specific data retrieval due to structured queries. | May read entire documents for each query, potentially less efficient. |
+| Relations                           | Implicit relationships maintained through foreign keys.     | Relationships not implicit, must be managed manually.       |
+| Joins                               | Supports joins for combining related data from multiple tables. | Joins are manual and often require merging data manually.   |
+| Normalization                       | Follows normalization principles for data organization.      | Not applicable, normalization is not typically used.        |
+| Horizontal scaling                  | Not easy          | NoSQL makes it easier to scale out since the data related to a specific employee is stored in one document instead of multiple tables over nodes|
+| License cost                        | expensive                                                    | open source                                                  |
+
+## Types of NoSql
+
+![alt text](PNG/db1.PNG "Title")  
+
+### 1. Key value DB (Redis, Memcached and AWS Dynamo DB)  
+
+1. Uses key-value methods like hash tables to store data in key-value pairs
+2. Key serves as a unique or primary key, and the values can be anything ranging from simple scalar values to complex objects. 
+3. Allow easy partitioning and horizontal scaling of the data.
+
+#### Usecases
+
+1. Session-oriented applications
+
+### 2. Document based DB (MongoDB, Google Cloud Firestore)
+
+1. Store and retrieve documents (JSON, XML, BSON)
+
+#### Usecases
+
+1. Used in unstructured catalog data
+2. e-commerce applications -  
+a product has thousands of attributes, which is unfeasible to store in a relational database (need multiple joins from so many tables to get all product details)  
+3. Storing user profile
+
+```JSON
+{
+  "user_id": "123456",
+  "username": "john_doe",
+  "email": "john.doe@example.com",
+  "full_name": "John Doe",
+  "birthdate": "1990-05-15",
+  "gender": "male",
+  "address": {
+    "street": "123 Main Street",
+    "city": "New York",
+    "state": "NY",
+    "postal_code": "10001",
+    "country": "USA"
+  },
+  "phone_numbers": [
+    {
+      "type": "mobile",
+      "number": "123-456-7890"
+    },
+    {
+      "type": "home",
+      "number": "987-654-3210"
+    }
+  ],
+  "social_media": {
+    "twitter": "john_doe",
+    "linkedin": "john.doe",
+    "github": "johndoe"
+  },
+  "preferences": {
+    "theme": "light",
+    "language": "en",
+    "notifications": {
+      "email": true,
+      "sms": false,
+      "push": true
+    }
+  },
+  "membership_status": "active",
+  "registration_date": "2023-01-01",
+  "last_login": "2024-02-05T10:15:30Z",
+  "profile_picture": "https://example.com/profile.jpg",
+  "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquam justo ac sem malesuada commodo."
+}
+
+```
+
+**Note in one application only we can connect to both SQL and NoSql DB (store user profile in MongDB and other app data in MySql)**  -
+
+```javascript
+const mysql = require('mysql');
+const { MongoClient } = require('mongodb');
+const express = require('express');
+const app = express();
+// MySQL connection configuration
+const mysqlConnection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'password',
+  database: 'my_database'
+});
+// MongoDB connection URL
+const mongoUrl = 'mongodb://localhost:27017/my_database';
+// Promise to connect to MySQL
+const connectToMySQL = new Promise((resolve, reject) => {
+  mysqlConnection.connect((err) => {
+    if (err) {
+      reject(err);
+      return;
+    }
+    console.log('Connected to MySQL');
+    resolve();
+  });
+});
+// Promise to connect to MongoDB
+const connectToMongoDB = new Promise((resolve, reject) => {
+  MongoClient.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then((mongoClient) => {
+      console.log('Connected to MongoDB');
+      resolve(mongoClient);
+    })
+    .catch((err) => {
+      reject(err);
+    });
+});
+// Start Express server only when both connections are successful
+Promise.all([connectToMySQL, connectToMongoDB])
+  .then(() => {
+    console.log('All connections successful. Starting Express server...');
+    app.listen(3000, () => {
+      console.log('Express server started on port 3000');
+    });
+  })
+  .catch((err) => {
+    console.error('Error connecting to databases:', err);
+    // Handle error and exit application
+    process.exit(1);
+  });
+// Close MySQL connection when the Node.js process exits
+process.on('exit', () => {
+  mysqlConnection.end();
+  console.log('MySQL connection closed');
+});
+```
+
+## 3. Graph DB (MongoDB, Google Cloud Firestore)
