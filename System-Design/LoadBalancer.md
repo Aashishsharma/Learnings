@@ -52,3 +52,5 @@ Mostly combination of L4 and L7 is used in large sace system
 3. **Least connections** -  LBs keep a state of the number and mapping of existing connections and whichever server has least active connection, client request is redirected
 4. **Least response time** - 
 5. **IP/URL hash**
+
+**In AWS console, we get all the options like select LB type (L4/L7), select LB algo (RR/IP Hash)**
