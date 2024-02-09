@@ -174,6 +174,9 @@ process.on('exit', () => {
 #### Usecases
 
 1. Efficient for a large number of aggregation and data analytics queries  
-(e.g. )  
+(e.g. In financial institutions, there’s a need to sum the financial transaction over a period of time)   
+
+In traditional row based DB, to do sum, we need to traverse through each row  
+In column based DB, just traverse through only 1 row and read all data sequentially
 
 ![alt text](PNG/db3.PNG "Title")  
