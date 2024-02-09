@@ -170,3 +170,10 @@ process.on('exit', () => {
 
 1. Store data in columns instead of rows
 2. Enable access to all entries in the database column quickly and efficiently
+
+#### Usecases
+
+1. Efficient for a large number of aggregation and data analytics queries  
+(e.g. )  
+
+![alt text](PNG/db3.PNG "Title")  
