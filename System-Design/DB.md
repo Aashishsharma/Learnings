@@ -154,4 +154,19 @@ process.on('exit', () => {
 });
 ```
 
-## 3. Graph DB (MongoDB, Google Cloud Firestore)
+## 3. Graph DB ( Neo4J, OrientDB, and InfiniteGraph)
+
+1. Use the graph data structure to store data
+2. Nodes represent entities, edges represent relationship between entities
+
+![alt text](PNG/db2.PNG "Title")  
+
+#### Usecases
+
+1. Social applications
+2. To Drive analyses and decisions based on relationships between entities
+
+## 4. Column based DB ( Cassandra, HBase, Hypertable, and Amazon SimpleDB)
+
+1. Store data in columns instead of rows
+2. Enable access to all entries in the database column quickly and efficiently
