@@ -328,7 +328,59 @@ In interview ask this Qs to the interviewer
   - Read heavy - primary secondary replication
   - write heavy - peer-to-peer replication
 
-**Note data replication is configured and handled at DBMS level, nothing to do in a code**.  
+**Note data replication is configured and handled at DBMS level, nothing to do in a code, we just have to connect to the primary server**.
+
+**Problem - in my nodejs code I am connected to primary DB (MS SQL server) in a primary-secondary DB replication pattern, if the primary DB goes down, the MS SQL server will internally assign a secondary node as a new primary node, but the server address would be different, how will my nodejs client know the address of new primary server and get connected to this new server automatically**
+
+**Answer - Using VNN (Virtual Network Name)** - VNN allows a client (Node.js) to connect to a replica without having to know the physical instance name of the SQL Server.  
+
+```javascript
+const sql = require('mssql');
+const config = {
+  user: 'your_username',
+  password: 'your_password',
+  server: 'your_listener_or_vnn_address', // Listener or VNN address
+  database: 'your_database',
+};
+
+let pool;
+async function connect() {
+  try {
+    pool = await sql.connect(config);
+    console.log('Connected to SQL Server');
+  } catch (err) {
+    console.error('Error connecting to SQL Server:', err);
+    // Implement retry logic here
+  }
+}
+// Call connect function to establish the initial connection
+connect();
+// Monitor for errors and handle failover
+pool.on('error', async err => {
+  console.error('Database error:', err);
+  // Check if the error indicates primary node failure
+  if (err.code === 'ESOCKET' || err.code === 'ECONNRESET') {
+    // Handle failover by reconnecting
+    try {
+      await connect();
+      console.log('Reconnected to the new primary server');
+    } catch (error) {
+      console.error('Error reconnecting to the new primary server:', error);
+      // Implement further error handling or retry logic if needed
+    }
+  }
+});
+// Example query execution
+async function executeQuery() {
+  try {
+    const result = await pool.request().query('SELECT * FROM your_table');
+    console.log(result.recordset);
+  } catch (err) {
+    console.error('Error executing query:', err);
+  }
+}
+
+```
 
 ## DB partitioning aka sharding
 
