@@ -362,7 +362,7 @@ pool.on('error', async err => {
   if (err.code === 'ESOCKET' || err.code === 'ECONNRESET') {
     // Handle failover by reconnecting
     try {
-      await connect();
+      await connect(); // here VNN would be same, but it will connect to new primary server internally
       console.log('Reconnected to the new primary server');
     } catch (error) {
       console.error('Error reconnecting to the new primary server:', error);
