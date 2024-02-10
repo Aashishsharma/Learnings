@@ -341,11 +341,15 @@ Partion must be balanced. If partitioning is unbalanced, the majority of queries
 - Column based partitioning.
 - Vertical sharding is often used in scenarios where certain columns of a table are accessed more frequently or there is blob column in the table
 - increases the speed of data retrieval from a table consisting of columns with very wide text or a binary large object (blob)
+- sit with stakeholders to understand which tables / columns to be partitioned based on requirement
 
  ![alt text](PNG/db7.PNG "Title") 
 
 ### 2. Horizontal sharding
 
 - Row based partitioning
--  AB
+
+
+#### 1. key-range based sharding
+
 
