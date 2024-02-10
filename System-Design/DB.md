@@ -312,6 +312,7 @@ Sync and Async DB replications are the type of replications, below are the model
 ### 3. peer-to-peer / leaderless replication (using sync / async)
 
  All the nodes have equal weightage and can accept reads and writes requests.
+ Issue - Data inconsistency
 
  ![alt text](PNG/db6.PNG "Title")  
 
@@ -326,3 +327,25 @@ In interview ask this Qs to the interviewer
 - Is the workload readh-heavy or write-heavy?
   - Read heavy - primary secondary replication
   - write heavy - peer-to-peer replication
+
+**Note data replication is configured and handled at DBMS level, nothing to do in a code**.  
+
+## DB partitioning aka sharding
+
+At some point, a single node-based database isn’t enough to tackle the load. We might need to distribute the data over many nodes but still export all the nice properties of relational databases.  
+
+Partion must be balanced. If partitioning is unbalanced, the majority of queries will fall into a few partitions
+
+### 1. Vertical sharding
+
+- Column based partitioning.
+- Vertical sharding is often used in scenarios where certain columns of a table are accessed more frequently or there is blob column in the table
+- increases the speed of data retrieval from a table consisting of columns with very wide text or a binary large object (blob)
+
+ ![alt text](PNG/db7.PNG "Title") 
+
+### 2. Horizontal sharding
+
+- Row based partitioning
+-  AB
+
