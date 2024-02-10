@@ -180,3 +180,94 @@ In traditional row based DB, to do sum, we need to traverse through each row
 In column based DB, just traverse through only 1 row and read all data sequentially
 
 ![alt text](PNG/db3.PNG "Title")  
+
+## DB replication
+
+Replication refers to keeping multiple copies of the data at various nodes (preferably geographically distributed) to achieve 
+
+1. availability
+2. scalability
+3. performance
+
+**If we just do daat replication, we mean that all the data is stored in a single node, and we replicate the same data across multiple nodes (If the data can't be stored in one node we use partitioning)**
+
+#### Issues with Data replication
+
+1. Data consistency / integrity
+2. Network latency
+3. Conflict resolution - when multiple copies of the same data are modified independently in different. (How to resolve conflicts? 1. Automatic - DBMS systems checks timestamp of 2 writes, last-writer-wins 2. Manual - DBMS admin manually resolves conflicts)
+4. Scalability issues - due to network latency to replicate data will all nodes
+5. Synchronization overhead
+6. Performance degradation
+7. Failure recovery
+
+#### DB replication types
+
+##### Synchronous and Asynchronous
+
+| Aspect                 | Synchronous Replication                                | Asynchronous Replication                               |
+|------------------------|--------------------------------------------------------|--------------------------------------------------------|
+| **Define**             | Primary node to wait for ack from all nodes, and then send response to client | Primary node no wait            |
+| Data Consistency       | Ensures strong consistency between replicas            | Eventual consistency                                   |
+| Durability             | Guarantees that data is safely replicated before ACK    |Data eventaully replicated after ACK                   |
+| Failure Handling       | Easier to detect failures and maintain consistency     | More fault-tolerant due to decoupled operation         |
+| Read Scalability       | Generally better for read-heavy workloads               | May provide better read scalability with lagged replicas|
+| Performance Impact     | Synchronous nature can introduce latency for writes     | Potential data loss in case of replica failure         |
+| Network Dependency     | Relies heavily on stable and fast network connections  | Less dependent on network quality and latency          |
+| Scalability            | May limit scalability due to synchronous nature        | Generally more scalable due to asynchronous operation  |
+| Complexity             | Can introduce complexity in managing synchronous commits| Simplified configuration and management                |
+
+![alt text](PNG/db4.PNG "Title")  
+
+##### Who does DB replication
+
+| Entity                    | Examples                                      |
+|---------------------------|-----------------------------------------------|
+| Database Management Systems (DBMS) | SQL Server Replication, Oracle Data Guard, MySQL Replication, PostgreSQL streaming replication |
+| Middleware Solutions      | IBM InfoSphere Data Replication, Oracle GoldenGate, Attunity Replicate |
+| Third-party Replication Tools | SharePlex, HVR, Dbvisit Replicate |
+| Cloud Service Providers   | Amazon RDS (Relational Database Service), Google Cloud SQL, Azure SQL Database |
+
+##### DB replication in MySQL -  
+
+1. **Prepare the Master Database**:
+   - Ensure that binary logging is enabled on the MySQL server acting as the master.
+   - Set the `log_bin` parameter in the MySQL configuration file (`my.cnf`).
+
+2. **Create a Replication User on the Master**:
+   - Create a dedicated MySQL user account for replication with appropriate privileges like `REPLICATION SLAVE` and `RELOAD`.
+
+3. **Identify the Master's Binary Log File and Position**:
+   - Note down the current binary log file and position on the master for replication initialization.
+
+4. **Prepare the Slave Database**:
+   - Install and configure MySQL on the slave node.
+   - Ensure network connectivity between the master and slave nodes.
+
+5. **Configure the Slave to Replicate from the Master**:
+   - Edit the MySQL configuration file (`my.cnf`) on the slave to configure it as a replica.
+   - Configure replication parameters (`master_host`, `master_port`, `master_user`, `master_password`, `master_log_file`, `master_log_pos`) using master's information.
+
+6. **Start the Slave and Begin Replication**:
+   - Start the MySQL server on the slave node.
+   - Start replication process on the slave using `START SLAVE` command.
+
+##### DB replication in MS SQL server - 
+
+1. **Configure Replication on the Primary Server**:
+   - Launch SQL Server Management Studio (SSMS) and connect to the primary SQL Server instance.
+   - Right-click on the primary database, navigate to Tasks > Replication > Configure Distribution.
+   - Follow the wizard to configure distribution for the database. Choose the appropriate options based on your replication requirements.
+
+2. **Select Replication Type**:
+   - Choose the appropriate replication type based on your needs (e.g., transactional replication, snapshot replication, merge replication).
+
+3. **Configure Publishers (Primary node)**:
+   - Specify the publisher (primary server) for the replication topology.
+
+4. **Install SQL Server on Subscriobers (Secondary Nodes)**:
+   - Install SQL Server on the secondary nodes (replicas) where you want to replicate the database.
+   - Use SQL Server Management Studio (SSMS) to configure each subscriber, specifying the publisher's connection properties, 
+
+5. **Initialize Subscribers**:
+   - Initialize the subscribers by applying the initial snapshot or transaction log backup (depending on the replication type) to synchronize the data with the primary database.
