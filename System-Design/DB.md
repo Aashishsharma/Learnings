@@ -30,7 +30,7 @@
 ### 1. Key value DB (Redis, Memcached and AWS Dynamo DB)  
 
 1. Uses key-value methods like hash tables to store data in key-value pairs
-2. Key serves as a unique or primary key, and the values can be anything ranging from simple scalar values to complex objects. 
+2. Key serves as a unique or primary key, and the values can be anything ranging from simple scalar values to complex objects.
 3. Allow easy partitioning and horizontal scaling of the data.
 
 #### Usecases
@@ -174,7 +174,7 @@ process.on('exit', () => {
 #### Usecases
 
 1. Efficient for a large number of aggregation and data analytics queries  
-(e.g. In financial institutions, there’s a need to sum the financial transaction over a period of time)   
+(e.g. In financial institutions, there’s a need to sum the financial transaction over a period of time)
 
 In traditional row based DB, to do sum, we need to traverse through each row  
 In column based DB, just traverse through only 1 row and read all data sequentially
@@ -183,7 +183,7 @@ In column based DB, just traverse through only 1 row and read all data sequentia
 
 ## DB replication
 
-Replication refers to keeping multiple copies of the data at various nodes (preferably geographically distributed) to achieve 
+Replication refers to keeping multiple copies of the data at various nodes (preferably geographically distributed) to achieve
 
 1. availability
 2. scalability
@@ -252,7 +252,7 @@ Replication refers to keeping multiple copies of the data at various nodes (pref
    - Start the MySQL server on the slave node.
    - Start replication process on the slave using `START SLAVE` command.
 
-##### DB replication in MS SQL server - 
+##### DB replication in MS SQL server -
 
 1. **Configure Replication on the Primary Server**:
    - Launch SQL Server Management Studio (SSMS) and connect to the primary SQL Server instance.
@@ -267,7 +267,62 @@ Replication refers to keeping multiple copies of the data at various nodes (pref
 
 4. **Install SQL Server on Subscriobers (Secondary Nodes)**:
    - Install SQL Server on the secondary nodes (replicas) where you want to replicate the database.
-   - Use SQL Server Management Studio (SSMS) to configure each subscriber, specifying the publisher's connection properties, 
+   - Use SQL Server Management Studio (SSMS) to configure each subscriber, specifying the publisher's connection properties,
 
 5. **Initialize Subscribers**:
    - Initialize the subscribers by applying the initial snapshot or transaction log backup (depending on the replication type) to synchronize the data with the primary database.
+
+### DB replication Models
+
+Sync and Async DB replications are the type of replications, below are the models where either of (sync/async) replication can be used
+
+### 1. primary-secondary replication (using sync / async)
+
+- One node is designated as the primary. It’s responsible for processing any writes to data stored on the cluster
+- Useful when workload is read heavy
+- DB could be inconsistent if we use asynchronous replication
+- Primary node is bottlneck and if primary node goes down any one of the secondary node (based on which node has most up-to-date data) becomes primary node
+
+**3 ways in how DB does primary-secondary replication**
+
+1. Statement based replication
+   - primary node sends all SQL queries to secondary nodes
+   - issue with nondeterministic functions in SQL queries, for e.g. NOW()
+   - query seqeunce issue -  if second write query is sent first before the first write query to secondary nodes if first write query is slow
+
+2. Write ahead log (WAL) shipping
+   - primary node writes query to a log file and send archieve log files to secondary nodes (improved performance)
+   - no issue of query sequence, since queries are logged first before execution
+
+3. Row based replication
+   - secondary nodes replicate the actual data changes rather then executing queries from primary node
+
+### 2. multi-leader replication (using sync / async)
+
+- There are multiple primary nodes that process the writes and send them to all other primary and secondary nodes to replicate.
+- Better performance, scalobility and reliability
+- Issue - write conflicts between multiple leaders
+
+![alt text](PNG/db5.PNG "Title")  
+
+**Avoding conflicts**
+
+- Last write wins - Using their local clock, all nodes assign a timestamp to each update.
+
+### 3. peer-to-peer / leaderless replication (using sync / async)
+
+ All the nodes have equal weightage and can accept reads and writes requests.
+
+ ![alt text](PNG/db6.PNG "Title")  
+
+###### Interview
+
+In interview ask this Qs to the interviewer  
+
+- Do you need low latency to the client or more consistency
+  - If low latency - async replication
+  - If more consistency - sunc replication
+
+- Is the workload readh-heavy or write-heavy?
+  - Read heavy - primary secondary replication
+  - write heavy - peer-to-peer replication
