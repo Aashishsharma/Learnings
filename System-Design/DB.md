@@ -395,7 +395,7 @@ Partion must be balanced. If partitioning is unbalanced, the majority of queries
 - increases the speed of data retrieval from a table consisting of columns with very wide text or a binary large object (blob)
 - sit with stakeholders to understand which tables / columns to be partitioned based on requirement
 
- ![alt text](PNG/db7.PNG "Title") 
+ ![alt text](PNG/db7.PNG "Title")
 
 ### 2. Horizontal sharding
 
@@ -405,9 +405,9 @@ Partion must be balanced. If partitioning is unbalanced, the majority of queries
 
 Note - When partitioning tables with foreign key relationships, ensure that the referenced rows are stored in the same shard as the referencing rows. for referential integrity.  
 
- ![alt text](PNG/db7.PNG "Title") 
+ ![alt text](PNG/db8.PNG "Title")
 
-**Get data from multiple shards** - 
+**Get data from multiple shards** -
 
 ```javascript
 // Function to query horizontally sharded database
@@ -528,3 +528,40 @@ startServer().catch(error => {
 });
 
 ```
+
+#### 1. Hash based sharding
+
+- Hash function is applied on one of the attribute from the table
+
+In below example, we have 4 shards and hash function is applied on the value column, hash func is Value % 4, based on the hash value the row is added on that particular shard
+
+ ![alt text](PNG/db9.PNG "Title")
+
+**Rebalancing issue** - in hash based partitioning, based on value mod (no.of nodes), if no.of nodes increase the hash function return value would change, in this case we need to rebalance the data to appropriate shards. This is the issue.
+
+##### **Solving rebalancing issue**
+
+##### 1. Using Dynamic / Extended Hashing
+
+##### 2. Using Consistent Hashing
+
+#### Range based vs Hash based sharding
+
+| Feature                 | Range-Based Partitioning                                          | Hash-Based Partitioning                                       |
+|-------------------------|--------------------------------------------------------------------|---------------------------------------------------------------|
+| Key Distribution        | Data is partitioned based on a specified range of key values.       | Data is partitioned based on the output of a hash function.   |
+| Key Range Definition    | Requires explicit definition of key ranges for each partition.     | Does not require explicit definition of key ranges.          |
+| Data Distribution       | Uneven distribution may occur if key ranges are not evenly sized.  | Provides a more even distribution of data across partitions.  |
+| Query Efficiency        | Well-suited for range queries that involve consecutive key values. | May require scanning multiple partitions for range queries.  |
+| Insert/Update Efficiency| May require rebalancing if key distribution changes significantly.| Generally does not require rebalancing for key distribution changes. |
+| Example Use Cases       | Time-based partitioning (e.g., partitioning data by date ranges). | High-throughput systems where even data distribution is crucial. |
+
+### Issues with sharding
+
+1. If we need to use JOIN queries across shards
+   - run individaul joins on all shards, build merge logic in application code
+
+## DB replication and partitioning combined
+
+1. Create shards, and for few / each shard create DB replica for those shards
+2. So, in Nodejs write code to connect to each shard, but instead of giving each shard's server address, give VNN address of each shard
