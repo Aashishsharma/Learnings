@@ -541,7 +541,7 @@ In below example, we have 4 shards and hash function is applied on the value col
 
 ##### **Solving rebalancing issue using consistent hashing**
 
-Note - consistent hasing doesn't completely solve the rebalacing issue, it just minimizes the efforts required in the rebalancing
+Note - consistent hasing doesn't completely solve the rebalacing issue, it just minimizes the data required to be rebalanced
 
 **Consistent hasing algo** - 
 
@@ -554,7 +554,9 @@ Note - consistent hasing doesn't completely solve the rebalacing issue, it just 
 7. If new node is added, then HN is calculated for new Node and placed inside the ring, and new data to be added / removed is calculated based on point no 5.
 8. This way rebalancing is done only on the HN that is affected with the new node. (refer to image below)
 
- ![alt text](PNG/db10.PNG "Title")
+ ![alt text](PNG/db10.PNG "Title")  
+
+In above example, If new DB server S4 is added, then only K0 keys need to be rebalanced to new DB server S4, no rebalancing required for any other keys 
 
 **Please go through YT videos if consistent hashing isn't clear**
 
