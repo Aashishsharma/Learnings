@@ -537,13 +537,10 @@ In below example, we have 4 shards and hash function is applied on the value col
 
  ![alt text](PNG/db9.PNG "Title")
 
-**Rebalancing issue** - in hash based partitioning, based on value mod (no.of nodes), if no.of nodes increase the hash function return value would change, in this case we need to rebalance the data to appropriate shards. This is the issue.
+**Rebalancing issue** - in hash based partitioning, based on value mod (no.of nodes), if no.of nodes increase/decrease the hash function return value would change, in this case we need to rebalance the data to appropriate shards. So from above hash func is Value % 4, now if we increase no of nodes, hash func is Value % 5, so our data would go to wrong shards + we won;t be reaching out to correct shard for existing data.
 
-##### **Solving rebalancing issue**
+##### **Solving rebalancing issue using consistent hashing**
 
-##### 1. Using Dynamic / Extended Hashing
-
-##### 2. Using Consistent Hashing
 
 #### Range based vs Hash based sharding
 
