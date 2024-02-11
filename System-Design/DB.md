@@ -447,3 +447,84 @@ queryShardedDatabase(query)
     .then(result => console.log('Query result:', result))
     .catch(error => console.error('Error executing query:', error));
 ```
+
+**Code to determine on which shard query needs to be executed**  
+
+```javascript
+const express = require('express');
+const mssql = require('mssql');
+
+const app = express();
+
+// Placeholder function to establish connection to a shard
+async function connectToShard(shardInfo) {
+    try {
+        // Establish connection to the shard using shardInfo (e.g., hostname, port)
+        await mssql.connect(shardInfo);
+        console.log(`Connected to shard ${shardInfo.name}`);
+        return true;
+    } catch (error) {
+        console.error(`Error connecting to shard ${shardInfo.name}:`, error);
+        return false;
+    }
+}
+// Function to determine shard based on user input
+// this is for key-range based sharding
+// in hash based sharding, shard would be selected based on the hash
+function determineShard(userId) {
+    return userId <= 1000 ? shard1 : shard2;
+}
+// Placeholder shard objects
+let shard1;
+let shard2;
+// Define route to handle user queries
+app.get('/query', async (req, res) => {
+    const { userId } = req.query;
+    const shard = determineShard(parseInt(userId));
+
+    if (!shard) {
+        return res.status(400).json({ error: 'Invalid shard' });
+    }
+
+    // Example query execution
+    try {
+        const request = shard.request();
+        const result = await request.query(`SELECT * FROM users WHERE userId = ${userId}`);
+        return res.json(result.recordset);
+    } catch (error) {
+        console.error('Error executing query:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+});
+// Connect to multiple shards and start Express server only when all shards are connected
+async function startServer() {
+    const shard1Info = { name: 'shard1', user: 'user', password: 'password', server: 'shard1.example.com', database: 'database' };
+    const shard2Info = { name: 'shard2', user: 'user', password: 'password', server: 'shard2.example.com', database: 'database' };
+
+    const shardPromises = [
+        connectToShard(shard1Info),
+        connectToShard(shard2Info)
+    ];
+
+    const shardConnections = await Promise.all(shardPromises);
+
+    // Check if all shards are connected successfully
+    if (shardConnections.every(conn => conn)) {
+        shard1 = new mssql.Request(); // Reuse connection to shard 1
+        shard2 = new mssql.Request(); // Reuse connection to shard 2
+
+        const port = process.env.PORT || 3000;
+        app.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
+        });
+    } else {
+        console.error('Failed to connect to all shards. Server will not start.');
+    }
+}
+// Start the server
+startServer().catch(error => {
+    console.error('Error starting server:', error);
+    process.exit(1);
+});
+
+```
