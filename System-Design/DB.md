@@ -541,6 +541,63 @@ In below example, we have 4 shards and hash function is applied on the value col
 
 ##### **Solving rebalancing issue using consistent hashing**
 
+Note - consistent hasing doesn't completely solve the rebalacing issue, it just minimizes the efforts required in the rebalancing
+
+**Consistent hasing algo** - 
+
+1. In Normal hasing we just has the data attribute and get the hash value
+2. In consistent hashing 2 hash is calculated, 1 hash of data value (HD), 1 hash for the actual node (HN)
+3. Theriotically, based on JD and HN values, they are placed in a ring (aka Hash ring)
+4. Pratically - the library we use for consistent hashing compares HD and HN values, and based on their values they are placed close or farther away in the ring
+5. When to want to get the shard on which the data needs to be found / inserted, HD is calculated and we find closest HN clockwise (in case of library HN > HD but HN - HD is smallest)
+6. Hence for HD we get HN and we add / find data in that shard
+7. If new node is added, then HN is calculated for new Node and placed inside the ring, and new data to be added / removed is calculated based on point no 5.
+8. This way rebalancing is done only on the HN that is affected with the new node. (refer to image below)
+
+ ![alt text](PNG/db10.PNG "Title")
+
+**Please go through YT videos if consistent hashing isn't clear**
+
+Same consistent hashing algo can be applied in load balancers, when new server is added, the reqeusts would be redirected to new server based on consistent hasing steps discussed above. (HD would be hash of the request url, HN would be hash of the new server)
+
+**Consistent hashing in code**
+
+```javascript
+// npm library already available
+const { HashRing } = require('hashring');
+// Initialize the hash ring with some initial shards
+const initialShards = ['shard1', 'shard2', 'shard3'];
+const hashRing = new HashRing(initialShards);
+
+// new HashRing(initialShards) - can take array of objects
+// new HashRing(initialShards);
+
+// Simulate adding a new shard
+const newShard = 'newShard';
+hashRing.add(newShard);
+
+// Simulate placing data items
+const dataItems = ['data1', 'data2', 'data3', 'data4', 'data5'];
+dataItems.forEach(dataItem => {
+    const shard = hashRing.get(dataItem);
+    console.log(`Data item ${dataItem} is placed in shard ${shard}`);
+});
+
+
+
+/////////////////////////////////////////
+// new HashRing(initialShards) - can take array of objects
+// Weights or vnodes are used to give servers a bigger distribution in the HashRing
+var ring = new HashRing({
+  '127.0.0.1:11211': 200,
+  '127.0.0.2:11211': { weight: 200 }, // same as above
+  '127.0.0.3:11211': 3200
+});
+
+// In above example you have 3 servers where you want to distribute your keys over but not all servers are equal in capacity
+// as 2 of those machines have 200mb of memory and the other has 3.2 gig of memory. 
+// The last server is substantially bigger and there for should receive a greater distrubtion in the ring.
+```
 
 #### Range based vs Hash based sharding
 
