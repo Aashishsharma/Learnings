@@ -339,7 +339,7 @@ const sql = require('mssql');
 const config = {
   user: 'your_username',
   password: 'your_password',
-  server: 'your_listener_or_vnn_address', // Listener or VNN address
+  server: 'your_listener_or_vnn_address', // Listener or VNN address from SSMS
   database: 'your_database',
 };
 
@@ -401,7 +401,49 @@ Partion must be balanced. If partitioning is unbalanced, the majority of queries
 
 - Row based partitioning
 
-
 #### 1. key-range based sharding
 
+Note - When partitioning tables with foreign key relationships, ensure that the referenced rows are stored in the same shard as the referencing rows. for referential integrity.  
 
+ ![alt text](PNG/db7.PNG "Title") 
+
+**Get data from multiple shards** - 
+
+```javascript
+// Function to query horizontally sharded database
+async function queryShardedDatabase(query) {
+    const shards = await determineShardsForQuery(query);
+    const results = [];
+    // Execute queries on all shards concurrently and wait for all to finish
+    await Promise.all(shards.map(async (shard) => {
+        const result = await executeQueryOnShard(query, shard);
+        results.push(result);
+    }));
+    const mergedResult = mergeResults(results);
+    return mergedResult;
+}
+// Placeholder function to determine shards for query
+async function determineShardsForQuery(query) {
+    // Logic to determine which shards contain relevant data for the query
+    // This might involve querying metadata or using a shard-routing mechanism
+    // For simplicity, returning mock shard IDs
+    return ['shard1', 'shard2', 'shard3'];
+}
+// Placeholder function to execute query on a shard
+async function executeQueryOnShard(query, shard) {
+    // Logic to execute the query on the specified shard
+    // For simplicity, returning a mock result
+    return `Result from ${shard}`;
+}
+// Placeholder function to merge results from multiple shards
+function mergeResults(results) {
+    // Logic to merge results from multiple shards
+    // For simplicity, concatenating the results into a single string
+    return results.join(', ');
+}
+// Example usage
+const query = "SELECT * FROM users WHERE age > 30";
+queryShardedDatabase(query)
+    .then(result => console.log('Query result:', result))
+    .catch(error => console.error('Error executing query:', error));
+```
