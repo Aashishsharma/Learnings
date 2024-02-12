@@ -612,10 +612,12 @@ var ring = new HashRing({
 | Insert/Update Efficiency| May require rebalancing if key distribution changes significantly.| Generally does not require rebalancing for key distribution changes. |
 | Example Use Cases       | Time-based partitioning (e.g., partitioning data by date ranges). | High-throughput systems where even data distribution is crucial. |
 
-### Issues with sharding
+### Issues with sharding / distributed DBs
 
 1. If we need to use JOIN queries across shards
    - run individaul joins on all shards, build merge logic in application code
+2. Difficult to mainatin consistency
+3. If DB not properly distribued, may have performance impact
 
 ## DB replication and partitioning combined
 
