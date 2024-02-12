@@ -284,3 +284,14 @@ pubSubClient.quit();
 4. Use redis client's pub/sub model to replicate cache changes to all cache servers
 5. Monitoring services can be additionally used to log and report different metrics of the caching service
 
+## Redis vs memecached
+
+| Feature                | Redis                                                            | Memcached                                                       |
+|------------------------|------------------------------------------------------------------|-----------------------------------------------------------------|
+| Data Structures        | Supports various data structures such as strings, lists, sets, hashes, sorted sets, bitmaps, and geospatial indexes. | Limited to simple key-value pairs.                              |
+| Persistence            | Supports both in-memory storage and optional disk persistence (snapshots and append-only file mode). | Does not support persistence.                                   |
+| Data Eviction Policy   | Supports multiple eviction policies including LRU, LFU, and randomized. | Uses LRU (Least Recently Used) eviction policy.                |
+| Replication            | Supports master-slave replication, clustering, and sentinel-based high availability. | Does not support built-in replication or clustering.           |
+| Pub/Sub                | Supports publish/subscribe messaging.                            | Does not support publish/subscribe messaging.                  |
+| Performance            | Slow.                                                            | Fast                                               |
+| Use Cases              | Suitable for use cases requiring advanced data structures, persistence, high availability, and pub/sub messaging. | Suitable for simple caching use cases where speed is critical.  |
