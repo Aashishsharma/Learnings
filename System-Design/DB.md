@@ -599,6 +599,12 @@ var ring = new HashRing({
 // In above example you have 3 servers where you want to distribute your keys over but not all servers are equal in capacity
 // as 2 of those machines have 200mb of memory and the other has 3.2 gig of memory. 
 // The last server is substantially bigger and there for should receive a greater distrubtion in the ring.
+
+// Q. but how does adding weight works internally in consistent hasing
+// ANS - by using multiple hash functions
+// in above e.g. '127.0.0.3:11211': 3200 has highest weight, so this server is hashed with multiple hash functions, so for the same server
+// we get multiple hash values, so same server insctance is placed multiple times in the hash ring
+// hence by increasing footprints of high capacity servers on hash ring, chances are more requests are redirected to this server 
 ```
 
 #### Range based vs Hash based sharding
