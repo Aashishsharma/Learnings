@@ -100,7 +100,15 @@ const updateDB = (err, success) => {
 
 But now the redisserver2 will still refer to old data in it's cache for the same key, because we did not do redisclient2.del(key, newVal)
 
-**Solution - use pub/sub messaging pattern in redis**
+**Solution - use pub/sub messaging pattern in redis**  
+
+STEPS - 
+
+1. connect redis client to multiple redis server
+2. make connection for each redis server
+3. for each redis server connection, subscribe to the channel
+4. for each redis server listen to the message from that channel
+5. in api call, publish the to the channel for relevant data
 
 ```javascript
 const redis = require('redis');
@@ -112,12 +120,13 @@ const redisConfigurations = [
 ];
 // Create an array to store Redis client instances
 const redisClients = [];
-// Create Redis client instances for each server
+// STEP 1 - Create Redis client instances for each server
 redisConfigurations.forEach(config => {
     const client = redis.createClient(config);
-    // Optionally, you can handle connection and error events for each client
+    // STEP 2 - , you can handle connection and error events for each client
     client.on('connect', () => {
         console.log(`Connected to Redis server at ${config.host}:${config.port}`);
+        // STEP 3 - 
         // Subscribe to the keyInvalidation channel for each client
         client.subscribe('keyInvalidation', (err, count) => {
             if (err) {
@@ -140,7 +149,7 @@ pubSubClient.subscribe('keyInvalidation');
 
 // Example: Perform operations on each Redis server
 redisClients.forEach((client, index) => {
-    // listen to the message event
+    // STEP 4 - listen to the message event
     client.on('message', (channel, key) => {
         // Handle invalidation messages received from the pub/sub channel
         if (channel === 'keyInvalidation') {
@@ -167,6 +176,7 @@ redisClients.forEach((client, index) => {
 const updateKey = (key) => {
     // code to update DB
     client.del(key);
+    // STEP 5 - 
     client..publish('keyInvalidation', key, (err, count) => {
     if (err) {
         console.error('Error publishing message:', err);
