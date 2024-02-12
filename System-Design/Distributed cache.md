@@ -21,4 +21,25 @@ Key-value stores, like ordinary hash tables, provide two primary functions, whic
 
 **Note - while building apps, we need to define write policies (tools like redis can't), because we need to decide under which table cache data needs to be written**  
 
+## Cache eviction policies
 
+1. Least recently used (LRU)
+2. Most recently used (MRU)
+3. Least frequently used (LFU)
+4. Most frequently used (MFU)
+5. FIFO
+
+#### Setting eviction policy in redis
+
+1. You need to connect to redis server using redis cli
+2. Run command - ```CONFIG SET maxmemory-policy allkeys-lru```
+3. allkeys-lru - LRU policy, similarly - allkeys-lfu
+4. No option for this in redis npm package
+
+**alternatively, we can specify expiry time in node js while setting up the key**
+
+```javascript
+ client.setex(key, 24*60*60, value, function(err, result) {
+    //check for success/failure here
+  });
+```
