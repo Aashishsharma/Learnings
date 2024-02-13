@@ -174,7 +174,7 @@ const updateDB = (err, success) => {
 }
 ```
 
-But now the redisserver2 will still refer to old data in it's cache for the same key, because we did not do redisclient2.del(key, newVal)
+**Issue in distributed cache - (CONSISTENCY) But now the redisserver2 will still refer to old data in it's cache for the same key, because we did not do redisclient2.del(key, newVal)**
 
 **Solution - use pub/sub messaging pattern in redis**  
 
@@ -185,6 +185,8 @@ STEPS -
 3. for each redis server connection, subscribe to the channel
 4. for each redis server listen to the message from that channel
 5. in api call, publish the to the channel for relevant data
+
+**Note - in below code the publish and subscribe methods on redisCLient can be called from different nodes as long as all the redis clients are connected to the same redis server (This is imp to understand)**
 
 ```javascript
 const redis = require('redis');
@@ -275,6 +277,8 @@ redisClients.forEach(client => {
 // Close pub/sub connection
 pubSubClient.quit();
 ```
+
+**Hence CONSISTENCY issue in distribued cache is solved using pub-sub model**
 
 ## Distributed cache design solution
 
