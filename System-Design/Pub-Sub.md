@@ -41,7 +41,7 @@ But using MQs we’ll copy the same message for a topic in all subscriber queues
 
 #### Using redis as message broker
 
-**Below code is same code we used in Distributed cache**
+**Below code is same code we used in Distributed cache (to solve consistency issue in Distributed cache)**
 
 ```javascript
 const redis = require('redis');

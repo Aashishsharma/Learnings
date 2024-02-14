@@ -186,8 +186,8 @@ STEPS -
 4. for each redis server listen to the message from that channel
 5. in api call, publish the to the channel for relevant data
 
-**Note - in below code the publish and subscribe methods on redisCLient can be called from different nodes as long as all the redis clients are connected to the same redis server (This is imp to understand)**
-
+**Note - in below code the publish and subscribe methods on redisCLient can be called from different nodes as long as all the redis clients are connected to the same redis server (This is imp to understand)**  
+**Below code is same as seen in pub-sub model**
 ```javascript
 const redis = require('redis');
 // Define Redis server configurations
