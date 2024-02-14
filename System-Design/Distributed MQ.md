@@ -15,7 +15,7 @@
 ## Rabbit MQ on local
 
 1. Install Rabbit MQ server on local (in distribted systems, it would be installed on on of the nodes).
-2. sender.js
+2. sender.js 
 ```javascript
 const amqp = require('amqplib');
 async function send() {
@@ -53,3 +53,5 @@ async function receive() {
 }
 receive().catch(console.error);
 ```
+
+**In dsitributed systems, sender.js and reciever.js will be scripts running on different nodes (machines), provided that they are connected to same RabbitMQ server**
