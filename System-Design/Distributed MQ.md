@@ -118,7 +118,3 @@ In case of single-server MQ, design is straight forward, but it has limitations 
 ![alt text](PNG/MQ.PNG "Title")  
 Think of exchanges as servers with consistent-hasing algo, which will determine to which queue the message needs to be stored
 
-# To-do 
-
-1. learn RabbitMQ api
-2. synchronized clocks.
