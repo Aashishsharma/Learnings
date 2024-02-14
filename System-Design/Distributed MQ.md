@@ -87,6 +87,23 @@ Need to ensure that messages need to be recieved at the reciever component in th
 1. Monotonically increasing numbers -  When the first message arrives to MQ serer, the server assigns it a number, such as 1. It then assigns the number 2 to the second message, and so on. (slow performance since Rabbit MQ qill be bottleneck for generating numbers)
 2. Using time stamps based on synchronized clocks - assign timestamp for each message when produced by the producer, but producers can be running on different machines, hence timstamp would differ since different machines / nodes will have different timestamps, so use synchronized clocks
 
+**Synchronized clocks** - aka network time protocol (NTP) synchronized clock, is a clock that is precisely set to the same time as other clocks within a network. This synchronization ensures that all devices in the network are using the same time reference. The time servers (any node assigned as main clock) periodically broadcast their time information to other devices on the network, and other devies replicate that timing
+
+```javascript
+const ntpClient = require('ntp-client');
+// Fetch time from NTP server
+// NTP server is a globally distributed network of servers that provide 
+// accurate time synchronization services to clients over the Internet
+ntpClient.getNetworkTime("pool.ntp.org", 123, (err, date) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+  // Use synchronized time in your application
+  console.log("Synchronized time:", date);
+});
+```
+
 ### HLD od Distributed MQ
 
 In case of single-server MQ, design is straight forward, but it has limitations -  
