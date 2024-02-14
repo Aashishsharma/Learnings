@@ -5,3 +5,4 @@ Remember in case of distributed cache Redis, we used pub-sub model so that one s
 
 ![alt text](PNG/pub-sub.PNG "Title")
 
+**Here it is imp to note that a publisher can publish a message from one node and subscribers from another node in a distributed system can consume the message**
