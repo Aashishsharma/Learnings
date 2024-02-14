@@ -87,6 +87,20 @@ Need to ensure that messages need to be recieved at the reciever component in th
 1. Monotonically increasing numbers -  When the first message arrives to MQ serer, the server assigns it a number, such as 1. It then assigns the number 2 to the second message, and so on. (slow performance since Rabbit MQ qill be bottleneck for generating numbers)
 2. Using time stamps based on synchronized clocks - assign timestamp for each message when produced by the producer, but producers can be running on different machines, hence timstamp would differ since different machines / nodes will have different timestamps, so use synchronized clocks
 
+### HLD od Distributed MQ
+
+In case of single-server MQ, design is straight forward, but it has limitations -  
+1. Availibility - if single server MQ goes down
+2. Scability - if lot of producers connected, MQ grows long, then it becomes bottleneck,
+
+**Hence use Distributed MQ - (multiple MQ servers)** - 
+
+1. Queue data is replicated using primary-secondary or peer-ro-peer model
+2. We can use data partitioning if the queue gets too long to fit on a single server, use use a consistent hashing-like scheme to know when message is stored in which queue
+
+![alt text](PNG/MQ.PNG "Title")  
+Think of exchanges as servers with consistent-hasing algo, which will determine to which queue the message needs to be stored
+
 # To-do 
 
 1. learn RabbitMQ api
