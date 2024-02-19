@@ -21,3 +21,25 @@ We need sequencer to assign unique incremental Id to each of this event, otherwi
 
 ### System design for Sequencer
 
+#### Requirements
+
+1. Unique (64 bit for large range of vals)
+2. Scalable
+3. Available
+
+#### 1. Using UUID
+
+Each server / node in distributed system to generate UUID (it is 128 bit number).  
+Collision possibility - very low, but still possible  
+Issue - string 128 bit no. in DB as PK in DB makes indexing slower
+
+#### 2. Using Range handler
+
+Here we will have range handler micro-service which will have reserved range of Ids. For e.g. it will have range of Ids from 1 to 1 Billion, then 1 Billion 1 to 2 Billion and so on.  
+Each node withing thw system will request for the range, lets say node 1 gets 1 to 1 Billion range, node 2 gets 1 Billion 1 to 2 Billion rnage.  
+Now Node 1 and Node 2 can incrmentallty use these ranges provided by the range handler microservice for each of it's events.  
+When all the range is used up, query the microservice to get a new range of Ids
+
+![alt text](PNG/seq1.PNG "Title")  
+
+
