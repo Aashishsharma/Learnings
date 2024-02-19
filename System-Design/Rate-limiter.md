@@ -83,7 +83,3 @@ Each request will retrieve, update, and push back the count to the respective ca
 - **Bucket Expiry:** Move the sliding window forward over time, allowing older buckets to expire and be removed. This ensures that the window only contains buckets corresponding to recent time intervals.
 
 - **Rate Limit Enforcement:** Calculate the total number of requests within the sliding window by summing the request counts in non-expired buckets. If the total exceeds the specified rate limit, additional incoming requests are rejected or delayed.
-
-- **Key Features:** Dynamic adaptation to changes in request rates, accurate rate limiting, efficient resource usage, and simple implementation.
-
-- **Benefits:** Ensures fair usage of system resources, maintains system stability and reliability, and provides an effective way to control request rates in various network and system applications.
