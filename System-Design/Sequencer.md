@@ -63,3 +63,67 @@ Here we are using 64bit UUID, so out of total 64 bits
 2. **41 bits** for epoch timestamp (in milliscond) - these epoch time would act as uniuw identifiers
 3. **10 worker bits** - each worker node within the system will have Id in bits fromat so total (1024 worker nodes)
 4. **12 bit sequence** - last 12 bits will be sequence in incremental format, so toal 4096 incremental Ids, in a given millisecond. Hence in highlt concurrent distributed system, in 1 milliscond, we can handle upto 4096 req. per milliscond per worker node with unique ID generated in a sequnce, and when a req. is not hit within the same milliscond (not concrrently) we will have different epoch time 
+
+**Nodejs example**
+
+```javascript
+const Snowflake = require('snowflake-id').Snowflake;
+// Initialize Snowflake with worker ID and optional epoch
+const snowflake = new Snowflake(1); // Assuming worker ID is 1
+// Generate Snowflake IDs
+console.log(snowflake.nextId());
+console.log(snowflake.nextId());
+```
+
+#### 3. Using Lamport Clocks 
+
+- **Initialization:** Each process or node initializes its Lamport clock to zero.
+- **Event Timestamping:** Every time a process performs an event, it increments its Lamport clock by one to timestamp the event.
+- **Message Timestamping:** When a process sends a message, it includes its current Lamport timestamp with the message.
+- **Message Reception:** Upon receiving a message, the receiving process updates its Lamport clock to be the maximum of its current timestamp and the timestamp received in the message, plus one. This ensures that the Lamport clock of the receiving process reflects a timestamp greater than any event it has observed so far.
+
+##### Lamport Clocks Example
+
+- **Initial State:** Both processes start with Lamport clocks initialized to zero.
+
+- **Event at Process P1:**
+  - P1 performs a local computation.
+  - P1's Lamport clock: 1
+  - P1 sends a message to P2 with its Lamport timestamp (1).
+  
+- **Event at Process P2:**
+  - P2 receives the message from P1.
+  - P2's Lamport clock: max(0, 1) + 1 = 2
+  - P2 processes the received message.
+  
+- **Another Event at Process P2:**
+  - P2 performs another local computation.
+  - P2's Lamport clock: 3
+  - P2 sends a reply message to P1 with its Lamport timestamp (3).
+  
+- **Event at Process P1:**
+  - P1 receives the reply message from P2.
+  - P1's Lamport clock: max(1, 3) + 1 = 4
+  - P1 processes the received message.
+
+Now, let's analyze the Lamport timestamps associated with these events:
+
+- Event 1 (P1 computation): Lamport timestamp = 1
+- Event 2 (P1 sends message to P2): Lamport timestamp = 1
+- Event 3 (P2 receives message from P1): Lamport timestamp = 2
+- Event 4 (P2 computation): Lamport timestamp = 3
+- Event 5 (P2 sends reply to P1): Lamport timestamp = 3
+- Event 6 (P1 receives reply from P2): Lamport timestamp = 4
+
+#### 4. Using vector clocks - (only at high level)  
+
+Vector clocks are another logical clock mechanism used in distributed systems to order events and capture causal relationships between them. Unlike Lamport clocks, which assign a single timestamp to each process, vector clocks maintain a vector of timestamps, with each entry representing the timestamp of a particular process.
+
+| Usage Scenarios                | Twitter Snowflake                                          | Lamport Clock                                               | Vector Clock                                                |
+|--------------------------------|------------------------------------------------------------|-------------------------------------------------------------|-------------------------------------------------------------|
+| Unique ID Generation           | ✓ Generates unique IDs at scale.                          | ✗ Not suitable for generating unique IDs.                   | ✗ Not suitable for generating unique IDs.                   |
+| Event Ordering                 | ✓ Last 12 bits can be used for event ordering within a time window. | ✓ Provides partial event ordering based on timestamp.       | ✓ Provides partial event ordering based on causal relations.|
+| Causality Tracking             | ✗ Does not track causal relations between events.         | ✗ Limited capability to track causal relations.             | ✓ Tracks causal relations between events accurately.       |
+| Concurrency Resolution         | ✓ Handles concurrency by ensuring unique IDs.             | ✗ Does not resolve concurrency issues.                     | ✓ Resolves concurrency issues by tracking event dependencies.|
+| Distributed Systems            | ✓ Suitable for generating unique IDs in distributed systems. | ✓ Suitable for establishing event order in distributed systems. | ✓ Suitable for tracking causal relations in distributed systems.|
+
