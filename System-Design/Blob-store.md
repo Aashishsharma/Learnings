@@ -74,7 +74,7 @@ The client’s requests are received at the front-end servers that process the r
 - **Load Balancer:** Distributes network traffic among servers and can reroute requests based on location.
 - **Front-end Servers:** Forward user requests to appropriate storage servers.
 - **Data Nodes:** Store blob data, divided into chunks; managed by master node.
-- **Master Node:** Manages all data nodes, stores metadata (account, container, blob), and handles access privileges.
+- **Master Node:** Manages all data nodes, stores metadata (account, container, blob), handles access privileges, and does partitioning (see below for partitioning).
 - **Metadata Storage:** Distributed database for storing metadata used by master node. Metadata includes which part of blob is stored under which storage server (aka Datanode)
 - **Monitoring Service:** Monitors data nodes and master node, alerts administrators of disk failures or low disk space.
 - **Administrator:** Handles notifications, conducts routine checkups to ensure reliability.
