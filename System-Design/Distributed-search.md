@@ -12,7 +12,7 @@ e.g. - Youtube / google search
 
 1. Users should be able to search
 
-**Non Functional requirements** - 
+**Non Functional requirements** -
 
 1. Availablity
 2. Scalibility
@@ -24,13 +24,14 @@ e.g. - Youtube / google search
 
 ## Step 1 - Build Indexing
 
-#### Search using Inverted indexing 
+#### Search using Inverted indexing
 
 1. For each document we assign ID, so that we can refer those Ids when creating inverted index
 
-![alt text](PNG/ds2.PNG "Title") 
+![alt text](PNG/ds2.PNG "Title")
 
-2. Create Inverted Index  
+2. Tokenization - remove frequently occuring words like (to, and the) from documents
+3. Create Inverted Index  
 
 ![alt text](PNG/ds3.PNG "Title")  
 
@@ -38,5 +39,14 @@ e.g. - Youtube / google search
 for example - the value for distributed is ([1, 3], [1, 1], [[4], [4]]) - this means  
 
 1. **[1,3]** -  the word distributed is found in doc 1 and 3
-2. **[1, 1]** -  in both the docs the frequency of this word is 1 
-3. **[4, 4]** the word is found on 4th location for document 1 and document 3
+2. **[1, 1]** -  in both the docs the frequency of this word is 1
+3. **[4, 4]** the word is found on 4th location for document 1 and document 3  
+
+**Similarly understand the mapping generated for elasticsearch keyword**  
+
+4. Now when user searches for **search engine** - we get the mappings - 
+
+![alt text](PNG/ds4.PNG "Title")  
+
+5. Finally we rank the documents based on the frequency counts and return the doc list to the user
+
