@@ -96,7 +96,9 @@ The client’s requests are received at the front-end servers that process the r
 ##### Read workflow
 
 1. **Front-end Request:** Front-end server requests blob metadata from master node.
-2. **Authorization:** Master node checks authorization for the blob.
+2. **Authorization:** Master node checks authorization for the blob (public / private).
 3. **Chunk Mapping:** Master node retrieves chunk mappings to data nodes.
 4. **Response:** Master node returns chunk data and mappings to client.
 5. **Data Retrieval:** Client reads chunk data from data nodes.
+
+Partition the blobs based on the complete path of the blob. The partition key here is the combination of the account ID, container ID, and blob ID. This helps in co-locating the blobs for a single user on the same partition server, which enhances performance.
