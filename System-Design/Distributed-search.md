@@ -32,4 +32,11 @@ e.g. - Youtube / google search
 
 2. Create Inverted Index  
 
-![alt text](PNG/ds3.PNG "Title") 
+![alt text](PNG/ds3.PNG "Title")  
+
+**Understand how the mapping is created** - ([doc], [freq], [loc]),  
+for example - the value for distributed is ([1, 3], [1, 1], [[4], [4]]) - this means  
+
+1. **[1,3]** -  the word distributed is found in doc 1 and 3
+2. **[1, 1]** -  in both the docs the frequency of this word is 1 
+3. **[4, 4]** the word is found on 4th location for document 1 and document 3
