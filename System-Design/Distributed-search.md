@@ -50,3 +50,17 @@ for example - the value for distributed is ([1, 3], [1, 1], [[4], [4]]) - this m
 
 5. Finally we rank the documents based on the frequency counts and return the doc list to the user
 
+### 2. HLD
+
+**Note - both crawling the documents and creating inverted index is done offile as a batch job and both crawling and indexing steps needs to be run when new doc is added / removed or updated**
+
+**See in below image how crawling and indexing is an offline process**
+
+![alt text](PNG/ds5.PNG "Title")  
+
+1. The process begins with a crawler gathering textual content from a designated resource, like YouTube videos, including titles, descriptions, and annotations. This content is structured into JSON documents and stored in distributed storage.
+
+2. Next, an indexer processes these documents using MapReduce on a distributed cluster, constructing an index table also stored in distributed storage.
+
+3. When a user submits a search query, the searcher parses it and retrieves mappings from the index in distributed storage. It intelligently handles misspelled words by mapping them to the closest vocabulary terms, then finds documents containing all query words and ranks them for presentation to the user.
+
