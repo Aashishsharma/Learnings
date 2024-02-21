@@ -64,3 +64,29 @@ for example - the value for distributed is ([1, 3], [1, 1], [[4], [4]]) - this m
 
 3. When a user submits a search query, the searcher parses it and retrieves mappings from the index in distributed storage. It intelligently handles misspelled words by mapping them to the closest vocabulary terms, then finds documents containing all query words and ranks them for presentation to the user.
 
+**But all og the above logic is for centralized search, how to work with Distributed search** - 
+
+## Distributed Search
+
+We need to partition the inverted index that is generated offline. That means different nodes will have their individual inverted index 
+
+2 ways to do this 
+
+1. **Document partitioning** - Each node gets subset of Documents, and the nodes perform inverted index on those subset of documents
+2. **Term partitioning** - Terms are partitioned into subsets, and each node gets subset of Terms, and inverted index is generated for all documents but only for the terms assigned to that node
+
+![alt text](PNG/ds6.PNG "Title")   
+
+In term partitioning, a search query is sent to the nodes that correspond to the query terms. Here subset of query string is sent to different nodes based on their term mapping and then results are merged from different nodes. (**here lot of to and fro is required between different nodes which is costly**)  
+In document partitioning, each query is distributed across all nodes, and the results from these nodes are merged before being shown to the user.  
+
+**Document partitioning workflow** - 
+
+![alt text](PNG/ds7.PNG "Title")   
+
+1. **Offline process** - Here cluster manager will partition the documents to different Nodes based on Node's capacity and each node will run the indexing logic to generate inverted index.
+2. **Online process** - when user sends search query, the query is run across all individual index and results are then merged and ranked based on the frequence of search keywords.
+
+**Partitioning + Replica** - for each of this individual nodes, we can have replica of each od these nodes for replication, so even if one of the node fails, the replica will do indexing. Again repplica here can be **primary-secondary replication** which we learnt in DB replication.
+
+**Note - computing index is a very resource intensive taks, hence if we create replica, we only create inverted index on primary node and share the inverted index (binary file) to the replica nodes**
