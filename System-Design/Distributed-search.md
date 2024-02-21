@@ -24,7 +24,7 @@ e.g. - Youtube / google search
 
 ## Step 1 - Build Indexing
 
-#### Search using Inverted indexing
+#### Search using Inverted indexing (Map reducer function)
 
 1. For each document we assign ID, so that we can refer those Ids when creating inverted index
 
@@ -90,3 +90,4 @@ In document partitioning, each query is distributed across all nodes, and the re
 **Partitioning + Replica** - for each of this individual nodes, we can have replica of each od these nodes for replication, so even if one of the node fails, the replica will do indexing. Again repplica here can be **primary-secondary replication** which we learnt in DB replication.
 
 **Note - computing index is a very resource intensive taks, hence if we create replica, we only create inverted index on primary node and share the inverted index (binary file) to the replica nodes**
+
