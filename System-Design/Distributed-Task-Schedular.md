@@ -38,3 +38,13 @@ The client needs to send below info to the task schedular  -
 | Status              | VarChar  | This can be waiting, in progress, done, or failed.                                                    |
 | DelayTolerance      | Time     | This indicates how much delay we can sustain before starting a task.                                   |
 | ScriptPath          | VarChar  | The path of the script that needs to be executed. The script is a file placed in a file system. The file should be made accessible so that it can be executed |
+
+![alt text](PNG/dt3.PNG "Title")
+
+To prioritize the tasks, the task scheduler maintains a delay tolerance parameter for each task and executes the task close to its delay tolerance. Delay tolerance is the maximum amount of time a task execution could be delayed. The task that has the shortest delay tolerance time is executed first.  
+
+E.g. - Facebook, suggesting friends is not an urgent task. We can make a separate queue for tasks like this and execute them in off-peak times. (This is how friend suggestions in FB work using Distributed task schedular)
+
+**Questions** - 
+1. What if a long task is 90% executed, but before it completes, the machine that was executing this task fails?
+ - Divide the taks into stages. Save logs or have a pub-sub system for such task, where each stage of long task is published and save the state of the task step where it failed, and re-run only those tasks
