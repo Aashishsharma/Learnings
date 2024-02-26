@@ -1,5 +1,19 @@
 # Understanding requirements
 
+## Starting with System Design
+
+**Below are the points we need to cover in any system design interview (RESHADE)**
+
+**RESHADE** - (Requirements, Estimation, Storage Schema, HLD, API Design, Detailed Design, Evaluation)
+
+1. **Requirements** - Get func and non-func requirements from the interviewer
+2. **Estimation (optional)** - do resource estimation based on req. (like daily active users = 500M, then calc no. of servers)
+3. **Storage schema (optional)** - design DB schema at high level
+5. **High level design** - figure out building blocks / custom blocks/services
+6. **API design** - these are API calls, and are generally a translation of our functional requirements
+7. **Detailed Design** - The detailed design starts by recognizing the limitations of the high-level design, and refine futher on non-happy paths
+8. **Evaluation** - here we need to justify how our design fulfills the functional and non-functional requirements
+
 ## Resource estimation
 
 1. Calculate RPS for 1 web/app server
@@ -97,107 +111,3 @@ Total storage per yesr = 365 * 128 TB = 46.72 PB (peta bytes)
 Total outgoing bandwidth = 209 Gbps
 
 
-
-Understanding Requirements:
-
-Functional Requirements:
-Identifying core features
-User stories
-Non-functional Requirements:
-Performance
-Scalability
-Reliability
-Security
-Architecture Patterns:
-
-Client-Server Architecture:
-Distributed systems
-Load balancing
-Microservices Architecture:
-Service decomposition
-Inter-service communication
-Deployment strategies
-Event-Driven Architecture:
-Pub/Sub model
-Event sourcing
-CQRS (Command Query Responsibility Segregation)
-Database Design:
-
-Relational Databases:
-Entity-Relationship Modeling (ERD)
-Normalization
-Indexing
-NoSQL Databases:
-Document-oriented databases
-Key-value stores
-Graph databases
-Scalability and Performance:
-
-Horizontal Scaling:
-Load balancing
-Sharding
-Vertical Scaling:
-Increasing resources (CPU, RAM)
-Database optimization techniques
-Caching:
-CDN caching
-In-memory caching (e.g., Redis)
-System Design Tools and Techniques:
-
-UML (Unified Modeling Language):
-Use case diagrams
-Class diagrams
-Sequence diagrams
-Design Patterns:
-Creational, Structural, and Behavioral patterns
-Singleton, Factory, Observer, etc.
-API Design:
-
-RESTful APIs:
-Resource modeling
-HTTP methods
-Authentication and authorization
-GraphQL:
-Query language
-Schema design
-Resolver functions
-Security:
-
-Authentication and Authorization:
-JWT (JSON Web Tokens)
-OAuth
-Role-based access control (RBAC)
-Data Encryption:
-TLS/SSL
-Encryption algorithms
-Data masking
-Fault Tolerance and Reliability:
-
-Redundancy:
-Replication
-Failover
-Monitoring and Alerting:
-Health checks
-Logging
-Metrics collection
-Deployment and Infrastructure:
-
-Cloud Services:
-AWS, Azure, Google Cloud
-Infrastructure as Code (IaC)
-Containerization:
-Docker
-Kubernetes
-Continuous Integration/Continuous Deployment (CI/CD):
-Jenkins, GitLab CI/CD, CircleCI
-Performance Optimization:
-
-Database Optimization:
-Query optimization
-Index optimization
-Caching Strategies:
-CDN caching
-In-memory caching (e.g., Redis)
-Content Delivery Networks (CDNs):
-Content caching
-Edge computing

@@ -8,6 +8,12 @@ A task is a piece of computational work that requires resources (CPU time, memor
 
 ![alt text](PNG/dt.PNG "Title")
 
+2. Non-functional requirements
+
+1. Availability - we use rate limiter to ensure the system doesn't go down
+2. Durability - We store the tasks in a persistent distributed database and push the tasks into the queue near their execution time
+2. Scalibility -  task submitter is distributed in our design. We can add more nodes to the cluster to submit an increasing number of tasks
+
 ## Building blocks for Distributed Task schedular
 
 ![alt text](PNG/dt1.PNG "Title")  
