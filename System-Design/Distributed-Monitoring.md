@@ -7,7 +7,9 @@
 3. Monitor storage / infra load logs
 4. Generate alerts on failures
 
-## HLD / Building blocks
+## 1. Monitoring server side errors
+
+### HLD / Building blocks
 
 ![alt text](PNG/dm1.PNG "Title")  
 
@@ -25,3 +27,4 @@ We can use heat maps for the globally distributed systems and continuously share
 We can quickly find out which server is down by the red color and focus on the problematic parts.  
 We can create similar heat maps to get a bird’s-eye view of any resource, like filesystems, networking switches, links, and so on.  
 
+## 2. Monitoring client side errors  
