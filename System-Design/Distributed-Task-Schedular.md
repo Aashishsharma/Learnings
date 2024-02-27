@@ -21,7 +21,7 @@ A task is a piece of computational work that requires resources (CPU time, memor
 **More building blocks-** - 
 
 1. **Queue manager** - The queue manager deletes a task from the queue if it executes successfully. It retries for the allowed number of attempts for a task in case of a failed execution.
-2. **Resource manager** -  The resource manager knows which of the resources are free. It pulls the tasks from the distributed queue and assigns them resources. The resource manager keeps track of the execution of each task and sends back their statuses to the queue manager.
+2. **Resource manager** -  The resource manager knows which of the resources are free. It pulls the tasks from the distributed queue and assigns them resources. The resource manager keeps track of the execution of each task and sends back their statuses to the queue manager. (We have manifest.yml file where we specify ram, cpu cores req, and resource manager has list of nodes and their capacity, using this 2 info we (resource manager) can decide if a job can run on a given node)
 
 It is important to put the tasks in the queue, and the task schedular will decide which tasks to start (based on priority) and which tasks to keep on-hold (in queue) based on resources left in the Resources component.
 
