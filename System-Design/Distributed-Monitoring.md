@@ -28,3 +28,10 @@ We can quickly find out which server is down by the red color and focus on the p
 We can create similar heat maps to get a bird’s-eye view of any resource, like filesystems, networking switches, links, and so on.  
 
 ## 2. Monitoring client side errors  
+
+A service has no visibility of the errors that don’t occur at its infrastructure.  
+To ensure that the client’s requests reach the server, we’ll act as clients and perform reachability and health checks.  
+
+**Prober** - It is a service, that periodically sends requests to the service to check availability.  
+
+![alt text](PNG/dm4.PNG "Title")   
