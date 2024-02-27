@@ -2,6 +2,12 @@
 
 ## Starting with System Design
 
+### TODO
+
+1. Event driven architecture
+2. Microservice architecture
+3. Time-series DB
+
 **Below are the points we need to cover in any system design interview (RESHADE)**
 
 **RESHADE** - (Requirements, Estimation, Storage Schema, HLD, API Design, Detailed Design, Evaluation)
