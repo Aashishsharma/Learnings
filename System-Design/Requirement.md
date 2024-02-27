@@ -7,6 +7,7 @@
 1. Event driven architecture
 2. Microservice architecture
 3. Time-series DB
+4. CAP theorem
 
 **Below are the points we need to cover in any system design interview (RESHADE)**
 
