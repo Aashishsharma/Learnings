@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Prime Number Calculator</title>
+  <style>
+    :root {
+      --main-color: red;
+      --background-color: #ecf0f1;
+    }
+    body {
+   background-color: var(--background-color);
+}
+h1 {
+  text-align: center;
+}
+div::before { content: "Read this: "; }
+  </style>
+</head>
+<body>
+  <h1 id="abc">Prime Number Calculator</h1>
+  <input type="number" id="rangeStart" placeholder="Start">
+  <input type="number" id="rangeEnd" placeholder="End">
+  <button id="calculate">Calculate Primes</button>
+  <div id="result"></div>
+  
+
+  <script>
+
+
+
+let pqr = document.createElement('div')
+pqr.textContent = 'PQR';
+
+document.getElementById('abc').before(pqr);
+const workerScript = `
+  self.onmessage = function(event) {
+  const rangeStart = event.data.rangeStart;
+  const rangeEnd = event.data.rangeEnd;
+  const primeNumbers = calculatePrimesInRange(rangeStart, rangeEnd);
+  
+  self.postMessage(primeNumbers);
+};
+
+function calculatePrimesInRange(start, end) {
+  const primes = [];
+  for (let num = start; num <= end; num++) {
+    if (isPrime(num)) {
+      primes.push(num);
+    }
+  }
+  return primes;
+}
+
+function isPrime(num) {
+  if (num <= 1) return false;
+  if (num <= 3) return true;
+  if (num % 2 === 0 || num % 3 === 0) return false;
+
+  let i = 5;
+  while (i * i <= num) {
+    if (num % i === 0 || num % (i + 2) === 0) return false;
+    i += 6;
+  }
+
+  return true;
+}
+
+`;
+
+    const calculateButton = document.getElementById('calculate');
+    const resultDiv = document.getElementById('result');
+
+    calculateButton.addEventListener('click', () => {
+      const rangeStart = parseInt(document.getElementById('rangeStart').value);
+      const rangeEnd = parseInt(document.getElementById('rangeEnd').value);
+      
+const blob = new Blob([workerScript], { type: 'application/javascript' });
+const blobURL = URL.createObjectURL(blob);
+
+const worker = new Worker(blobURL);
+      
+      worker.postMessage({ rangeStart, rangeEnd });
+
+      worker.onmessage = function(event) {
+        resultDiv.textContent = 'Prime numbers: ' + event.data.join(', ');
+      };
+    });
+  </script>
+<script>
+  
+
+
+</script>
+
+</body>
+</html>
