@@ -123,3 +123,5 @@ Total outgoing bandwidth = 209 Gbps
 2. Reliability - how frequently system is down (5 - 5 times system is down)
 3. Scability -  handle an increasing amount of workload without compromising performance
 ![alt text](PNG/r1.PNG "Title")   
+4. Maintainability - refers to time-to-repair
+5. Fault tolerance - system’s ability to execute persistently even if one or more of its components fail (use replication)
