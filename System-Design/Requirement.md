@@ -117,4 +117,9 @@ Total storage per yesr = 365 * 128 TB = 46.72 PB (peta bytes)
 
 Total outgoing bandwidth = 209 Gbps
 
+## Non Functional requirements
 
+1. Availability - amount of time the system was down (99% = 3.65 days down)
+2. Reliability - how frequently system is down (5 - 5 times system is down)
+3. Scability -  handle an increasing amount of workload without compromising performance
+![alt text](PNG/r1.PNG "Title")   
