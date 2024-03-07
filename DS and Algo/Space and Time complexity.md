@@ -47,14 +47,15 @@ console.log(i);</code></pre></td>
 }</code></pre></td>
     </tr>
     <tr>
-      <td>O(n^c)</td>
+      <td>O(n^c) here  "c" represents a constant</td>
       <td>Polynomial Time</td>
       <td><pre><code>function polynomialTime(n) {
     for (let i = 0; i < Math.pow(n, 2); i++) {
         console.log(i);
     }
 }
-polynomialTime(10);</code></pre></td>
+polynomialTime(10);
+// here time complexity = 10 to the power 2, here c is 2 because of pow(n, 2)</code></pre></td>
     </tr>
     <tr>
       <td>O(c^n)</td>
