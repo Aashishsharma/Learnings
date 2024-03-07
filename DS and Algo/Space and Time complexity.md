@@ -1,34 +1,64 @@
 <table>
-<tr>
-<td> Status </td> <td> Response </td>
-</tr>
-<tr>
-<td> 200 </td>
-<td>
-
-↑ Blank line!
-```json
-json
-{
-    "id": 10,
-    "username": "alanpartridge",
-    "email": "alan@alan.com",
-    "password_hash": "$2a$10$uhUIUmVWVnrBWx9rrDWhS.CPCWCZsyqqa8./whhfzBZydX7yvahHS",
-    "password_salt": "$2a$10$uhUIUmVWVnrBWx9rrDWhS.",
-    "created_at": "2015-02-14T20:45:26.433Z",
-    "updated_at": "2015-02-14T20:45:26.540Z"
-}
-```
-↓ Blank line!
-
-</td>
-</tr>
-<tr>
-<td> 400 </td>
-<td>
-
-**Markdown** _here_. (↕︎ Blank lines above and below!)
-
-</td>
-</tr>
+  <thead>
+    <tr>
+      <th>Time Complexity</th>
+      <th>Name</th>
+      <th>JavaScript Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>O(1)</td>
+      <td>Constant Time</td>
+      <td><code>let x = 5;<br>console.log(x);</code></td>
+    </tr>
+    <tr>
+      <td>O(log n)</td>
+      <td>Logarithmic Time</td>
+      <td><pre><code>let i = n;
+while (i > 0) {
+    i = Math.floor(i / 2);
+}</code></pre></td>
+    </tr>
+    <tr>
+      <td>O(n)</td>
+      <td>Linear Time</td>
+      <td><pre><code>for (let i = 0; i < n; i++) {
+    console.log(i);
+}</code></pre></td>
+    </tr>
+    <tr>
+      <td>O(n log n)</td>
+      <td>Linearithmic Time</td>
+      <td><pre><code>for (let i = 0; i < n; i++) {
+    for (let j = 0; j < Math.log2(n); j++) {
+        console.log(i, j);
+    }
+}</code></pre></td>
+    </tr>
+    <tr>
+      <td>O(n^2)</td>
+      <td>Quadratic Time</td>
+      <td><pre><code>for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+        console.log(i, j);
+    }
+}</code></pre></td>
+    </tr>
+    <tr>
+      <td>O(n^c)</td>
+      <td>Polynomial Time</td>
+      <td>*Not commonly implemented in JavaScript*</td>
+    </tr>
+    <tr>
+      <td>O(c^n)</td>
+      <td>Exponential Time</td>
+      <td>*Not commonly implemented in JavaScript*</td>
+    </tr>
+    <tr>
+      <td>O(n!)</td>
+      <td>Factorial Time</td>
+      <td>*Not commonly implemented in JavaScript*</td>
+    </tr>
+  </tbody>
 </table>
