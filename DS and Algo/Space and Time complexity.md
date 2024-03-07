@@ -18,7 +18,8 @@
       <td><pre><code>let i = n;
 while (i > 0) {
     i = Math.floor(i / 2);
-}</code></pre></td>
+}
+console.log(i);</code></pre></td>
     </tr>
     <tr>
       <td>O(n)</td>
@@ -48,17 +49,30 @@ while (i > 0) {
     <tr>
       <td>O(n^c)</td>
       <td>Polynomial Time</td>
-      <td>*Not commonly implemented in JavaScript*</td>
+      <td><pre><code>function polynomialTime(n) {
+    for (let i = 0; i < Math.pow(n, 2); i++) {
+        console.log(i);
+    }
+}
+polynomialTime(10);</code></pre></td>
     </tr>
     <tr>
       <td>O(c^n)</td>
       <td>Exponential Time</td>
-      <td>*Not commonly implemented in JavaScript*</td>
+      <td><pre><code>function exponentialTime(n) {
+    if (n <= 0) return;
+    exponentialTime(n - 1);
+}
+exponentialTime(3);</code></pre></td>
     </tr>
     <tr>
       <td>O(n!)</td>
       <td>Factorial Time</td>
-      <td>*Not commonly implemented in JavaScript*</td>
+      <td><pre><code>function factorial(n) {
+    if (n === 1) return 1;
+    return n * factorial(n - 1);
+}
+factorial(4);</code></pre></td>
     </tr>
   </tbody>
 </table>
