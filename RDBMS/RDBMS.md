@@ -11,7 +11,7 @@
 
 "Subjects" column violates 1NF because it is non-automic
 
-### 2NF
+### 2NF (In interview think of Ids and names as columns in same table, then remove names and keep only Ids)
 
 **A candidate key** - is a set of one or more attributes (columns) within a relation (table) that uniquely identifies each tuple (row) in that relation.  
 
@@ -27,3 +27,11 @@ To make above table compliant to 2NF -
 
 ![alt text](PNG/rdbms3.PNG "Title") 
 
+## 3 NF
+
+1. **1NF and 2 NF compliant**
+3. **Removal of Transitive dependencies** - non-prime attribute should not be functionally dependent on another non-prime attribute. All non-prime attributes should be directly dependent on primary / composite key
+
+![alt text](PNG/rdbms4.PNG "Title") 
+
+![alt text](PNG/rdbms5.PNG "Title") 
