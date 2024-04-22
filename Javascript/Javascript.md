@@ -466,41 +466,39 @@ Instead of calling api every single time, call only when there is a specific tim
 If user is typing a keyword, keyup event is called every single time, but make api call when there is a pause (say 300ms) see on flipkart website, autosuggestion changes only when you wait fir skme time after you type your keyword.  
 
 ```javascript
-// In this example, the 'search' function will only be called after 300ms of inactivity
-// since the user stops typing. This prevents excessive calls while typing quickly.
-// Function to be debounced
-function search(query) {
-    console.log(`Searching for: ${query}`);
-    // Insert your search logic here
+// step 1  - create a api func which needs to be debounced
+let apiCall = (arg) => {
+    console.log('api call made ')
+    let promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log('api call made with arg ', arg)
+            resolve({apiRes : 'success'})
+        }, 5000);
+    })
+    return promise;
 }
-// Debounce function
-function debounce(func, delay) {
-    let timeoutId;
-    
-    return function() {
-        const context = this;
-        const args = arguments;
+// step 2 - create a debounced function
+// this is like higer order func, will take a func and return a func
+// so first create a func signature, take a func and return a new func in this func
+let debounce = (apiCallFunc, debounceLimit) => {
+    let interval = null; // closure application
+    // returning new function
+    return function () { // if array func is used, then this is empty {} since (learn this)
+        return new Promise((resolve, reject) => {
+            clearInterval(interval);
+            let me = this;
+            // console.log(me)
+            let args = arguments;
+            interval = setTimeout(async () => {
+                let apiRes = await apiCallFunc.apply(me, args);
+                resolve(apiRes);
+            }, debounceLimit);
+        })
         
-        // Clear the previous timeout
-        clearTimeout(timeoutId);
-        
-        // Set a new timeout
-        timeoutId = setTimeout(() => {
-            func.apply(context, args);
-        }, delay);
-    };
-}
-// Create a debounced version of the search function
-const debouncedSearch = debounce(search, 300);
-// Example usage: Attach debouncedSearch to an input field's event listener
-const searchInput = document.getElementById('searchInput');
-searchInput.addEventListener('input', function(event) {
-    const query = event.target.value;
-    debouncedSearch(query);
-});
-// In this example, the 'search' function will only be called after 300ms of inactivity
-// since the user stops typing. This prevents excessive calls while typing quickly.
+    }
 
+}
+let debouncedApiCall = debounce(apiCall, 2000);
 ```
 
 2. THROTTLING  

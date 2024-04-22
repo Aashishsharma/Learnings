@@ -3,7 +3,7 @@
 |----------------|-----------------------------------------------|-----------------------------------------------------|
 | Version        | Latest version of the HTML standard.        | `<header>`, `<nav>`, `<footer>`, `<video>`, `<audio>`, `<canvas>`, new form input types, semantic elements, APIs, improved offline support, enhanced accessibility features. |
 | Doctype        | `<!DOCTYPE html>`                            | N/A                                                 |
-| Elements       | Expanded set of semantic and structural elements. | Semantic elements, new structural elements like `<article>`, `<section>`, etc. |
+| Elements       | Expanded set of semantic and structural elements. | Semantic elements, new structural elements like `<article>`, `<section>`, etc. They help search engines to understand page structure |
 | Attributes     | Additional attributes and global attributes.     | New input attributes, attributes for multimedia elements. (see below for new attributes)|
 | Multimedia     | Enhanced multimedia support with `<audio>`, `<video>`, and `<canvas>`. | `<audio>`, `<video>`, `<canvas>`, better multimedia support. |
 | Forms          | New input types, attributes, and validation features. | New input types, form attributes, validation attributes. |

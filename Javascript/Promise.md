@@ -200,6 +200,42 @@ Promise.all([add_positivenos_async(10,20),add_positivenos_async(30,40),add_posit
       console.log('Error',err)
    })
    console.log('end')
+
+
+
+
+///////// Promise.all my version
+
+
+/// create your own Promise.all
+// promsie.all takes array of promises and return a single promise with resolve (all results) or rejected
+
+let promiseAllMyVersion = (arrodPromises) => {
+    if(!Array.isArray(arrodPromises))
+      throw new Error('Invalid args')
+    let resolvedPromiseCnt = 0;
+    let totalPromise = arrodPromises.length;
+    let promArrResult = []
+    console.log({arrodPromises})
+    return new Promise((resove, reject) => {
+        arrodPromises.forEach((element) => {
+            if(!(typeof(element) === 'object')) 
+                reject('invalid args')
+            element.then((res) => {
+                promArrResult.push(res)
+                resolvedPromiseCnt++;
+                if(resolvedPromiseCnt === totalPromise)
+                  resove(promArrResult)
+            }).catch((e) => {
+                reject(e)
+            })
+        });
+    })
+}
+//below output is same as that of Promise.all()
+promiseAllMyVersion(arr.map((item) => promArr(item))).then((res) => {
+    console.log({res})
+})
 ```
 
 2. Promise.allSettled()
