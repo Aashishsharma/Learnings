@@ -21,59 +21,61 @@ Users cannot directly work with DB, they use any one of the DBMS
 ### Datatypes
 
 1. MySQL
-| Data Type     | Description                                 |
-|---------------|---------------------------------------------|
-| INT(n)        | Integer                                     |
-| VARCHAR(n)    | Variable-length character string in case of CHAR(50), if ashish is stored. memory used is 50 bytes, in varchar(50), if ashish is stored memory used is 6 bytes           |
-| CHAR(n)       | Fixed-length character string               |
-| TEXT          | Variable-length text                       |
-| DATE          | Date                                        |
-| TIME          | Time                                        |
-| DATETIME      | Date and time                               |
-| FLOAT(p, d)   | Floating-point number                      |
-| DOUBLE(p, d)  | Double-precision floating-point number     |
-| DECIMAL(p, d) | Fixed-point number                         |
-| BOOLEAN       | Boolean value                               |
-| ENUM('val1', 'val2', ...) | Enumeration                  |
-| SET('val1', 'val2', ...)  | Set of values                  |
-| BLOB          | Binary large object                        |
-| JSON          | JavaScript Object Notation                 |
+| Data Type     | Description                                            |
+|---------------|--------------------------------------------------------|
+| INT(n)        | Integer                                                |
+| VARCHAR(n)    | Variable-length character string (e.g., CHAR(50), if "ashish" is stored, memory used is 50 bytes; in VARCHAR(50), if "ashish" is stored, memory used is 6 bytes) |
+| CHAR(n)       | Fixed-length character string                          |
+| TEXT          | Variable-length text                                    |
+| DATE          | Date                                                   |
+| TIME          | Time                                                   |
+| DATETIME      | Date and time                                          |
+| FLOAT(p, d)   | Floating-point number                                  |
+| DOUBLE(p, d)  | Double-precision floating-point number                 |
+| DECIMAL(p, d) | Fixed-point number                                     |
+| BOOLEAN       | Boolean value                                          |
+| ENUM('val1', 'val2', ...) | Enumeration                           |
+| SET('val1', 'val2', ...)  | Set of values                           |
+| BLOB          | Binary large object                                    |
+| JSON          | JavaScript Object Notation                             |
 
 2. SQL
-| Data Type          | Description                                   |
-|--------------------|-----------------------------------------------|
-| int                | Integer                                       |
-| bigint             | Big integer                                   |
-| smallint           | Small integer                                 |
-| tinyint            | Tiny integer                                  |
-| decimal(p, s)      | Fixed precision and scale numeric            |
-| numeric(p, s)      | Fixed precision and scale numeric            |
-| float(n)           | Floating point number                        |
-| real               | Real number                                   |
-| money              | Monetary values                               |
-| smallmoney         | Monetary values, small range                  |
-| char(n)            | Fixed-length character string                |
-| varchar(n)         | Variable-length character string             |
-| text               | Variable-length text                         |
-| nchar(n)           | Fixed-length Unicode character string        |
-| nvarchar(n)        | Variable-length Unicode character string     |
-| ntext              | Variable-length Unicode text                 |
-| binary(n)          | Fixed-length binary data                     |
-| varbinary(n)       | Variable-length binary data                  |
-| image              | Variable-length binary data (deprecated)     |
-| datetime           | Date and time                                 |
-| smalldatetime      | Date and time with smaller range             |
-| datetime2(p)       | Date and time with fractional seconds        |
-| datetimeoffset(p)  | Date and time with time zone                 |
-| date               | Date                                          |
-| time(p)            | Time without time zone                       |
-| timestamp          | Row version                                  |
-| uniqueidentifier   | Unique identifier (GUID)                     |
-| xml                | XML data type                                 |
-| sql_variant        | Stores values of various SQL Server-supported data types |
-| geography          | Spatial data representing points, lines, and polygons |
-| geometry           | Spatial data representing points, lines, and polygons |
-| hierarchyid        | Represents a position in a hierarchy         |
+| Data Type          | Description                                                    |
+|--------------------|----------------------------------------------------------------|
+| int                | Integer                                                        |
+| bigint             | Big integer                                                    |
+| smallint           | Small integer                                                  |
+| tinyint            | Tiny integer                                                   |
+| decimal(p, s)      | Fixed precision and scale numeric                              |
+| numeric(p, s)      | Fixed precision and scale numeric                              |
+| float(n)           | Floating point number                                          |
+| real               | Real number                                                    |
+| money              | Monetary values                                                |
+| smallmoney         | Monetary values, small range                                   |
+| char(n)            | Fixed-length character string                                  |
+| varchar(n)         | Variable-length character string                               |
+| text               | Variable-length text                                           |
+| nchar(n)           | Fixed-length Unicode character string                          |
+| nvarchar(n)        | Variable-length Unicode character string                       |
+| ntext              | Variable-length Unicode text                                   |
+| binary(n)          | Fixed-length binary data                                       |
+| varbinary(n)       | Variable-length binary data                                    |
+| image              | Variable-length binary data (deprecated)                       |
+| datetime           | Date and time                                                  |
+| smalldatetime      | Date and time with smaller range                               |
+| datetime2(p)       | Date and time with fractional seconds                          |
+| datetimeoffset(p)  | Date and time with time zone                                   |
+| date               | Date                                                           |
+| time(p)            | Time without time zone                                         |
+| timestamp          | Row version                                                    |
+| uniqueidentifier   | Unique identifier (GUID)                                       |
+| xml                | XML data type                                                  |
+| sql_variant        | Stores values of various SQL Server-supported data types       |
+| geography          | Spatial data representing points, lines, and polygons           |
+| geometry           | Spatial data representing points, lines, and polygons           |
+| hierarchyid        | Represents a position in a hierarchy                           |
+
+
 
 ![alt text](PNG/db2.PNG "Title")
 

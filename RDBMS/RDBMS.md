@@ -30,7 +30,7 @@ To make above table compliant to 2NF -
 ## 3 NF
 
 1. **1NF and 2 NF compliant**
-3. **Removal of Transitive dependencies** - non-prime attribute should not be functionally dependent on another non-prime attribute. All non-prime attributes should be directly dependent on primary / composite key
+3. **Removal of Transitive dependencies** - all non-prime attribute should not be functionally dependent on another non-prime attribute. All non-prime attributes should be directly dependent on primary / composite key
 
 ![alt text](PNG/rdbms4.PNG "Title") 
 
