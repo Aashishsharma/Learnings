@@ -44,3 +44,8 @@ To make above table compliant to 2NF -
 ![alt text](PNG/rdbms4.PNG "Title") 
 
 ![alt text](PNG/rdbms5.PNG "Title") 
+
+## BCNF - Boyce-Codd Normal form
+
+1. **3 NF compliant**
+2. **in 3NF all non-prime attibutes need to depened on candidate key, in BCNF all the key attributes should also depend on candidate keys only**
