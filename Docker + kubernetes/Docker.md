@@ -11,11 +11,11 @@
 
 **Commands**  
 1. ```docker images```
-2.```docker pull <image-name:version>```
-2. ```docker image rm <img-name>```
-3. ```docker tag <existing-image:version> to new-ecr-domain-image:version```  
+2. ```docker pull <image-name:version>```
+3. ```docker image rm <img-name>```
+4. ```docker tag <existing-image:version> to new-ecr-domain-image:version```  
 this creates new image and adds the tag so that this image can be pushed to any other container registry like ECR and then push
-4. ```docker push <image-name:version>``` also first do docker login  
+5. ```docker push <image-name:version>``` also first do docker login  
 
 #### Containers  
 **Namespaces + own filesystem + controlgroups (CGroups)**
