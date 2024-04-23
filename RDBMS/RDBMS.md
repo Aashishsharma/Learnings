@@ -25,7 +25,7 @@
 **A candidate key** - is a set of one or more attributes (columns) within a relation (table) that uniquely identifies each tuple (row) in that relation.  
 
 1. **1NF compliant**
-2. **Removal of Partial Dependencies** - non-key attributes must not depend on any candidate key.
+2. **Removal of Partial Dependencies** - non-key attributes must not depend on **subset** of candidate key, it should depend on all candidate keys, if dependent on subset of candiate key, move that key to a separate table.
 
 ![alt text](PNG/rdbms2.PNG "Title")  - 
 
