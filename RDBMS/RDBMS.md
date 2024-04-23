@@ -39,7 +39,7 @@ To make above table compliant to 2NF -
 ## 3 NF
 
 1. **1NF and 2 NF compliant**
-3. **Removal of Transitive dependencies** - all non-prime attribute must not depend on non prime attribute, non-prome attributes muest depend on super key.
+3. **Removal of Transitive dependencies** - all non-prime attribute must not depend on non prime attribute, non-prome attributes must depend on super key.
 
 ![alt text](PNG/rdbms4.PNG "Title") 
 
