@@ -20,7 +20,8 @@ Users cannot directly work with DB, they use any one of the DBMS
 
 ### Datatypes
 
-1. MySQL
+1. MySQL  
+
 | Data Type     | Description                                            |
 |---------------|--------------------------------------------------------|
 | INT(n)        | Integer                                                |
@@ -39,7 +40,8 @@ Users cannot directly work with DB, they use any one of the DBMS
 | BLOB          | Binary large object                                    |
 | JSON          | JavaScript Object Notation                             |
 
-2. SQL
+2. SQL  
+
 | Data Type          | Description                                                    |
 |--------------------|----------------------------------------------------------------|
 | int                | Integer                                                        |
