@@ -2,6 +2,15 @@
 
 ## Normal forms
 
+#### Why normalize
+
+1. Elimination of Redundancy
+2. Improved Data Integrity
+3. Easier Maintenance
+4. Efficient Querying
+5. Scalability
+6. Flexibility
+
 ### 1NF
 
 1. **Each column needs to be atomic** - values that cannot be divided further. For example, if you have a column for "Address", it should not contain multiple parts of the address like street, city, and zip code in a single field.
@@ -16,11 +25,11 @@
 **A candidate key** - is a set of one or more attributes (columns) within a relation (table) that uniquely identifies each tuple (row) in that relation.  
 
 1. **1NF compliant**
-2. **Removal of Partial Dependencies** - non-prime attribute is functionally dependent on **only one part** of the primary key.
+2. **Removal of Partial Dependencies** - non-key attributes must not depend on any candidate key.
 
 ![alt text](PNG/rdbms2.PNG "Title")  - 
 
-In this example, the composite key (OrderID, ProductID) uniquely identifies each row. However, we can see that the "Customer Name" is functionally dependent only on "CustomerID" and not on the entire composite key. This violates 2NF because "Customer Name" is dependent on only a part of the primary key.  
+In this example, the candidate key (OrderID, ProductID) uniquely identifies each row. However, we can see that the "Customer Name" is functionally dependent only on "CustomerID" and not on the entire composite key. This violates 2NF because "Customer Name" is dependent on only a part of the primary key.  
 Similarly Product name is dependnt on Product Id, and not on composit key
 
 To make above table compliant to 2NF - 
@@ -30,7 +39,7 @@ To make above table compliant to 2NF -
 ## 3 NF
 
 1. **1NF and 2 NF compliant**
-3. **Removal of Transitive dependencies** - all non-prime attribute should not be functionally dependent on another non-prime attribute. All non-prime attributes should be directly dependent on primary / composite key
+3. **Removal of Transitive dependencies** - all non-prime attribute must not depend on non prime attribute, non-prome attributes muest depend on super key.
 
 ![alt text](PNG/rdbms4.PNG "Title") 
 
