@@ -223,17 +223,21 @@ Patterns that fall under this category include: Decorator, Facade, Flyweight, Ad
 4. Adapter
 
 ##### 1. Decorator pattern
-The Decorator Pattern attaches additional responsibilities to an object dynamically. Decorators provide a flexible alternative to subclassing for extending functionality.  
-**Coffee problem**  
-![alt text](PNG/decorator-problem.PNG "Title")  
-**Decorator pattern**  
-![alt text](PNG/decorator.PNG "Title")  
-![alt text](PNG/decorator2.PNG "Title")  
+The Decorator Pattern attaches additional responsibilities to an object dynamically.  
+
+**Coffee problem** - **Avoid subclass explosion**
+![alt text](PNG/decorator-problem.PNG "Title")   
+
+Instead of creating classes for all possible permutation / combination coffee variations, we need to create classes only for coffee variations and not for all combinations
+
 **UML**  
 ![alt text](PNG/decorator-uml.PNG "Title")  
-**Implementation**  
-![alt text](PNG/decorator-impl.PNG "Title")  
-Here decorator pattern maynot be the best usecae, but if cost function differs greatly in in't impl, then decorator pattern is more suitable.
+
+**Components -**  
+1. **Abstract class or interface** - this will have mthods all coffee subclasses need to have
+2. **Decorator class** - it extends above class **+ it also has instance of above class** (this is imp)
+3. **Only 1 concreate classes** - thet extend abstarct class in step 1 (simple coffee class)
+4. **Decorator concrete classes** - extend decorator class
 
 ```typescript
 /**
@@ -347,7 +351,6 @@ Total cost: 170
 Buying a coffee with extra caramel + espresso flavour + extra caramel (double caramel)  
 Total cost: 220  
 Total cost: 220  
-
 
 Hence we just need to create classes for all the different variations and not for all possible permutation / combination of those variations
 
