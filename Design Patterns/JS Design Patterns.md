@@ -222,11 +222,8 @@ Patterns that fall under this category include: Decorator, Facade, Flyweight, Ad
 3. Proxy
 4. Adapter
 
-<<<<<<< HEAD
 ##### 1. Decorator pattern (decorator class - extends the interface and has the interface (as a property))
-=======
-##### 1. Decorator pattern
->>>>>>> 71e5a5c43c25328120849bd278f8f65744980962
+
 The Decorator Pattern attaches additional responsibilities to an object dynamically.  
 
 **Coffee problem** - **Avoid subclass explosion**
@@ -360,15 +357,61 @@ Hence we just need to create classes for all the different variations and not fo
 
 ##### 2. Facade (the front of a building) pattern
 The Facade Pattern provides a unified interface to a set of interfaces in a subsytem. Facade defines a higherlevel interface that makes the subsystem easier to use.    
-![alt text](PNG/facade.PNG "Title")  
-Here and everywhere else client refers to some other piece of code
-**TV problem**  
-![alt text](PNG/facade-problem.PNG "Title")  
-**solution**  
-![alt text](PNG/facade-solution.PNG "Title")  
-**Implementation**  
-![alt text](PNG/facade-impl.PNG "Title")  
-here, watch/end movie implementation is same as the one shown in facade-problem 
+![alt text](PNG/Facade1.PNG "Title")  
+
+```typescript
+// Subsystem: Authentication
+class AuthenticationSystem {
+    authenticate(username: string, password: string): boolean {
+        // Simulate authentication logic
+        console.log(`Authenticating user ${username}`);
+        return true;
+    }
+}
+
+// Subsystem: Payment Processing
+class PaymentProcessor {
+    processPayment(amount: number): boolean {
+        // Simulate payment processing logic
+        console.log(`Processing payment of $${amount}`);
+        return true;
+    }
+}
+// Subsystem: Movie Streaming
+class MovieStreamer {
+    playMovie(movieId: string): void {
+        // Simulate movie streaming logic
+        console.log(`Streaming movie with ID ${movieId}`);
+    }
+}
+// Facade
+class MovieStreamingFacade {
+    private authenticationSystem: AuthenticationSystem;
+    private paymentProcessor: PaymentProcessor;
+    private movieStreamer: MovieStreamer;
+
+    constructor() {
+        this.authenticationSystem = new AuthenticationSystem();
+        this.paymentProcessor = new PaymentProcessor();
+        this.movieStreamer = new MovieStreamer();
+    }
+
+    watchMovie(username: string, password: string, movieId: string, amount: number): void {
+        if (this.authenticationSystem.authenticate(username, password)) {
+            if (this.paymentProcessor.processPayment(amount)) {
+                this.movieStreamer.playMovie(movieId);
+            } else {
+                console.log("Payment failed. Unable to watch the movie.");
+            }
+        } else {
+            console.log("Authentication failed. Unable to watch the movie.");
+        }
+    }
+}
+// Client code
+const movieStreamingFacade = new MovieStreamingFacade();
+movieStreamingFacade.watchMovie("john_doe", "password123", "12345", 10);
+```
 
 ##### 3. Proxy Pattern
 The Proxy Pattern provides a surrogate or placeholder for another object to control access to it.  
