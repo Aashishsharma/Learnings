@@ -24,122 +24,192 @@ It gives developers a common vocabulary to communicate
 3. Behavioural DP
 
 ### 1. Creational Design Patterns
-Creational design patterns focus on handling object creation mechanisms where objects are created in a manner suitable for the situation we're working in. The basic approach to object creation might otherwise lead to added complexity in a project whilst these patterns aim to solve this problem by controlling the creation process.e, especially if you need to create many different types of many different objects  
-**Patterns falling in this category**  
-1. Constructor
-2. Factory
-3. Singleton 
 
-##### 1. Constructor pattern
-**Object Creation**  
-The three common ways to create new objects in JavaScript are as follows:  
+**Patterns falling in this category** 
+1. Factory
+2. Singleton 
 
-**Accessing obj. values (4 ways)**  
+##### 1. Factory Pattern
 
-**Constructors with prototypes**  
-```javascript
-function Car( model, year, miles ) {
-  this.model = model;
-  this.year = year;
-  this.miles = miles;
-}
-//a single instance of toString() will now be 
-//shared between all of the Car objects.
-Car.prototype.toString = function () {
-  return this.model + " has done " + this.miles + " miles";
-};
-// Usage:
-var civic = new Car( "Honda Civic", 2009, 20000 );
-var mondeo = new Car( "Ford Mondeo", 2010, 5000 );
-console.log( civic.toString() );
-console.log( mondeo.toString() );
-```
+**Problem -** - You have a logistic service, and you create RoadLogiscit class which return Truck object, now in future we need to add See logistics. With Factory patter, client code is decoupled, so we can add new classes with client code been broken
+**Components** -  
 
-##### 2. Factory Pattern
-The Factory Method Pattern defines an interface for creating an object, but lets subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.  
-**We can create obj. on the fly, so why this is needed?**  
-So that we can handle all the obj. creations at a centralized location  
-The factory pattern is a creational design pattern that uses factory methods to create objects — rather than by calling a constructor.  
-This is particularly useful if the object creation process is relatively complex, e.g. if it strongly depends on dynamic factors or application configuration  
+1. **Interface** - this will include all common props, methods which different types of objects are supposed to have 
+2. **Abstract class** - this will have factory method (abstract / concrete). Return type of this factory method must match the above interface (this ensures client code won't break, as client code can call any objects method, and we ensure all methods are present becuase of this return type)
+3. **Concrete classes impleneting the interface**
+4. **Differnet concrete classes extending abstract class** - they will implement or override the factory method in abstract class and will return new concrete class object created in step 3
 
-![alt text](PNG/without-factory.PNG "Title")  
-![alt text](PNG/factory.PNG "Title")  
-So if we want to create obj. which we don't know before hand, this can be used.  
-Real scenario, consider space game, you have so many asteriods that you need to destroy in the game.  
-All asteriods are randomly coming in the game, and as level increases, more complex asteroids.  
-We can creste Asteriod Factory which will handle all this
+![alt text](PNG/f1.PNG "Title")  
 
-```javascript
-function Developer(name) {
-  this.name = name
-  this.type = "Developer"
-}
-function Tester(name) {
-  this.name = name
-  this.type = "Tester"
-}
-//all obj creation logic resides in this function, centralized location
-// here 1 means dev and 2 means tester
-//in future we can add many other types (BA,PO) and this method can control
-//those obj creation
-function EmployeeFactory() {
-  this.create = (name, type) => {
-    switch(type) {
-      case 1:
-        return new Developer(name)
-      case 2:
-        return new Tester(name)
+```typescript
+/**
+ * The Creator class declares the factory method that is supposed to return an
+ * object of a Product class. The Creator's subclasses usually provide the
+ * implementation of this method.
+ */
+abstract class Creator {
+    /**
+     * Note that the Creator may also provide some default implementation of the
+     * factory method.
+     */
+    public abstract factoryMethod(): Product;
+
+    /**
+     * Also note that, despite its name, the Creator's primary responsibility is
+     * not creating products. Usually, it contains some core business logic that
+     * relies on Product objects, returned by the factory method. Subclasses can
+     * indirectly change that business logic by overriding the factory method
+     * and returning a different type of product from it.
+     */
+    public someOperation(): string {
+        // Call the factory method to create a Product object.
+        const product = this.factoryMethod();
+        // Now, use the product.
+        return `Creator: The same creator's code has just worked with ${product.operation()}`;
     }
-  }
 }
-function say() {
-  console.log("Hi, I am " + this.name + " and I am a " + this.type)
-}
-const employeeFactory = new EmployeeFactory()
-const employees = []
-employees.push(employeeFactory.create("Patrick", 1))
-employees.push(employeeFactory.create("John", 2))
-employees.push(employeeFactory.create("Jamie", 1))
-employees.push(employeeFactory.create("Taylor", 1))
-employees.push(employeeFactory.create("Tim", 2))
-employees.forEach( emp => {
-  say.call(emp)
-})
-```
-**When to use?**  
-1. When our object or component setup involves a high level of complexity
-2. When we need to easily generate different instances of objects depending on the environment we are in
-3. When we're working with many small objects or components that share the same properties
 
-##### 3. Singleton Pattern
+/**
+ * Concrete Creators override the factory method in order to change the
+ * resulting product's type.
+ */
+class ConcreteCreator1 extends Creator {
+    /**
+     * Note that the signature of the method still uses the abstract product
+     * type, even though the concrete product is actually returned from the
+     * method. This way the Creator can stay independent of concrete product
+     * classes.
+     */
+    public factoryMethod(): Product {
+        return new ConcreteProduct1();
+    }
+}
+
+class ConcreteCreator2 extends Creator {
+    public factoryMethod(): Product {
+        return new ConcreteProduct2();
+    }
+}
+
+/**
+ * The Product interface declares the operations that all concrete products must
+ * implement.
+ */
+interface Product {
+    operation(): string;
+}
+/**
+ * Concrete Products provide various implementations of the Product interface.
+ */
+class ConcreteProduct1 implements Product {
+    public operation(): string {
+        return '{Result of the ConcreteProduct1}';
+    }
+}
+
+class ConcreteProduct2 implements Product {
+    public operation(): string {
+        return '{Result of the ConcreteProduct2}';
+    }
+}
+
+/**
+ * The client code works with an instance of a concrete creator, albeit through
+ * its base interface. As long as the client keeps working with the creator via
+ * the base interface, you can pass it any creator's subclass.
+ */
+function clientCode(creator: Creator) {
+    // ...
+    console.log('Client: I\'m not aware of the creator\'s class, but it still works.');
+    console.log(creator.someOperation());
+    // ...
+}
+
+/**
+ * The Application picks a creator's type depending on the configuration or
+ * environment.
+ */
+console.log('App: Launched with the ConcreteCreator1.');
+clientCode(new ConcreteCreator1());
+console.log('');
+
+console.log('App: Launched with the ConcreteCreator2.');
+clientCode(new ConcreteCreator2());
+
+```
+
+**Output ** - 
+App: Launched with the ConcreteCreator1.
+Client: I'm not aware of the creator's class, but it still works.
+Creator: The same creator's code has just worked with {Result of the ConcreteProduct1}
+
+App: Launched with the ConcreteCreator2.
+Client: I'm not aware of the creator's class, but it still works.
+Creator: The same creator's code has just worked with {Result of the ConcreteProduct2}
+
+##### 2. Singleton Pattern
+
 The Singleton Pattern ensures a class has only one instance, and provides a global point of access to it.  
 E.g. a country would have only 1 PM , so only 1 object needs to be created for PM class  
-Many people argue this pattern shouldn't be used, because we need to create that instance of the class as global, so any code accessing it only refers to the same object always. And we don't want globals  
-In Java -  
-**Using private constructor and static method**  
-![alt text](PNG/singleton.PNG "Title")  
-In JS -  
-To implement use IIFE and in that IIFE call the constructor of the class whose instance you want to limit  
-```javascript
-//usecase - many processes but just one process manager
-const Singleton = (function() {
-  let pManager
-  function ProcessManager() { this.state = 'starting'}
-  function createProcessManager() {
-    pManager = new ProcessManager()
-    return pManager
-  }
-  return {
-      getProcessManager: () => {
-        if(!pManager)
-          pManager = createProcessManager()
-        return pManager
-      }
-  }
-})()
-const singleton = Singleton.getProcessManager()
-const singleton2 = Singleton.getProcessManager()
-console.log(singleton === singleton2) // true
+
+**Steps** -  
+1. Make constructor private
+2. Create a static creation method that acts as a constructor
+
+![alt text](PNG/S1.PNG "Title") 
+
+```typescript
+/**
+ * The Singleton class defines the `getInstance` method that lets clients access
+ * the unique singleton instance.
+ */
+class Singleton {
+    private static instance: Singleton;
+
+    /**
+     * The Singleton's constructor should always be private to prevent direct
+     * construction calls with the `new` operator.
+     */
+    private constructor() { }
+
+    /**
+     * The static method that controls the access to the singleton instance.
+     *
+     * This implementation let you subclass the Singleton class while keeping
+     * just one instance of each subclass around.
+     */
+    public static getInstance(): Singleton {
+        if (!Singleton.instance) {
+            Singleton.instance = new Singleton();
+        }
+
+        return Singleton.instance;
+    }
+
+    /**
+     * Finally, any singleton should define some business logic, which can be
+     * executed on its instance.
+     */
+    public someBusinessLogic() {
+        // ...
+    }
+}
+
+/**
+ * The client code.
+ */
+function clientCode() {
+    const s1 = Singleton.getInstance();
+    const s2 = Singleton.getInstance();
+
+    if (s1 === s2) {
+        console.log('Singleton works, both variables contain the same instance.');
+    } else {
+        console.log('Singleton failed, variables contain different instances.');
+    }
+}
+
+clientCode();
 ```
 
 ### 2. Structural Design Patterns
