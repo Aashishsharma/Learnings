@@ -222,7 +222,11 @@ Patterns that fall under this category include: Decorator, Facade, Flyweight, Ad
 3. Proxy
 4. Adapter
 
+<<<<<<< HEAD
 ##### 1. Decorator pattern (decorator class - extends the interface and has the interface (as a property))
+=======
+##### 1. Decorator pattern
+>>>>>>> 71e5a5c43c25328120849bd278f8f65744980962
 The Decorator Pattern attaches additional responsibilities to an object dynamically.  
 
 **Coffee problem** - **Avoid subclass explosion**
