@@ -1,0 +1,139 @@
+body {
+    background-color: lightcyan; 
+}
+
+body,html {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 15vw auto;
+    grid-template-rows: 10vh 80vh 10vh;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    border: 2px solid blue;
+    grid-column: 1 / 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+
+.usericon {
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
+    background-color: chartreuse;
+    align-items: center;
+    padding-right: 20px;
+}
+
+
+
+div.navitem span {
+    color: brown;
+}
+
+
+.navitem:hover {
+    background-color: rgb(31, 59, 2);
+}
+
+div.sidebar-collapse {
+    display: none ;
+}
+
+.usericon:hover {
+    background-color: rgb(31, 59, 2);
+}
+
+button#close {
+    position: absolute;
+    top:10vh;
+    left: 4px;
+}
+
+.sidebar {
+    border: 2px solid green;
+    grid-column: 2 / 1;
+    display: flex;
+    flex-direction: column;
+    background-color: coral;
+    justify-content: flex-start;
+    gap: 20px;
+    padding-top: 40px;
+    align-items: stretch;
+    text-align: center;
+}
+
+.sidebar-item {
+}
+.sidebar-item:hover {
+    background-color: bisque;
+}
+
+.footer {
+    border: 2px solid brown;
+    grid-column: 1 / 3;
+}
+
+.navbar {
+    border: 2px solid blue;
+    grid-column: 1 / 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.navitem {
+    flex: 1 1 auto;
+    background-color: chartreuse;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.navlinks {
+    display: flex;
+    justify-content: stretch;
+    
+    align-items: stretch;
+    flex-grow: 1;
+}
+
+@media screen and (min-width: 400px) and (max-width: 600px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
+    }
+    .navbar {
+        border: 2px solid blue;
+        grid-column: 1 / 3;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: stretch;
+    }
+    .usericon {
+        justify-content: center;
+    }
+    
+.navlinks {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    
+    align-items: stretch;
+    flex-grow: 1;
+}
+    
+}
+
+
