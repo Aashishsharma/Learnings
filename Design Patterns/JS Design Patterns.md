@@ -208,7 +208,7 @@ Patterns that fall under this category include: Decorator, Facade, Flyweight, Ad
 **Patterns falling in this category**  
 1. Decorator
 2. Facade
-3. Proxy
+3. Proxy (need to revisit)
 4. Adapter
 
 ##### 1. Decorator pattern (decorator class - extends the interface and has the interface (as a property)) (solves class explosion problem)
@@ -402,7 +402,7 @@ const movieStreamingFacade = new MovieStreamingFacade();
 movieStreamingFacade.watchMovie("john_doe", "password123", "12345", 10);
 ```
 
-##### 3. Proxy Pattern
+##### 3. Proxy Pattern (need to revisit)
 The Proxy Pattern provides a surrogate or placeholder for another object to control access to it.  
 What is a proxy object?  
 A proxy object is an object that acts as an interface (or placeholder) for something else. The proxy could be an interface to anything: an API, a network connection, a large object in memory, or some other resource that is expensive or impossible to duplicate.  
@@ -635,7 +635,7 @@ client(flyDuck)
 client(noflyDuck)
 ```
 
-##### 2. Iterator Design Pattern  
+##### 2. Iterator Design Pattern  (need to revisit)
 The Iterator Pattern provides a way to access the elements of an aggregate object sequentially without exposing its underlying representation.  
 E.g. Java collections have iterator.  
 In java the Iterator can iterate through any collection (LinkedList, Tree, Set), and it does not matter to the iterator which DS it is iterating. This is a iterator pattern  
@@ -715,6 +715,11 @@ let pub = new ConcretePublisher();
 pub.add(sub1); pub.add(sub2)
 pub.notify()
 ```
+
+**OUTPUT -**  
+Subscriber 1 notified new state  State modified  
+Subscriber 2 notified new state  State modified
+
 **Observer vs Pub/Sub pattern**  
 The Observer pattern requires that the observer (or object) wishing to receive topic notifications must subscribe this interest to the object firing the event (the subject).  
 The Publish/Subscribe pattern however uses a topic/event channel which sits between the objects wishing to receive notifications (subscribers) and the object firing the event (the publisher). This event system allows code to define application specific events which can pass custom arguments containing values needed by the subscriber. The idea here is to avoid dependencies between the subscriber and publisher.  

@@ -1,18 +1,3 @@
-## Index
-
-1. **Code splitting & lazy loading** - CS via dynamic import (import {add} from './math'), LL (loaded at last {suspens} from React, React.lazy(() => import('./comp'))), <Suspense fallback={react elem}><Comp></Sus>
-2. ABC
-3. **Error boundaries** - getDerivedStateFromError()+componentDidCatch(), donot catch errors in(envt handlers, server side rendering)
-4. **Refs and Doms** - another way to alter child component apart from props, (myRef = React.createRef(), accessing {this.myref}) (managing focus/uncontrolled elements)
-5. **Fragment** - <></>, return multiple elems from single component, less dom nodes created
-6. **HOC** - reuse logic, takes and returns a component, not part of the React API,but pattern that emerges from compositional nature. (for cross cutting concerns, e.g. logging/security, commentpost/blogpost, loading UI for all components - (ListWithLoading=WithLoading(List) -takes list of repos & renders it),now withLoading returns new List which takes new param(isLoading) hence-<'ListWithLoading' isLoading={this.state.loading} repos={this.state.repos}/>) HOC syntax - (function HOC(Comp) {return fun HOCcomp({new param(isLoading), ...props}, if isLoading return <'Comp'> else return <'loading'>)
-7. **Performance optimization** - keys, profilier-api, shouldcompupdate/pure-coponent(shallow state comparison), React.memo
-8. **Portals** - ReactDOM.createPortal(child, container), render child outside of parent (tooltips)
-9. **Render Props** - reuse code - props are functions which retrun react elem/component, <Comp render={data=>(<>Hello {data.nm}<>)}/>, in child inside render - {props.render(state)}
-10. **Static type checking and Strict mode** - typescript or flow, use TS template while npx create, <React.StrictMode></>
-11. **Proptypes** - basic prop types checking - (import PropTypes from 'prop-types', comp.propTypes = {name: PropTypes.string})
-12. **React Router** - link(to), route(path/component), switch(route), browser-route for historys
-
 ## CODE SPLITTING
 
 Loading all this code upfront can lead to slower initial page loads. Code splitting allows developers to split the application into smaller pieces and load them on-demand.  

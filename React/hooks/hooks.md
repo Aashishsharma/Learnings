@@ -1,14 +1,4 @@
-﻿## Index
-
-1. **Hooks** why- (hard to use stateful logic in classes, classes don't menify very well and make hot reloding unreliable, unrelated logic in lifecycle methods)
-2. **State hook** - [count, setCount] = useState(0), setCount((prev.state)-> {})
-3. **Effect hook** - useEffect(()=>{},[]), ([]-didMount, [somevar]-didUpdate, return fun()-willUnMount()), multiple Effects to Separate Concerns
-4. **Rules of hooks** - 1. Only Call Hooks at the Top Level, not even in if/loop(react updates depend on ordering), Only Call Hooks from React Functions
-5. **Custom hooks** - for reusing STATEFUL logic (code that uses state is shared), in case of normal functions, only logic can be reused, but not stateful logic, change in state varaible inside custom hooks, re-renders components using that hook. syntax (let useCnt = (initcnt=0,incdecby=1) => {statehook init, return statehook vars}), starts with use and uses atleast 1/more inbuilt/custom hook, usage - let [a,b,c] = useCnt(return of useCnt)
-6. **State vs props** -  both trigger render update, state changed in comp, props changed by parent, props preferred
-7. **Commonly used hooks**- **1. Usecontext** -same as context, only usage part is diff (theme = useContext('light')) **2. useReducer** - alternative to useState, syntax fun red(state, action) => {switch/case(action.type) return newState}, preferred over useState when you have complex state logic that involves multiple sub-values (instead of using useState 10 times, add all usestae vars in a single Obj), usage - let [state, dispatch] = useReducer(red, intiVal), onClick={()=> dispatch({type: actionType})}, useCnt e.g. **3. useMemo** - const memval = useMemo(() => slowFun(a, b), [a, b]), sometimes react may re-render even if a,b are same **4.useCallback**- let cb = useCallback(() => {doSomething(a, b);},[a, b],), useMemo remembers returned val, useCallback remembes actual func, why remember func - to avoid purecomp based child to re-render when parent re-renders (see code) 5. **useRef** - let inputEl = useRef(initVal(refers to this dom elem)), <'inp' ref={inputEl}></'inp'>, access - inputEl.current.focus(), ref vs useRef - ref can only be used for DOM elements
-
-## # TODO - using useEffect the wrong way, mistakes while using hooks
+﻿## # TODO - using useEffect the wrong way, mistakes while using hooks
 
 ## HOOKS
 
