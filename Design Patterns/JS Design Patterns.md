@@ -1,14 +1,3 @@
-## Index
-1. **Design patterns** - solution/template that can be applied to commonly occurring problems in software design, common vocabulary to communicate. 3 tyes - 1. Creational(constructor, factory, singleton), 2. Structural(Decorator, Facade, Proxy, Adapter) 3. Behavioral(Strategy, observer, iterator)
-2. **Factory** - defines an interface for creating an object, but lets subclasses decide which class to instantiate. use - when obj creation is complex/depends on dynamic factor (e.g. asteriod game), func EmpFact() {this.create = (nm, type) => {switch(type) { case 1: return new Dev(nm) case 2: return new Tester(nm)}}}
-3. **Singleton** - ensures a class has only one instance, and provides a global point of access to it. e.g. 1 country 1 PM, how-to - Using private constructor and static method, using static method if 1st then call private constructor, else return ref to same obj.
-4. **Decorator** - attaches additional responsibilities to an object dynamically, avoids subclass explosion, coffee problem, is a comp n has an abstract comp (class caramel extends AddonDecorator {(abstract cls)Beverage b; constructor(Beverage b){this.b=b}; int cost(){return this.b.cost()+2}), Bev b = new Caramel(new Expresso())
-5. **Facade** - the front of a building, provides a unified interface to a set of interfaces in a subsytem, watching a movie (HomeTheaterFacade = new HTF(amp, dvd, screen, light); HTF.watchMovie(), .endMovie())
-6. **Proxy** - provides a placeholder for another object to control access to it, is a comp n has a concrete comp, usecase - caching - (func xAPIProxy(this.xapi=new xapi(), this.cache={}, this.getVal=func(abc){if not in cache return this.cache[abc] = this.api.getVal(abc) else return this.cache[abc]})), proxAPI = new xAPIProxy(), proxAPI.getVal(1)
-7. **Adapter** - converts the interface of a class into another interface the clients expect, 
-8. **Strategy** - duck problem, composition over inheritance (horizontal code share), The Strategy Pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable. Strategy lets the algorithm vary independently from clients that use it. Main abstract class having lot of subclasses, flyable n quackable, moved to separate interface, all types of fly/quack now subclass of flyable n quackable n instance of fly/quack in the main abstract class, now in all subclass constructor do (quackbehavior = new SubtypeofQuackablenFlyable)
-9. **Observer** - observers can subscribe to event/subject & get notified when signal occurs. use in chat apps. (IObservabe{add/remove(IObserver io), notify()}, IObserver{update()}, WetStation impls IObserveable{add/rem{this.obs.add/rem}, notify(foreach observer - ob.notify())}, phoneDisp impls IObserver{constructor{this.WetStation=wetstation}, update(){this.wetStation.getTemp()}}
-
 ## JS Design Patterns
 A pattern is a reusable solution that can be applied to commonly occurring problems in software design  
 It is a blueprint/template that you can use and modify to solve your particular problem  
@@ -222,7 +211,7 @@ Patterns that fall under this category include: Decorator, Facade, Flyweight, Ad
 3. Proxy
 4. Adapter
 
-##### 1. Decorator pattern (decorator class - extends the interface and has the interface (as a property))
+##### 1. Decorator pattern (decorator class - extends the interface and has the interface (as a property)) (solves class explosion problem)
 
 The Decorator Pattern attaches additional responsibilities to an object dynamically.  
 
@@ -567,8 +556,8 @@ Behavioral patterns focus on improving or streamlining the communication between
 3. Iterator
 
 ##### 1. Strategy Design Pattern (when subclasses have common funcs / alogs, but parent does not)
-**Note -** this pattern does not solve class explosion problem, this pattern solves duplication of common functions used across subclasses
-**The duck problem**
+**Note -** this pattern does not solve class explosion problem, this pattern solves duplication of common functions used across subclasses  
+**The duck problem**  
 ![alt text](PNG/strategy.PNG "Title")  
 In inheritance code sharing is done only top to down. But horizontal code sharing (2 subclasses having same method, but different than the parent), Inheritance fails.  
 In the above design, we have used interface but then if there are 100 types if ducks, then we will have to create 100 types of functions (fly and quack), even if 50 classes have exact same method.  
@@ -582,6 +571,7 @@ HAS-A can be better than IS-A
 **Implementation of above design**  
 ![alt text](PNG/strategy4.PNG "Title")  
 ![alt text](PNG/strategy5.PNG "Title")  
+
 
 **Definition**  
 The Strategy Pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable. Strategy lets the algorithm vary independently from clients that use it.  
@@ -663,42 +653,67 @@ For code, see iterators in JS
 The Observer pattern is a design pattern that offers a subscription model in which objects (known as 'observers') can subscribe to an event (known as a 'subject') and get notified when the event occurs (or when the subject sends a signal). This pattern is the cornerstone of event driven programming.  
 Used in event handling systems  
 Can be used in chat apps  
+
+**Components** - 
+
+1. **Subscriber interface-** - this will only have update method
+2. **Concrete subscribers-** - perform action based on notification sent by published via update method
+3. **Publisher -** this will have list of all subscribers and add / remove / notify subscribers method **(as well as the state of the publisher)**
+4. **Notify logic** - publisher will have notify method, where we iterate through list of subscribers (list of subscribers is a property in this class, see step 3), and call the update method for each subscriber. Here important thing is we pass the context (this) as arg in update method, so that each subscriber knows what state change has occured inside publisher
+
 **Observer pattern**  
 ![alt text](PNG/observer.PNG "Title")  
 It's implementation
-![alt text](PNG/observer2.PNG "Title")  
-```javascript
-function Subject() {
-  this.observers = [] // array of observer functions
+
+```typescript
+interface Subscriber {
+    update(obj: Publisher): void
 }
-Subject.prototype = {
-  subscribe: function(fn) {
-    this.observers.push(fn)
-  },
-  unsubscribe: function(fnToRemove) {
-    this.observers = this.observers.filter( fn => {
-      if(fn != fnToRemove)
-        return fn
-    })
-  },
-  fire: function() {
-    this.observers.forEach( fn => {
-      fn.call()
-    })
-  }
+class ConcreteSub1 implements Subscriber {
+    update(object: Publisher): void {
+        console.log('Subscriber 1 notified new state ', object.state)
+    }
 }
-const subject = new Subject()
-function Observer1() {
-  console.log("Observer 1 Firing!")
+class ConcreteSub2 implements Subscriber {
+    update(object: Publisher): void {
+        console.log('Subscriber 2 notified new state ', object.state)
+    }
 }
-function Observer2() {
-  console.log("Observer 2 Firing!")
+abstract class Publisher {
+    listOfSubscribers: Subscriber[];
+    state = 'State modified';
+    abstract add(subscriber: Subscriber): void;
+    abstract remove(subscriber: Subscriber): void;
+    abstract notify(): void;
 }
-subject.subscribe(Observer1)
-subject.subscribe(Observer2)
-subject.fire() 
-subject.unsubscribe(Observer1)
-subject.fire()
+class ConcretePublisher extends Publisher {
+    constructor() {
+        super();
+        this.listOfSubscribers = []
+    }
+    add(subscriber: Subscriber): void {
+        this.listOfSubscribers.push(subscriber)
+    }
+    remove(subscriber: Subscriber): void {
+        const subscriberIndex = this.listOfSubscribers.indexOf(subscriber);
+        if (subscriberIndex === -1) {
+            return console.log('Subject: Nonexistent observer.');
+        }
+        this.listOfSubscribers.splice(subscriberIndex, 1);
+    }
+    // notify method is important, need to pass this as arg in update method
+    notify(): void {
+        // update state if necessary
+        this.listOfSubscribers.forEach((subscriber) => {
+            subscriber.update(this)
+        })
+    }
+}
+let sub1 = new ConcreteSub1()
+let sub2 = new ConcreteSub2()
+let pub = new ConcretePublisher();
+pub.add(sub1); pub.add(sub2)
+pub.notify()
 ```
 **Observer vs Pub/Sub pattern**  
 The Observer pattern requires that the observer (or object) wishing to receive topic notifications must subscribe this interest to the object firing the event (the subject).  
