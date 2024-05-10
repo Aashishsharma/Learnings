@@ -69,3 +69,7 @@ functions:
           path: /
           method: get
 ```
+
+### CircleCI
+
+THen in CircleCI - in config.yml file run serverless deploy command, which will read serverless.yml file and to the deployment
