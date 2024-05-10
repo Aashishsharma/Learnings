@@ -4,40 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CSS Selector Test</title>
-<style>
-    /* Write your CSS selectors here */
-    input[name="email"] {
-        background-color: red;
-    }
+
 </style>
 </head>
 <body>
+    <div id="wrapper">
+        <input type="text" value="OFF" readonly/>
+        <button type="button">Click Me</button>
+        </div>
 
-<h1>This is a heading</h1> <!-- Target the <h1> element -->
+        <script>
+            
+const buttonElem = document.getElementById("wrapper").getElementsByTagName("button")[0]
+const inputElem = document.getElementById("wrapper").getElementsByTagName("input")[0]
 
-<p class="intro">This is a paragraph with the class "intro".</p> <!-- Target the element with the class "intro" -->
-
-<div id="content">
-    <p>This is a paragraph inside a div with the id "content".</p> <!-- Target the <p> element inside the <div> with the id "content" -->
-</div>
-
-<ul id="list">
-    <li>Item 1</li>
-    <li>Item 2</li>
-    <li>Item 3</li>
-</ul>
-
-<ul class="items">
-    <li>First item</li>
-    <li>Second item</li>
-    <li>Last item</li> <!-- Target the last <li> element inside the <ul> with the class "items" -->
-</ul>
-
-<a href="https://example.com">Visit Example</a> <!-- Target the <a> element with the href attribute value of "https://example.com" -->
-
-<input type="text" placeholder="Enter your name"> <!-- Target all <input> elements -->
-<input type="submit" value="Submit"> <!-- Target the <input> element with the type attribute value of "submit" -->
-<input type="email" name="email" placeholder="Enter your email"> <!-- Target the <input> element with the name attribute value of "email" -->
-
+buttonElem.addEventListener('click', () => {
+  const oldText = inputElem.value;
+    return inputElem.value = oldText === "ON" ? "OFF" : "ON";
+});
+        </script>
 </body>
 </html>
