@@ -344,6 +344,13 @@ Total cost: 220
 
 Hence we just need to create classes for all the different variations and not for all possible permutation / combination of those variations
 
+###### **Usecase** - 
+Ecommerce Discount classess - 
+
+1. You have n type of products
+2. You have m types of discounts (discount by manufacture, platfrom discount, season discount, credit card discount)
+3. instead of creating n*m products, create Discount decorator class which implements + has a product class, each separate discount type will have its concrete impl of Decorator class
+
 ##### 2. Facade (the front of a building) pattern
 The Facade Pattern provides a unified interface to a set of interfaces in a subsytem. Facade defines a higherlevel interface that makes the subsystem easier to use.    
 ![alt text](PNG/Facade1.PNG "Title")  
@@ -402,63 +409,7 @@ const movieStreamingFacade = new MovieStreamingFacade();
 movieStreamingFacade.watchMovie("john_doe", "password123", "12345", 10);
 ```
 
-##### 3. Proxy Pattern (need to revisit)
-The Proxy Pattern provides a surrogate or placeholder for another object to control access to it.  
-What is a proxy object?  
-A proxy object is an object that acts as an interface (or placeholder) for something else. The proxy could be an interface to anything: an API, a network connection, a large object in memory, or some other resource that is expensive or impossible to duplicate.  
-A proxy is a 'stand-in' object that is used to access the 'real' object behind the scenes. In the proxy, extra functionality can be provided, for example caching when operations on the real object are resource intensive.  
-![alt text](PNG/proxy.PNG "Title")  
-```javascript
-//proxy allows to add additional functionalities, like caching
-// External API Service
-function CryptocurrencyAPI() {
-  this.getValue = function(coin) {
-    console.log("Calling External API...")
-    switch(coin) {
-      case "Bitcoin":
-        return "$8,500"
-      case "Litecoin":
-        return "$50"
-      case "Ethereum":
-        return "$175"
-       default:
-        return "NA"
-    }
-  }
-}
-//we can use this but for 100 calls to this function
-//we will have to make 100 api calls
-const api = new CryptocurrencyAPI()
-console.log("----------Without Proxy----------")
-console.log(api.getValue("Bitcoin"))
-console.log(api.getValue("Litecoin"))
-console.log(api.getValue("Ethereum"))
-console.log(api.getValue("Bitcoin"))
-console.log(api.getValue("Litecoin"))
-console.log(api.getValue("Ethereum"))
-function CryptocurrencyProxy() {
-  this.api = new CryptocurrencyAPI()
-  this.cache = {}
-  this.getValue = function(coin) {
-    if(this.cache[coin] == null) {
-      this.cache[coin] = this.api.getValue(coin)
-    }
-    return this.cache[coin]
-  }
-}
-//instead we use proxy, so api response is cached
-//and api call is not made everytime
-console.log("----------With Proxy----------")
-const proxy = new CryptocurrencyProxy()
-console.log(proxy.getValue("Bitcoin"))
-console.log(proxy.getValue("Litecoin"))
-console.log(proxy.getValue("Ethereum"))
-console.log(proxy.getValue("Bitcoin"))
-console.log(proxy.getValue("Litecoin"))
-console.log(proxy.getValue("Ethereum"))
-```
-
-##### 4. Adapter pattern (implements client interface and has Adaptee class (as a property))
+##### 3. Adapter pattern (implements client interface and has Adaptee class (as a property))
 The Adapter Pattern converts the interface of a class into another interface the clients expect. Adapter lets classes work together that couldn’t otherwise because of incompatible interfaces.  
 This is used when clients want to call a sepcific method (in this case request) with a particular signature, but the actual method has a different signature  
 ![alt text](PNG/adapter-uml.PNG "Title")  
@@ -635,21 +586,12 @@ client(flyDuck)
 client(noflyDuck)
 ```
 
-##### 2. Iterator Design Pattern  (need to revisit)
-The Iterator Pattern provides a way to access the elements of an aggregate object sequentially without exposing its underlying representation.  
-E.g. Java collections have iterator.  
-In java the Iterator can iterate through any collection (LinkedList, Tree, Set), and it does not matter to the iterator which DS it is iterating. This is a iterator pattern  
-So in your app if you want to iterate over collection of objs, and each collection has different types of objects and you want to use a single iteration  
+##### **Usecase** - 
+1. Vehicle company with different vehicles (car, truck, buses)
+2. All cars have mode type (petrol, diesel, electric, hybrid, cng)
+3. Noew we can reuse logic for petrol, diesel types in call classess implemeting Vehicle abstract class
 
-In addition, you may need to access the items in the collection in a certain order, such as, front to back, back to front, depth first (as in tree searches), skip evenly numbered objects, etc.  
-The Iterator design pattern solves this problem by separating the collection of objects from the traversal of these objects by implementing a specialized 'iterator'!  
-
-![alt text](PNG/iterator-uml.PNG "Title")  
-Here Aggregate means anything that is iterable.  
-And for eash DS, we have a different concreteAggregate and concereteIterator.  
-For code, see iterators in JS  
-
-##### 3. Observer Design Pattern
+##### 2. Observer Design Pattern
 The Observer pattern is a design pattern that offers a subscription model in which objects (known as 'observers') can subscribe to an event (known as a 'subject') and get notified when the event occurs (or when the subject sends a signal). This pattern is the cornerstone of event driven programming.  
 Used in event handling systems  
 Can be used in chat apps  
