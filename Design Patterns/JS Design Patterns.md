@@ -589,7 +589,7 @@ client(noflyDuck)
 ##### **Usecase** - 
 1. Vehicle company with different vehicles (car, truck, buses)
 2. All cars have mode type (petrol, diesel, electric, hybrid, cng)
-3. Noew we can reuse logic for petrol, diesel types in call classess implemeting Vehicle abstract class
+3. Now we can reuse logic for petrol, diesel types in call classess implemeting Vehicle abstract class
 
 ##### 2. Observer Design Pattern
 The Observer pattern is a design pattern that offers a subscription model in which objects (known as 'observers') can subscribe to an event (known as a 'subject') and get notified when the event occurs (or when the subject sends a signal). This pattern is the cornerstone of event driven programming.  
