@@ -58,13 +58,13 @@ readline.on(`line`, name => {
 
 ## Node.js event loop
 
-#### Libuv
+### Libuv
 
 Before understanding event loop, we need to understand what is libuv.  
 Libuv is c code which is used to handle async non-blocking code.
 
-##### **Libuv has 2 components** - 
-1. **Thread pool**
+#### **Libuv has 2 components** - 
+#### 1. **Thread pool**
 no of threads available in the host machines (based on CPU cores) are available in this thread pool.
 
 **If you run async version of crypto, the hash time for last request would be hash time for its own + hash time of other 3 requests**   
@@ -85,16 +85,32 @@ As soon as max call is 5 or > 5, the hash time increases, because all 4 thread i
 ![alt text](PNG/Capture3.PNG "Title")  
 **The Network I/O async tasks are not run on thread pool, because it is not a CPU bound operation, network I/O task is delegated to kernel by nodejs**
 
+#### 2. **Event loop**
 
-2. **Event loop**
+![alt text](PNG/E1.PNG "Title")  
 
-There is a misconception in Node.js that there is only a single global queue where the callbacks are queued for execution which is not true.  
-In JS there is only one queue (i.e, task/callback queue)  
-Node.js event loop iterates through various phases (and each phase has a queue/heap)  
+##### 1. Microtask queue (process.nextTick(), all usercreated promises)
+##### 2. Timers queue (setTimeout, setInterval)
+##### 3. I/O queue (fs, http)
+##### 4. Check queue (setImmediate)
+##### 5. Close queue (cbs associated with close events of asyns tasks, socket.on('close'))  
 
-#### Phases (Event loop calls them in the following sequence)
+![alt text](PNG/E2.PNG "Title")  
+![alt text](PNG/E3.PNG "Title")   
 
-##### 1. Timers
+![alt text](PNG/E4.PNG "Title")   
+![alt text](PNG/E5.PNG "Title")   
+**VVIP - Callbacks in microtask queue are executed in between the execution of callbacks in the timer queue**   
+**VVIP - Callbacks in microtask queue are executed in between the execution of callbacks in the check (setImmediate) queue** 
+
+
+##### Unguranteed order of execution  
+
+![alt text](PNG/E6.PNG "Title")   
+**When running setTimeout with 0ms and async IO method, the order of execution can never be guranteed, because while the setTimeout is finished, the event loop might or might not have gone to IO callback queue, because main thread is empty and event queue is started**  
+**In above example, we did not have any task running in main thread, if we add for loop for million times, then we know for sure, that cb of timeout is complete, and in this case, setimeout will always be ececuted before IO CB**
+![alt text](PNG/E3.PNG "Title")   
+
 
 The callbacks of timers in JavaScript(setTimeout, setInterval) are kept in the heap memory until they are expired. If there are any expired timers in the heap, the event loop takes the callbacks associated with them and starts executing them in the ascending order of their delay until the timers queue is empty.  
 
