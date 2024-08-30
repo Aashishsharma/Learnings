@@ -272,6 +272,11 @@ orderService.placeOrder('12345', 'customer@example.com');
 
 It is a collection of data that might not br available all at once and don't have to fit in memory.  
 
+![alt text](PNG/C2.PNG "Title")  
+**IMP potins**  
+1. Using above code we can copy 10s of GBs of file without node getting memory out of bound error
+2. Notice the output, this is because of highWaterMark = 2, it indicates that the buffer can store only 2 bytes of data in memory and then need to flush the output to writable stream, default buffer size in nodejs is 64Kb
+
 types of streams 
 
 | Stream Type     | Example Code                                | Description                                                      | Key Methods                             |
