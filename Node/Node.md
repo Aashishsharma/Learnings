@@ -159,21 +159,66 @@ It is an in-built module that implements **observer pattern** in Nodejs.
 3. useful in scenarios where you want to notify multiple components about a specific state change or action
 
 ```javascript
-// 5 steps
-const EventEmitter = require('events'); // 1. import
-const logger = new EventEmitter() // 2. init
-logger.on('event', (data) => console.log({data})); // 4. register listeners
-logger.emit('event', {data: 123}); // 3. emit events
+// 1. create event emitter class
+// Import the EventEmitter class from Node.js
+const EventEmitter  = require('events');
+// Extend EventEmitter to create a custom event emitter class
+export class OrderEventEmitter extends EventEmitter {
+    // Additional custom methods or properties can be added here if needed
+}
 
-//Note - you first need to register the listeners before emiting the event, otherwise the listeners won't be called
+// 2. email servcice
+import { OrderEventEmitter } from './OrderEventEmitter';
+import { OrderPlaced } from './events';
+export class EmailService {
+    constructor(private eventEmitter: OrderEventEmitter) {
+        // Register event handler
+        this.eventEmitter.on(OrderPlaced, this.sendConfirmationEmail.bind(this));
+    }
+    sendConfirmationEmail(orderId: string, customerEmail: string): void {
+        console.log(`Sending confirmation email to ${customerEmail} for order ${orderId}`);
+    }
+}
+// 3. inventory service
+import { OrderEventEmitter } from './OrderEventEmitter';
+import { OrderPlaced } from './events';
+export class InventoryService {
+    constructor(private eventEmitter: OrderEventEmitter) {
+        // Register event handler
+        this.eventEmitter.on(OrderPlaced, this.updateInventory.bind(this));
+    }
+    updateInventory(orderId: string): void {
+        console.log(`Updating inventory for order ${orderId}`);
+    }
+}
+// 4. order service to emit the event
+import { OrderEventEmitter } from './OrderEventEmitter';
+import { OrderPlaced } from './events';
+export class OrderService {
+    private eventEmitter: OrderEventEmitter;
+    constructor(eventEmitter: OrderEventEmitter) {
+        this.eventEmitter = eventEmitter;
+    }
+    placeOrder(orderId: string, customerEmail: string): void {
+        console.log(`Order ${orderId} placed`);
+        // Emit the OrderPlaced event with relevant data
+        this.eventEmitter.emit(OrderPlaced, orderId, customerEmail);
+    }
+}
 
-
-// handling event once - 
-myEmitter.once('onceEvent', () => {
-  console.log('This will only happen once!');
-});
-myEmitter.emit('onceEvent');
-myEmitter.emit('onceEvent'); // This won't trigger the event again
+// 5. app.js
+import { OrderEventEmitter } from './OrderEventEmitter';
+import { OrderService } from './OrderService';
+import { EmailService } from './EmailService';
+import { InventoryService } from './InventoryService';
+// Instantiate the custom event emitter
+const eventEmitter = new OrderEventEmitter();
+// Instantiate services with the event emitter
+new EmailService(eventEmitter);
+new InventoryService(eventEmitter);
+const orderService = new OrderService(eventEmitter);
+// Place an order and trigger events
+orderService.placeOrder('12345', 'customer@example.com');
 
 ```
 
