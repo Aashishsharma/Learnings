@@ -26,4 +26,60 @@ Better to have too many small interfaces then to having to few large interfaces,
 
 #### 5 **Dependency inversion** - 
 Dependency injection(constructor injection), inversion(high n low level module must depend on abstraction rather than on concretion(this happends in injection)), class MyDB{constructor(SQLConn:conn)} here it is injection, what inversion says is intead of SQLConn use most generic DBConn(abstract class/interface)
+```typescript
+// 1. Define an abstraction for payment gateways using an interface.
+// This ensures that the business logic is decoupled from specific payment gateway implementations.
+export interface IPaymentGateway {
+    processPayment(amount: number, currency: string): Promise<boolean>;
+    refundPayment(transactionId: string): Promise<boolean>;
+}
 
+// 2. Implement the interface for specific payment gateways (e.g., PayPal, Stripe).
+// Each implementation handles the specifics of interacting with the respective payment gateway's API.
+
+export class PayPalGateway implements IPaymentGateway {
+    async processPayment(amount: number, currency: string): Promise<boolean> {
+        // PayPal-specific API call to process payment
+        return true; // Assume success for this example
+    }
+
+    async refundPayment(transactionId: string): Promise<boolean> {
+        // PayPal-specific API call to refund payment
+        return true;
+    }
+}
+
+export class StripeGateway implements IPaymentGateway {
+    async processPayment(amount: number, currency: string): Promise<boolean> {
+        // Stripe-specific API call to process payment
+        return true;
+    }
+
+    async refundPayment(transactionId: string): Promise<boolean> {
+        return true;
+    }
+}
+
+// 3. Inject the dependency into the business logic class.
+// This allows the PaymentService to work with any payment gateway implementation that adheres to the IPaymentGateway interface.
+
+class PaymentService {
+    private paymentGateway: IPaymentGateway;
+
+    constructor(paymentGateway: IPaymentGateway) {
+        this.paymentGateway = paymentGateway;
+    }
+
+    async processOrderPayment(orderId: string, amount: number, currency: string): Promise<boolean> {
+        // Business logic for processing payment
+        return this.paymentGateway.processPayment(amount, currency);
+    }
+}
+
+// 4. Configure dependency injection at runtime.
+// This allows you to switch between different payment gateways without changing the business logic code.
+
+const isUsingPayPal = true; // This could be determined based on configuration
+const paymentGateway: IPaymentGateway = isUsingPayPal ? new PayPalGateway() : new StripeGateway();
+const paymentService = new PaymentService(paymentGateway);
+```
