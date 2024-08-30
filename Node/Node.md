@@ -54,18 +54,39 @@ readline.on(`line`, name => {
 
 ```
 
-## Nodejs import export
-
-| Type of Export             | Export Example                           | Import Example                                | Export Description                                   | When to Use this Kind of Export               |
-|----------------------------|------------------------------------------|-----------------------------------------------|------------------------------------------------------|-----------------------------------------------|
-| Named Export (Function)    | `export function myFunction() { ... }`   | `import { myFunction } from './module';`     | Exports a named function.                            | When exporting specific functions.             |
-| Named Export (Object)      | `export { variable1, variable2 };`      | `import { variable1, variable2 } from './module';` | Exports multiple variables, functions, or classes. | When exporting multiple entities.              |
-| Default Export             | `export default variableName;`          | `import variableName from './module';`       | Exports a default variable, function, or class.      | When a module has a primary entity to export. |
-| Default Export (Function)  | `export default function() { ... }`     | `import myFunction from './module';`         | Exports a default function.                          | When a module is primarily a function.         |
-
 ------------------------------------------------------------------------------
 
 ## Node.js event loop
+
+#### Libuv
+
+Before understanding event loop, we need to understand what is libuv.  
+Libuv is c code which is used to handle async non-blocking code.
+
+##### **Libuv has 2 components** - 
+1. **Thread pool**
+no of threads available in the host machines (based on CPU cores) are available in this thread pool.
+
+**If you run async version of crypto, the hash time for last request would be hash time for its own + hash time of other 3 requests**   
+![alt text](PNG/Capture.PNG "Title")    
+
+**Running them in async will give hast time same for all the hashes, because each async version of hash is run on a separate thread pool**  
+![alt text](PNG/Capture1.PNG "Title") 
+
+**IMP - default thradpool size is 4, see below example**  
+As soon as max call is 5 or > 5, the hash time increases, because all 4 thread in the pool are busy and the 5th async task goes into queue and executes when only one of the thread from the pool becomes free   
+
+![alt text](PNG/Capture2.PNG "Title")   
+
+**IMP - to increase thread pool size - process.env.UV_THREADPOOL_SIZE = 8**  
+**But you can increase the thread pool size maximum upto no. of cpu cores your machine has**  
+
+**Hence asyn operations are run on thread pool, but not all async operations are run on thread pool, see below** - 
+![alt text](PNG/Capture3.PNG "Title")  
+**The Network I/O async tasks are not run on thread pool, because it is not a CPU bound operation, network I/O task is delegated to kernel by nodejs**
+
+
+2. **Event loop**
 
 There is a misconception in Node.js that there is only a single global queue where the callbacks are queued for execution which is not true.  
 In JS there is only one queue (i.e, task/callback queue)  
