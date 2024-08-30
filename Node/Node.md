@@ -109,79 +109,68 @@ As soon as max call is 5 or > 5, the hash time increases, because all 4 thread i
 ![alt text](PNG/E6.PNG "Title")   
 **When running setTimeout with 0ms and async IO method, the order of execution can never be guranteed, because while the setTimeout is finished, the event loop might or might not have gone to IO callback queue, because main thread is empty and event queue is started**  
 **In above example, we did not have any task running in main thread, if we add for loop for million times, then we know for sure, that cb of timeout is complete, and in this case, setimeout will always be ececuted before IO CB**
-![alt text](PNG/E3.PNG "Title")   
 
 
-The callbacks of timers in JavaScript(setTimeout, setInterval) are kept in the heap memory until they are expired. If there are any expired timers in the heap, the event loop takes the callbacks associated with them and starts executing them in the ascending order of their delay until the timers queue is empty.  
+### Scaling Nodejs app (Scale async tasks + sync tasks)
+1. One way to scale is increase threads in the libuv pool, but this will scale only async tasks, because only async tasks can be executed in thread pool
+2. What if we need to scale the tasks running on the main thread?
+3. Use cluster module, **cluster module utilizes cpu cores and create multiple instances of nodeJS application based on CPU cores**
+4. **Threadpool size to scale async tasks, cluster module to scale sync tasks**
 
-##### 2. Pending callbacks
+![alt text](PNG/C1.PNG "Title")  -
 
-In this phase, the event loop executes system-related callbacks if any.  
-E.g. The port on which you want to run the process is being used by some other process, some systems may want the callback to wait for execution due to some other tasks that the operating system is processing. Such process are put to pendening callback queue.
+**In above code**  
+**Case 1 - call / api (retured in few ms) and then call /slow-page (returned after 5 seconds)**
+**Case 2 - call call /slow-page (returned after 5 seconds) and then call / api (retured in 5 seconds + few ms) because slow-page is still executing and / endpint is queued up**
 
-##### 3. Idle
+![alt text](PNG/C2.PNG "Title")  
+Note - master node does not handle api calls, only worked nodes handle  
 
-In this phase, the event loop does nothing
 
-##### 4. Poll
+Note - you can only fork the no. of processes as much as cpu cores are present in the operating system
 
-In this phase, the event loop watches out for new async I/O callbacks. Nearly all the callbacks except the setTimeout, setInterval, setImmediate and closing callbacks are executed.  
-The event loop does two things in this phase:-  
-1-> If there are callbacks in poll phase queue, those would be executed untill the queue is empty  
-2-> If no callbacks, event loop will wait for some time to go to the next phase
-How much time would event loop wait?  
-Depends  
-If there are any callbacks present in the setImmediate (next phase) queue to be executed, or there are any expired timers in the Timers queue (phase 1), event loop will not wait in this phase  
+#### using cluster module to load balance server
 
-##### 5. Check/setImmediate
-
-Generally, the callbacks of setImmediate are executed in this phase.
-
-##### 6. Closing callbacks
-
-In this phase, the event loop executes the callbacks associated with the closing events like **socket.on('close', fn) or process.exit()**.
-
-##### 7. Microtask
-
-The process.nextTick comes under microtasks which are prioritised above all other phases and thus the callback associated with it is executed just after the event loop finishes the current operation. Which means that, whatever callback we pass to process.nextTick, the event loop will complete its current operation and then execute callbacks from the microtasks queue until it is drained up. Once the queue is drained up, it returns back to the phase where it left its work from.
-
-##### **If you were the Node interpreter and want to execute code do the following**
-
-1. Scan the code and put each async/callback code in their respective phase's queue
-2. Act like event loop and follow each phase in sequence and execute the callbacks (only the callbacks of async code whose callback are in ready state (for e.g. setTimeout(abc,0) if the timer is expired then execute, if not expired don't execute)) present in each phases's queue, untill the queue is empty or the callback is not yet ready.
-3. You will get the output :). Cheers!!
-
-#### What is process.nextTick()?
-
-We say that a 'tick' has happened when the event loop iterates over all of its phases for one time (one iteration of the event loop).  
-
-When we pass a function to process.nextTick(), we instruct the engine to invoke this function at the end of the current **PHASE and NOT at the end of all phases**.  
+**standard code everytime**
+CLuster module behind the scenes uses child_process module's fork api
 
 ```javascript
-// syntax
-process.nextTick(() => {
-  //do something
-})
+const cluster = require('cluster');
+const http = require('http');
+const numCPUs = require('os').cpus().length;
+if (cluster.isMaster) {
+  // Fork workers
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+  // Listen for dying workers and fork a new one
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`Worker ${worker.process.pid} died. Forking a new one...`);
+    cluster.fork();
+  });
+} else {
+  // Workers can share any TCP connection
+  // In this case, it's an HTTP server
+  http.createServer((req, res) => {
+    res.writeHead(200);
+    res.end('Hello, World!');
+  }).listen(3000);
 
+  console.log(`Worker ${process.pid} started`);
+}
 ```
 
-When to use process.nextTick()?  
-This is important when developing APIs in order to give users the opportunity to assign event handlers after an object has been constructed but before any I/O has occurred  
-**Need to unserstand**
+**problem with cluster**
 
-#### What is process.setImmediate()?
+1. caching becomes difficult as each worker process has different memory
+2. managing user authentication sessions - // use sticky load balancers to solve this
+what it does if a uer is authenicated in a wroker process and that workers memory has session, then sticky load balancer will send the request to same worker is request comes from the same user
 
-Runs as soon as the Event loop completes one iteration (i.e, completes all the phases once)
-
-```javascript
-setImmediate(() => {
-  //run something
-})
-```
-
-##### setImmediate vs setTimeout(fn, 0)?
-
-setImmediate has a higher priority than setTimeout, meaning its callback will be executed before the one scheduled by setTimeout **in the same cycle**.
+### PM2
+1. Process manager for Node and other envs like python  
+2. Instead of using cluster module we can use pm2 to scale the nodejs app
+3. ```npm i -g pm2```
+4. ```pm2 start app.js -i 0``` - 0 indicates, we ask pm2 to pick up optimal worker processes
 
 ------------------------------------------------------------------------------
 
@@ -558,76 +547,3 @@ setInterval(() => {
 // process.send(msg)
 // process.on('message', function(msg) {})
 ```
-
-Note - you can only fork the no. of processes as much as cpu cores are present in the operating system
-
-## cluster module - buil-in module - enable load balancing where os has more than cpu cores
-
-#### using cluster module to load balance server
-
-**standard code everytime**
-CLuster module behind the scenes uses child_process module's fork api
-
-```javascript
-const cluster = require('cluster');
-const http = require('http');
-const numCPUs = require('os').cpus().length;
-if (cluster.isMaster) {
-  // Fork workers
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
-  // Listen for dying workers and fork a new one
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`Worker ${worker.process.pid} died. Forking a new one...`);
-    cluster.fork();
-  });
-} else {
-  // Workers can share any TCP connection
-  // In this case, it's an HTTP server
-  http.createServer((req, res) => {
-    res.writeHead(200);
-    res.end('Hello, World!');
-  }).listen(3000);
-
-  console.log(`Worker ${process.pid} started`);
-}
-
-```
-
-**communication between mater and worker processes** 
-
-```javascript
-//Sending Messages to Workers:
-if (cluster.isMaster) {
-  const worker = cluster.fork();
-  worker.send({ message: 'Hello, worker!' });
-}
-
-//Receiving Messages in Workers:
-if (cluster.isWorker) {
-  process.on('message', (msg) => {
-    console.log(`Message from master: ${msg}`);
-  });
-}
-
-//Sending Messages to Master:
-if (cluster.isWorker) {
-  process.send({ message: 'Hello, master!' });
-}
-
-//Receiving Messages in Master:
-if (cluster.isMaster) {
-  cluster.on('message', (worker, msg) => {
-    console.log(`Message from worker ${worker.process.pid}: ${msg}`);
-  });
-}
-```
-
-**problem with cluster**
-
-1. caching becomes difficult as each worker process has different memory
-2. managing user authentication sessions - // use sticky load balancers to solve this
-what it does if a uer is authenicated in a wroker process and that workers memory has session, then sticky load balancer will send the request to same worker is request comes from the same user
-
-**module.exports vs exports**
