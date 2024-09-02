@@ -83,6 +83,27 @@ function Example() {
 }
 ```
 
+## Using useLayoutEffect hook
+
+1. Syntax and strucuture exactly same as useEffect hook
+2. **Difference in timing - useEffect runs after the component is renderd, useLayoutEffect is run before the component is renders**
+3. Hence useEffect is async and useLayoutEffect is synchronous, and hence useLayoutEffect can hamper performance, because it needs to be executed before the component is renderd / painted
+4. usecase - **Measuring layout before the browser repaints the screen**
+
+```javascript
+function Tooltip() {
+  const ref = useRef(null);
+  const [tooltipHeight, setTooltipHeight] = useState(0); // You don't know real height yet
+  useLayoutEffect(() => {
+    const { height } = ref.current.getBoundingClientRect();
+    setTooltipHeight(height); // Re-render now that you know the real height
+  }, []);
+  // ...use tooltipHeight in the rendering logic below...
+}
+```
+In aboove code if we use useEffect instead of useLayoutEffect, the tooltip is first renderd, then the height is calculated and then again, the tooltip is renderd at correct position
+
+
 ### Key points
 
 1. useEffect Hook as componentDidMount, componentDidUpdate, and componentWillUnmount combined.  
