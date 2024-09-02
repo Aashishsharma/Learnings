@@ -533,6 +533,70 @@ export default function App() {
 }
 ```
 
+### 7. useTransition 
+
+#### Key points
+1. Imporve performance based on priority based state updates
+2. How? - We know that react does batch updates of multiple state changes
+3. see below code - in useEffect, we are doing setName as well as setList, but setList is slow because of filtering largeList(> 1000 list)
+4. Now react will do batch update, that is, setName and setList will be batched and updates at once in the actual DOM
+5. Due to this the input filed becomes slow, becasue setList is not run yet, because of setList
+6. using transtiion we specufy that setName should be rendered immediately and setList can be run later (or even get cancelled if name input filed is again changed)
+7. Disadvantages - multiple rerenders because setName is renderd and then setList, (earlier react would have updated both at once, once the setList was finished)
+8. usecase - see below code - input + list filtering
+
+```javascript
+function App() {
+  const [name, setName] = useState("")
+  const [list, setList] = useState(largeList)
+  const [isPending, startTransition] = useTransition()
+  function handleChange(e) {
+    setName(e.target.value)
+    startTransition(() => {
+      setList(largeList.filter(item => item.name.includes(e.target.value)))
+    })
+  }
+  return (
+    <>
+      <input type="text" value={name} onChange={handleChange} />
+      {isPending ? (
+        <div>Loading...</div>
+      ) : (
+        list.map(item => <ListComponent key={item.id} item={item} />)
+      )}
+    </>
+  )
+}
+```
+
+### 8. useDeferredValue
+
+```javascript
+export default function App() {
+  const [query, setQuery] = useState('');
+  const deferredQuery = useDeferredValue(query);
+  return (
+    <>
+      <label>
+        Search albums:
+        <input value={query} onChange={e => setQuery(e.target.value)} />
+      </label>
+      <Suspense fallback={<h2>Loading...</h2>}>
+        <SearchResults query={deferredQuery} />
+      </Suspense>
+    </>
+  );
+}
+```
+
+##### Key points
+1. The query will update immediately, so the input will display the new value. However, the deferredQuery will keep its previous value until the data has loaded, so SearchResults will show the stale results for a bit.
+2. indicate that data shown is stale ```<div style={{opacity: query !== deferredQuery ? 0.5 : 1}}>```
+3. **useTransition vs useDeferredValue** - 
+useTransition - to make a particular state update a lower priority  
+useDeferredValue - any piece of code that need to have a lower priority, not just state
+
+
 ### 7. useReducer + useContext
 
 In smaller apps we don't need Redux we can achieve same Redux functionality using useReducer and useContext hooks  
