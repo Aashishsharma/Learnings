@@ -460,8 +460,6 @@ So in cases when props change almost all the time, we will anyhow need to re-ren
 
 ### 5. useRef
 
-A common use case is to access a child imperatively:  
-
 ```javascript
 function TextInputWithFocusButton() {
   const inputEl = useRef(null);
@@ -478,7 +476,24 @@ function TextInputWithFocusButton() {
 }
 ```
 
-Essentially, useRef is like a “box” that can hold a mutable value in its .current property.  
+#### Key points
+1. useRef is exactly same as useState, that is the value of variables used in useRef persists across re-renders, same as useState
+2. But useRef does not trigeer a component re-render
+
+**useCases** - 
+1. to reference HTML elements (see above code)
+```javascript
+// here we hide the default choose file html button
+// and use our cutom icon button, and when that button is clicked
+// we simulate the file clic event
+const ref = useRef(null)
+  return (<>
+    <input type="file" ref={ref} hidden></input>
+    <button onClick={() => ref.current.click()}>Custom file icon</button>
+  </>
+  )
+```
+2. to store previous value of your state
 
 **They are used to handle uncontrolled components**
 
