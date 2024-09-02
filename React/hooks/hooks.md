@@ -365,6 +365,37 @@ If we click on counter Two - UI updates fast as expected
 3. Componet re-render - new isEven function created which is called in the render method in the span tag, hence it cause slowness
 4. If we use useMemo, the return value of the isEven function is cached and the function will only run if the counter one state is changed
 
+#### Usecases - 
+
+1. when you want to call slow function synchronously
+2. Referential integrity check
+```javascript
+// without useMemo
+const [count, setCount] = useState(0)
+const [dark, setDark] = useState(false);
+
+const theme = {
+  color: dark? 'black': 'white'
+}
+useEffect(() => {
+  console.log('current theme color : ', theme.color)
+}, [theme])
+// useEffect is run everytime event id count state variable is changed
+// because of referential integrity, if count state variable is changed, component rerenders, new theme obj is created
+// so theme used as second arg in useEffect got changed because new theme variable is created
+
+// fix this with useMemo
+const theme = useMemo(() => {
+  return {
+    color: dark? 'black': 'white'
+  }
+}, [dark])
+useEffect(() => {
+  // only called when dark variable is updated and not when count variable is changed
+  console.log('current theme color : ', theme.color)
+}, [dark])
+```
+
 ### 4. useCallback() - use when making a component controlled (passing the handleCLick functions to parent component)
 
 Returns a memoized callback.
