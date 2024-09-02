@@ -497,7 +497,43 @@ const ref = useRef(null)
 
 **They are used to handle uncontrolled components**
 
-### 6. useReducer + useContext
+
+### 6. forwardRef
+forwardRef lets your component expose a DOM node to parent component with a ref.  
+**Real life usecase - to pause/play a video of a child component**
+
+```javascript
+//child component exposing it's input element's ref to parent
+import { forwardRef } from 'react';
+// notice we pass ref as second arg, besides props
+const VideoPlayer = forwardRef(function VideoPlayer({ src, type, width }, ref) {
+  return (
+    <video width={width} ref={ref}>
+      <source
+        src={src}
+        type={type}
+      />
+    </video>
+  );
+});
+export default VideoPlayer;
+//parent component accessing child's ref element
+import { useRef } from 'react';
+import MyVideoPlayer from './MyVideoPlayer.js';
+export default function App() {
+  const ref = useRef(null);
+  return (
+    <>
+      <button onClick={() => ref.current.play()}>Play</button>
+      <button onClick={() => ref.current.pause()}>Pause</button>
+      <MyVideoPlayer ref={ref} src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+        type="video/mp4"width="250" />
+    </>
+  );
+}
+```
+
+### 7. useReducer + useContext
 
 In smaller apps we don't need Redux we can achieve same Redux functionality using useReducer and useContext hooks  
 **Steps**
