@@ -19,7 +19,7 @@ Common input types
 
 | **Type**        | **Sample HTML Code**               | **Common Attributes**                          |
 |-----------------|------------------------------------|------------------------------------------------|
-| text          | <input type="text" />            | name, value, placeholder, maxlength    |
+| text          | `<input type="text" />`            | name, value, placeholder, maxlength    |
 | password      | <input type="password" />        | name, value, maxlength, autocomplete   |
 | email         | <input type="email" />           | name, value, placeholder, required     |
 | number        | <input type="number" />          | name, value, min, max, step          |
