@@ -886,3 +886,43 @@ const App = () => {
 ```
 
 ### 4. use useMemo, useCallback, useTransition, useDerivedValue
+
+## React 18 new features - 
+
+### 1. Automatic batching -
+
+automatic batching used to happen only within React event handlers, and not inside other event handlers like setTimeout or user realted promises cbs
+```javascript
+// Before: only React events were batched.
+setTimeout(() => {
+  setCount(c => c + 1);
+  setFlag(f => !f);
+  // React will render twice, once for each state update (no batching), because setTimeout is not a react event handler
+}, 1000);
+// however if we used React event handlers like 
+const handleCLick = () => {
+  setCount(c => c + 1);
+  setFlag(f => !f);  // these 2 state updates used to get batched
+}
+// but if we had user defined promises or fecth apis even in react event handlers
+// then multiple re-renders for both state updates
+// because technically both stateupdates are inside fecth and not inside handleCLick
+const handleCLick = () => {
+  fetchSomething().then(() => {
+      setCount(c => c + 1); // Causes a re-render
+      setFlag(f => !f); // Causes a re-render
+  })
+}
+// After: updates inside of timeouts, promises,
+// native event handlers or any other event are batched.
+setTimeout(() => {
+  setCount(c => c + 1);
+  setFlag(f => !f);
+  // React will only re-render once at the end (that's batching!)
+}, 1000);
+```
+
+### 2 useTransitions, useDerivedValue hooks
+
+### 3. New Suspense
+
