@@ -83,6 +83,12 @@ function Example() {
 }
 ```
 
+### Key points
+1. **useEffect us run after the component is renderd (VVIP)**
+2. Only use useEffect for sideeffects (making api call, maybe ise usequery, adding event listeners)
+3. Since it is run after redner method, if we again update another state variable (not the same state that useEffect listens to in dep array), then it will again cause re-render
+4. In such cases use useMemo (see performance optimization below)
+
 ## Using useLayoutEffect hook
 
 1. Syntax and strucuture exactly same as useEffect hook
@@ -416,6 +422,7 @@ useEffect(() => {
   console.log('current theme color : ', theme.color)
 }, [dark])
 ```
+3. to Avoid re-rendeing replace useEffect with useMemo where ever possible (see performance optimization section below)
 
 ### 4. useCallback() - use when making a component controlled (passing the handleCLick functions to parent component)
 
@@ -514,7 +521,21 @@ const ref = useRef(null)
   </>
   )
 ```
-2. to store previous value of your state
+2. **To calculate how many times component is re-renderd**
+```javascript
+
+const renderCount = useRef(0);
+renderCount.current = renderCount.current+1;
+// since useRef value is maintained acress re-renders, whenever component re-renders, just like state variables
+// the renderCount value is preserved and it is not 0 ()
+
+return(
+  <div>ABC
+  {console.log('render count ', renderCount.current)}
+  </div>
+)
+```
+3. to store previous value of your state
 
 **They are used to handle uncontrolled components**
 
@@ -789,3 +810,62 @@ export function App(props) {
     2. Component cannot change it's props, state can be changed - (both can be changed, but updaing props in child component doesn't cause re-render)
 - Which to use when
     If a Component needs to alter one of its attributes at some point in time, that attribute should be part of its state, otherwise it should  just be a prop for that Component.
+
+## Performance optimization in React
+
+### 1. use code-splitting
+### 2. use unique keys while rendering list
+**dont' use map indexes / sequential numbers as keys to list, why?**
+
+```javascript
+list.map((item, index) => <div key={index}>{item}</div>)
+```  
+if we add a elem at the end of list, it's fine, but if we add item at the start of the list, then new item's index would be 0 and the item who earlier had index of 0 will have index of 1,  
+so react will have to re-redner all of the list items since keys are changed for all the list items, hence use some unique ids 
+
+### 2. conditionally run useEffect - (using second arg)
+### 3. Avoid re-rendering (replace useEffect with useMemo) - 
+e.g. 
+```javascript
+const getSaluation = (name) => `Hi, ${name}`;
+const App = () => {
+  const [name, setName] = useState('');
+  const [fullName, setFullName] = useState('');
+  const renderCount = useRef(0);
+  renderCount.current = renderCount.current+1;
+
+  useEffect(() => {
+    setFullName(() => getSaluation(name))
+  }, [name])
+
+  return(<>
+    <input type="text" value={name} onChange={((e) => setName(e.target.value))}></input>
+     Name - {fullName} 
+     {console.log('render order ', renderCount.current) /* here component is twice everytime the name variable is changed by the user */}
+     </>
+  )
+}
+// plus un above code we need to unnecessary create fullName state variable
+// component is renderd twice everytime
+// reason - name variable changed, component re-renders, after rerender, useEffect is called, there we are setting fullName, again render method is called
+// so every time 2X re-renders
+
+// use useMemo
+
+const getSaluation = (name) => `Hi, ${name}`
+const App = () => {
+  const [name, setName] = useState('');
+  const renderCount = useRef(0);
+  renderCount.current = renderCount.current+1;
+  const fullName = useMemo(() => getSaluation(name),[name]);
+  return (
+    <>
+    </>
+  )
+}
+// we eliminated useEffect + now we don;t need fullName state variable as well/
+// because when name state variable is changed, component re-renders, 
+// and everytime fullName variable is calculated from useMemo
+// and since useMemo is run before the render method is called
+// we have latest value of fullName and component renders only
+```
