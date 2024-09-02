@@ -14,31 +14,32 @@
 | Browser Support | Better support in modern browsers, some features may not work in older browsers. | Better compatibility with modern browsers. |
 
 **New attributes**  
+
 New input types  
 ```HTML
 | **Type**        | **Sample HTML Code**               | **Common Attributes**                          |
 |-----------------|------------------------------------|------------------------------------------------|
-| `text`          | `<input type="text" />`            | `name`, `value`, `placeholder`, `maxlength`    |
-| `password`      | `<input type="password" />`        | `name`, `value`, `maxlength`, `autocomplete`   |
-| `email`         | `<input type="email" />`           | `name`, `value`, `placeholder`, `required`     |
-| `number`        | `<input type="number" />`          | `name`, `value`, `min`, `max`, `step`          |
-| `checkbox`      | `<input type="checkbox" />`        | `name`, `value`, `checked`, `disabled`         |
-| `radio`         | `<input type="radio" />`           | `name`, `value`, `checked`, `disabled`         |
-| `date`          | `<input type="date" />`            | `name`, `value`, `min`, `max`, `required`      |
-| `file`          | `<input type="file" />`            | `name`, `accept`, `multiple`, `required`       |
-| `range`         | `<input type="range" />`           | `name`, `min`, `max`, `step`, `value`          |
-| `submit`        | `<input type="submit" />`          | `value`, `form`, `disabled`                    |
-| `button`        | `<input type="button" />`          | `value`, `onclick`, `disabled`, `form`         |
-| `reset`         | `<input type="reset" />`           | `value`, `form`, `disabled`                    |
-| `color`         | `<input type="color" />`           | `name`, `value`, `disabled`, `required`        |
-| `search`        | `<input type="search" />`          | `name`, `value`, `placeholder`, `maxlength`    |
-| `tel`           | `<input type="tel" />`             | `name`, `value`, `placeholder`, `pattern`      |
-| `url`           | `<input type="url" />`             | `name`, `value`, `placeholder`, `maxlength`    |
-| `hidden`        | `<input type="hidden" />`          | `name`, `value`, `form`                        |
-| `datetime-local`| `<input type="datetime-local" />`  | `name`, `value`, `min`, `max`, `required`      |
-| `time`          | `<input type="time" />`            | `name`, `value`, `min`, `max`, `required`      |
-| `image`         | `<input type="image" />`           | `src`, `alt`, `width`, `height`, `form`        |
-
+| text          | <input type="text" />            | name, value, placeholder, maxlength    |
+| password      | <input type="password" />        | name, value, maxlength, autocomplete   |
+| email         | <input type="email" />           | name, value, placeholder, required     |
+| number        | <input type="number" />          | name, value, min, max, step          |
+| checkbox      | <input type="checkbox" />        | name, value, checked, disabled         |
+| radio         | <input type="radio" />           | name, value, checked, disabled         |
+| date          | <input type="date" />            | name, value, min, max, required      |
+| file          | <input type="file" />            | name, accept, multiple, required       |
+| range         | <input type="range" />           | name, min, max, step, value          |
+| submit        | <input type="submit" />          | value, form, disabled                    |
+| button        | <input type="button" />          | value, onclick, disabled, form         |
+| reset         | <input type="reset" />           | value, form, disabled                    |
+| color         | <input type="color" />           | name, value, disabled, required        |
+| search        | <input type="search" />          | name, value, placeholder, maxlength    |
+| tel           | <input type="tel" />             | name, value, placeholder, pattern      |
+| url           | <input type="url" />             | name, value, placeholder, maxlength    |
+| hidden        | <input type="hidden" />          | name, value, form                        |
+| datetime-local| <input type="datetime-local" />  | name, value, min, max, required      |
+| time          | <input type="time" />            | name, value, min, max, required      |
+| image         | <input type="image" />           | src, alt, width, height, form        |
+```
 
 ### First 10 lines in HTML 
 | Line | Example | Explanation |
