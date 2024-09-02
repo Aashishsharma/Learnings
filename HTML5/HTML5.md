@@ -16,23 +16,28 @@
 **New attributes**  
 New input types  
 ```HTML
-<input type="datetime"></input>    // will take date only in a specified format 
-<input type="number"></input>      // will take only number
-<input type="email"></input>       // will take only valid email
-<input type="url"></input>         // will take only valid url
-```
-| Attribute         | Example                                       | Description                                     |
-|-------------------|-----------------------------------------------|-------------------------------------------------|
-| `placeholder`     | `<input type="text" placeholder="Enter your name">` | Provides a hint or example text within the input field. |
-| `required`        | `<input type="email" required>`              | Specifies that the input must be filled out before submission. |
-| `autofocus`       | `<input type="text" autofocus>`              | Automatically focuses on the input element when the page loads. |
-| `min` and `max`   | `<input type="number" min="0" max="100">`    | Sets the minimum and maximum allowed values for numeric inputs. |
-| `pattern`         | `<input type="text" pattern="[A-Za-z]{3}">` | Specifies a regular expression pattern that the input value must match. |
-| `readonly`        | `<input type="text" value="Readonly" readonly>` | Makes the input field read-only, preventing user input. |
-| `disabled`        | `<input type="text" value="Disabled" disabled>` | Disables the input field, preventing user interaction. |
-| `size`            | `<input type="text" size="20">`             | Sets the visible width of the input field in characters. |
-| `maxlength`       | `<input type="text" maxlength="50">`        | Specifies the maximum number of characters allowed in the input. |
-| `step`            | `<input type="number" step="0.5">`          | Specifies the increment or decrement step for number inputs. |
+| **Type**        | **Sample HTML Code**               | **Common Attributes**                          |
+|-----------------|------------------------------------|------------------------------------------------|
+| `text`          | `<input type="text" />`            | `name`, `value`, `placeholder`, `maxlength`    |
+| `password`      | `<input type="password" />`        | `name`, `value`, `maxlength`, `autocomplete`   |
+| `email`         | `<input type="email" />`           | `name`, `value`, `placeholder`, `required`     |
+| `number`        | `<input type="number" />`          | `name`, `value`, `min`, `max`, `step`          |
+| `checkbox`      | `<input type="checkbox" />`        | `name`, `value`, `checked`, `disabled`         |
+| `radio`         | `<input type="radio" />`           | `name`, `value`, `checked`, `disabled`         |
+| `date`          | `<input type="date" />`            | `name`, `value`, `min`, `max`, `required`      |
+| `file`          | `<input type="file" />`            | `name`, `accept`, `multiple`, `required`       |
+| `range`         | `<input type="range" />`           | `name`, `min`, `max`, `step`, `value`          |
+| `submit`        | `<input type="submit" />`          | `value`, `form`, `disabled`                    |
+| `button`        | `<input type="button" />`          | `value`, `onclick`, `disabled`, `form`         |
+| `reset`         | `<input type="reset" />`           | `value`, `form`, `disabled`                    |
+| `color`         | `<input type="color" />`           | `name`, `value`, `disabled`, `required`        |
+| `search`        | `<input type="search" />`          | `name`, `value`, `placeholder`, `maxlength`    |
+| `tel`           | `<input type="tel" />`             | `name`, `value`, `placeholder`, `pattern`      |
+| `url`           | `<input type="url" />`             | `name`, `value`, `placeholder`, `maxlength`    |
+| `hidden`        | `<input type="hidden" />`          | `name`, `value`, `form`                        |
+| `datetime-local`| `<input type="datetime-local" />`  | `name`, `value`, `min`, `max`, `required`      |
+| `time`          | `<input type="time" />`            | `name`, `value`, `min`, `max`, `required`      |
+| `image`         | `<input type="image" />`           | `src`, `alt`, `width`, `height`, `form`        |
 
 
 ### First 10 lines in HTML 
