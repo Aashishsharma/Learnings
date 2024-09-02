@@ -638,8 +638,22 @@ export default function App() {
 useTransition - to make a particular state update a lower priority  
 useDeferredValue - any piece of code that need to have a lower priority, not just state
 
+### 9. useId - for generating unique IDs that can be passed to accessibility attributes.
 
-### 7. useReducer + useContext
+```javascript
+import { useId } from 'react';
+function PasswordField() {
+  const passwordHintId = useId();
+  return(<>
+    <input type="password" aria-describedby={passwordHintId} />
+    <p id={passwordHintId}>
+  </>
+  )
+}
+```
+**useId should not be used to generate keys in a list. Keys should be generated from your data.**
+
+### 10. useReducer + useContext
 
 In smaller apps we don't need Redux we can achieve same Redux functionality using useReducer and useContext hooks  
 **Steps**
