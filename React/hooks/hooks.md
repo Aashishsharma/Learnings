@@ -123,97 +123,6 @@ This plugin is included by default in Create React App.
 
 ------------------------------------------------------------------------------
 
-## Building Your Own Hooks
-
-Custom hooks are used to reuse Stateful logic -
-**What is stateful logic?**  - stateful logic includes the use of state management hooks like useState, useEffect, useReducer, or a combination of them. The goal is to abstract away the complexity of managing state within a component and provide a clean interface for components to use that logic.
-
-**HOC vs Custom hooks** -
-
-1. custom hooks are more readable
-2. When you want to reuse JSX code use HOC - in example of withLoader
-
-1. useApiData
-
-```javascript
-// custom hook - useApiData.js
-import { useState, useEffect } from 'react';
-function useApiData(apiEndpoint) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(apiEndpoint);
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [apiEndpoint]);
-  return { data, loading, error };
-}
-export default useApiData;
-
-// using the custom hook
-import useApiData from './useApiData';
-function MyComponent() {
-  const apiEndpoint = 'https://api.example.com/data';
-  const { data, loading, error } = useApiData(apiEndpoint);
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
-  return (
-    <div>
-      <h1>Data from API - {data}</h1>
-    </div>
-  );
-}
-
-```
-
-2. useLocalStorage
-
-```javascript
-import { useEffect, useState } from 'react';
-const setInitialVal = (key, initialVal) => {
-  if(localStorage.getItem(key)) {
-    return (localStorage.getItem(key))
-  } 
-  return initialVal
-}
-const useLocalStorage = (key, initialVal ) => {
-  const [value, setValue] = useState(() => setInitialVal(key, initialVal))
-  useEffect(() => {
-    localStorage.setItem(key, initialVal);
-  }, [value]); 
-  return [value, setValue];
-};
-export default useLocalStorage;
-
-import React, {useState} from 'react';
-import useLocalStorage from './useLocalStorage'; 
-export function App(props) {
-  let [state, setState] = useLocalStorage('abc', 123);
-  let [state2, setState2] = useLocalStorage('abc2', 1232);
-  console.log({state}); console.log({state2})
-  return (<>
-    <button onClick={() => setState((state) => state+1)}>Abc</button> 
-    <button onClick={() => setState2((state) => state+1)}>Pqr</button>
-  </>);
-}
-```
-
-------------------------------------------------------------------------------
-
 ## Other Commonly used hooks  
 
 ### 1. useContext - same as context API in React  
@@ -603,6 +512,100 @@ function ComponentF() {
 }
 export default ComponentF
 ```
+
+------------------------------------------------------------------------------
+
+## Building Your Own Hooks
+
+Custom hooks are used to reuse Stateful logic -
+**What is stateful logic?**  - stateful logic includes the use of state management hooks like useState, useEffect, useReducer, or a combination of them. The goal is to abstract away the complexity of managing state within a component and provide a clean interface for components to use that logic.
+
+**HOC vs Custom hooks** -
+
+1. custom hooks are more readable
+2. When you want to reuse JSX code use HOC - in example of withLoader
+
+1. useApiData
+
+```javascript
+// custom hook - useApiData.js
+import { useState, useEffect } from 'react';
+function useApiData(apiEndpoint) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(apiEndpoint);
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [apiEndpoint]);
+  return { data, loading, error };
+}
+export default useApiData;
+
+// using the custom hook
+import useApiData from './useApiData';
+function MyComponent() {
+  const apiEndpoint = 'https://api.example.com/data';
+  const { data, loading, error } = useApiData(apiEndpoint);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+  return (
+    <div>
+      <h1>Data from API - {data}</h1>
+    </div>
+  );
+}
+
+```
+
+2. useLocalStorage
+
+```javascript
+import { useEffect, useState } from 'react';
+const setInitialVal = (key, initialVal) => {
+  if(localStorage.getItem(key)) {
+    return (localStorage.getItem(key))
+  } 
+  return initialVal
+}
+const useLocalStorage = (key, initialVal ) => {
+  const [value, setValue] = useState(() => setInitialVal(key, initialVal))
+  useEffect(() => {
+    localStorage.setItem(key, initialVal);
+  }, [value]); 
+  return [value, setValue];
+};
+export default useLocalStorage;
+
+import React, {useState} from 'react';
+import useLocalStorage from './useLocalStorage'; 
+export function App(props) {
+  let [state, setState] = useLocalStorage('abc', 123);
+  let [state2, setState2] = useLocalStorage('abc2', 1232);
+  console.log({state}); console.log({state2})
+  return (<>
+    <button onClick={() => setState((state) => state+1)}>Abc</button> 
+    <button onClick={() => setState2((state) => state+1)}>Pqr</button>
+  </>);
+}
+```
+
+------------------------------------------------------------------------------
+
 
 ## FAQs
 
