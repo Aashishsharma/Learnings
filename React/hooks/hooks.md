@@ -868,8 +868,8 @@ list.map((item, index) => <div key={index}>{item}</div>)
 if we add a elem at the end of list, it's fine, but if we add item at the start of the list, then new item's index would be 0 and the item who earlier had index of 0 will have index of 1,  
 so react will have to re-redner all of the list items since keys are changed for all the list items, hence use some unique ids 
 
-### 2. conditionally run useEffect - (using second arg)
-### 3. Avoid re-rendering (replace useEffect with useMemo) - 
+### 3. conditionally run useEffect - (using second arg)
+### 4. Avoid re-rendering (replace useEffect with useMemo) - 
 e.g. 
 ```javascript
 const getSaluation = (name) => `Hi, ${name}`;
@@ -915,7 +915,7 @@ const App = () => {
 // we have latest value of fullName and component renders only
 ```
 
-### 4. use useMemo, useCallback, useTransition, useDerivedValue
+### 5. use useMemo, useCallback, useTransition, useDerivedValue
 
 ## React 18 new features - 
 
@@ -955,4 +955,5 @@ setTimeout(() => {
 ### 2 useTransitions, useDerivedValue hooks
 
 ### 3. New Suspense
+earlier suspense was only available with lazy loading, now in any component we can use suspense
 
