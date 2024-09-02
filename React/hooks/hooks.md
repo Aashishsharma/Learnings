@@ -869,3 +869,5 @@ const App = () => {
 // and since useMemo is run before the render method is called
 // we have latest value of fullName and component renders only
 ```
+
+### 4. use useMemo, useCallback, useTransition, useDerivedValue
