@@ -3,57 +3,6 @@
 Loading all this code upfront can lead to slower initial page loads. Code splitting allows developers to split the application into smaller pieces and load them on-demand.  
 Overly aggressive code splitting may lead to increased network requests, potentially negating the performance gains.  
 
-2 ways to introduce code splitting in react app -  
-
-#### 1. Using Dynamic import + React suspense
-
-With Code splitting, the bundle can be split to smaller chunks where the most important chunk can be loaded first and then every other secondary one lazily loaded.  
-
-```javascript
-import React, {lazy, Suspense, useEffect, useState} from "react";
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-
-const Feed = lazy(() => import("./routes/Feed")); // dynamic import
-const Profile = lazy(() => import("./routes/Profile"));
-const Home = lazy(() => import("./routes/Home"));
-const Settings = lazy(() => import("./routes/Settings"));
-
-<Switch>
-  <Route exact path="/"
-    render={props => (
-      <Suspense fallback={<div>Loading...<div>}>
-        <Home {...props} />
-      </Suspense>
-    )}
-  />
-   <Route
-    exact
-    path="/feed"
-    render={() => (
-      <Suspense fallback={<div>Loading...<div>}>
-        <Feed isLogged={isLogged} user={user} {...props} />
-      </Suspense>
-    )}
-  />
-</Switch>
-```
-
-So when home is opened only that js is pulled from the split bundle, same case when feed is opened
-
-#### 2. Using Dynamic import + React router
-
-```javascript
-const HomePage = React.lazy(() => import('./HomePage'));
-const AboutPage = React.lazy(() => import('./AboutPage'));
-
-// React Router setup
-<Switch>
-  <Route path="/home" component={HomePage} />
-  <Route path="/about" component={AboutPage} />
-</Switch>
-
-```
-
 Behind the scenes React uses webpack for code splitting
 
 ------------------------------------------------------------------------------

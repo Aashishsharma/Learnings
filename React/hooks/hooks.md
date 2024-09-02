@@ -829,6 +829,36 @@ export function App(props) {
 ## Performance optimization in React
 
 ### 1. use code-splitting
+
+**Using Dynamic import + React suspense**
+
+With Code splitting, the bundle can be split to smaller chunks where the most important chunk can be loaded first and then every other secondary one lazily loaded.  
+
+```javascript
+import React, {lazy, Suspense, useEffect, useState} from "react";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+const Feed = lazy(() => import("./routes/Feed")); // dynamic import
+const Home = lazy(() => import("./routes/Home"));
+<Switch>
+  <Route exact path="/"
+    render={props => (
+      <Suspense fallback={<div>Loading...<div>}>
+        <Home {...props} />
+      </Suspense>
+    )}
+  />
+   <Route
+    exact
+    path="/feed"
+    render={() => (
+      <Suspense fallback={<div>Loading...<div>}>
+        <Feed isLogged={isLogged} user={user} {...props} />
+      </Suspense>
+    )}
+  />
+</Switch>
+```
+
 ### 2. use unique keys while rendering list
 **dont' use map indexes / sequential numbers as keys to list, why?**
 
