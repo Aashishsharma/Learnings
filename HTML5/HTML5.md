@@ -15,8 +15,8 @@
 
 **New attributes**  
 
-New input types  
-```HTML
+Common input types  
+
 | **Type**        | **Sample HTML Code**               | **Common Attributes**                          |
 |-----------------|------------------------------------|------------------------------------------------|
 | text          | <input type="text" />            | name, value, placeholder, maxlength    |
@@ -39,7 +39,7 @@ New input types
 | datetime-local| <input type="datetime-local" />  | name, value, min, max, required      |
 | time          | <input type="time" />            | name, value, min, max, required      |
 | image         | <input type="image" />           | src, alt, width, height, form        |
-```
+
 
 ### First 10 lines in HTML 
 | Line | Example | Explanation |
