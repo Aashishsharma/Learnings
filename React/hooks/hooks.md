@@ -651,7 +651,8 @@ function PasswordField() {
   )
 }
 ```
-**useId should not be used to generate keys in a list. Keys should be generated from your data.**
+**useId should not be used to generate keys in a list. Keys should be generated from your data.**  
+**useId vs Math.random() - useId Ensures that IDs remain consistent across server and client rendering (SSR)**
 
 ### 10. useReducer + useContext
 
