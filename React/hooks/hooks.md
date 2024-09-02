@@ -36,7 +36,7 @@ You can’t use Hooks inside a class component
  6:    return (
  7:      <div>
  8:        <p>You clicked {count} times</p>
- 9:        <button onClick={() => setCount(count + 1)}>
+ 9:        <button onClick={() => setCount((count) => count + 1)}>
 10:         Click me
 11:        </button>
 12:      </div>
@@ -47,78 +47,12 @@ You can’t use Hooks inside a class component
 Normally, variables “disappear” when the function exits but state variables are preserved by React.  
 Group logically making sense of all states into one state object
 
-**use previous state value** -  
-use functional form of setstate -- setCnt(cnt => cnt+1)  
-setState here is different from the class componente's setState method, classe setState method merges the state, where is in useState, stats aren't merged.  
-e.g.
+### Key points
 
-```javascript
-useObj = {
-  firstName: 'abc',
-  lastName: 'pqr'
-} 
-// in class
-this.setState({firstName: 'abc2'})
-// this methods updates the first name and also preserved the last name
-
-//in useState
-setState({firstName: 'abc2'})
-// updates firstName, but lastName is lost it will give undefined
-// instaed to this
-setState({...state, state.firstName: 'abc2'})
-```
-
-**Using single state variable vs multiple state variables**
-
-```javascript
-// use this for better performance of unrelated state
-const [count, setCount] = useState(0);
-const [text, setText] = useState('');
-
-
-// use this when
-// state variables are closely related.
-// can cause unnecessary re-renders
-const [state, setState] = useState({
-  count: 0,
-  text: '',
-});
-
-// e.g. of how 1st approach is better for unrelated state
-// but when the state is related - club them into a signle object
-// related state means when 1 attribute of the state changes, 
-// other attributes also change with that
-import React, { useState } from 'react';
-
-function MultipleStateVariablesExample() {
-  const [count, setCount] = useState(0);
-  const [text, setText] = useState('');
-  const increment = () => {
-    setCount(count + 1);
-  };
-  const handleChange = (event) => {
-    setText(event.target.value);
-  };
-
-  return (
-    <div>
-      <p>Count: {count}</p>
-      <button onClick={increment}>Increment</button>
-
-      <p>Text: {text}</p>
-      <input type="text" value={text} onChange={handleChange} />
-    </div>
-  );
-}
-export default MultipleStateVariablesExample;
-
-//  if you click the "Increment" button, only the part of the component
-// displaying the count will re-render. The text input, being controlled
-// by a different state variable, remains unaffected. 
-// This targeted re-rendering improves performance, especially in larger components
-```
-
-------------------------------------------------------------------------------
+1. use functional form of setstate -- setCnt(cnt => cnt+1)  
+2. setState here is different from the class componente's setState method, classe setState method merges the state, where is in useState, stats aren't merged.  
+e.g. ```setState({...state, state.firstName: 'abc2'})```
+3. Using single state variable vs multiple state variables - if multiple state variables are closely related, then group them in one obj, else create multiple state variables
 
 ## Using the Effect Hook
 
@@ -149,42 +83,18 @@ function Example() {
 }
 ```
 
-If your effect returns a function, React will run it when it is time to clean up:
+### Key points
 
-```javascript
-useEffect(() => {
-    function handleStatusChange(status) {
-      setIsOnline(status.isOnline);
-    }
-    ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
-    // Specify how to clean up after this effect: // similar to componentWillUnmount()
-    return function cleanup() {
-      ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
-    };
-  });
-```
-
-#### Tip: Use Multiple Effects to Separate Concerns
-
-#### Tip: Optimizing Performance by Skipping Effects
-
-```javascript
-useEffect(() => {
-  document.title = `You clicked ${count} times`;
-}, [count]); // Only re-run the effect if count changes
-// similar to componentShouldUpdate()
-```
-
-**second arg in useEffect**  
-
-1. if not passed - use effect will run on every component re-render (component did mount + component did update)
-2. If empty array is passed - [] - will only run once (component did mount)
-3. If some value is passed - [count] - will get called when count value is changed (shouldComponentUpdate)
-
-- count should be a state variable, or coming from props - props.count
-
-**order of execution**  
-
+1. useEffect Hook as componentDidMount, componentDidUpdate, and componentWillUnmount combined.  
+2. useEffect second arg - 
+  a. if not passed - use effect will run on every component re-render (component did mount + component did update)
+  b. If empty array is passed - [] - will only run once (component did mount)
+  c. If some value is passed - [count] - will get called when count value is changed (shouldComponentUpdate)
+3. If your effect returns a function, React will run it when it is time to clean up:
+4. Use Multiple Effects to Separate Concerns
+5. **usecase** - making api call, (maybe use usequery), listening to events
+6. **when not to use** - if the second arg is a state variable and you update same state variable inside useeffect (instead use useMemo)
+5. **order of execution**  -
 1. State initializations - component body is executed
 2. Render method
 3. UseEffect func  
@@ -198,33 +108,8 @@ useEffect(() => {
 Don't use inside a condition or a loop
 But why?
 
-```javascript
-function Form() {
-  // 1. Use the name state variable
-  const [name, setName] = useState('Mary');
-
-  // 2. Use an effect for persisting the form
-  useEffect(function persistForm() {
-    localStorage.setItem('formData', name);
-  });
-
-  // 3. Use the surname state variable
-  const [surname, setSurname] = useState('Poppins');
-
-  // 4. Use an effect for updating the title
-  useEffect(function updateTitle() {
-    document.title = name + ' ' + surname;
-  });
-
-  // ...
-}
-```
-
 So how does React know which state corresponds to which useState call?
 The answer is that React relies on the order in which Hooks are called.  
-Bassically, hook rely on a call index. React doesn't know what a given useState() returned
-Our example works because the order of the Hook calls is the same on every render
-(if rendered in condition or in a loop, order might change):
 
 #### 2. Only Call Hooks from React Functions
 
