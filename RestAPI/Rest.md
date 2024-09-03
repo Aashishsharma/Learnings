@@ -96,7 +96,7 @@ Solution 3 is not needed if solution 1 is in place
 
 #### 6. Caching headers
 
-| Header           | Example                                           | Possible Values                                     | Purpose                                                                     | Use Case                                           |
+| Header           | Example                   | Possible Values                                                       | Purpose                                                                                              | Use Case                                           |
 |------------------|---------------------------------------------------|----------------------------------------------------|-----------------------------------------------------------------------------|----------------------------------------------------|
 | Cache-Control    | Cache-Control: max-age=3600, must-revalidate      | max-age, no-cache, no-store, must-revalidate        | Specifies caching policies in both requests and responses.                 | Controlling how and for how long resources should be cached by the browser or intermediate caches. |
 | Expires (same as cache control, but expects a fixed date)         | Expires: Wed, 21 Oct 2024 07:28:00 GMT            | Date in HTTP-date format (e.g., Wed, 21 Oct 2024 07:28:00 GMT) | Sets a specific expiration date and time for cached content.                | Defining when a resource should be considered stale.                   |
