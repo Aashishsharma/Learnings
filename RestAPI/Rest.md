@@ -26,7 +26,7 @@ REST allows you to use a layered system architecture where you deploy the APIs o
 #### 6. Code on demand (optional)
 Most of the time, you will be sending the static representations of resources in the form of XML or JSON. But when you need to, you are free to return executable code to support a part of your application, e.g., clients may call your API to get a UI widget rendering code. It is permitted.
 
-### HTTP headers
+### HTTP headers (setting headers in express ```res.set({'Content-Type', 'application/json', 'Access-Control-Allow-Origin': '*'})```)
 
 #### 1. General headers
 
@@ -111,19 +111,27 @@ Solution 3 is not needed if solution 1 is in place
 |-------------|-----------------------------------------------------------|--------------------------------------------------------------------|
 | `GET`       | Retrieve data from the server without modifying it.       | Fetching a web page, querying a list of users, or reading an article. |
 | `POST`      | Submit data to the server to create or update a resource. | Submitting a form, creating a new user, or posting a comment.        |
-| `PUT`       | Update or create a resource at a specific URI.            | Updating user information, replacing an existing resource, or uploading a file. |
+| `PUT`       | (if recource not exixts then it is supposed to be created, expects full resource from client)           | Updating user information, replacing an existing resource, or uploading a file. |
 | `DELETE`    | Remove a resource from the server.                        | Deleting a user, removing an item from a cart, or clearing a database record. |
-| `PATCH`     | Apply partial modifications to a resource.                | Updating specific fields of a user's profile, such as changing an email address. |
-| `HEAD`  (to check eTag)    | Retrieve headers from the server without the response body. | Checking if a resource exists or validating a resource without downloading it. |
-| `OPTIONS`   | Describe the communication options for the target resource. | Checking the allowed HTTP methods for a resource or performing CORS preflight checks. |
+| `PATCH`     | (if recource not exixts then 404, expects partial resource from client)           | Updating specific fields of a user's profile, such as changing an email address. |
+| `HEAD` (server sends only headers, no body) (to check eTag, check if resource exists)    | Retrieve headers from the server without the response body. | Checking if a resource exists or validating a resource without downloading it. |
+| `OPTIONS`   | Describe the communication options for the **target resource**. | Checking the allowed HTTP methods for a resource or **performing CORS preflight checks**. |
 | `TRACE`     | Perform a message loop-back test along the path to the target resource. | Diagnosing network issues by seeing the path a request takes to reach the server. |
-| `LINK`      | Establish relationships between resources.                | Creating a connection between related resources, such as linking a blog post to its author. |
-| `UNLINK`    | Remove relationships between resources.                   | Removing a connection between related resources, like detaching an author from a blog post. |
-| `PURGE`     | Clear the cache for a specific resource.                  | Invalidating cached content on a CDN or a reverse proxy, forcing a fresh fetch from the origin server. |
-| `LOCK`      | Lock a resource to prevent it from being modified by others. | Locking a file in a WebDAV server to prevent concurrent edits.       |
-| `UNLOCK`    | Unlock a resource previously locked by `LOCK`.            | Releasing a lock on a file in a WebDAV server to allow others to edit it. |
-| `COPY`      | Copy a resource from one URI to another.                  | Copying a file or a directory within a WebDAV server.               |
-| `MOVE`      | Move a resource from one URI to another.                  | Moving a file from one folder to another on a WebDAV server.        |
+
+**using head to check if resource exists**
+```javascript
+app.head('/users/:id', (req, res) => {
+  const userId = req.params.id;
+  // Add custom headers
+  res.set('X-Custom-Header', 'CustomHeaderValue');
+  res.set('X-User-Request-Time', new Date().toISOString());
+  if (users[userId]) {
+    res.status(200).end(); // User exists, respond with 200 OK
+  } else {
+    res.status(404).end(); // User does not exist, respond with 404 Not Found
+  }
+});
+```
 
 ------------------------------------------------------------------------------
 ## Designing APIs
