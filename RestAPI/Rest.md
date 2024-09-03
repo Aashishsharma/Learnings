@@ -26,6 +26,48 @@ REST allows you to use a layered system architecture where you deploy the APIs o
 #### 6. Code on demand (optional)
 Most of the time, you will be sending the static representations of resources in the form of XML or JSON. But when you need to, you are free to return executable code to support a part of your application, e.g., clients may call your API to get a UI widget rendering code. It is permitted.
 
+### HTTP headers
+
+#### 1. General headers
+
+| Header           | Example                           | Possible Values                                                    | Description                                                                 |
+|------------------|-----------------------------------|--------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| Cache-Control    | Cache-Control: no-cache           | no-cache, no-store, max-age=3600, public, private                  | Controls the caching mechanisms for both requests and responses.            |
+| Connection       | Connection: keep-alive            | keep-alive, close                                                  | Controls whether the network connection stays open after the current transaction. |
+| Date             | Date: Tue, 15 Nov 1994 08:12:31 GMT | Any valid date/time string in HTTP-date format                     | Contains the date and time at which the message was sent.                   |
+| Upgrade          | Upgrade: websocket                | websocket, h2c                                                     | Requests the server to switch protocols, commonly used for WebSockets.      |
+| Via              | Via: 1.1 example.com (squid/3.5.27) | Any proxy or gateway details in HTTP version format                | Indicates the intermediate protocols and recipients between the user agent and the server. |
+
+#### 2. Request headers
+
+| Header          | Example                                  | Possible Values                                | Description                                                                 |
+|-----------------|------------------------------------------|------------------------------------------------|-----------------------------------------------------------------------------|
+| Accept          | Accept: text/html                        | text/html, application/json, */*               | Indicates the media types that are acceptable for the response.             |
+| Authorization   | Authorization: Basic YWxhZGRpbjpvcGVuc2VzYW1l | Basic, Bearer, Digest                          | Contains the credentials to authenticate a user agent with a server.        |
+| User-Agent      | User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124 Safari/537.36 | Various strings identifying the client software | Contains information about the user agent (browser) making the request.     |
+| Referer         | Referer: https://previous-site.com       | URL of the referring page                      | Indicates the URL of the previous web page from which a link to the currently requested page was followed. |
+
+#### 3. Response headers
+
+| Header          | Example                                  | Possible Values                                | Purpose                                                                 |
+|-----------------|------------------------------------------|------------------------------------------------|-------------------------------------------------------------------------|
+| Content-Type    | Content-Type: text/html                  | text/html, application/json, text/css          | Specifies the media type of the resource being returned in the response.|
+| Server          | Server: Apache/2.4.41 (Unix)             | Server software details                        | Provides information about the software used by the server to handle the request. (used for debugging) |
+| Set-Cookie      | Set-Cookie: sessionId=abc123; HttpOnly   | Cookie data and attributes                     | Sends cookies from the server to the client to be stored and sent with subsequent requests. |
+| Content-Length  | Content-Length: 3487                     | Size of the response body in bytes             | used to implement progress indicator, server can read-file and get filesize in metadata                   |
+| Location        | Location: https://example.com/redirect   | URL to redirect to                             | Specifies the URL to redirect the client to, often used in 3xx responses. |
+
+#### 4. Represenation headers
+
+| Header              | Example                                  | Possible Values                                | Purpose                                                                 | Use Case                                                   |
+|---------------------|------------------------------------------|------------------------------------------------|-------------------------------------------------------------------------|------------------------------------------------------------|
+| Content-Type        | Content-Type: application/json           | application/json, text/html, text/css, image/png | Indicates the media type of the resource being returned.                | Specifying the format of the response, like JSON or HTML.  |
+| Content-Encoding    | Content-Encoding: gzip                   | gzip, compress, deflate, br                    | Specifies the encoding (compression) used on the response body.         | Compressing content to reduce response size, e.g., gzip.    |
+| Content-Language    | Content-Language: en-US                  | en-US, fr-CA, es-ES                             | Indicates the language of the content being returned.                   | Serving content in a specific language, like English or Spanish. |
+| Content-Length      | Content-Length: 5120                     | Size of the response body in bytes             | Indicates the size of the response body in bytes.                       | Providing the exact size of the content in the response.    |
+| Content-Disposition | Content-Disposition: attachment; filename="example.pdf" | inline, attachment; filename="filename.ext"   | Suggests how the content should be displayed (inline or as an attachment). | Forcing a download of a file, like a PDF, rather than displaying it in the browser. |
+
+
 ------------------------------------------------------------------------------
 ## Designing APIs
 #### 1. URIs
@@ -36,82 +78,7 @@ Most of the time, you will be sending the static representations of resources in
 5. Query strings - used for non-resource properties - (https://example.com/books?sort=name, https://example.com/books?page=1, https://example.com/books?format=json (Note: content type should be sent on headers and not in query params)) use for searching, sorting, response format.
 6. URIs should include api keyword (https://example.com/api/books or https://api.example.com/books), use former one when you website and API are hosted on same server, or else use later one, but use it.
 
-#### 2. Verbs
-1. GET - retrieve a resource
-2. POST - Add a new resource
-3. PUT - Update an existing resource, requires whole resource to be sent in the body
-4. PATCH - same as PUT, i.e, update existing resource by sending part of resource
-5. DELETE - remove existing resource 
 
-###### Method not allowed
-e.g. https://example.com/books - (all above verbs can be used except DELETE, it should throw an error, individual resource item should be deleted instead of the colection, for PUT - it is called as batch update, as PUT also generally needs ID)  
-https://example.com/books/123 - (all above verbs can be used except POST, it should throw an error, POST is applied to collection URI, as item 123 is already created, you cannot use POST for this API)
-
-**Idempotecy**
-Apart from POST, all other verbs mentioned above must be idempotent. i.e, every time exact same request is made, you should get exact same response. Like GET, PUT once, updated, even if there are no updated, same response should be sent, instead os sending a response no update found and gicing status code of 400 (Bad request), status code should be 200.  
-In case of POST, it is not idempotent, like once POST is done, response - new resource created with resource details, again if same request is passed, response - resource already exists. so it is not idempotent
-
-#### 3. Association
-e.g. use URL like https://api.example.com/books/123/content.  
-for nested associations use search qyery param
-
-#### 4. Paging
-1. Lists should support paging
-2. Query string are generally used for paging - https://api.example.com/books?page=1&page_size=25
-3. response body should include - (total results, link to next and previous pages, and then actual result)
-
-#### 5. Error handling
-Proper error message for public APIs, for secure APIs no description is necessary. Also for most common error like 404, only status code is enough, description not necessary
-
-#### 6. Caching
-Usually, it is done at both server and client side. Rest guidelines suggests to implement caching at client side by sending cache details in resposne header
-1. Use Entity Tags (Etags) in response header.  
-It is a vesrion number which identifies version of the resource.  
-While making a get client can use **If-None-Match: "Etag value"** (sent by server in response headers), so if not matched then make a GET request or use cache.  
-For Put and DELETE, use **If-Match: "Etag value"**, so if client has same cached data, then only update, if it has stale data then fail this request (the failure response would be 412 - precondition failed), so that client can get the latest resource, and then do PUT/DELETE
-
-#### 7. Functional APIs
-If need to so operation at server side  
-1. /api/calculateTax
-2. /api/rebootServer  
-Should rarely be used. OPTION/GET verb can be used in this case
-
-------------------------------------------------------------------------------
-## API versioning (support old and new version)
-Versioning Strategy
-1. URI versioning  
-e.g. https://example.com/api/v2/books, right after api keyword or https://api.example.com/v2/books  
-Clients need to change URI
-2. Query String versioning
-e.g. https://example.com/api//books?v=2.0  
-we can set default version value
-3. Versioning with Headers
-e.g. add header in the request - **X-Version: 2.0**  
-e.g. use accept header - **Accept: application/json; version=2.0**
-4. Versioning with content type
-e.g. - **Content-Type: application/vnd.yourapp.camp.v1+json**
-**Accept: application/vnd.yourapp.camp.v1+json**  
-Powerful way as it can version payload as well as API call itself.  
-
-Which versioning strategy to be used?  
-1. Query string/URI versioning - for simple APIs
-2. More publicly used API - versioning with content type
-3. Depends on the requirement 
-
-------------------------------------------------------------------------------
-## API and Security
-1. CORS - only limited to browsers - headers - (Access-Control-Request-Method, Access-Control-Allow-Origin)
-
-#### Authentication types for API
-1. Cookies  
-Easy, less secure, not used in bankng apps
-2. Basic Auth  
-Send user credentials in Query parameters or in headers. Not secured unless SSL is eanbled
-3. Token based auth  
-Client send credentials, then server returns token, every next request sends roken and server validates and the request is performed. Generally expires after 20-25 mins. JWT is most common token based auth
-4. OAuth  
-Use trusted 3rd party to identify, Server never gets credentials  
-**How it works**  
 
 
 ------------------------------------------------------------------------------
