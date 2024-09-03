@@ -67,6 +67,27 @@ Most of the time, you will be sending the static representations of resources in
 | Content-Length      | Content-Length: 5120                     | Size of the response body in bytes             | Indicates the size of the response body in bytes.                       | Providing the exact size of the content in the response.    |
 | Content-Disposition | Content-Disposition: attachment; filename="example.pdf" | inline, attachment; filename="filename.ext"   | Suggests how the content should be displayed (inline or as an attachment). | Forcing a download of a file, like a PDF, rather than displaying it in the browser. |
 
+#### 5. Security headers
+
+| Header                   | Example                                   | Possible Values                                | Purpose                                                                 | Use Case                                                   |
+|--------------------------|-------------------------------------------|------------------------------------------------|-------------------------------------------------------------------------|------------------------------------------------------------|
+| Strict-Transport-Security | Strict-Transport-Security: max-age=31536000; includeSubDomains | max-age, includeSubDomains, preload           | Enforces the use of HTTPS over HTTP for future requests to the domain.  | Ensuring that all future requests to the domain are made over HTTPS. |
+| Content-Security-Policy   | Content-Security-Policy: default-src 'self'; script-src 'self' https://trusted-scripts.com; (indicates scripts can be loaded only from this domain)
+ | scrip-src- (controls which scripts browsers can load)| Controls the resources the browser is allowed to load for a given page. | Preventing cross-site scripting (XSS) attacks by limiting resource loading. |
+| X-Frame-Options           | X-Frame-Options: DENY                     | DENY, SAMEORIGIN                               | Controls whether a page can be displayed in a frame or iframe.          | Preventing clickjacking attacks by disallowing framing of the page. |
+| X-XSS-Protection (see XSS attack below)         | X-XSS-Protection: 1; mode=block           | 0, 1, 1; mode=block                            | Enables the Cross-Site Scripting (XSS) filter built into browsers.      | Preventing pages from loading when XSS attacks are detected.       |
+| Access-Control-Allow-Origin | Access-Control-Allow-Origin: *           | * (wildcard), specific origin (e.g., https://example.com) | Specifies which origins can access the resources on the server. | Allowing cross-origin requests from specified domains, typically used in APIs. |
+
+**XSS attack - Cross site scripting attack** - 
+You have an input and also have document.getElemntById("a").innerHTML = userInput, and you are getting input from the url = /?userInput="", if userInput is not sanitised, whatever is passed in innerHTML wil get rendered  
+```<img src onerror="alert("document.cookie")```, and when we send this url to a user under target, the cookie would be read and we can write some email functionality in the onerror script to share the cookie on hacker email, then hacker can login.  
+
+**Solution - use textContent instaed of innerHTML, if still innerHTML is needed for dynaimically genrating HTML, then sanitize user input**  
+**Solution 2 - use X-XSS-Protection:0/1/mode: block; 0-no xss protection, 1: browser to try and sanitize the script, mode:block - stop loading the page**  
+
+
+#### 6. Caching headers
+
 
 ------------------------------------------------------------------------------
 ## Designing APIs
