@@ -90,8 +90,9 @@ You have an input and also have document.getElemntById("a").innerHTML = userInpu
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src https://*; child-src 'none';" />
 ```
 
-**Solution - use textContent instaed of innerHTML, if still innerHTML is needed for dynaimically genrating HTML, then sanitize user input**  
-**Solution 2 - use X-XSS-Protection:0/1/mode: block; 0-no xss protection, 1: browser to try and sanitize the script, mode:block - stop loading the page**  
+**Solution 2 - use textContent instaed of innerHTML, if still innerHTML is needed for dynaimically genrating HTML, then sanitize user input**  
+**Solution 3 - use X-XSS-Protection:0/1/mode: block; 0-no xss protection, 1: browser to try and sanitize the script, mode:block - stop loading the page**  
+Solution 3 is not needed if solution 1 is in place 
 
 
 #### 6. Caching headers
