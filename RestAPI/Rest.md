@@ -97,6 +97,15 @@ Solution 3 is not needed if solution 1 is in place
 
 #### 6. Caching headers
 
+| Header           | Example                                           | Possible Values                                     | Purpose                                                                     | Use Case                                           |
+|------------------|---------------------------------------------------|----------------------------------------------------|-----------------------------------------------------------------------------|----------------------------------------------------|
+| Cache-Control    | Cache-Control: max-age=3600, must-revalidate      | max-age, no-cache, no-store, must-revalidate        | Specifies caching policies in both requests and responses.                 | Controlling how and for how long resources should be cached by the browser or intermediate caches. |
+| Expires          | Expires: Wed, 21 Oct 2024 07:28:00 GMT            | Date in HTTP-date format (e.g., Wed, 21 Oct 2024 07:28:00 GMT) | Sets a specific expiration date and time for cached content.                | Defining when a resource should be considered stale.                   |
+| ETag             | ETag: "33a64df551425fcc55e4d42a148795d9f25f89d4"  | String (e.g., hash or version identifier)           | Provides a way to validate cached responses by comparing ETag values.       | Ensuring efficient caching by validating whether the cached version is still fresh. |
+| Last-Modified    | Last-Modified: Tue, 15 Nov 2024 12:45:26 GMT      | Date in HTTP-date format                            | Indicates the date and time at which the resource was last modified.        | Allowing the browser to make conditional requests to check if the cached content is still valid. |
+| Vary             | Vary: Accept-Encoding                             | Header names (e.g., Accept-Encoding, User-Agent)    | Instructs caches to store multiple versions of a resource based on the specified headers. | Serving different versions of content based on headers like `Accept-Encoding` for gzip, deflate, etc. |
+
+
 
 ------------------------------------------------------------------------------
 ## Designing APIs
