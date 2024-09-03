@@ -105,6 +105,26 @@ Solution 3 is not needed if solution 1 is in place
 | Pragma         | Pragma: no-cache                                  | no-cache                                           | Used for backward compatibility with HTTP/1.0 caches to ensure that a request bypasses the cache. | use in legace systems supporting HTTP/1.0 clients - check http version in express```console.log(req.httpVersion); // e.g., "1.1" or "2.0"```, in browser inspect network tab |
 
 
+### HTTP methods
+
+| HTTP Method | When to Use                                               | Scenarios of Use Cases                                             |
+|-------------|-----------------------------------------------------------|--------------------------------------------------------------------|
+| `GET`       | Retrieve data from the server without modifying it.       | Fetching a web page, querying a list of users, or reading an article. |
+| `POST`      | Submit data to the server to create or update a resource. | Submitting a form, creating a new user, or posting a comment.        |
+| `PUT`       | Update or create a resource at a specific URI.            | Updating user information, replacing an existing resource, or uploading a file. |
+| `DELETE`    | Remove a resource from the server.                        | Deleting a user, removing an item from a cart, or clearing a database record. |
+| `PATCH`     | Apply partial modifications to a resource.                | Updating specific fields of a user's profile, such as changing an email address. |
+| `HEAD`  (to check eTag)    | Retrieve headers from the server without the response body. | Checking if a resource exists or validating a resource without downloading it. |
+| `OPTIONS`   | Describe the communication options for the target resource. | Checking the allowed HTTP methods for a resource or performing CORS preflight checks. |
+| `TRACE`     | Perform a message loop-back test along the path to the target resource. | Diagnosing network issues by seeing the path a request takes to reach the server. |
+| `LINK`      | Establish relationships between resources.                | Creating a connection between related resources, such as linking a blog post to its author. |
+| `UNLINK`    | Remove relationships between resources.                   | Removing a connection between related resources, like detaching an author from a blog post. |
+| `PURGE`     | Clear the cache for a specific resource.                  | Invalidating cached content on a CDN or a reverse proxy, forcing a fresh fetch from the origin server. |
+| `LOCK`      | Lock a resource to prevent it from being modified by others. | Locking a file in a WebDAV server to prevent concurrent edits.       |
+| `UNLOCK`    | Unlock a resource previously locked by `LOCK`.            | Releasing a lock on a file in a WebDAV server to allow others to edit it. |
+| `COPY`      | Copy a resource from one URI to another.                  | Copying a file or a directory within a WebDAV server.               |
+| `MOVE`      | Move a resource from one URI to another.                  | Moving a file from one folder to another on a WebDAV server.        |
+
 ------------------------------------------------------------------------------
 ## Designing APIs
 #### 1. URIs
