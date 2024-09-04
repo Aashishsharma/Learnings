@@ -110,6 +110,41 @@ As soon as max call is 5 or > 5, the hash time increases, because all 4 thread i
 **When running setTimeout with 0ms and async IO method, the order of execution can never be guranteed, because while the setTimeout is finished, the event loop might or might not have gone to IO callback queue, because main thread is empty and event queue is started**  
 **In above example, we did not have any task running in main thread, if we add for loop for million times, then we know for sure, that cb of timeout is complete, and in this case, setimeout will always be ececuted before IO CB**
 
+##### Usecases for process.nextTick and setImmediate
+
+1. **process.nextTick**
+
+```javascript
+const EventEmitter = require('node:events');
+type ClassData = {
+    payload: string
+}
+class MyClass extends EventEmitter {
+    data: ClassData
+    constructor(data: ClassData) {
+        super();
+        this.data = data;
+        // directly caaling this.emitEvent will not work, because liseners are not yet added
+        // and event would be emitted before listeners are registered
+
+        // this.emitEvent() - will not work
+        // fix - first task to be executed after callstack is free
+        // if can use setTimeout or setImmedaite as well, but those can get delayed since nextTick as highest priority
+        process.nextTick(() => {
+            this.emitEvent()
+        })
+    }
+    emitEvent() {
+        this.emit("initiate", this.data)
+    }
+}
+const obj = new MyClass({payload: 'hello world'})
+obj.on('initiate', (data) => {
+    console.log('event intiated ', data)
+})
+```
+
+Disadvantage of process.nextTick - everytime using process.nextTick will starve the event loop, so use wisely
 
 ### Scaling Nodejs app (Scale async tasks + sync tasks)
 1. One way to scale is increase threads in the libuv pool, but this will scale only async tasks, because only async tasks can be executed in thread pool
