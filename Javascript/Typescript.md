@@ -183,10 +183,6 @@ console.log(userCanAccessFile(FilePermission.EXECUTE, FilePermission.WRITE)) // 
 ## Functions
 
 ```typescript
-// interfaces are used in classes
-// type aliases are used in functions or any other place since 
-// type aliases can be used within type aliases
-// but we can't use interace within interface
 
 // Type Aliases 
 type stringOrNumber = string | number // can't do this using an interface
@@ -250,14 +246,13 @@ const addAll = (a: number, b: number, c?: number): number => {
 }
 
 // default param value
-const sumAll = (a: number = 10, b: number, c: number = 2): number => {
+const sumAll = (a:number, b: number, c: number = 2): number => {
     return a + b + c
 }
 
 logMsg(addAll(2, 3, 2))
 logMsg(addAll(2, 3))
 logMsg(sumAll(2, 3))
-logMsg(sumAll(undefined, 3))
 
 // Rest Parameters 
 const total = (a: number, ...nums: number[]): number => {
@@ -279,10 +274,26 @@ const isNumber = (value: any): boolean => {
 }
 
 // use of the never type 
-const numberOrString = (value: number | string): string => {
-    if (typeof value === 'string') return 'string'
-    if (isNumber(value)) return 'number'// using custom typeguard
+// 1. if function throws error
+// 2. infinite loop
+// 3. Exhaustive check for union types (see below)
+type Animal = "cat" | "dog" | "fish" ;
+function getAnimalSound(animal: Animal): string {
+    switch (animal) {
+        case "cat":
+            return "meow";
+        case "dog":
+            return "bark";
+        case "fish":
+            return "blub";
+        default:
+            const _exhaustiveCheck: never = animal; // Compile-time error if a case is missed
+            return _exhaustiveCheck;
+    }
 }
+// If you later add a new animal to the type, TypeScript will alert you to update this function.
+console.log(getAnimalSound('cat')) // "meow"
+// if we add cow in the ANimal union type in future, ts will throw error that switch case for cow is missed
 ```
 
 ## Type assertion
