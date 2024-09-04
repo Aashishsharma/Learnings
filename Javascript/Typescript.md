@@ -312,9 +312,8 @@ type Two = string | number // more genric, union type
 type Three = 'hello' // more specific, literal type
 
 // convert to more or less specific 
-let a: One = 'hello'
-let b = a as Two // less specific 
-let c = a as Three // more specific 
+let a: Two = 'hello'
+let c = a as One // more specific instead of string | number, c will now be a string
 
 // using angled bracket
 let d = <One>'world'
@@ -359,8 +358,8 @@ Access modifers in ts are same as that in Java, but only at compile time and not
 ```typescript
 class Coder {
     // by default, all the class members need to be initialized in constructor
-    // if we don't want that, add the null assertion
-    secondLang!: string
+    // if we don't want that
+    secondLang: string
 
     // we need to specify access modifers for each of the members, if not provided we need to 
     // add them as class members outside of the constructor
@@ -397,9 +396,9 @@ console.log(Dave.lang)
 class WebDev extends Coder {
     constructor(
         public computer: string,
-        name: string,
-        music: string,
-        age: number,
+        private name: string,
+        private music: string,
+        private age: number,
     ) {
         super(name, music, age)
         this.computer = computer
@@ -443,11 +442,6 @@ console.log(Page.play('strums'))
 class Peeps {
     // count is a member of a class and not a member of an instance 
     static count: number = 0
-
-    static getCount(): number {
-        return Peeps.count
-    }
-
     public id: number
 
     constructor(public name: string) {
