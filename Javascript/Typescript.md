@@ -273,10 +273,8 @@ const isNumber = (value: any): boolean => {
         ? true : false
 }
 
-// use of the never type 
-// 1. if function throws error
-// 2. infinite loop
-// 3. Exhaustive check for union types (see below)
+// ts returns never type in case if a function throws error or has infinite loop
+// use of the never type - Exhaustive check for union types (see below)
 type Animal = "cat" | "dog" | "fish" ;
 function getAnimalSound(animal: Animal): string {
     switch (animal) {
