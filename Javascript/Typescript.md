@@ -109,7 +109,7 @@ myTuple - mized // error
 // Objects
 let myObj: object
 
-// here ts automaticallyy infers the type of prop1 and prop2
+// here ts automatically infers the type of prop1 and prop2
 const exampleObj = {
     prop1: 'Dave',
     prop2: true,
@@ -157,17 +157,27 @@ console.log(greetGuitarist(jp))
 // hence ts throws are error if we don't add this typeguuard or narrowing
 // removing errors at development time
 
-// Enums 
-//
-enum Grade {
-    U,
-    D,
-    C,
-    B,
-    A,
-}
-
+// Enums - are named constants to write more maintainable code
+// by defaul in TS, enums are enumerated (numberd) starting with 0, we can also explicitly 
+// give the number value
+enum Grade { U, D, C, B, A, }
 console.log(Grade.U) // output = 0, GRADE.D = 1
+
+//e.g. user file permission check
+enum FilePermission {NONE, READ, WRITE, EXECUTE}
+// anyone who has access to write to a file, will also implicitly have access to read the file as well
+// this method will let us know if user can access file, notice we are using > operator since enums are enumerated
+const userCanAccessFile = (userPrem: FilePermission, filePerm: FilePermission): boolean => {
+    return userPrem >= filePerm
+}
+console.log(userCanAccessFile(FilePermission.READ, FilePermission.EXECUTE)) // false
+console.log(userCanAccessFile(FilePermission.EXECUTE, FilePermission.WRITE)) // true
+
+// advantage of enum - everywhere in code we can use enum in if condition
+// we don't have to manually checl if(abc === 'SOME_CONSTANT')
+// if we have this condition everywhere in the code and if the constatn needs to be chanhed
+// then everywhere we need to replace SOME_CONSTANT with SOME_CONSTANT1
+// in case of enum, we just need to change it enum
 ```
 
 ## Functions
