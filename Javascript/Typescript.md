@@ -1148,7 +1148,7 @@ C.prototype.toString = trace(C.prototype.toString);
 
 ### Decorator types
 
-#### Class decorator - ClassDecorator
+#### 1. Class decorator - ClassDecorator
 
 **Syntax for creating a decorator** -
 1. It should be a function
@@ -1182,7 +1182,6 @@ class InstanceCollector {
     install = <T extends {new (...args: any[]) :{} }>(baseClass: T, context: ClassDecoratorContext) => {
         let me = this;
         return class extends baseClass {
-            
             constructor(...args: any[]) {
                 super(baseClass);
                 me.instances.add(this)
@@ -1231,11 +1230,60 @@ console.log('instances: ', instanceCollector.instances); // returns set we 3 cla
 
 ```
 
+#### 1. Class Method decorator - ClassMethodDecorator 
 
-Class decorators
-Method decorators
-Property decorators
-Parameter decorators
+**Syntax for creating a decorator** -
+1. It should be a function
+2. will have 2 params **1. baseFunction** - on which the decorator needs to be applied **2. Context** - which has different props like - 
+```javascript
+context: {
+    kind: string; // class, method, field
+    name: string | symbol;
+}
+```
+3. Since we are altering a behavior of a given class using class decorator, the function should return a new function which makes a call the given function
+4. In this new function, we can add whatever new functionality, metadata that we want to add
+5. **syntax**
+
+```javascript
+class Project {
+    budget: number = 900;
+    @withBudget(10)
+    writeTests() {
+        console.log('Tests are important!!!')
+    }
+    @withBudget(500)
+    fixBugInProduction() {
+        console.log('Fixing bug in production .... :(((')
+    }
+}
+
+const project = new Project();
+project.fixBugInProduction(); // Fixing bug in production .... :(((
+project.fixBugInProduction(); // Insufficient budget for fixBugInProduction. Required 500, available 400
+
+function withBudget(actionBudget: number) {
+    // note we are calling a paramaterized decorator @withBudget(200), so this should return a function decorator
+    // hence we have the first return below to return a decorator
+    // we added extends {budgest: number} to make sure that this decorator can only be applied to class methods that have budgest
+    return function <T extends {budget: number}>(target: Function, context: ClassMethodDecoratorContext<T>) {
+        // simialr to class decorator, where a decorator function needs to return a new class
+        // here in the decorator function we need to return a new function, add metadata logic and then call that function
+        return function(...args: any) {
+            // inside this function we have access to the Project calls this
+            //@ts-ignore
+            const instance = this as T
+            if (instance.budget > actionBudget) {
+                instance.budget = instance.budget - actionBudget
+                target.apply(instance, args)
+            } else {
+                console.error(`Insufficient budget for ${context.name.toString()}. Required ${actionBudget}, available ${instance.budget}`)
+            }
+            return target
+        }
+    }
+}
+```
 
 ## Typescript with React
 see react-typescript project
