@@ -1181,7 +1181,7 @@ class InstanceCollector {
 
     install = <T extends {new (...args: any[]) :{} }>(baseClass: T, context: ClassDecoratorContext) => {
         let me = this;
-        return class extends baseClass {
+        return class extends baseClass {j
             constructor(...args: any[]) {
                 super(baseClass);
                 me.instances.add(this)
@@ -1230,7 +1230,7 @@ console.log('instances: ', instanceCollector.instances); // returns set we 3 cla
 
 ```
 
-#### 1. Class Method decorator - ClassMethodDecorator 
+#### 2. Method decorator - ClassMethodDecorator 
 
 **Syntax for creating a decorator** -
 1. It should be a function
