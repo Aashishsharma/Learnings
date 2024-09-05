@@ -718,6 +718,7 @@ const logStudentKey = (student: Student, key: keyof Student): void => {
 
 logStudentKey(student, 'name')
 
+
 ```
 
 ## Generics
@@ -944,13 +945,17 @@ const recordAssignment = (assign: Required<Assignment>): Assignment => {
     return assign
 }
 
-// 3. ReadOnly<T> - creates a new type with all properties of an existing type T marked as read-only, preventing any modifications.
+// 3. Readonly<T> - creates a new type with all properties of an existing type T marked as read-only, preventing any modifications.
 const assignVerified: Readonly<Assignment> = { ...assignGraded, verified: true }
 assignVerified.grade = 22 // error -readonly
 
 recordAssignment({ ...assignGraded, verified: true })
 
+// 4 ReadonlyArray - make entire array readonly
+const roArray: ReadonlyArray<string> = ["red", "green", "blue"];
+
 // 4. Record<K, T> - creates a new type with keys of type K and values of type T. It's useful for creating dictionaries or mapping types.
+// using records, we can
 const hexColorMap: Record<string, string> = {
     red: "FF0000",
     green: "00FF00",
@@ -1079,22 +1084,6 @@ type ConditionalMappedType<T> = {
     [K in keyof T]: T[K] extends SomeCondition ? X : Y;
 };
 
-// e.g. fix this code
-type Vehicle = {
-    wheels: number;
-    isElectric: boolean;
-    speed: number;
-};
-type ConvertToMilesPerHour<T> = {
-    [K in keyof T]: K extends "speed" ? T[K] * 0.621371 : T[K];
-};
-type ConvertedVehicle = ConvertToMilesPerHour<Vehicle>;
-const car: ConvertedVehicle = {
-    wheels: 4,
-    isElectric: true,
-    speed: 100, // This property will be converted to miles per hour.
-};
-
 // another working example
 type Product = {
     [index: string]: string | number;
@@ -1127,9 +1116,121 @@ for (const key in productStatus) {
 
 ```
 
-## Decorators (To Do)
-Addes meta-deta (meta-logic) (meta-programming)  
-Can be added only to classes in TS
+## Decorators (usecase for building libraries - NestJS / TypeORM)
+
+Addes meta-deta, used for meta-programming  
+**metaprogramming** - programming is to write code that processes user data  
+**metaprogrmming - is to write code that processes code that processes user data**  
+
+#### Behind the scenes 
+
+1. client code using the decorator
+
+```javascript
+class C {
+  @trace // trace is the decorator on function
+  toString() {
+    return 'C';
+  }
+}
+```
+
+2. behind the scenes
+
+```javascript
+C.prototype.toString = trace(C.prototype.toString);
+// this indicates that for each instance of class C
+// the toString method is changed to a new method
+// trace(C.prototype.toString) - we call our custom decorator function
+// passing in the existing mthod, then trace and add more functionlaity to the existing function
+// this was the decorators work
+```
+
+### Decorator types
+
+#### Class decorator - ClassDecorator
+
+**Syntax for creating a decorator** -
+1. It should be a function
+2. will have 2 params **1. Baseclass** - on which the decorator needs to be applied **2. Context** - which has different props like - 
+```javascript
+context: {
+    kind: string; // class, method, field
+    name: string | symbol;
+}
+```
+3. Since we are altering a behavior of a given class using class decorator, the function should return a new class which extends the given class
+4. In this new class, we can add whatever new functionality, metadata that we want to add
+5. **syntax**
+```javascript
+function withEmploymentDate<T extends { new(...args: any[]): {} }>(baseClass: T, context: ClassDecoratorContext) {
+    return class extends baseClass {
+        employmentDate = new Date().toISOString(); // new property added for each instance if this decorator is used
+        constructor(...args: any[]) {
+            super(...args);
+            console.log('Adding employment date to ' + baseClass.name)
+        }
+    }
+}
+```
+
+#### Example usecase (Add new properties, add logs, seal all objects, keep track of all instances)
+```javascript
+class InstanceCollector {
+    instances = new Set();
+
+    install = <T extends {new (...args: any[]) :{} }>(baseClass: T, context: ClassDecoratorContext) => {
+        let me = this;
+        return class extends baseClass {
+            
+            constructor(...args: any[]) {
+                super(baseClass);
+                me.instances.add(this)
+            }
+
+        }
+
+    }
+}
+let instanceCollector = new InstanceCollector();
+
+function sealed(constructor: Function, context: ClassDecoratorContext) {
+    Object.seal(constructor);
+    Object.seal(constructor.prototype);
+}
+
+function withEmploymentDate<T extends { new(...args: any[]): {} }>(baseClass: T, context: ClassDecoratorContext) {
+    return class extends baseClass {
+        employmentDate = new Date().toISOString();
+        constructor(...args: any[]) {
+            super(...args);
+            console.log('Adding employment date to ' + baseClass.name)
+        }
+    }
+}
+
+@withEmploymentDate
+@sealed
+@instanceCollector.install
+class Manager {
+
+    task: string = 'Simple task'
+    project: string = 'Simple project'
+
+    constructor(){
+        console.log('Initializing the Manager class')
+    }
+}
+ 
+const manager1 = new Manager();
+const manager2 = new Manager();
+const manager3 = new Manager();
+console.log(manager1) // this has a new property employmentDate
+
+console.log('instances: ', instanceCollector.instances); // returns set we 3 class instances
+
+```
+
 
 Class decorators
 Method decorators
