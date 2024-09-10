@@ -57,8 +57,22 @@ it('renders correctly', () => {
 // package.json
 "scripts": {
   "test": "react-scripts test", // react-scripts runs the test which has jest, jest-dom installed
-  "coverage": "npm run test --coverage --watchAll --collectCoverageFrom='src/components/**/*.{ts,tsx}' --collectCoverageFrom='!src/components/**/*.{type}" 
+  "coverage": "npm run test --coverage --watchAll --collectCoverageFrom='src/components/**/*.{ts,tsx}' --collectCoverageFrom='!src/components/**/*.{type}", 
   // run code coverage for all ts/tsx files and ignore all typescripts files
+
+  // to setup code coverage thresholds
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "lines": 80,
+        "functions": 80,
+        "branches": 80,
+        "statements": -10
+      }
+    }
+  }
+  // jest will fail if less than 80% coverage for lines / branches/functions or more than 10 statements not covered
+
 }
 ```
 
