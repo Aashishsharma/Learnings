@@ -13,6 +13,7 @@ Testing in react is done with 2 libraries (Jest and RTL)
 1. **Jest** - it is a test runner (testing framework) - describe, test etc. function are part of this library
 2. **RTL (React testing library)** - it provides a virtual DOM, that is used to verify behaviour of a component
 
+## 1. JEST
 ![alt text](PNG/J1.PNG "Title") 
 
 ```javascript
@@ -76,7 +77,7 @@ it('renders correctly', () => {
 }
 ```
 
-## Matchers
+### Matchers
 
 Besides below matchers - jest dom provides custom matchers related to virtual DOM  
 [Jest-dom custom matchers](https://github.com/testing-library/jest-dom?tab=readme-ov-file#custom-matchers)
@@ -233,6 +234,7 @@ test('city database has San Juan', () => {
 });
 ```
 By default, the before and after blocks apply to every test in a file. You can also group tests together using a describe block. When they are inside a describe block, the before and after blocks only apply to the tests within that describe block.  
+
 So jest also has describe  
 ```javascript
 // Applies to all tests in this file
@@ -255,102 +257,16 @@ describe('matching cities to foods', () => {
 //first aftereach is run and then afterall
 ```
 
-### Mocking
-2 Ways  
-1. by creating a mock function to use in test code
-2. writing a manual mock to override a module dependency.
 
-**1. Creating a Mock function**  
-```javascript
-function forEach(items, callback) {
-  for (let index = 0; index < items.length; index++) {
-    callback(items[index]);
-  }
-}
-//To test this function, we can use a mock function, and inspect
-//the mock's state to ensure the callback is invoked as expected
-const mockCallback = jest.fn(x => 42 + x);
-forEach([0, 1], mockCallback);
-// The mock function is called twice
-expect(mockCallback.mock.calls.length).toBe(2);
-// The first argument of the first call to the function was 0
-expect(mockCallback.mock.calls[0][0]).toBe(0);
+## 2. RTL (React testing library)
 
-//All mock functions have this special .mock property, which is where 
-//data about how the function has been called and what the function returned is kept
+### Steps to test the components
+1. Render the component in virtualDOM in test env (achieved using render method from RTL)
+2. Find an element renderd by the component (achieved by RTL quereis, see below)
+3. Assert agains the found element (use matchers from jest + custom matchers from jest-dom library)
 
-//These mock members are very useful in tests to assert how these functions get called
-// The function was called exactly once
-expect(someMockFunction.mock.calls.length).toBe(1);
-// The first arg of the first call to the function was 'first arg'
-expect(someMockFunction.mock.calls[0][0]).toBe('first arg');
-
-//Mock return values
-const myMock = jest.fn();
-console.log(myMock());
-// > undefined
-myMock.mockReturnValueOnce(10).mockReturnValueOnce('x').mockReturnValue(true);
-console.log(myMock(), myMock(), myMock(), myMock());
-// > 10, 'x', true, true
-```
-
-**Mocking modules**
-```javascript
-// users.js
-import axios from 'axios';
-class Users {
-  static all() {
-    return axios.get('/users.json').then(resp => resp.data);
-  }
-}
-export default Users;
-
-// users.test.js
-import axios from 'axios';
-import Users from './users';
-jest.mock('axios');
-test('should fetch users', () => {
-  const users = [{name: 'Bob'}];
-  const resp = {data: users};
-  axios.get.mockResolvedValue(resp);
-  return Users.all().then(data => expect(data).toEqual(users));
-});
-```
-
-**2. Writing manual mocks**  
-To mock a module called user in the models directory, create a file called user.js and put it in the models/__mocks__ directory. Note that the __mocks__ folder is case-sensitive.
-
-### Jest with Mongo
-npm i @shelf/jest-mongodb --save-dev  
-In jest config add  
-{
-  "preset": "@shelf/jest-mongodb"
-}
-```javascript
-// your test file
-const {MongoClient} = require('mongodb');
-describe('insert', () => {
-  let connection;
-  let db;
-  beforeAll(async () => {
-    connection = await MongoClient.connect(global.__MONGO_URI__, {
-      useNewUrlParser: true,
-    });
-    db = await connection.db(global.__MONGO_DB_NAME__);
-  });
-  afterAll(async () => {
-    await connection.close();
-    await db.close();
-  });
-  it('should insert a doc into collection', async () => {
-    const users = db.collection('users');
-    const mockUser = {_id: 'some-user-id', name: 'John'};
-    await users.insertOne(mockUser);
-    const insertedUser = await users.findOne({_id: 'some-user-id'});
-    expect(insertedUser).toEqual(mockUser);
-  });
-});
-```
+### 1. RTL quereis
+![alt text](PNG/J1.PNG "Title") 
 
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
