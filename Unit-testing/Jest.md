@@ -13,11 +13,14 @@ Testing in react is done with 2 libraries (Jest and RTL)
 1. **Jest** - it is a test runner (testing framework) - describe, test etc. function are part of this library
 2. **RTL (React testing library)** - it provides a virtual DOM, that is used to verify behaviour of a component
 
-File name should be - <componentname>.test.tsx/jsx
+![alt text](PNG/J1.PNG "Title") 
+
 ```javascript
 import { render, screen } from '@testing-library/react'
 import { Greet } from './Greet'
-describe('Greet', () => {
+//Don't need to import describe/ test
+describe('Greet', () => { // describe is used to group multiple tests, for logical grouping 
+  // 1 test suit = 1 test file and not 1 describe block
   test('renders correctly', () => {
     render(<Greet />) // this creates a virtual DOM for Greet component
     const textElement = screen.getByText('Hello Guest') // screen is an obj, which allows to query VDOM
@@ -30,8 +33,34 @@ describe('Greet', () => {
     expect(textElement).toBeInTheDocument()
   })
 })
+
+// both describe and test functions have utility (only and skip) functions
+// describe.only() // test.skip()
+// e.g.
+describe.only("Greet", () => {})
+
+// test function can be replaced with it functions
+// no difference
+it('renders correctly', () => {
+})
+
+// test.skip() would be xit() and test.only would be fit()
 ```
-Don't need to import describe/ test
+
+### Coverage
+
+![alt text](PNG/J2.PNG "Title") 
+
+**coverage command**  
+
+```json
+// package.json
+"scripts": {
+  "test": "react-scripts test", // react-scripts runs the test which has jest, jest-dom installed
+  "coverage": "npm run test --coverage --watchAll --collectCoverageFrom='src/components/**/*.{ts,tsx}' --collectCoverageFrom='!src/components/**/*.{type}" 
+  // run code coverage for all ts/tsx files and ignore all typescripts files
+}
+```
 
 ## Jest
 Is a testing javascript framework and works with rpojects like node, react, angular (Mocha is specific to Node)  
