@@ -57,7 +57,7 @@ it('renders correctly', () => {
 // package.json
 "scripts": {
   "test": "react-scripts test", // react-scripts runs the test which has jest, jest-dom installed
-  "coverage": "npm run test --coverage --watchAll --collectCoverageFrom='src/components/**/*.{ts,tsx}' --collectCoverageFrom='!src/components/**/*.{type}", 
+  "coverage": "npm run test --coverage --watchAll --collectCoverageFrom='src/components/**/*.{ts,tsx}' --collectCoverageFrom='!src/components/**/*.{type}'", 
   // run code coverage for all ts/tsx files and ignore all typescripts files
 
   // to setup code coverage thresholds
@@ -76,59 +76,11 @@ it('renders correctly', () => {
 }
 ```
 
-## Jest
-Is a testing javascript framework and works with rpojects like node, react, angular (Mocha is specific to Node)  
-It is simple to use  
-**Features**
-1. Zero config - config free for most JS projects
-2. Snapshots - Make test which keep track of large objs. with ease
-3. Isolated/Fast - By ensuring your tests have unique global state, Jest can reliably run tests in parallel. 
-4. Code coverage out of the box - Generate code coverage by adding the flag --coverage.  
-
-## Getting started
-1. Installation
-npm i --save-dev jest  
-in pkg.json - "test": "jest"  
-2. Simple test case
-```javascript
-//sum.js
-function sum(a, b) {
-  return a + b;
-}
-module.exports = sum;
-
-// use test name as below for jest to understand
-//sum.test.js
-const sum = require('./sum');
-test('adds 1 + 2 to equal 3', () => {
-  expect(sum(1, 2)).toBe(3);
-});
-```
-3. Generate a basic configuration file (optional)  
-Based on your project, Jest will ask you a few questions and will create a basic configuration file  
-jest --init  
-4. using bable  
-npm i --save-dev babel-jest @babel/core @babel/preset-env  
-then create a config file
-```javascript
-// babel.config.js
-module.exports = {
-  presets: [
-    [
-      '@babel/preset-env',
-      {
-        targets: {
-          node: 'current',
-        },
-      },
-    ],
-  ],
-};
-```
-
 ## Matchers
-Jest uses "matchers" to let you test values in different ways.  
-Commonly used matchers  
+
+Besides below matchers - jest dom provides custom matchers related to virtual DOM  
+[Jest-dom custom matchers](https://github.com/testing-library/jest-dom?tab=readme-ov-file#custom-matchers)
+
 ```javascript
 //exact equality - value and type of obj should be same
 test('two plus two is four', () => {
