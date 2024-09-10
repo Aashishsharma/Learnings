@@ -7,6 +7,32 @@
 6. **Snapshot testing** - renders UI comp, takes a snapshot, compares it to a reference snapshot file, test fails if snapshots don't match(either update test/snapshot), npm i --save-dev react-test-renderer (import React, import renderer from 'react-test-renderer'; it('renders correctly', () => {const tree = renderer.create(<`Link page="http://www.facebook.com"> Facebook</Link>`).toJSON();expect(tree).toMatchSnapshot();});), code review of snapshots, jest --updateSnapshot, jest --watch(ineractively update snapshot), **property matchers** - when comp renders dynamic val - renders Math.random() - (expect(tree).toMatchSnapshot({createdAt: expect.any(Date),id: expect.any(Number),});)
 7. **Snapshot vs visual regression(backstop)** - sanpshot - only UI is verified, values are serialized, stored within text files, and compared using a diff algorithm.,  for logic do normal unit testing (above 1-5), visual regression - take screenshots of web pages and compare the resulting images pixel by pixel. Jest ADV - no flakiness n fast, visual regression requires real browser n diff browser render UI differently(use docker), in snapshot tests is run in cli
  
+## React Testing
+Testing in react is done with 2 libraries (Jest and RTL)  
+
+1. **Jest** - it is a test runner (testing framework) - describe, test etc. function are part of this library
+2. **RTL (React testing library)** - it provides a virtual DOM, that is used to verify behaviour of a component
+
+File name should be - <componentname>.test.tsx/jsx
+```javascript
+import { render, screen } from '@testing-library/react'
+import { Greet } from './Greet'
+describe('Greet', () => {
+  test('renders correctly', () => {
+    render(<Greet />) // this creates a virtual DOM for Greet component
+    const textElement = screen.getByText('Hello Guest') // screen is an obj, which allows to query VDOM
+    expect(textElement).toBeInTheDocument() // this matchers like toBeInTheDOM is comming from jest-dom library which is a dependent of RTL library
+    // to see all custom matchers - https://github.com/testing-library/jest-dom?tab=readme-ov-file#custom-matchers
+  })
+  test('renders a name', () => {
+    render(<Greet name="Vishwas" />)
+    const textElement = screen.getByText('Hello Vishwas')
+    expect(textElement).toBeInTheDocument()
+  })
+})
+```
+Don't need to import describe/ test
+
 ## Jest
 Is a testing javascript framework and works with rpojects like node, react, angular (Mocha is specific to Node)  
 It is simple to use  
