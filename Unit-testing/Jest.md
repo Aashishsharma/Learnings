@@ -271,7 +271,7 @@ describe('matching cities to foods', () => {
 ![alt text](PNG/J3.PNG "Title") 
 
 
-#### 1. getByRole() - ``````
+#### 1. getByRole()
 1. This query will get html elements from RTL VDOM based on role attribute from HTML tags
 2. By default most html elements have default roles even if we don't add them in html tag
 3. role attribute are added to help assistive technologies understand the meaning of that tag
@@ -320,6 +320,44 @@ getAllByRole('button', { hidden: true })
 // checked?: boolean,
 ```
 
+#### 2. getByLabelText() - This will search for the label that matches the given TextMatch  
+
+```javascript
+
+
+import {render, screen} from '@testing-library/react'
+render(<Login />)
+const inputNode = screen.getByLabelText('Username')
+```
+
+#### 3. getByPlaceholderText()
+#### 4. getByText()
+#### 5. getByAltText()
+#### 6. getByTitle()
+#### 6. getByTestId() - returns elements that have matching data-testid attribute
+
+**what is data-testid attribute?** - 
+1. Provide unique identifiers for testing purposes, used in unit and intergation testing to select DOM elements. 
+2. Used in complex UIs to efficiently target elements
+3. These attributes should not be pushed to production code
+```javascript
+<div data-testid="custom-element" />
+
+import {render, screen} from '@testing-library/react'
+render(<MyComponent />)
+const element = screen.getByTestId('custom-element')
+```
+4. Removing data-testid attributes for prod
+**Using bable**
+
+```javascript
+// npm install --save-dev babel-plugin-react-remove-properties
+{
+  "plugins": [
+    ["babel-plugin-react-remove-properties", { "properties": ["data-testid"] }]
+  ]
+}
+```
 
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
