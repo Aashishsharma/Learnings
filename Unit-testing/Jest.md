@@ -520,6 +520,26 @@ test('rendres a count of 10 after clicking the set button', async () => {
     const countElement = screen.getByRole('heading')
     expect(countElement).toHaveTextContent('10')
   })
+
+// test case to check the order of focus on html elements when keyboard tab is pressed
+test('elements are focused in the right order', async () => {
+    user.setup()
+    render(<Counter />)
+    const amountInput = screen.getByRole('spinbutton')
+    const setButton = screen.getByRole('button', { name: 'Set' })
+    const incrementButton = screen.getByRole('button', { name: 'Increment' })
+    await user.tab()
+    expect(incrementButton).toHaveFocus()
+    await user.tab()
+    expect(amountInput).toHaveFocus()
+    await user.tab()
+    expect(setButton).toHaveFocus()
+  })
+
+// other apis from user events (specific to keyboard)
+// user.type()
+// .tab()
+// .clear()
 ```
 
 ### 2. Keyboard interaction
