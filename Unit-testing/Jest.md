@@ -394,6 +394,35 @@ const element = screen.getByTestId('custom-element')
 
 ![alt text](PNG/J7.PNG "Title") 
 
+### 3. RTL queryBy...()
+**all the above queries we saw get.., they only return an element if it is present in VDOM**  
+**If we want to test if the element should not be present in the DOM?**  
+**e.g. - for not logged in user we show login button, for logged in button we show logout button**  
+**if we want to ensure that logout button is not present when user is not logged in, then we cannot use getBy methods**  
+
+```javascript
+// componet JSX
+return (<>
+    {isLoggedIn? <button>Log out</button>: <button>Log in</button>}
+  </>
+)
+
+// test case to show log out button is not in DOM when user is not logged in
+
+let elem = screen.getByRole('button', {
+  name: 'Log out'
+})
+expect(elem).not.toBeInTheDocument() // this throws error
+// cannot find accessible element button with name Log out
+// instead we need to use queryByRole
+
+let elem = screen.queryByRole('button', {
+  name: 'Log out'
+})
+expect(elem).not.toBeInTheDocument() // this works
+```
+
+
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
 npm i --save-dev react-test-renderer
