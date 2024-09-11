@@ -548,6 +548,58 @@ test('elements are focused in the right order', async () => {
 
 ```
 
+## 3. Testing custom hooks in react
+We cannot directly test custom hooks in react because 
+1. custom hooks don't return any jsx, so no virtaul DOM
+2. hooks can't be called outside of functional components
+
+```javascript
+// this wont work
+render(useCounter)
+```
+
+Need to use renderHook function instead of the defaul render function
+
+```javascript
+// hook code
+import { useState } from 'react'
+import { UseCounterProps } from './userCouner.types'
+export const useCounter = ({ initialCount = 0 }: UseCounterProps = {}) => {
+  const [count, setCount] = useState(initialCount)
+  const increment = () => setCount(count + 1)
+  const decrement = () => setCount(count - 1)
+  return { count, increment, decrement }
+}
+
+// unit test
+import { renderHook, act } from '@testing-library/react'
+import { useCounter } from './useCounter'
+describe('useCounter', () => {
+  test('should render the initial count', () => {
+    const { result } = renderHook(useCounter) // notice we need to use renderHook
+    // this returns result object, which has current property which has all the return values from custom hook
+    expect(result.current.count).toBe(0)
+  })
+  test('should accept and render the same initial count', () => {
+    const { result } = renderHook(useCounter, {// in the second arg, we can pass the initialProps to the customhook
+      initialProps: { initialCount: 10 },
+    })
+    expect(result.current.count).toBe(10)
+  })
+  test('should increment the count', () => {
+    const { result } = renderHook(useCounter)
+    act(() => result.current.increment())
+    expect(result.current.count).toBe(1)
+  })
+  test('should decrement the count', () => {
+    const { result } = renderHook(useCounter)
+    act(() => result.current.decrement())
+    expect(result.current.count).toBe(-1)
+  })
+})
+
+```
+
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
 npm i --save-dev react-test-renderer
