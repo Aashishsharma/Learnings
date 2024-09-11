@@ -450,8 +450,23 @@ test('check logout button is diplayed after successful login', async () => {
     timeout: 2000 // change default timeout of 100ms
   })
 })
-
 ```
+
+### 5. Debugging in unit test
+
+**1. using debug()**  
+```javascript
+screen.debug() // this will log the snapshot of current VDOM
+```
+
+**2. logRoles()**  
+```javascript
+const view = render(<Greet />)
+logRoles(view.container)// this will give list of all role attributes attached to each VDOM element 
+```
+
+### 6. VVIP - use Testing playground chrome extension to generate queries for testing
+**Instead of generating query for each element in a unit test, install above extension and when we hover over the element, we will get the RTL query to get the element in the unit test**
 
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
