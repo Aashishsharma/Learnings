@@ -805,7 +805,11 @@ static analysis checks if the code is well written (formatting, limit complexity
 
 ##### 1. Use Typescript
 ##### 2. ESlint
-
+##### 3. Prettier
+##### 4. Husky - used to add pre-commit hooks, here we can add linters and formatters in the pre-commit hooks, if there is any linting or formatting issue, the commit is aborted, when we install husky, .husky folder is created, it has a file named pre-commit, inside this file we can add the npm lint and format commands to ensure those commands are run before the code is commited, if any of the commands file, commit is aborted  
+similar to pre-commit hook, we alos have a pre-push hook,  
+1. in pre-commit - do linting and formatting
+2. in pre-push hook - do npm run test commands
 
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
