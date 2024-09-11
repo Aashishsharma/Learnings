@@ -129,9 +129,6 @@ interface Guitarist {
 //     albums: (string | number)[]
 // }
 
-// whn to use interface vs type
-// see functions section
-
 let evh: Guitarist = {
     name: 'Eddie',
     active: false,
@@ -180,6 +177,42 @@ console.log(userCanAccessFile(FilePermission.EXECUTE, FilePermission.WRITE)) // 
 // in case of enum, we just need to change it enum
 ```
 
+### Types vs interfaces
+1. We can use union in types but not in interfaces
+
+```typescript
+type abc = string | number
+// not possible with interfaces
+```
+
+2. We can extend interfaces by re-writing interfaces, not possible with types
+
+```typescript
+interface User {
+    name: string
+}
+// later in the app, we wan;t to add age to the User type
+interface User {
+    age: number
+}
+// this results to 
+interface User {
+    name: string,
+    age: number
+}
+// thus interfaces tolerates re-declarations
+// not possible with types
+// but what is the usecase for this?
+// suppose we want to add a new propery on the global window object of DOM
+interface Window {
+    test: () : void
+}
+// now we can use
+window.test()
+// with above Window interface declaration
+// we have extended the in-build Window interface that ts already had
+```
+
 ## Functions
 
 ```typescript
@@ -190,7 +223,7 @@ type stringOrNumberArray = (string | number)[]
 type Guitarist = {
     name?: string,
     active: boolean,
-    albums: stringOrNumberArray // here we used a type inside a type, we can do this when using an interface as well
+    albums: stringOrNumberArray
 }
 
 type UserId = stringOrNumber
