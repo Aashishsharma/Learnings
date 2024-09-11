@@ -588,7 +588,8 @@ describe('useCounter', () => {
   })
   test('should increment the count', () => {
     const { result } = renderHook(useCounter)
-    act(() => result.current.increment())
+    act(() => result.current.increment()) // notice the use of act
+    // act functions ensure that the state updates are processed before any assertions are made
     expect(result.current.count).toBe(1)
   })
   test('should decrement the count', () => {
@@ -598,6 +599,66 @@ describe('useCounter', () => {
   })
 })
 
+```
+
+## 4. Mocking in Jest
+
+**2 common scenarios where we need to mock the function**  
+1. Calling parent handler functions
+2. When making API calls
+
+### 1. Calling parent handler functions
+
+```javascript
+// counter component where inc / dec is handleded by parent component
+import { CounterTwoProps } from './CounterTwo.types'
+export const CounterTwo = (props: CounterTwoProps) => {
+  return (
+    <div>
+      <h1>Counter Two</h1>
+      <p>{props.count}</p>
+      {props.handleIncrement && (
+        <button onClick={props.handleIncrement}>Increment</button>
+      )}
+      {props.handleDecrement && (
+        <button onClick={props.handleDecrement}>Decrement</button>
+      )}
+    </div>
+  )
+}
+
+// the basic of unit test is to ensure that we just test the counter component
+// this unit test should not bother to test handleIncrement / decrement handlers from parent components
+// so we need to mock those functions
+
+import { render, screen } from '@testing-library/react'
+import user from '@testing-library/user-event'
+import { CounterTwo } from './CounterTwo'
+
+test('renders correctly', () => {
+  render(<CounterTwo count={0} />)
+  const textElement = screen.getByText('Counter Two')
+  expect(textElement).toBeInTheDocument()
+})
+
+test('handlers are called', async () => {
+  user.setup()
+  const incrementHandler = jest.fn() // create 2 mock functions
+  const decrementHandler = jest.fn()
+  render(
+    <CounterTwo
+      count={0}
+      handleIncrement={incrementHandler} // pass mocked functions to the component
+      handleDecrement={decrementHandler}
+    />
+  )
+  const incrementButton = screen.getByRole('button', { name: 'Increment' })
+  const decrementButton = screen.getByRole('button', { name: 'Decrement' })
+  await user.click(incrementButton) // notice that we need to use user-events to simulate button click
+  await user.click(decrementButton)
+  expect(incrementHandler).toHaveBeenCalledTimes(1)
+  expect(decrementHandler).toHaveBeenCalledTimes(1)
+})
 ```
 
 ## Snapshot testing
