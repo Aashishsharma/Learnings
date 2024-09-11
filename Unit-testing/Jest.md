@@ -359,6 +359,22 @@ const element = screen.getByTestId('custom-element')
 }
 ```
 
+### Priority order for queries
+
+**always use getByRole wherever possible**
+
+| Priority | Query              | When to Use                                                     |
+|----------|--------------------|-----------------------------------------------------------------|
+| 1        | `getByRole`        | Use for elements with ARIA roles (e.g., button, heading, link). |
+| 2        | `getByLabelText`   | Use for form elements associated with a label.                  |
+| 3        | `getByPlaceholderText` | Use for input elements with placeholder text.              |
+| 4        | `getByText`        | Use for elements with visible text content.                     |
+| 5        | `getByDisplayValue`| Use for form elements displaying a specific value.              |
+| 6        | `getByAltText`     | Use for images with alt text.                                   |
+| 7        | `getByTitle`       | Use for elements with a title attribute.                        |
+| 8        | `getByTestId`      | Use for elements with a `data-testid` attribute.                |
+
+
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
 npm i --save-dev react-test-renderer
