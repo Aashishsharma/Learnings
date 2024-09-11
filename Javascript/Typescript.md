@@ -215,6 +215,42 @@ console.log(window.test())
 // we have extended the in-build Window interface that ts already had
 ```
 
+### any vs unknown
+1. any lets you do anything with the object 
+2. unknown restricts you to do anything with that object unless you add typeguards
+
+```typescript
+let a: any;
+let b: unknown
+
+a.whatever() // no issues with ts
+b.whatever() // issue - basically you cannot do anything with b unless you add some typeguards
+```
+
+```typescript
+// usecase - in try catch block error is of type unknown
+// when error is of type unknown, we basically cannot do anything with error object, unless we add typeguards
+try {
+
+} catch(error: unknown) {
+    let message: string;
+    if(error instanceof Error)
+        message = error.message;
+    else if(error && typeof error === 'object' && 'message' in error && typeof error.message === 'string') {
+        message = error.message;
+    }
+    else if(typeof error === 'string') {
+        message = error
+    } 
+    else {
+        message = 'unknown error'
+    }
+    res.status(500).json({message})
+}
+
+```
+
+
 ## Functions
 
 ```typescript
