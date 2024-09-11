@@ -268,7 +268,10 @@ describe('matching cities to foods', () => {
 ### 1. RTL quereis
 ![alt text](PNG/J4.PNG "Title") 
 
-#### 1. getByRole() - ```screen.getByRole('textbox')```
+![alt text](PNG/J3.PNG "Title") 
+
+
+#### 1. getByRole() - ``````
 1. This query will get html elements from RTL VDOM based on role attribute from HTML tags
 2. By default most html elements have default roles even if we don't add them in html tag
 3. role attribute are added to help assistive technologies understand the meaning of that tag
@@ -292,6 +295,30 @@ describe('matching cities to foods', () => {
 | `<header>`     | `banner`             | `banner`, `group`          |
 | `<footer>`     | `contentinfo`        | `contentinfo`, `group`     |
 | `<form>`       | `form`               | `form`, `search`           |
+
+**Usage** - 
+
+```javascript
+const elem = screen.getByRole('textbox')
+
+// we can pass optional 3rd argument
+<body>
+  <main aria-hidden="true">
+    <button>Open dialog</button>
+  </main>
+  <div role="dialog">
+    <button>Close dialog</button>
+  </div>
+</body> 
+
+//getByRole('button') would only return the Close dialog-button. To make assertions about the Open dialog-button you would need to use 
+getAllByRole('button', { hidden: true })
+// other properties in options object
+// name?: TextMatch,
+// description?: TextMatch,
+// selected?: boolean,
+// checked?: boolean,
+```
 
 
 ## Snapshot testing
