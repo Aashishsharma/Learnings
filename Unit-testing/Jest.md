@@ -472,7 +472,9 @@ logRoles(view.container)// this will give list of all role attributes attached t
 ## 2. user-events library
 **If we want to simulate user actions in VDOM unit testing, we need to use this library**
 
+
 ```javascript
+// ### 1. Mouse interaction
 // e.g. - assume we have a counter component
 // unit test code - simulating a button click which increments the count
 
@@ -488,7 +490,7 @@ describe('Counter', () => {
   })
 
   test('renders a count of 1 after clicking the increment button', async () => {
-    user.setup() // need to setup the user
+    user.setup() // need to setup the user to begin user interaction
     render(<Counter />)
     const incrementButton = screen.getByRole('button', { name: 'Increment' })
     await user.click(incrementButton) // simulate user event (click)// notice it is async
@@ -501,6 +503,29 @@ describe('Counter', () => {
 // user.click()
 // .dblClick()
 // .hover() .unhover()
+
+// ### 2. Keyboard interaction
+// e.g. - assume we have a counter component and an input filed, and the counter is set to a value set in the input field when set button is clicked
+// unit test code - simulating a keyboard type event which sets the count to a specfic value set in the input
+
+test('rendres a count of 10 after clicking the set button', async () => {
+    user.setup() // setup userevents
+    render(<Counter />)
+    const amountInput = screen.getByRole('spinbutton') // role for input type="number" is spinbutton
+    // we don't need to rememeber the role = spin button, we need to use RTL playground chrome extension, it will give is the above query
+    await user.type(amountInput, '10') // this simulates that user has typed 10 in the amountInput input field
+    expect(amountInput).toHaveValue(10)
+    const setButton = screen.getByRole('button', { name: 'Set' }) 
+    await user.click(setButton) // when set button is cliked, asset that heading counter has value set inside the input field (which is 10)
+    const countElement = screen.getByRole('heading')
+    expect(countElement).toHaveTextContent('10')
+  })
+```
+
+### 2. Keyboard interaction
+
+```javascript
+
 ```
 
 ## Snapshot testing
