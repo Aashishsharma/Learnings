@@ -661,6 +661,152 @@ test('handlers are called', async () => {
 })
 ```
 
+### 2. Mocking https requests (need to use Mock Service Worker (MSW) library)
+
+```javascript
+// consider below component
+// we don't need to call actual API, we need to mock it
+// the goal of the unit test should be
+// 1. component redners user list when API call is success
+// 2. component renders error message when api call fails
+import { useState, useEffect } from 'react'
+export const Users = () => {
+  const [users, setUsers] = useState<string[]>([])
+  const [error, setError] = useState<string | null>(null)
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then((res) => res.json())
+      .then((data) => setUsers(data.map((user: { name: string }) => user.name)))
+      .catch(() => setError('Error fetching users'))
+  }, [])
+  return (
+    <div>
+      <h1>Users</h1>
+      {error && <p>{error}</p>}
+      <ul>
+        {users.map((user) => (
+          <li key={user}>{user}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+```
+
+#### Setting up MSW
+
+##### 1. install - npm install msw --save-dev
+##### 2. create server.ts inside mocks folder and paste below code
+
+```javascript
+// server.ts file
+// src/mocks/server.js
+import { setupServer } from 'msw/node'
+import { handlers } from './handlers'
+
+// This configures a request mocking server with the given request handlers.
+export const server = setupServer(...handlers)
+
+// this file needs handler file
+// handler.ts
+import { rest } from 'msw'
+// since we are making rest call, import rest, it can be graphQL as well
+
+// create array of handlers to mock necessary API calls
+export const handlers = [
+  // for get method - res.get - pass the api uri
+  rest.get('https://jsonplaceholder.typicode.com/users', (req, res, ctx) => {
+    return res(
+      ctx.status(200), // mock the status code this mock api would return
+      ctx.json([ // mock the data that this api call needs to return
+        {
+          name: 'Bruce Wayne',
+        },
+        {
+          name: 'Clark Kent',
+        },
+        {
+          name: 'Princess Diana',
+        },
+      ])
+    )
+  }),
+]
+```
+
+##### 3. Setup mock handler to be used for each test
+
+```javascript
+// setupTests.ts
+// this file needs to be inside the src directory
+// jest-dom adds custom jest matchers for asserting on DOM nodes.
+// allows you to do things like:
+// expect(element).toHaveTextContent(/react/i)
+// learn more: https://github.com/testing-library/jest-dom
+import '@testing-library/jest-dom'
+// src/setupTests.js
+import { server } from './mocks/server'
+// Establish API mocking before all tests.
+beforeAll(() => server.listen())
+
+// Reset any request handlers that we may add during the tests,
+// so they don't affect other tests.
+afterEach(() => server.resetHandlers())
+
+// Clean up after the tests are finished.
+afterAll(() => server.close())
+```
+
+##### 4. Now we can write unit test for User component which makes external API call
+
+```javascript
+import { render, screen } from '@testing-library/react'
+import { Users } from './Users'
+import { rest } from 'msw'
+import { server } from '../../mocks/server'
+describe('Users', () => {
+  test('renders correctly', () => {
+    render(<Users />)
+    const textElement = screen.getByText('Users')
+    expect(textElement).toBeInTheDocument()
+  })
+  test('renders a list of users', async () => {
+    render(<Users />)
+    // note here we are not doing any mock because by default
+    // jest will search in the MSW server mock file if the api endpoint is mocked
+    // if yes, jest will pick up the mocked data
+    // if not, jest will make the actual API call 
+    const users = await screen.findAllByRole('listitem')
+    expect(users).toHaveLength(3)
+  })
+
+  // if we want to change the mocked response for a single testcase, use server.use and return custom response
+  // in the server mock file, the api call is mocked for all tests
+  // server.use mocks respons only for this particular testcase
+  test('renders error', async () => {
+    server.use(
+      rest.get(
+        'https://jsonplaceholder.typicode.com/users',
+        (req, res, ctx) => {
+          return res(ctx.status(500))
+        }
+      )
+    )
+    render(<Users />)
+    const error = await screen.findByText('Error fetching users')
+    expect(error).toBeInTheDocument()
+  })
+})
+```
+
+### 3. Static code analysis
+Unit testing check if under given parameters if the function returns correct result  
+static analysis checks if the code is well written (formatting, limit complexity of code)
+
+##### 1. Use Typescript
+##### 2. ESlint
+
+
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
 npm i --save-dev react-test-renderer
