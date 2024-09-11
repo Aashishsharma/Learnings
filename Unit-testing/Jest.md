@@ -374,6 +374,25 @@ const element = screen.getByTestId('custom-element')
 | 7        | `getByTitle`       | Use for elements with a title attribute.                        |
 | 8        | `getByTestId`      | Use for elements with a `data-testid` attribute.                |
 
+### 2. RTL text match
+
+**In all the above query, the first argument us not a string, but it is a textMatch**  
+**screen.getByRole('button')** - here 1st arg button is string, but it can be any of the three  
+1. string
+2. regex
+3. custom function - which returns boolean
+
+##### 1. string
+
+![alt text](PNG/J5.PNG "Title") 
+
+##### 2. Regex
+
+![alt text](PNG/J6.PNG "Title") 
+
+##### 3. custom function
+
+![alt text](PNG/J7.PNG "Title") 
 
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
