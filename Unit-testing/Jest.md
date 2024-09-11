@@ -394,7 +394,7 @@ const element = screen.getByTestId('custom-element')
 
 ![alt text](PNG/J7.PNG "Title") 
 
-### 3. RTL queryBy...()
+### 3. RTL queryBy...() - when we want to assert that the element is not present in the VDOM
 **all the above queries we saw get.., they only return an element if it is present in VDOM**  
 **If we want to test if the element should not be present in the DOM?**  
 **e.g. - for not logged in user we show login button, for logged in button we show logout button**  
@@ -422,6 +422,36 @@ let elem = screen.queryByRole('button', {
 expect(elem).not.toBeInTheDocument() // this works
 ```
 
+
+### 4. RTL findBy...() - to test async code
+**usecase - when login button is cliked, api call made to backend and after 100ms user is logged in and then logout button is shown**
+**if we use queryBy, then queryBy does not wait for logout button to be showed after 100ms, the test is run immediately**  
+**use findBy / findAllby, which returns a promise after specified timeout (defautl timeout is 100ms)**
+
+```javascript
+// component code
+function Login() {
+  useEffect(() => { // simulating api call
+    setTimeout(() => {
+      setIsLoggedIn(true)
+    }, 50)
+  }, [])
+  return (<>
+    {isLoggedIn? <button>Log out</button>: <button>Log in</button>}
+  </>
+  )
+}
+// testing code
+// if we use queryBy instead of findBy then unit test will search of logout button immediately instead of waiting for api call to complete
+test('check logout button is diplayed after successful login', async () => {
+  const elem = await screen.findByRole('button', {
+    name: 'Log out'
+  }, {
+    timeout: 2000 // change default timeout of 100ms
+  })
+})
+
+```
 
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
