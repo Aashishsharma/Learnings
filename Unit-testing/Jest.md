@@ -468,6 +468,41 @@ logRoles(view.container)// this will give list of all role attributes attached t
 ### 6. VVIP - use Testing playground chrome extension to generate queries for testing
 **Instead of generating query for each element in a unit test, install above extension and when we hover over the element, we will get the RTL query to get the element in the unit test**
 
+
+## 2. user-events library
+**If we want to simulate user actions in VDOM unit testing, we need to use this library**
+
+```javascript
+// e.g. - assume we have a counter component
+// unit test code - simulating a button click which increments the count
+
+import { render, screen } from '@testing-library/react'
+import { Counter } from './Counter'
+import user from '@testing-library/user-event' // import from user-event library
+
+describe('Counter', () => {
+  test('renders a count of 0', () => {
+    render(<Counter />)
+    const countElement = screen.getByRole('heading')
+    expect(countElement).toHaveTextContent('0')
+  })
+
+  test('renders a count of 1 after clicking the increment button', async () => {
+    user.setup() // need to setup the user
+    render(<Counter />)
+    const incrementButton = screen.getByRole('button', { name: 'Increment' })
+    await user.click(incrementButton) // simulate user event (click)// notice it is async
+    const countElement = screen.getByRole('heading')
+    expect(countElement).toHaveTextContent('1')
+  })
+})
+
+// other apis from user events (specific to mouse)
+// user.click()
+// .dblClick()
+// .hover() .unhover()
+```
+
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
 npm i --save-dev react-test-renderer
