@@ -268,6 +268,32 @@ describe('matching cities to foods', () => {
 ### 1. RTL quereis
 ![alt text](PNG/J4.PNG "Title") 
 
+#### 1. getByRole() - ```screen.getByRole('textbox')```
+1. This query will get html elements from RTL VDOM based on role attribute from HTML tags
+2. By default most html elements have default roles even if we don't add them in html tag
+3. role attribute are added to help assistive technologies understand the meaning of that tag
+
+**default html roles**
+
+| HTML Element   | Default Role         | Possible Values            |
+|----------------|----------------------|----------------------------|
+| `<a>`          | `link`               | `button`, `link`           |
+| `<button>`     | `button`             | `button`, `link`           |
+| `<input>`      | `textbox`            | `checkbox`, `textbox`      |
+| `<select>`     | `combobox`           | `listbox`, `combobox`      |
+| `<textarea>`   | `textbox`            | `textbox`, `combobox`      |
+| `<img>`        | `img`                | `img`, `button`            |
+| `<table>`      | `table`              | `table`, `grid`            |
+| `<th>`         | `columnheader`       | `columnheader`, `rowheader`|
+| `<ul>`         | `list`               | `list`, `group`            |
+| `<ol>`         | `list`               | `list`, `group`            |
+| `<li>`         | `listitem`           | `listitem`, `menuitem`     |
+| `<nav>`        | `navigation`         | `navigation`, `group`      |
+| `<header>`     | `banner`             | `banner`, `group`          |
+| `<footer>`     | `contentinfo`        | `contentinfo`, `group`     |
+| `<form>`       | `form`               | `form`, `search`           |
+
+
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
 npm i --save-dev react-test-renderer
