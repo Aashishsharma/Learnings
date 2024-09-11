@@ -266,7 +266,7 @@ describe('matching cities to foods', () => {
 3. Assert agains the found element (use matchers from jest + custom matchers from jest-dom library)
 
 ### 1. RTL quereis
-![alt text](PNG/J1.PNG "Title") 
+![alt text](PNG/J4.PNG "Title") 
 
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
