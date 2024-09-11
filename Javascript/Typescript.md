@@ -205,10 +205,12 @@ interface User {
 // but what is the usecase for this?
 // suppose we want to add a new propery on the global window object of DOM
 interface Window {
-    test: () : void
+    test: () => void
 }
-// now we can use
-window.test()
+window.test = () => {
+    console.log("adding test function to global window object")
+}
+console.log(window.test())
 // with above Window interface declaration
 // we have extended the in-build Window interface that ts already had
 ```
