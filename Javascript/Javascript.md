@@ -98,6 +98,13 @@ Programming languages that allow such things, are called “dynamically typed”
 | `object`    | Represents a collection of key-value pairs, including arrays, functions, and objects. | `let person = { name: 'Alice', age: 25 };` |
 | `function`  | Represents a reusable block of code that can be called. | `function greet() { console.log('Hello!'); }` |
 
+**Null vs undefined**  
+1. undefined means variable doesn't exists
+2. null means variable exists but doesn't have any value
+3. ```document.getElementByUd('123')```, if id is not present it will return null and not undefined
+4. when defining a variable which will later hold a value, then initialize will null
+5. undefined means there is a mistake, you might be trying to access a property which does not exists, null means property exists, so you are accessing it correctly, but the value is not present
+
 
 | Feature            | Description                                                                                        |
 |--------------------|----------------------------------------------------------------------------------------------------|
