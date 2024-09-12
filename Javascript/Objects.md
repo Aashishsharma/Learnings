@@ -211,6 +211,30 @@ let newObj = Object.create(obj, {
 console.log(newObj.name) // new test, because prototype property (name is changed)
 ```
 
+**Object.freeze() vs Object.seal() - 'use strict directive is needed**
+| Feature              | **`Object.freeze()`**                                        | **`Object.seal()`**                                        |
+|----------------------|--------------------------------------------------------------|------------------------------------------------------------|
+| **Mutability**        | Completely immutable: properties cannot be added, removed, or changed. | Partially mutable: existing properties cannot be added or removed, but values of existing properties can be changed (as long as they're writable). |
+| **Adding Properties** | Not allowed                                                  | Not allowed                                                |
+| **Removing Properties** | Not allowed                                                  | Not allowed                                                |
+| **Modifying Properties** | Not allowed                                                  | Allowed for existing writable properties                   |
+| **Configurable Properties** | Turns all properties non-configurable (cannot be redefined) | Existing properties remain non-configurable                |
+| **Use Case**          | To make an object fully immutable, preventing any changes.   | To prevent adding/removing properties while still allowing modifications of existing ones. |
+
+
+```javascript
+'use strict'
+let obj = {
+    name: 'as',
+    age:23
+}
+Object.freeze(obj)
+obj.name = 123 // error
+
+Object.seal(obj)
+obj.name = 123 // works
+console.log(obj)
+```
 
 ### Prototypal inheritance
 
