@@ -152,6 +152,10 @@ font-family: "lato", "sarabun", sans-serif
 **Block vs Inline elements**
 Block elements have line break, so every block element comes to new line.  
 BLock elements have display: block/none, and inline have display: inline/none  
+```<span> <a> <br> <strong>``` are inline elems  
+```<p>, <div>, <h1-h6>``` are block elems  
+
+**both inline and block elems have margin, padding and border**
 
 **inline block elements** - display: inline-block  
 
