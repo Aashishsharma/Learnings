@@ -293,8 +293,11 @@ let debugNow = logNow("DEBUG");
 debugNow("message"); // [HH:mm] DEBUG message
 ```
 
-curry is not same as default parameters in a function, as default value can have only one value.  
-close to partial functions but not exactly same  
+**curry vs partial functions**
+| Use Case | **Curry** | **Partial Function** |
+|----------|-----------|----------------------|
+| **Use Case** | Best when arguments are supplied one by one or reused in different contexts. | Best for fixing several arguments in advance for a more convenient function call later. |
+
 
 Implement currying function for n arguments
 
