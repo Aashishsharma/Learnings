@@ -50,7 +50,6 @@ foo()
 | `const` | Block (Local)                | Yes but (not initialized), will throw cannot access before initializtion error | No   | Yes         | No                |
 
 
-
 ##### IIFE Immediately invoked function expression
 
 ```javascript
