@@ -50,6 +50,7 @@ foo()
 | `const` | Block (Local)                | Yes but (not initialized), will throw cannot access before initializtion error | No   | Yes         | No                |
 
 
+
 ##### IIFE Immediately invoked function expression
 
 ```javascript
@@ -103,6 +104,11 @@ Programming languages that allow such things, are called “dynamically typed”
 3. ```document.getElementByUd('123')```, if id is not present it will return null and not undefined
 4. when defining a variable which will later hold a value, then initialize will null
 5. undefined means there is a mistake, you might be trying to access a property which does not exists, null means property exists, so you are accessing it correctly, but the value is not present
+
+```javascript
+console.log(typeof undefined) // undefined
+console.log(typeof null) // object
+```
 
 
 | Feature            | Description                                                                                        |
