@@ -16,6 +16,7 @@
 **New attributes**  
 
 Common input types  
+Most input types like (url, email) will allow you to enter random value, and the actual valiadtion is done, when the form is getting submitted
 
 | **Type**        | **Sample HTML Code**               | **Common Attributes**                          |
 |-----------------|------------------------------------|------------------------------------------------|
@@ -31,9 +32,8 @@ Common input types
 | submit        | `<input type="submit" />`          | value, form, disabled                    |
 | button        | `<input type="button" />`         | value, onclick, disabled, form         |
 | reset         | `<input type="reset" />`           | value, form, disabled                    |
-| color         | `<input type="color" />`           | name, value, disabled, required        |
+| color (shows color palette)         | `<input type="color" />`           | name, value, disabled, required        |
 | search        | `<input type="search" />`          | name, value, placeholder, maxlength    |
-| tel           | `<input type="tel" />`             | name, value, placeholder, pattern      |
 | url           | `<input type="url" />`             | name, value, placeholder, maxlength    |
 | hidden        | `<input type="hidden" />`          | name, value, form                        |
 | datetime-local| `<input type="datetime-local" />`  | name, value, min, max, required      |
