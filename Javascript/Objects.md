@@ -181,14 +181,36 @@ In JavaScript, objects are reference types. When you assign an object to another
 | **Object.assign() (Shallow Copy)**       | Creates a new object and copies enumerable own properties (shallow copy) from one or more source objects. Nested objects remain referenced. | `const obj1 = { prop: 'value' }; const obj2 = Object.assign({}, obj1); obj2.prop = 'new value';` | Reference          |
 | **Spread Operator (Shallow Copy)**       | Creates a new object and copies enumerable own properties (shallow copy) from an existing object. Nested objects remain referenced.     | `const obj1 = { prop: 'value' }; const obj2 = { ...obj1 }; obj2.prop = 'new value';`         | New Object (Shallow Copy)           |
 | **JSON.parse() and JSON.stringify() (Deep Copy)** | Creates a deep copy of an object by converting it to JSON and then parsing the JSON string back into an object. | `const obj1 = { prop: 'value' }; const obj2 = JSON.parse(JSON.stringify(obj1)); obj2.prop = 'new value';` | New Object (Deep Copy)           |
-| **Object.create() (Empty Object)**       | Creates a new object with the specified prototype object. The new object initially has no properties. Changes in one object do not affect the other. | `const obj1 = { prop: 'value' }; const obj2 = Object.create(obj1); obj2.prop = 'new value';` | New Object                         |
-| **Object.create() (Copied Properties)**   | Creates a new object with the specified prototype object and copies properties from another object. Changes in one object do not affect the other. | `const obj1 = { prop: 'value' }; const obj2 = Object.create(obj1, Object.getOwnPropertyDescriptors(obj1)); obj2.prop = 'new value';` | New Object                         |
+| **Object.create() (Copied Properties)**   | Creates a new object with the specified prototype object and copies properties from another object. Changes in one object do not affect the other. | `const obj1 = { prop: 'value' }; const obj2 = Object.create(obj1, Object.getOwnPropertyDescriptors(obj1)); obj2.prop = 'new value';` | New Object, for new properties, for parent properites it is copy by reference                         |
 
 In the table:
 
 - Methods like assignment (`=`), `Object.assign()`, result in references, meaning changes in one variable affect the other.
 - `JSON.parse()` and `JSON.stringify()` create a deep copy by converting the object to a JSON string and then parsing it back, resulting in two separate objects.
 - `Object.create()` can be used to create new objects with specified prototypes. The first variant creates an empty object, while the second variant copies properties from another object, effectively creating a new object with the same properties but not sharing references.
+
+**Object.create() vs Object.assign()**
+| Feature               | `Object.create()`                                            | `Object.assign()`                                          |
+|-----------------------|--------------------------------------------------------------|------------------------------------------------------------|
+| **Prototype Chain**    | The new object inherits properties from the prototype.       | Properties are copied, but no prototype inheritance is established. |
+| **Shallow vs Deep Copy** | Doesn't copy properties, it just sets the prototype. Changes to the prototype object reflect in the created object. | Performs a shallow copy of properties. Changes in the source objects after the assignment do not affect the target object. |
+| **Use Case**           | Useful for creating objects with a specific prototype (e.g., for inheritance). | Useful for merging objects or cloning objects without prototype inheritance. |
+
+```javascript
+let obj = {
+    name: 'test',
+    age: 20
+}
+obj.name = 'new Test'
+let newObj = Object.create(obj, {
+    address: {
+        value: 'abcd',
+        writable: false
+    }
+})
+console.log(newObj.name) // new test, because prototype property (name is changed)
+```
+
 
 ### Prototypal inheritance
 
