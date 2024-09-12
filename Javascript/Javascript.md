@@ -182,6 +182,7 @@ console.log(typeof null) // object
 | **How Closures Work** | Closures are created when an inner function references variables from its containing outer function. The inner function "closes over" these variables, effectively preserving them, even if the outer function has completed execution. |
 | **Use Cases**         | Closures are often used for data encapsulation, creating private variables, and maintaining state in functional programming. They are also fundamental in scenarios like callbacks and event handling. |
 | **Benefits for Developers** | - Enables data encapsulation and creation of private variables, promoting better code organization and reducing global scope pollution. - Facilitates the creation of reusable and modular code through closures as callbacks. - Provides a powerful tool for managing and maintaining state in asynchronous programming, such as with event listeners. |
+| **Drawbacks**         | Increased Memory Usage. Potential for Memory Leaks, hard to understand |
 
 **Closure eamples**
 
