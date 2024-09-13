@@ -404,32 +404,23 @@ const ChildComponent = ({ propFromParent }) => {
 export default ChildComponent;
 ```
 
-###### 2. Uncontrolled components -> not contolled by react
+###### 2. Uncontrolled components -> not contolled by react or by parent component
 
-Uncontrolled components in React are those where form data is handled by the DOM itself, rather than by React state. Uncontrolled components are typically used when you need to integrate React with non-React code  
-For uncontrolled form elements, you don't use the value prop; instead, you let the DOM handle the input's value **using useRef hook**.
+**Key points - a component is uncontrolled component when -** 
+1. The values elements in the component are controlled by DOM and not by React
+2. When values of elements in the component is contolled by a parent component and not by the component itself
+
 
 ```javascript
-import React, { useRef } from 'react';
-
-const UncontrolledForm = () => {
-  const inputRef = useRef(null);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log('Input Value:', inputRef.current.value);
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      {/* Ref is used to access the DOM element */}
-      <input type="text" ref={inputRef} />
-      <button type="submit">Submit</button>
-    </form>
-  );
-};
-
-export default UncontrolledForm;
+// here we hide the default choose file html button
+// and use our cutom icon button, and when that button is clicked
+// we simulate the file clic event
+const ref = useRef(null)
+  return (<>
+    <input type="file" ref={ref} hidden></input>
+    <button onClick={() => ref.current.click()}>Custom file icon</button>
+  </>
+  )
 ```
 
 ------------------------------------------------------------------------------
