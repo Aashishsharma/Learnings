@@ -814,7 +814,9 @@ similar to pre-commit hook, we alos have a pre-push hook,
 ### 4. Stub vs Mock
 
 #### 1. Stub - is a dummy object / function, use when you need to control dependencies but don’t care about how they’re called
+e.g. - you want to test sendEmail, just stub the sendEmail function with a dummy function
 #### 2. Mock - Can do whatever stub can do + track the behaviour of the mocked function - (e.g, check how a function is used -if it was called with certain arguments or how many times it was called)
+e.g. - you want to mock a orderprocessing service, so need to ensure email service is called, payment service is called, so you mocj the orderprocessing service and provide dummy object (aka stubs) of email and payment service
 
 **When to Use Which:**  
 1. Use a stub when you just need a dummy implementation or predefined return values without caring how it was used.
