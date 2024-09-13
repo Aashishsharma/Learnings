@@ -822,6 +822,41 @@ e.g. - you want to mock a orderprocessing service, so need to ensure email servi
 1. Use a stub when you just need a dummy implementation or predefined return values without caring how it was used.
 2. Use a mock when you need to verify interactions, such as checking if a function was called or how it was used.
 
+```javascript
+jest.fn() // this creates both a stub as well as mock objects
+
+// e.g. real order service - 
+// orderService.js
+function placeOrder(order, customerEmail, paymentService, emailService) {
+  // Step 1: Charge the customer
+  const paymentStatus = paymentService.charge(order);
+  // Step 2: If payment is successful, send a confirmation email
+  if (paymentStatus.success) {
+    emailService.sendEmail(customerEmail, "Your order has been placed!");
+  }
+  return paymentStatus.success;
+}
+
+// in our unit test we need to pass the stubs of payment and email service to mock placeorder function
+
+const paymentService = { charge: jest.fn() }; // Mock the payment service
+const emailService = { sendEmail: jest.fn() }; // Stub the email service
+test('charges the customer for the order', () => {
+    const order = { total: 100 };
+
+    // Mock the payment service to return a successful payment
+    paymentService.charge.mockReturnValue({ success: true });
+    // note we actual placeorder function, we are passing dummy objest of payment and email service
+    // created by funcs - const paymentService = { charge: jest.fn() };
+    placeOrder(order, "customer@example.com", paymentService, emailService);
+
+    // Verify payment service was called
+    expect(paymentService.charge).toHaveBeenCalled();
+    expect(paymentService.charge).toHaveBeenCalledWith(order); // Ensures correct order data was passed
+  });
+
+```
+
 
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
