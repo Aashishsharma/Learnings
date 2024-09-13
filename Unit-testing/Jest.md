@@ -811,6 +811,16 @@ similar to pre-commit hook, we alos have a pre-push hook,
 1. in pre-commit - do linting and formatting
 2. in pre-push hook - do npm run test commands
 
+### 4. Stub vs Mock
+
+#### 1. Stub - is a dummy object / function, use when you need to control dependencies but don’t care about how they’re called
+#### 2. Mock - Can do whatever stub can do + track the behaviour of the mocked function - (e.g, check how a function is used -if it was called with certain arguments or how many times it was called)
+
+**When to Use Which:**  
+1. Use a stub when you just need a dummy implementation or predefined return values without caring how it was used.
+2. Use a mock when you need to verify interactions, such as checking if a function was called or how it was used.
+
+
 ## Snapshot testing
 A typical snapshot test case renders a UI component, takes a snapshot, then compares it to a reference snapshot file stored alongside the test. The test will fail if the two snapshots do not match: either the change is unexpected, or the reference snapshot needs to be updated to the new version of the UI component.  
 npm i --save-dev react-test-renderer
