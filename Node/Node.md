@@ -209,6 +209,33 @@ what it does if a uer is authenicated in a wroker process and that workers memor
 
 ------------------------------------------------------------------------------
 
+### Working with worker threads
+
+**focus on point 4 & 5 for cluster module vs worker threads**  
+![alt text](PNG/W1.PNG "Title")  
+
+```javascript
+// Parent file - index.js
+const { Worker } = require('node:worker_threads');
+// note while creating a worker only we need to pass the workerData
+let worker = new Worker('./worker.js', {
+  workerData: 5,
+});
+// listen to worker thread
+worker.on('message', (dataFromWorker) => {
+  console.log('data from worker ', dataFromWorker);
+});
+worker.on('error', (err) => {
+  console.log(err);
+});
+
+// worker.js
+const { parentPort, workerData } = require('node:worker_threads');
+console.log('data from parent ', workerData);
+parentPort.postMessage(workerData * 2);
+
+```
+
 ## Working with Event Emitters
 
 It is an in-built module that implements **observer pattern** in Nodejs.
