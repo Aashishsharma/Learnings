@@ -236,6 +236,11 @@ parentPort.postMessage(workerData * 2);
 
 ```
 
+##### Libuv thread pool vs worker threads vs cluster module (pm2)
+1. **Libuv (scale async task)** - use multiple threads to scale only async tasks (promises) and not the synchronous tasks that run on main thread
+2. **worker threads (scale sync task)** - use multiple threads to scale synchronous tasks and not async tasks
+3. **cluster module (scale sync task)** - instead of using threads it creates multiple application instances (separate node instance, separate V8 engine), so it is multi processing as opposed to multi threading
+
 ## Working with Event Emitters
 
 It is an in-built module that implements **observer pattern** in Nodejs.
