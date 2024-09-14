@@ -67,7 +67,7 @@ Libuv is c code which is used to handle async non-blocking code.
 #### 1. **Thread pool**
 no of threads available in the host machines (based on CPU cores) are available in this thread pool.
 
-**If you run async version of crypto, the hash time for last request would be hash time for its own + hash time of other 3 requests**   
+**If you run sync version of crypto, the hash time for last request would be hash time for its own + hash time of other 3 requests**   
 ![alt text](PNG/Capture.PNG "Title")    
 
 **Running them in async will give hast time same for all the hashes, because each async version of hash is run on a separate thread pool**  
@@ -307,7 +307,7 @@ orderService.placeOrder('12345', 'customer@example.com');
 
 It is a collection of data that might not br available all at once and don't have to fit in memory.  
 
-![alt text](PNG/C2.PNG "Title")  
+![alt text](PNG/S1.PNG "Title")  
 **IMP potins**  
 1. Using above code we can copy 10s of GBs of file without node getting memory out of bound error
 2. Notice the output, this is because of highWaterMark = 2, it indicates that the buffer can store only 2 bytes of data in memory and then need to flush the output to writable stream, default buffer size in nodejs is 64Kb
