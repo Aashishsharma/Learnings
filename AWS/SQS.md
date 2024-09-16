@@ -153,3 +153,17 @@ app.on('processing_error', (err) => {
 })
 app.start()
 ```
+
+## SNS vs SQS
+
+SNS is to publish messages to multiple consumers, SQS where one message can be consumed by one consumer  
+SQS can be one of the consumers of SNS
+
+![alt text](PNG/SNS1.PNG "Title") 
+
+Here when a credit card transaction is done, multiple subscribers are subscribed to the topic, each one performaing a separate business usecase
+![alt text](PNG/SNS2.PNG "Title") 
+
+Notice how we are using lambda for email services, if lambda fails, then the message is lost and email is not sent, not business critical  
+For fraud and analytics service, we purposefully use SQS, becasue is any of the coneumer of SQS fails, SQS gurantees that message is consumed by some other consumer  
+**(remember - SQS - qurantees message delivery atleast once)**
