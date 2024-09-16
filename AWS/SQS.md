@@ -1,0 +1,56 @@
+# SQS (Async message based communication)
+
+#### SQS messaging vs API calls
+1. SQS is async based message system, API call is synchronous
+2. Decoupled architecture
+3. Backpressure Control - consmers can choose the rate of processing
+
+### Usecases - 
+#### 1. Data processing (IoT devices)
+IoT end devices can send messages to SQS and different consumers can consume those messages at their own pace
+#### 2. Real time event processing  
+E-commerece site requiring real time data analytics dashboards, the web app can produce events and the analytics dashboard can consume data
+
+## Core concepts
+
+### 1. Queue (standard or FIFO)
+**1. Standard**  
+ - ordering of the messages is not guranteed
+ - a message can be delivered multiple times
+ - high throughput
+ - low cost
+
+**2. FIFO**
+ - guranteed message ordering
+ - message delivered excatly once
+ - low throughput
+ - high cost
+
+### 2. Producers 
+
+### 3. Consumers
+
+### 4. Configurations  
+![alt text](PNG/SQS2.PNG "Title")  
+
+##### 1. Visibility timeout (default 30s)
+Once the message is consumed by one of the consumers, the message is hidden from the queue (basically a lock is applied, so no other consumer can see this message). 
+Now once the consumer consumes the message, it need to notify the queue that message is successfully consumed, delete from the queue (then the message is permanentaly deleted)  
+If the consumer fails to consume the message and no response is sent back to queue to delete the message, then the queue waits for (**Visibility Timeout deuration**) and then message is again available for other consumers for processing
+
+##### 2. Message retention period
+The amount of time the message can stay in the queue (1 min to 14 days), after which the message is automatically deleted from the queue
+
+##### 3. Delivery Delay
+The time for which the message needs to wait to enter the queue
+
+##### 4. Receive message wait time (LONG POOLING duration)
+The amount of time the consumer can hold on to the request before the message is arraived in the queue  
+In SQS, consumers constantly poll the queue to check of new messages, if no message is in the queue, consumer will send another request to check for message.  
+Howvere if no message is present in queue, long pooling will keep the connection open for a specified time, before closing the connection.
+
+##### 5. Dead Letter Queue (DLQ)
+![alt text](PNG/SQS2.PNG "Title")  
+It is a secondary queue, which stores failed messages for X number of times  
+When configuring DLQ, you will have to provied **Maximum retires setting**, e.g. (3), so if the message is failed to be processed 3 times by any or all of the consumers, then this message is sent to DLQ.  
+Then in DLQ, we can add alerting / monitoring to send email to dev team, which says message not being able to be processed 
