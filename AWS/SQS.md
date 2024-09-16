@@ -54,3 +54,102 @@ Howvere if no message is present in queue, long pooling will keep the connection
 It is a secondary queue, which stores failed messages for X number of times  
 When configuring DLQ, you will have to provied **Maximum retires setting**, e.g. (3), so if the message is failed to be processed 3 times by any or all of the consumers, then this message is sent to DLQ.  
 Then in DLQ, we can add alerting / monitoring to send email to dev team, which says message not being able to be processed 
+
+## Nodejs code for producers and subscribers
+
+### 1. Send message to Queue  
+
+```javascript
+const configObject = {
+  region: 'us-east-1',
+  credentials: {
+    accessKeyId: 'AKIAW5JGT2L735FXOIT',
+    secretAccessKey: 'EbuOFnKUHnja5Vt10RSFcTMP9eIZYNWh17Zke1IM',
+  },
+};
+module.exports = { configObject };
+```
+
+```javascript
+const { SQSClient, SendMessageCommand } = require('@aws-sdk/client-sqs');
+const { configObject } = require('./credentials');
+const sqsClient = new SQSClient(configObject);
+//queue url is the arn name of the queue which we get once queue is created in AWS console
+const queueUrl = 'https://sqs.us-east-1.amazonaws.com/451613728407/MyNodeQueue';
+const sendMessageToQueue = async (body) => {
+  try {
+    const command = new SendMessageCommand({
+      MessageBody: body,
+      QueueUrl: queueUrl,
+      MessageAttributes: {
+        OrderId: { DataType: 'String', StringValue: '4421x' },
+      },
+    });
+    const result = await sqsClient.send(command);
+    console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+```
+
+### 2. Consume message from queue
+
+```javascript
+const PollMessages = async () => {
+  try {
+    const command = new ReceiveMessageCommand({
+      QueueUrl: queueUrl,
+      WaitTimeSeconds: 5,
+      MessageAttributes: ["All"],
+      VisibilityTimeout: 10,
+    });
+
+    const result = await sqsClient.send(command);
+    console.log(result.Messages);
+
+    // once the message is processed, it is important to delete it from the queue
+    // message has a key called - RecieptHandle which is unique to the message
+    // use this key to delete the message
+    const delResult = await DeleteMessageFromQueue(message.RecieptHandle)
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const DeleteMessageFromQueue = async (uniqueRecieptHandler) => {
+    try {
+        const command = new DeleteMessageCommand({
+            QueueUrl: queueUrl,
+            RecieptHandleData: uniqueRecieptHandler
+        });
+
+        await sqsClient.send(command);
+    } catch(err) {
+        console.log(err)
+    }
+}
+```
+
+##### Note that above code will run once and get closed, but we need to continuously poll the queue, so we can use something like setInterval to call the PollMessage function
+##### But for real-world projects we use a library - sqs-consumer
+
+```npm i sqs-consumer``` 
+
+```javascript
+// this consumer will be always on continuosly polling for the message
+// will delete the message once the message is processed
+// no need to call the deleet SQS command explicitly
+const {Consumer} = require('sqs-consumer')
+const app = Consumer.create({
+    QueueUrl: queueUrl,
+    sqs: sqsClient,
+    handleMessage: async (message) => {
+        console.log('new message in the queue ', message)
+    }
+})
+app.on('processing_error', (err) => {
+    console.log('error processing message ', err)
+})
+app.start()
+```
