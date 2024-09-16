@@ -42,5 +42,17 @@ For fraud and analytics service, we purposefully use SQS, becasue is any of the 
 #### 2. Create Subscription
 1. Specify topic ARN
 2. Specify protocol - who the subscriber is?
-![alt text](PNG/SNS3.PNG "Title")   
-3. Specify subscription filter policy **(Used to reduce AWS cost)**
+![alt text](PNG/SNS4.PNG "Title")   
+3. Specify subscription filter policy **(Used to reduce AWS cost)**  
+![alt text](PNG/SNS5.PNG "Title")   
+Suppose we have 2 subscribers to a topic and   
+ - sub1 needs to consume all messages
+ - sub2 cares only the messages with specific arrtibutes (type: www), (assume sub2 is lambda)
+ - sub3 cares for only (type:inperson)
+
+In trival world, to filter messages so that sb2 recieves only type:www we can have if condition in the sub2, since sub2 is lambda it is invoed and checks  for type, if it is inperson, then return, and lambda stops. This is unnecessary lambda invocation, and lambda invoations costs money, bu Instead - 
+When we set this Subscription filter that if a message which as attribute type:inperson will not be sent to sub2, and if sub2 is a lambda function, we are saving the lambda invocation cost for these types of messages
+
+#### 3. SNS DLQ (Dead letter queue)
+If one of the subscribers is down, then the message is kept in the topic until specified retries, after the retries limts are reached it is put into SNS DLQ, and this DLQ is an SNS queue ARN  
+![alt text](PNG/SNS5.PNG "Title")   
