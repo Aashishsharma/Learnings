@@ -161,7 +161,7 @@ SQS can be one of the consumers of SNS
 
 ![alt text](PNG/SNS1.PNG "Title") 
 
-Here when a credit card transaction is done, multiple subscribers are subscribed to the topic, each one performaing a separate business usecase
+(**SNS usecase)** - Here when a credit card transaction is done, multiple subscribers are subscribed to the topic, each one performaing a separate business usecase
 ![alt text](PNG/SNS2.PNG "Title") 
 
 Notice how we are using lambda for email services, if lambda fails, then the message is lost and email is not sent, not business critical  
