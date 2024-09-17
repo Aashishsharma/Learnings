@@ -735,3 +735,90 @@ app.use(
  - for cross origins - only domain name is sent
  - for https to http redirects - no-referrer gets applied
 
+##### 4. Strict Transport Security
+
+Informs browsers that the site should only be accessed using HTTPS, and that any future attempts to access it using HTTP should automatically be converted to HTTPS.
+
+```javascript
+// Sets "Strict-Transport-Security: max-age=15552000; includeSubDomains"
+app.use(helmet());
+// even subdomains need to be using https
+```
+
+##### 4. X-Powered-By
+
+Helmet removes the X-Powered-By header, which is set by default in Express and some other frameworks
+
+```javascript
+// Not required, but recommended for Express users:
+app.disable("x-powered-by");
+
+// Ask Helmet to ignore the X-Powered-By header.
+app.use(
+  helmet({
+    xPoweredBy: false,
+  })
+);
+```
+
+### 2. CORS (cross-origin-resource-sharing)
+
+**Note - helmet does not have capability to configure this header, hence need to use cors header separatley**  
+
+ - By default, web browsers block cross-origin requests for security reasons.
+ - CORS provides a way for a server to allow some cross-origin requests while rejecting others.
+
+**3 concepts in CORS**  
+1. **Preflight request** - browser first sends an OPTIONS request (other than GET/HEAD/POST) to the server to check if the CORS policy allows the actual request.
+2. **Response headers** - Access-Control-Allow-Origin, Access-Control-Allow-Methods, Access-Control-Allow-Headers
+3. **Credentials** - Cookies or authentication headers are sent only if the server permits it with the Access-Control-Allow-Credentials header set to true
+
+```javascript
+app.use(cors({
+  origin: 'www.example.com',
+  methods: ['GET', 'POST'] // if a client sends del req, then it gets blocked
+  credentials: true // by default cookies are blocked when using cors header
+}))
+
+// the origin property above can take a function as well to dynamically configure origins
+// lets say one originA should access only endpointA and originB should access only endpointB
+// in this cases we can dynamically configure cors
+const express = require('express');
+const cors = require('cors');
+const app = express();
+// Define your CORS configuration function
+const corsOptions = (req, res, next) => {
+  const origin = req.headers.origin;
+  // Define allowed origins and their respective endpoints
+  const allowedOrigins = {
+    'https://allowed-origin-1.com': ['/endpoint1'],
+    'https://allowed-origin-2.com': ['/endpoint2'],
+  };
+  // Get the paths of the requested endpoint
+  const requestedPath = req.path;
+  // Check if the origin is allowed for the requested path
+  for (const [allowedOrigin, paths] of Object.entries(allowedOrigins)) {
+    if (origin === allowedOrigin && paths.includes(requestedPath)) {
+      res.header('Access-Control-Allow-Origin', origin);
+      res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+      }
+      return next();
+    }
+  }
+  // If origin is not allowed for the requested path, respond with a 403 error
+  res.status(403).json({ message: 'Forbidden' });
+};
+// Use the CORS configuration middleware
+app.use(cors(corsOptions));
+// only origin1 can access below endpoint1
+// origin2 cannot access endpoint1
+app.get('/endpoint1', (req, res) => {
+  res.send('This is endpoint 1');
+});
+app.get('/endpoint2', (req, res) => {
+  res.send('This is endpoint 2');
+});
+```
