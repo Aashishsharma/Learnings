@@ -621,3 +621,89 @@ setInterval(() => {
 // process.send(msg)
 // process.on('message', function(msg) {})
 ```
+
+## Node js Security
+
+### 1. Helmet - secures express / Nestjs apps by setting HTTP response headers
+
+```javascript
+import express from "express";
+import helmet from "helmet";
+const app = express();
+// Use Helmet!
+app.use(helmet());
+app.get("/", (req, res) => {
+  res.send("Hello world!");
+});
+```
+
+#### Default headers set by Helmet
+
+##### 1. **Content-Security-Policy**  
+
+- CSP defines rules on where resources can come from (scripts, images, styles).
+- When the browser renders a page, the browser enforces these rules by blocking unauthorized resources.
+
+1. **XSS attack** - attacker injects malicious executable scripts into the code  
+**XSS attack - Cross site scripting attack** - 
+You have an input and also have document.getElemntById("a").innerHTML = userInput, and you are getting input from the url = /?userInput="", if userInput is not sanitised, whatever is passed in innerHTML wil get rendered  
+```<img src onerror="alert("document.cookie")```, and when we send this url to a user under target, the cookie would be read and we can write some email functionality in the onerror script to share the cookie on hacker email, then hacker can login.  
+
+```javascript
+// if we use app.use(helmet()), csp header is automatically set with default value
+// default value - 
+// Content-Security-Policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;
+// form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self'
+
+// to configure this value - 
+// Sets all of the defaults, but overrides `script-src`
+// and disables the default `style-src`.
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        "script-src": ["'self'", "example.com"],
+        "style-src": null,
+      },
+    },
+  })
+);
+```
+
+##### 2. Cross origin opener policy
+When two documents are opened (e.g., two tabs in a browser), if one document opens the other via window.open(), these two documents can interact with each other.  
+The two domains can interract using below code 
+
+```javascript
+// Assume we have a reference to the other window (e.g., via window.open or window.opener)
+const otherWindow = window.open('https://example.com'); // Open a tab to Domain B
+// Send a message to Domain B
+otherWindow.postMessage("Hello from Domain A!", "https://example.com"); // Specify target domain to ensure security
+
+// if exmaple.com has window.addeveentLinster 
+// Listen for incoming messages from any other domains
+// then these 2 sites can communicate
+window.addEventListener("message", (event) => {
+  if (event.origin === "https://your-domain.com") { // Check the origin for security
+    console.log("Received message:", event.data); // Log the message content
+  } else {
+    console.warn("Untrusted origin:", event.origin);
+  }
+});
+//The message event is fired on a Window object when the window receives a message,
+// for example from a call to Window.postMessage() from another browsing context
+```
+
+TO avoid an cross comunication between different domains (which can result in data leak), set the cross origin openeer policy header
+```javascript
+// default value set by helment-
+// Cross-Origin-Opener-Policy: same-origin 
+
+// configuing in helmet
+// Sets "Cross-Origin-Opener-Policy: same-origin-allow-popups"
+app.use(
+  helmet({
+    crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
+  })
+);
+```
