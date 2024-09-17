@@ -707,3 +707,31 @@ app.use(
   })
 );
 ```
+
+##### 3. Referrer policy (more of a privacy header as opposed to security header)
+
+
+When your app has a link to some different site, browser automatically sets referrer header - which will include your app url (including query params), which is available for the site where the user is redirected to.  
+Now if your apps query params has some info, like user_name or something, it is shared with the new site when user redirects to that site from your site (like button or link click), let's say your site has a link to YT video, then query params are also shared with YT site which has username in it.  
+
+**Browsers by default add referrer details for logging and statistics purposes**
+
+To avoid this, use this header 
+
+```javascript
+app.use(
+  helmet({
+    referrerPolicy: {
+      policy: "no-referrer", // referrer header is not added by the browser when user is getting redirected
+    },
+  })
+);
+```
+
+**In modern browsers, there is a new value (which is also a default value) - strict-origin-when-cross-origin**  
+
+**strict-origin-when-cross-origin** - 
+ - for same origin, enire url including query params is sent
+ - for cross origins - only domain name is sent
+ - for https to http redirects - no-referrer gets applied
+
