@@ -20,7 +20,9 @@ export const resolvers = {
     },
     // get single author by name
     author: (_, args) => {
-      return authors.find((author) => author.name === args.name);
+      let author = authors.find((author) => author.name === args.name);
+      console.log('LOG NO - 1');
+      return author;
     },
   },
 
@@ -34,13 +36,14 @@ export const resolvers = {
       return books.filter((book) => book.author === parent.name);
     },
 
+    // fectch one book with gove id for given author
     book: (parent, args) => {
       let book = books.filter((book) => book.author == parent.name && book.id == args.id);
-      console.log({ book });
       // big problem, below I returned book instead of book[0]
       // even though the filter returned 1 element, it is still an array
       // and gql complains that you are returning a book arr instead of a book
       // beacuse in the Author schema, we have book(id: Int!) => book, it returns book and not [book]
+      console.log('LOG NO - 2');
       return book[0];
     },
     // client gql query for above resolver -
@@ -58,31 +61,11 @@ export const resolvers = {
     // hence this resolver is inside Author and not inside Query property
     // all resolvers under Query are root resolver
   },
-  // similarly
-  // for double nesting
-  // find an author with given name, find only one book, and find all review within the given book
-  // this means, Author should have nested field - book and book should have nested field review
-  // we already have resolver for author -> book, new we need to build book -> review resolver
-  // similar to author, create a new object for resolver Book, and inside that return the reviews
 
-  // client query
-  /*
-    query getAllBooksbyAuthor($name: String!, $id: Int!) {
-        author(name: $name) {
-            name,
-            book(id: $id) {
-              title,
-              reviews {
-                review
-              }
-            }
-        } 
-    }
-  */
   Book: {
     reviews: (parent, args) => {
       let data = reviews.filter((item) => item.bookId === parent.id);
-      console.log({ data });
+      console.log('LOG NO - 3 ');
       return data;
     },
   },
@@ -111,10 +94,45 @@ type Query {
 */
 
 // Summary for nested queries
-// for any complex nested query from client
-// the root object of that query, the resolver function needs to be present in the Query object
-// now if there is a nested object within the root object
-// e.g. a book inside the author
-// a new propert needs to be created besides the Query object inside resolver object
-// hence we have Author besides Query
-// in author write respective resolvers
+// we need to do resolver chaining
+
+// client query
+/*
+    query getAllBooksbyAuthor($name: String!, $id: Int!) {
+        author(name: $name) {
+            name,
+            book(id: $id) {
+              title,
+              reviews {
+                review
+              }
+            }
+        } 
+    }
+ */
+//gql flow for above query
+/**
+ * author(name: $name)
+ * gql will look into root Query schema
+ * property author() with parameter exists
+ * gql goes to root resolver and find resolver with name author under root resolver
+ * all root resolvers are always under Query resolver
+ * from this function author name is fetched
+ *
+ * book(id: $id)
+ * now this book is not a root object, it is under author
+ * so author needs to be a separate resolver just like the root resolver
+ * hence we have Author: {} besides Query: {} in the resolvers
+ * now inside author resolver, gql will search for book() resolver
+ * this resolver will have book(parent, args) - parent is whatever data returned by its previous resolver
+ * in this case the author function from root resolver
+ *
+ * book(id: $id) {title, reviews}
+ * from this second resolver gql fetches title and reviews
+ * now reviews is not a not a root object, it is under book
+ * so book also needs to be separte resolver just like author and root resolver
+ * hence we have Book: {} besides Author: {} and Query {} in the resolvers
+ * now inside Book, gql will serach for reviews resolver
+ * reviews(parent, args) - here parent would be whatever data was returned by its previoud resolver
+ * in this case book function from Author resolver
+ */
