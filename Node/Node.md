@@ -822,3 +822,17 @@ app.get('/endpoint2', (req, res) => {
   res.send('This is endpoint 2');
 });
 ```
+
+### 4. DoS attack
+### 5. SQL Injection
+### 6. Input Sanitization
+### 7. Authentication + Authorization
+
+## Nodejs Performance
+
+### 1. gzip
+### 2. Promise.all
+### 3. Caching - Redis
+### 4. 
+
+## Nodejs Error handling
