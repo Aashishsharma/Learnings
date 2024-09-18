@@ -5,9 +5,9 @@ import { dateScalar } from './custom-scalars.js';
 
 export const resolvers = {
   Date: dateScalar, // STEP 3 - register custom scalar type in resolvers
-  // note - for all the properties in graph's entry point type Query
-  // the resolver function needs to be inside the Query object (see below)
+  // note - all the root resolvers need to be under Query object
   // and for all nested / related queries, their resolvers must be outside of this Query object
+  // basically everything mentioned inside type Query in schema needs be inside Query
   Query: {
     books: () => books,
     authors: () => authors,
