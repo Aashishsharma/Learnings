@@ -22,7 +22,8 @@ export const typeDefs = `#graphql
   # e.g. if we don't define author in the Query type, the gql client 
   # won't be able to query on the author
   type Query {
-    books: [Book!],
+    books: [Book!], # the name books need to match with the resolver function
+    # and this is also the name the gql client will use in it's query
     authors: [Author!]
   }
   # for each of the qyery property we defined in type Query
