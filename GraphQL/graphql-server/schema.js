@@ -1,34 +1,16 @@
-import { books, authors } from './db.js';
-import { GraphQLScalarType } from 'graphql';
+// this file specifies the datatype for gql
 
-const dateScalar = new GraphQLScalarType({
-  name: 'Date',
-  description: 'Custom Date scalar type',
-  // Serialize the date to send to the client (Convert JS Date object to ISO string)
-  serialize(value) {
-    console.log({ value }, typeof value);
-    if (value instanceof Date) {
-      // If it's a Date object, convert it to YYYY-MM-DD
-      return value.toISOString().split('T')[0];
-    } else if (typeof value === 'string') {
-      // If it's already a string (ISO format), just extract the date part
-      return value.split('T')[0];
-    }
-    return null;
-  },
-  // Parse value from the client input (e.g. for mutation or query variables)
-  parseValue(value) {
-    return value ? new Date(value) : null; // Convert incoming string to Date
-  },
-});
+// Primitive scalar types in gql
+// (Int | Float | String | Boolean | ID)
 
 export const typeDefs = `#graphql
+  # STEP 1 - declare custom scalar type 
   scalar Date
   type Book {
     title: String!,
     price: Int!,
     author: String!,
-    publishedOn: Date!
+    publishedOn: Date! # use custom scalar type
   } 
 
   type Author {
@@ -36,16 +18,27 @@ export const typeDefs = `#graphql
     books: [Book!]
   }
 
+  # Each graphql schema must must define the query type
+  # e.g. if we don't define author in the Query type, the gql client 
+  # won't be able to query on the author
   type Query {
     books: [Book!],
     authors: [Author!]
   }
+  # for each of the qyery property we defined in type Query
+  # we need to write the resolver function (in this case for books and authors)
 `;
 
-export const resolvers = {
-  Date: dateScalar,
-  Query: {
-    books: () => books,
-    authors: () => authors,
-  },
-};
+// other scalar types
+// UNIONS
+// `union SearchResult = Human | Droid | Starship`;
+// interface
+
+// interface Character {
+//   id: ID!
+//   name: String!
+//   friends: [Character]
+//   appearsIn: [Episode]!
+// }
+
+// using the interface - type Human implements Character
