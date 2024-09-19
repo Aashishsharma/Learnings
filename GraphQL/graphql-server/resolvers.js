@@ -124,6 +124,58 @@ export const resolvers = {
 
       return `Book - ${args.input.title} added successfully`;
     },
+
+    /**
+    client query
+    mutation updateBook($input: BookUpdate! ) {
+      updateBook(input: $input) {
+        ... on Book { // VVIP - notice this syntax - this is called inline fragments
+          id,
+          title
+        }
+        ... on ErrorResponse { // another inline fragment
+          message
+        }
+      }
+    }   
+
+    // inline fragements are requried if the resolver (in this case updateBook) returns more than 1 type
+    // see below update book function, it retunrs a union type BookUpdateReturnsBookOrError which is defined in the 
+    // schema - updateBook(input: BookUpdate): BookUpdateReturnsBookOrError
+    // now union type BookUpdateReturnsBookOrError can return either a book object or an error response
+    // so on the client side we need to add inline fragment (syntax ... on <ReturnTypeOfResolver>)
+    // Adding inline fragment on client side is one part of the query
+    // on the server side, in resolvers, we need to add resolver function for BookUpdateReturnsBookOrError
+    // see code below the updateBook resolver, we have another resolver BookUpdateReturnsBookOrError, which is adjacent to Query / Mutation resolver
+    // inside this resolver, we need to override __resolveType(obj) function - whose job is to return one of the union types based on the value returned from updateBook resolver
+     */
+    updateBook: (_, args) => {
+      let book = books.find((book) => book.id === args.input.id);
+      let index = books.findIndex((book) => book.id === args.input.id);
+
+      // the return type of rthis resolver is BookUpdateReturnsBookOrError, see in schema file
+
+      if (index === -1) {
+        return { message: `Book with ${args.input.id} not found` };
+      }
+
+      let updatedBook = { ...book, ...args.input };
+
+      console.log({ updatedBook });
+      books.splice(index, 1, updatedBook);
+
+      return updatedBook;
+    },
+  },
+
+  // for every resolver which returns a union type, we need to create a field resolver for it
+  BookUpdateReturnsBookOrError: {
+    // the obj arg here is the return value from that specific resolver
+    __resolveType(obj) {
+      if (obj.message) {
+        return 'ErrorResponse';
+      } else return 'Book';
+    },
   },
 };
 

@@ -52,6 +52,8 @@ export const typeDefs = `#graphql
     # we have created a new type BookInput
     # this ensure that the ars passed from the client query will have type BookInput
     # BookInput type is defined below 
+
+    updateBook(input: BookUpdate): BookUpdateReturnsBookOrError # return the updated book
   }
 
   # notice that the keyword is input and not type
@@ -62,6 +64,23 @@ export const typeDefs = `#graphql
     # but what aboout other fields required for the Book
     # like id, published on and other?
     # we set default values in the resolver
+  }
+
+  input BookUpdate {
+    id: Int! # book id is required, other fileds are optional, if options fileds are passed, their value would be update
+    title: String,
+    price: Int,
+    author: String
+  }
+
+  # unions can only incude object types, it cannot include premitive scalar types like String, Int
+  # unsing below throws error
+  # union BookUpdateReturnsBookOrString = Book | String
+
+  union BookUpdateReturnsBookOrError = Book | ErrorResponse
+
+  type ErrorResponse {
+    message: String!
   }
 `;
 
