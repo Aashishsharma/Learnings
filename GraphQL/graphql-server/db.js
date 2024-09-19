@@ -1,4 +1,4 @@
-export const books = [
+export let books = [
   {
     id: 1,
     title: 'The Awakening',
@@ -23,12 +23,12 @@ export const books = [
   },
 ];
 
-export const authors = [
+export let authors = [
   { id: 1, name: 'abc', bookId: [1, 3] },
   { id: 2, name: 'pqr', bookId: [1, 2] },
 ];
 
-export const reviews = [
+export let reviews = [
   { id: 1, review: 'Good book', bookId: 1 },
   { id: 2, review: 'Very Good book', bookId: 1 },
   { id: 3, review: 'Good book', bookId: 2 },

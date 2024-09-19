@@ -73,6 +73,32 @@ export const resolvers = {
       return data;
     },
   },
+
+  // all mutation resolvers need to be in this object only
+  Mutation: {
+    /**
+     client query
+       mutation deleteBook($id: Int!) {
+            deleteBook(id: $id)
+        }
+     */
+    deleteBook: (_, args) => {
+      // books = books.filter((book) => book.id != args.id);
+      // note - above filter is not letting me re-assing the books array
+      // even though it is declares as let in db.js file
+      // this is beacuse if we are using ES6 imports, the imported objects are by default made const
+
+      // fix - in the db.js file only, expose another method and call that method below, which will update book
+      // books = books.filter((book) => book.id != args.id);  // Reassign locally
+      // setBooks(books);  this function is also exported from the db.js module, which can re-assign books object
+
+      // I will directly mutate the array, since const can allow mutation but no re-assignment
+      let index = books.findIndex((book) => book.id === args.id);
+      if (index === -1) return 'Book not found';
+      books.splice(index, 1); // remember? splice mutates the array
+      return 'Book deleted successfully';
+    },
+  },
 };
 
 // VVIP - gql query execution flow

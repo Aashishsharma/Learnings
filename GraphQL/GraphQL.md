@@ -1,5 +1,11 @@
 # GraphQL - query language for API
 
+## GraphQL
+
+## Client queires
+
+## Client queries in javascript
+
 ## Infamous N+1 problem (see resolver.js to understand the problem)
 
 #### 1. Use dataloader library

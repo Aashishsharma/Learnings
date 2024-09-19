@@ -43,6 +43,12 @@ export const typeDefs = `#graphql
   }
   # for each of the qyery property we defined in type Query
   # we need to write the resolver function (in this case for books, authors, book and author)
+
+  # the Query type can only fetch the data, to add / update / delete data we need to use Mutation
+
+  type Mutation {
+    deleteBook(id: Int): String # create resolver for this 
+  }
 `;
 
 // other scalar types
