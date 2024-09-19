@@ -131,6 +131,24 @@ const resolvers = {
     },
   },
 };
+
+// client query
+query {
+  books(first: 5, after: "10") {
+    edges {
+      cursor
+      node {
+        id
+        title
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+
 ```
 
 **But in both the cases if we are slicing the books array how is cursor faster than limit /offest**
