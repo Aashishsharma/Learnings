@@ -6,7 +6,7 @@ import { dateScalar } from './custom-scalars.js';
 export const resolvers = {
   Date: dateScalar, // STEP 3 - register custom scalar type in resolvers
   // note - all the root resolvers need to be under Query object
-  // and for all nested / related queries, their resolvers must be outside of this Query object
+  // and for all nested / related queries, their resolvers must be outside of this Query object, they are called FIELD LEVEL RESOLVERS
   // basically everything mentioned inside type Query in schema needs be inside Query
   Query: {
     books: () => books,
@@ -26,7 +26,9 @@ export const resolvers = {
     },
   },
 
-  // resolvers for nested data
+  // FIELD LEVEL RESOLVERS
+  // note if client calls books, gql will execute Query.books() resolver and not below resolver
+  // if client calls Author {name, books}, then Author.books() resolver will be called and not the root books resolver
   // below gql means
   // from authors object, where authorname = name, fectch all the books
   Author: {
@@ -36,7 +38,7 @@ export const resolvers = {
       return books.filter((book) => book.author === parent.name);
     },
 
-    // fectch one book with gove id for given author
+    // fectch one book with given id for given author
     book: (parent, args) => {
       let book = books.filter((book) => book.author == parent.name && book.id == args.id);
       // big problem, below I returned book instead of book[0]
@@ -64,8 +66,10 @@ export const resolvers = {
 
   Book: {
     reviews: (parent, args) => {
+      console.log({ parent });
+      console.log('called again');
       let data = reviews.filter((item) => item.bookId === parent.id);
-      console.log('LOG NO - 3 ');
+      //console.log('LOG NO - 3 ');
       return data;
     },
   },
@@ -86,8 +90,7 @@ query ExampleQuery {
 // 3. books keyword is matched with books function inside Query property in resolvers, and that resolver function is run
 // 4. event though if the resolver returns all the fields of the object (e.g. book), gql will truncate and return only those fields that are asked by the client
 
-// Although apollo server gives us the gql explorer by default to write client side queries
-// always look at the below query object to understand what all is exposed by the schema
+// Apollo server gives us the gql explorer by default to write client side queries
 /*
 type Query {
 }
@@ -116,7 +119,6 @@ type Query {
  * gql will look into root Query schema
  * property author() with parameter exists
  * gql goes to root resolver and find resolver with name author under root resolver
- * all root resolvers are always under Query resolver
  * from this function author name is fetched
  *
  * book(id: $id)
@@ -124,7 +126,8 @@ type Query {
  * so author needs to be a separate resolver just like the root resolver
  * hence we have Author: {} besides Query: {} in the resolvers
  * now inside author resolver, gql will search for book() resolver
- * this resolver will have book(parent, args) - parent is whatever data returned by its previous resolver
+ * this resolver will have book(parent, args) -
+ * Parent argument contains data returned from it's parent resolver
  * in this case the author function from root resolver
  *
  * book(id: $id) {title, reviews}
@@ -135,4 +138,16 @@ type Query {
  * now inside Book, gql will serach for reviews resolver
  * reviews(parent, args) - here parent would be whatever data was returned by its previoud resolver
  * in this case book function from Author resolver
+ * VVIP - IF PARENT RESOLVER IS RETURNING ARRAY WITH N ELEMENTS
+ * THE NEXT RESOLVER WILL BE CALLED N TIMES
+ * THIS MEANS THE reviews(parent, args) resolver from Book resolver WILL BE CALLED
+ * 5 TIMES IF THE book() PARENT RESOLVER RETUNRS ARRAY WITH 5 ELEMENTS
+ * THIS IS CALLED N+1 PROBLEM
+ * IN REAL WORLD WE WOULD BE MAKING A DB CALL INSIDE THSES RESOLVERS
+ * SO FOR DATASET OF N, N+1 DB CALLS (ROUNDTRIPS) WOULD BE MADE
+ * N CALLS FOR CHILD RESOLVER, 1 CALL FOR PARENT RESOLVER
+ *
+ * SEE BELOW FOR SOLVING N+1 PROBLEM
  */
+
+// 3 ways to solve n+1 problem (see graphql.md file)

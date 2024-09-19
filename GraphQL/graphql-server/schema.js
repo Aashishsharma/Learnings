@@ -29,8 +29,7 @@ export const typeDefs = `#graphql
   }
 
   # Each graphql schema must must define the query type
-  # e.g. if we don't define author in the Query type, the gql client 
-  # won't be able to query on the author
+  # all the properties under this object can be queied by client at the ROOT LEVEL
   type Query {
     books: [Book!], # the name books need to match with the resolver function
     # and this is also the name the gql client will use in it's query
@@ -43,7 +42,7 @@ export const typeDefs = `#graphql
   
   }
   # for each of the qyery property we defined in type Query
-  # we need to write the resolver function (in this case for books and authors)
+  # we need to write the resolver function (in this case for books, authors, book and author)
 `;
 
 // other scalar types
