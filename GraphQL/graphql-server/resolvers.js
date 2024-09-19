@@ -139,6 +139,16 @@ export const resolvers = {
       }
     }   
 
+    $input variable in the client query would be - 
+    {
+      "input": {
+        "id": 3,
+        "title": "new Book3333333",
+        "price": 600,
+        "author": "ashish"  
+      }
+    }
+
     // inline fragements are requried if the resolver (in this case updateBook) returns more than 1 type
     // see below update book function, it retunrs a union type BookUpdateReturnsBookOrError which is defined in the 
     // schema - updateBook(input: BookUpdate): BookUpdateReturnsBookOrError
