@@ -1,7 +1,5 @@
 # GraphQL - query language for API
 
-## GraphQL
-
 ### GraphQL vs REST Comparison Table
 
 | Feature            | GraphQL                                                                                                                                                                            | REST                                                                                                                                                    |
@@ -20,9 +18,140 @@
 
 ## Client queires
 
+How to create client queries is coverd as comments section in resolver.js file which includes
+
+1. Query
+2. Nested Queries
+3. Queires with arguments
+4. Using inline fragments
+
+**But pagination is not covered, see below**
+
+#### 5. Pagination
+
+Two ways to achieve -
+
+###### 1. limit and offset - similar to traditional SQL LIMIT and OFFSET
+
+```graphql
+#schema
+type Query {
+  books(limit: Int, offset: Int): [Book]
+}
+type Book {
+  id: ID!
+  title: String!
+  author: String!
+}
+
+#resolver
+const resolvers = {
+  Query: {
+    books: (_, { limit, offset }) => {
+      return books.slice(offset, offset + limit); // Assuming 'books' is an array of book data
+    },
+  },
+};
+
+# client query
+query {
+  books(limit: 5, offset: 10) {
+    id
+    title
+    author
+  }
+}
+```
+
+This approcah is inefficient if dataset is larger in size.
+
+###### 2. using curosrs (efficient for larger data sets)
+
+To implement cursor based pagination, the most important part to understand is designign the schema
+Whichever type needs to be paginated, create schema in below format
+
+```graphql
+# for that entity create edges which would include
+# edges and pageinfo
+# edges will include 1. cursor and 2. node
+# 1. cursor - someId which indicates, where the cursor position (it can be an autoincrement field from DB)
+# 2. node - array of actual data that is supposed to be returned to client
+# pageInfo to have hasNextPage, hasPrevioudPage like metadata about the page
+type BookConnection {
+  edges: [BookEdge]
+  pageInfo: PageInfo
+}
+
+type BookEdge {
+  cursor: String
+  node: Book
+}
+
+type Book {
+  id: ID!
+  title: String!
+  author: String!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  endCursor: String!
+}
+
+# the resolver must return the connection object which has the necessary fields for client for iteration
+type Query {
+  books(first: Int, after: String): BookConnection
+}
+# this pagination schema is industry standard, github also uses this pattern
+```
+
+Then create resolver which returns the ConnectionType we created above (in this case BookConnection)
+
+```javascript
+const resolvers = {
+  Query: {
+    books: (_, { first, after }) => {
+      const startIndex = after
+        ? books.findIndex((book) => book.id === after) + 1
+        : 0;
+      const paginatedBooks = books.slice(startIndex, startIndex + first);
+
+      return {
+        edges: paginatedBooks.map((book) => ({
+          cursor: book.id, // Use the book's ID as the cursor
+          node: book,
+        })),
+        pageInfo: {
+          hasNextPage: startIndex + first < books.length,
+          endCursor: paginatedBooks.length
+            ? paginatedBooks[paginatedBooks.length - 1].id
+            : null,
+        },
+      };
+    },
+  },
+};
+```
+
+**But in both the cases if we are slicing the books array how is cursor faster than limit /offest**
+
+```SQL
+SELECT * FROM books LIMIT 10 OFFSET 1000;
+```
+
+This query requires the database to scan 1000 records before retrieving the 10 you need, even if you don't need the first 1000 records
+
+```SQL
+SELECT * FROM books WHERE id > 'last_cursor' LIMIT 10;
+```
+
+Here we directly skip the records using where condition
+
 ## Client queries in javascript
 
-## Pagination
+## Authroization
+
+## Caching
 
 ## Infamous N+1 problem (see resolver.js to understand the problem)
 

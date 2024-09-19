@@ -15,7 +15,8 @@
     "@apollo/server": "^4.11.0",
     "cors": "^2.8.5",
     "express": "^4.21.0",
-    "graphql": "^16.9.0"
+    "graphql": "^16.9.0",
+    "gzip": "^0.1.0"
   },
   "devDependencies": {
     "eslint": "^9.10.0",

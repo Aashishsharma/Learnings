@@ -129,11 +129,11 @@ export const resolvers = {
     client query
     mutation updateBook($input: BookUpdate! ) {
       updateBook(input: $input) {
-        ... on Book { // VVIP - notice this syntax - this is called inline fragments
+        ... on Book { // VVIP - notice this syntax - this is called INLINE FRAGMENTS
           id,
           title
         }
-        ... on ErrorResponse { // another inline fragment
+        ... on ErrorResponse { // another INLINE fragment
           message
         }
       }
@@ -149,12 +149,12 @@ export const resolvers = {
       }
     }
 
-    // inline fragements are requried if the resolver (in this case updateBook) returns more than 1 type
+    // INLINE FRAGMENTS are requried if the resolver (in this case updateBook) returns more than 1 type
     // see below update book function, it retunrs a union type BookUpdateReturnsBookOrError which is defined in the 
     // schema - updateBook(input: BookUpdate): BookUpdateReturnsBookOrError
     // now union type BookUpdateReturnsBookOrError can return either a book object or an error response
-    // so on the client side we need to add inline fragment (syntax ... on <ReturnTypeOfResolver>)
-    // Adding inline fragment on client side is one part of the query
+    // so on the client side we need to add INLINE fragment (syntax ... on <ReturnTypeOfResolver>)
+    // Adding INLINE fragment on client side is one part of the query
     // on the server side, in resolvers, we need to add resolver function for BookUpdateReturnsBookOrError
     // see code below the updateBook resolver, we have another resolver BookUpdateReturnsBookOrError, which is adjacent to Query / Mutation resolver
     // inside this resolver, we need to override __resolveType(obj) function - whose job is to return one of the union types based on the value returned from updateBook resolver
@@ -265,3 +265,26 @@ type Query {
  */
 
 // 3 ways to solve n+1 problem (see graphql.md file)
+
+// like INLINE FRAGMENTS, gql has concepts of DIRECTIVES (TO DYNAMICALLY CHANGE THE STRUCUTRE OF A CLIENT QUERY)
+// DIRECTIVES
+
+/**
+variables for below client query 
+{
+  "episode": "JEDI",
+  "withFriends": false // if withFriends is false, then the friends object is removed from the client query (see below)
+  // if it is true then frieds objecy is paased to the query and it is fecthed in the backend
+}
+
+query Hero($episode: Episode, $withFriends: Boolean!) {
+  hero(episode: $episode) {
+    name
+    friends @include(if: $withFriends) { 
+      name
+    }
+  }
+}
+
+
+ */
