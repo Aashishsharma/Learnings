@@ -98,6 +98,32 @@ export const resolvers = {
       books.splice(index, 1); // remember? splice mutates the array
       return 'Book deleted successfully';
     },
+
+    /**
+     client query
+     mutation addBook($input: BookInput! ) {
+         addBook(input: $input)
+    }
+    variables
+    {
+      "input": {
+        "title": "new Book",
+        "price": 200,
+        "author": "ashish"   
+       }
+    }
+     */
+    addBook: (_, args) => {
+      // again mutating the array
+      let newBookData = {
+        ...args.input, // notice in schema the argument is named as input
+        id: Math.floor(Math.random() * 1000).toString(),
+        publishedOn: new Date(),
+      };
+      books.splice(books.length - 1, 0, newBookData);
+
+      return `Book - ${args.input.title} added successfully`;
+    },
   },
 };
 

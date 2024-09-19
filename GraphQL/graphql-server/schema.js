@@ -48,6 +48,20 @@ export const typeDefs = `#graphql
 
   type Mutation {
     deleteBook(id: Int): String # create resolver for this 
+    addBook(input: BookInput): String # notice the input type as BookInput
+    # we have created a new type BookInput
+    # this ensure that the ars passed from the client query will have type BookInput
+    # BookInput type is defined below 
+  }
+
+  # notice that the keyword is input and not type
+  input BookInput {
+    title: String!
+    price: Int!
+    author: String!
+    # but what aboout other fields required for the Book
+    # like id, published on and other?
+    # we set default values in the resolver
   }
 `;
 
