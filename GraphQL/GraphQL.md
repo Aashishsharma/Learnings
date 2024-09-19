@@ -151,19 +151,23 @@ query {
 
 ```
 
-**But in both the cases if we are slicing the books array how is cursor faster than limit /offest**
+**Limit-Offest vs Cursor based pagination**  
+| **Aspect** | **Limit-Offset Pagination** | **Cursor-Based Pagination** |
+|---------------------------------------|-------------------------------------------------------------------|-----------------------------------------------------------|
+| **Performance** | Needs to iterate over rows and may result in a full-table scan | Uses `WHERE` query to skip unwanted rows, more efficient |
+| **Jumping to Any Page** | Allows jumping to any page (e.g., page 3, page 10) | Can only navigate to the next or previous page |
+| **Handling Data Changes** | Can lead to inconsistent data when rows are added/removed | Consistent as it uses a stable cursor (like ID or timestamp)|
+| **SQL** | `SELECT * FROM books LIMIT 10 OFFSET 1000;` | `SELECT * FROM books WHERE id > 'last_cursor' LIMIT 10;` |
 
 ```SQL
-SELECT * FROM books LIMIT 10 OFFSET 1000;
+
 ```
 
 This query requires the database to scan 1000 records before retrieving the 10 you need, even if you don't need the first 1000 records
 
 ```SQL
-SELECT * FROM books WHERE id > 'last_cursor' LIMIT 10;
-```
 
-Here we directly skip the records using where condition
+```
 
 ## Client queries in javascript
 
