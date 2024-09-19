@@ -11,9 +11,10 @@ import express from 'express';
 import http from 'http';
 import { typeDefs } from './schema.js';
 import { resolvers } from './resolvers.js';
+import cors from 'cors';
 
 const app = express();
-
+app.use(cors());
 // note that we need to pass in http server and not express server to the expressmiddleware
 const httpServer = http.createServer(app);
 

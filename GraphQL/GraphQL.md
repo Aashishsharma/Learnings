@@ -119,6 +119,8 @@ const resolvers = {
       return {
         edges: paginatedBooks.map((book) => ({
           cursor: book.id, // Use the book's ID as the cursor
+          // in real life from SQL use windowfunction for cursor
+          // ROW_NUMBER() OVER (ORDER BY createdAt) AS cursor  -- Generating the cursor based on 'createdAt'
           node: book,
         })),
         pageInfo: {
@@ -159,17 +161,7 @@ query {
 | **Handling Data Changes** | Can lead to inconsistent data when rows are added/removed | Consistent as it uses a stable cursor (like ID or timestamp)|
 | **SQL** | `SELECT * FROM books LIMIT 10 OFFSET 1000;` | `SELECT * FROM books WHERE id > 'last_cursor' LIMIT 10;` |
 
-```SQL
-
-```
-
-This query requires the database to scan 1000 records before retrieving the 10 you need, even if you don't need the first 1000 records
-
-```SQL
-
-```
-
-## Client queries in javascript
+## Client queries in React using apollo-client
 
 ## Authroization
 
