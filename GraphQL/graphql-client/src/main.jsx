@@ -13,6 +13,10 @@ const client = new ApolloClient({
   // so this data would be available in the browser, only store config vars liek urls, don't store any secrets
   uri: import.meta.env.VITE_GRAPHQL_URL,
   cache: new InMemoryCache(), // Apollo Client uses this to cache query results after fetching them
+  headers: {
+    authorization:
+      localStorage.getItem("token") || "dummy token from ui client",
+  },
 });
 
 // Supported in React 18+

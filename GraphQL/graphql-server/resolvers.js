@@ -113,7 +113,7 @@ export const resolvers = {
        }
     }
      */
-    addBook: (_, args) => {
+    addBook: (_, args, context) => {
       // again mutating the array
       let newBookData = {
         ...args.input, // notice in schema the argument is named as input
@@ -121,7 +121,8 @@ export const resolvers = {
         publishedOn: new Date(),
       };
       books.splice(books.length - 1, 0, newBookData);
-
+      // playing around to check is this header is returned as response or not
+      context.res.setHeader('Dummy-Header', 'Dummy-Value');
       return `Book - ${args.input.title} added successfully`;
     },
 

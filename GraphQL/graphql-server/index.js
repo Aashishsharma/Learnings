@@ -1,3 +1,6 @@
+// 2 common ways to create apollo server
+// 1. using apollostandalone server
+// 2. using apolloserverexpress
 // STEPS to use graphql + express
 // 1. Use expressMiddleware to use express + graphql (need to pass 2 args - http server, optionl context arg)
 // 2. we need to create http server using express
@@ -29,6 +32,9 @@ const server = new ApolloServer({
   // Below, we tell Apollo Server to "drain" this httpServer,
   // enabling our servers to shut down gracefully.
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  // note that below conext won't work, becuase this works only when using apollo standalone server
+  // but we are using apolloserverexpress, hence we need to use context in express middleware (see below)
+  context: async ({ req }) => {},
 });
 // Ensure we wait for our server to start
 await server.start();
@@ -42,7 +48,12 @@ app.use(
   // expressMiddleware accepts 2 arguments:
   // an Apollo Server instance and optional configuration options
   expressMiddleware(server, {
-    context: async ({ req }) => ({ token: req.headers.token }),
+    // using context, this code will run as middleware for every gql query run from the client
+    context: async ({ req, res }) => {
+      const token = req.headers.authorization || '';
+      console.log('token received in middleware ', token);
+      return { req, res };
+    },
   }),
 );
 

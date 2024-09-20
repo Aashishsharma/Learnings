@@ -30,7 +30,7 @@ const server = new ApolloServer({
   resolvers,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   // similar to express middlewares, context has access to request, response
-  context: (req) => {
+  context: ({ req, res }) => {
     const token = req.headers.authorization || "";
     const user = getUserFromToken(token);
     return {
@@ -91,7 +91,44 @@ signInUser: (_, args) => {
 mutation signIn($user: UserInput!) {
   signInUser(user: $user) // this will return token
 }
+// but this is gql query
+// how to pass token for all the gql queries as headers in client side?
+// see Client queries section below
+```
 
+#### Implementing headers in gql-server resolvers
+
+As we saw that we can get access to request object, in context, we can also get response object and we can set custom headers
+
+```javascript
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req, res }) => {
+    // VVIP - Make sure to return the `res` object to be accessible in resolvers
+    // we can set headers here as well res.setHeader('X-First-Header', 'FirstValue')
+    // but this will be applied to all resolver's response
+    // instead just return req, and res to the resolvers, and inside resolvers
+    // set headers based on resolver's usecase
+    return { req, res };
+  },
+});
+
+// resolver
+const resolvers = {
+  Query: {
+    first: (parent, args, context) => {
+      // Set a custom header for this resolver
+      context.res.setHeader("X-First-Header", "FirstValue");
+      return "First Resolver Response";
+    },
+    second: (parent, args, context) => {
+      // Set a different custom header for this resolver
+      context.res.setHeader("X-Second-Header", "SecondValue");
+      return "Second Resolver Response";
+    },
+  },
+};
 ```
 
 ### 2. Pagination
@@ -253,6 +290,16 @@ const client = new ApolloClient({
   // so this data would be available in the browser, only store config vars liek urls, don't store any secrets
   uri: import.meta.env.VITE_GRAPHQL_URL, // see syntx it is import.meta.env
   cache: new InMemoryCache(), // Apollo Client uses this to cache query results after fetching them
+  headers: {
+    // this is where we set the auth headers, for each gql query
+    // this header would be availale in context middleware function of the gql
+    authorization:
+      localStorage.getItem("token") || "dummy token from ui client",
+  },
+  // there are some disadvantages of setting headers like this
+  // 1. these header are available for all queries, even if some queries don't require it
+  // 2. You now CANNOT change the headers for individual gql queries
+  // instead use Apollo link middleware (see below)
 });
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -260,6 +307,48 @@ root.render(
     <App />
   </ApolloProvider>
 );
+```
+
+**Apollo link middleware** -
+
+```javascript
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+const httpLink = new HttpLink({
+  uri: import.meta.env.VITE_GRAPHQL_URL, // Set the GraphQL URI
+});
+const authLink = setContext((request, previousContext) => {
+  // Dynamically get the token or other headers
+  const token = localStorage.getItem("token") || "dummy token from ui client";
+  // Check the request and customize headers accordingly
+  // this is where we are dynamicallt setting the headers
+  // based on qhich gql query is getting executed
+  // this cannot be done if we firect set the headers
+  if (request.operationName === "GetUserProfile") {
+    // You can set a different token for specific operations, for example:
+    const specialToken = "specialTokenForProfileQueries";
+    return {
+      headers: {
+        ...previousContext.headers,
+        authorization: `Bearer ${specialToken}`,
+      },
+    };
+  }
+  // For all other operations, use the regular token
+  return {
+    headers: {
+      ...previousContext.headers, // Include any existing headers
+      authorization: token ? `Bearer ${token}` : "",
+    },
+  };
+});
+const client = new ApolloClient({
+  // if we are using link component from apollo
+  // the url should be added in the HTTPLink component
+  // we cannot add directly here as we did in above case
+  link: authLink.concat(httpLink), // Combine authLink and httpLink
+  cache: new InMemoryCache(),
+});
 ```
 
 ### 2. useQuery hook from apollo client
@@ -352,8 +441,18 @@ export const ADD_BOOK = gql`
 `;
 
 const AddBooks = () => {
-  // similar to useQuery useMutation needs 1 arg - the gql query
-  const [addBook, { data, loading, error }] = useMutation(ADD_BOOK);
+  // useMutation needs 2 args
+  // 1. the gql query
+  // 2. optional obj
+  const [addBook, { data, loading, error }] = useMutation(ADD_BOOK, {
+    // in this optional object
+    // all the listed queries would be refetched
+    // remember apollo client by default catches the quereis, so any mutation won't get reflected immedaitely
+    refetchQueries: [
+      { query: GET_BOOKS }, // Refetch this query after this mutation is completed
+      { query: GET_BOOK_BY_ID, variables: { id: 1 } }, // You can refetch with variables too
+    ],
+  });
   // but it returns an array of 2 objs, useQuery just returned 1 obj
   // the frst elem of returned array from useMutate is a funcition
   // this function we need to call whenever we need to call the gqlQuery (in this case ADD_BOOK)
@@ -385,7 +484,77 @@ const AddBooks = () => {
 };
 ```
 
+### 4. useLazyQuery
+
+1. **useQuery** - the gql query will get fired whenever the component is loaded / rendered
+2. **useMutation** - used for mutation gql queries, The query will not run until you explicitly call the function returned by useMutation.
+3. **useLazyQuery** - used ofr normal fetch gql queries The query will not run until you explicitly call the function returned by useLazyQuery.
+
+```javascript
+const UserComponent = () => {
+  // the GET_USER gql query would get called only when we call the getUser function
+  // used when we want to call a query on some event handler
+  const [getUser, { loading, data, error }] = useLazyQuery(GET_USER);
+  const handleFetchUser = () => {
+    getUser({ variables: { id: "1" } }); // Trigger the query with variables
+  };
+};
+```
+
+#### Error handling at client side
+
+Similar to link apollo middleware, we can use error middleware
+
+```javascript
+import { ApolloClient, HttpLink, InMemoryCache, from } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
+// errors in gql can be of 2 types, gqlErrors and network errors
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    );
+  if (networkError) console.error(`[Network error]: ${networkError}`);
+});
+const httpLink = new HttpLink({ uri: "http://localhost:4000/graphql" });
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: from([errorLink, httpLink]),
+});
+
+// mainly this error middleware is used for logging
+// to update the UI, we can use the error object returned from useQuery / useMutation hooks
+```
+
 ## Caching
+
+### 1. Caching in Apollo Client
+
+In Apollo Client, the default cache behavior is to cache results indefinitely, meaning they will persist in the cache until they are explicitly removed or the cache is reset.
+
+Also there is no option to set the cache expire time, like we have in useQuery hook from tankstack, we can provide cache-time / stale-time, no such config option available in apollo-client
+
+**Cache policy in apollo client** -
+
+| Fetch Policy              | Description                                                                       |
+| ------------------------- | --------------------------------------------------------------------------------- |
+| **cache-first (Default)** | Returns cached data if available; otherwise, it fetches from the server.          |
+| **network-only**          | Always fetches from the server, bypassing the cache.                              |
+| **cache-only**            | Only returns data from the cache; if not found, it returns null.                  |
+| **no-cache**              | Always fetches from the server and does not store the result in the cache.        |
+| **cache-and-network**     | Returns cached data first and then fetches from the server for an updated result. |
+
+**Managing cache policy** -
+
+```javascript
+const { data, loading, error } = useQuery(MY_QUERY, {
+  fetchPolicy: "network-only", // Set fetch policy for this query
+});
+```
+
+### 2. Caching in Apollo server
 
 ## Infamous N+1 problem (see resolver.js to understand the problem)
 
@@ -463,3 +632,9 @@ context - an object shared by all resolvers in a specific execution. It's used t
 info arg - this has the information related to what query the client has made
 info.fieldNodes - will give all the feilds the user has request for
 based on this field, we can decide if we want to use join in the parent resolver or not
+
+## Scaling GraphQL server
+
+For bigger applications with lot of resolvers and schema types, use below module style
+
+![alt text](PNG/Capture2.PNG "Title")
