@@ -63,6 +63,37 @@ const resolvers = {
 };
 ```
 
+**But before we can use the jwt token in the auth header, we need to login the user and generate the JWT token**
+
+```javascript
+type mutation {
+  signInUser(user: UserInput): String
+}
+input UserInput {
+  userName: String!
+  password: String!
+}
+
+// create resolver
+signInUser: (_, args) => {
+
+  let user = db.collectionName.find({userName: args.userName})
+  if(!user) throw new Error("user does not exists")
+  // write code to comapre password
+  // then use jwt to create token
+  let token = jwt.sign({user}, SECRET_KEY;
+    return token;
+  )
+}
+
+// client query
+// pass appropriate user variable
+mutation signIn($user: UserInput!) {
+  signInUser(user: $user) // this will return token
+}
+
+```
+
 ### 2. Pagination
 
 Two ways to achieve -
