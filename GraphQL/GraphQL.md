@@ -161,9 +161,52 @@ query {
 | **Handling Data Changes** | Can lead to inconsistent data when rows are added/removed | Consistent as it uses a stable cursor (like ID or timestamp)|
 | **SQL** | `SELECT * FROM books LIMIT 10 OFFSET 1000;` | `SELECT * FROM books WHERE id > 'last_cursor' LIMIT 10;` |
 
-## Client queries in React using apollo-client
+## Client queries in React using apollo-client - see graphql-client folder
 
-## Authroization
+## Authentication
+
+### Using middlewares (context object)
+
+While creating gql server using Apollo server, we can app another objct **context**, besides typeDef and resolvers
+
+```javascript
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  // similar to express middlewares, context has access to request, response
+  context: (req) => {
+    const token = req.headers.authorization || "";
+    const user = getUserFromToken(token);
+    return {
+      user,
+      getUserById: (id) => db.users.find((user) => user.id === id),
+    };
+  },
+  // now every resolver will have context.user - which will have logged in user value
+  // 1 catch here - context is applied to all the resolvers, we cannot create resolver specific contexts
+  // hence no flexibility to create route based middlewares, as we had in express
+  // so, we should not throw error in the context
+  // any validation of user, we need to do that in the resolvers (see below)
+});
+
+// Resolver will have to  decide whether to throw error or not
+const resolvers = {
+  Query: {
+    sensitiveData: (parent, args, context) => {
+      // This resolver uses context data (e.g., user authentication)
+      if (!context.user) {
+        throw new AuthenticationError("You must be logged in!");
+      }
+      return getSensitiveData();
+    },
+    publicData: (parent, args) => {
+      // This resolver doesn't need context
+      return getPublicData();
+    },
+  },
+};
+```
 
 ## Caching
 

@@ -1,8 +1,11 @@
 import "./App.css";
 import { useQuery, gql } from "@apollo/client";
 
-function DisplayLocations() {
-  const { loading, error, data } = useQuery(GET_LOCATIONS);
+// React component which makes gql API call using useQuery hook
+function DisplayBooks() {
+  // useQuery needs 1 arg, the gqlQuery
+  // this hooks is pretty much similar to useQuery from tanstack
+  const { loading, error, data } = useQuery(GET_BOOKS);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
@@ -10,16 +13,14 @@ function DisplayLocations() {
   return data.books.map(({ id, title, author }) => (
     <div key={id}>
       <h3>{title}</h3>
-      <br />
-      <b>About this Author:</b>
-      <p>{author}</p>
-      <br />
+      <b>About this Author:</b> {author}
+      <hr></hr>
     </div>
   ));
 }
 
-const GET_LOCATIONS = gql`
-  query GetLocations {
+const GET_BOOKS = gql`
+  query GetBooks {
     books {
       id
       title
@@ -30,8 +31,8 @@ const GET_LOCATIONS = gql`
 function App() {
   return (
     <>
-      Vite app 123
-      <DisplayLocations />
+      Books Data
+      <DisplayBooks />
     </>
   );
 }

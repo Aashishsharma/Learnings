@@ -14,7 +14,11 @@ import { resolvers } from './resolvers.js';
 import cors from 'cors';
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:5173', // vite frontend
+  }),
+);
 // note that we need to pass in http server and not express server to the expressmiddleware
 const httpServer = http.createServer(app);
 
