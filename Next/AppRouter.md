@@ -116,6 +116,8 @@ export default function Error({
 
 ### 7. route.ts
 
+Used to handle API requests and return data (e.g., JSON), status codes, headers, etc. (see Route-handler.md file)
+
 ### 8. middleware.ts
 
 In Next.js, middleware allows you to execute code before a request is completed, enabling you to modify the request or response, redirect users, handle authentication, logging.  
@@ -124,6 +126,8 @@ In Next.js, middleware allows you to execute code before a request is completed,
 
 1. **Nodejs runtime**
 2. **Edge runtime** - this is a runtime env. which is closer to the user, reducing network latency, but does not have access to all the APIs that nodejs runtime has
+
+NOTE - only one middleware.ts file is supported per project and at the root level
 
 ```typescript
 // middleware.ts
