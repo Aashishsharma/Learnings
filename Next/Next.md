@@ -118,10 +118,10 @@ In Nextjs all components are server components by default, to make a component a
 #### VVIP Interleaving client and Server Components
 
 1. **Case 1 - server component within a server components (works by default)**
-2. **Case 2 - client component within a client component (works by default)**, infact any component inside a client component becomes a client component, it is also advised to use client components as low in the hierarchy as possible
+2. **Case 2 - client component within a client component (works by default)**, also remember that any component inside a client component becomes a client component, it is also advised to use client components as low in the hierarchy as possible
 3. **Case 3 - client component within a server component (works by default)**
 4. **Case 4 - server component within a client compnent (does not work)**, if server component is using any server side node api, like using fs module  
-   To solve case 4 - Pass server component as a children in the client component
+   To solve case 4 - Pass server component as a children in the client component (see code below)
 
 ```javascript
 export function ServerComponent() {
