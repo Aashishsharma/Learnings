@@ -80,10 +80,11 @@ async function page() {
 ### 6. error.ts
 
 error.ts file work simialr to error boundary component in react.  
-It does not handle other types of errors like API route errors, server-side errors, or build errors
+It does not handle other types of errors like API route errors, server-side errors, or build errors  
+**error.tsx file should always be a client component**
 
 ```typescript
-"use client"; // Error boundaries must be Client Components
+"use client"; // Error boundaries must always be Client Components
 import { useEffect } from "react";
 export default function Error({
   error,
