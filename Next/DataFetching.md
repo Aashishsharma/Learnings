@@ -77,3 +77,5 @@ export async function ServerComponent() {
 // another way to do this is to using ROUTE SEGMENT CONFIGURATION
 export const revalidate = 10;
 ```
+
+## 2. Data fetching in client components
