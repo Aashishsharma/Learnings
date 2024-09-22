@@ -1,4 +1,4 @@
-# Next.js
+# Next.js (Fullstack React.js framework)
 
 ## 1. SPA (Client Side Rendering)
 
