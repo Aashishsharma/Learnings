@@ -184,59 +184,59 @@ export function ClientComponent({ children }) {
 
 **How does ISR rebuilds the pages in the background without redeploying**
 
-1. You set revalidate: 60 in getStaticProps.
-2. On a request, if 60 seconds have passed since the last regeneration, the cached page is served.
-3. Meanwhile, the page is regenerated in the background with updated content.
-4. The next user who visits the page gets the freshly rebuilt version.
+### ISR is achieved via - exporting function generateStaticParams
 
-**Regenerating page in the background is done by Next.js, we don't have to worry about it**
-
-<Revisit below code once you know basics of getstatic paths and getstatic props>
+Used to create dynamic, pre-rendered pages efficiently.  
+This means that the pages will be built at runtime, any API / DB calls would be made at the build time, so when the page is invked in prod, the API call is not made (see below code)
 
 ```javascript
-import { useRouter } from "next/router";
-// The Post component displays a specific post's content
-const Post = ({ post }) => {
-  const router = useRouter();
-  // If the page is not yet generated, show a fallback UI
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
+// for explaination of below code, see images
+import { notFound } from "next/navigation";
+// this function shoudl return reutrn array of objects
+// the object should contain the key which is used as a dynamic param
+// in this case the dynamic param is id
+// so array should return [{id: 1}, {id:2} ...]
+export function generateStaticParams() {
+  // we are returning 10 static params
+  // this means that api call below would be made at build time for params from 1-10
+  return Array.from(Array(10).keys()).map((item) => ({ id: item.toString() }));
+}
+async function getPost(id: string) {
+  // below console log for ids 1-10 is called at build time
+  // when the page is called on prod with url /about/1
+  // below console log is not called
+  // for /about/11 - console log is called in prod
+  console.log("making a fecth api call for id", id);
+  const res = await fetch(`https://api.vercel.app/blog/${id}`);
+  const post = await res.json();
+  if (!post) notFound();
+  return post;
+}
+
+export default async function Page({ params }: { params: { id: string } }) {
+  const post = await getPost(params.id);
   return (
-    <div>
+    <article>
       <h1>{post.title}</h1>
       <p>{post.content}</p>
-    </div>
+    </article>
   );
-};
-// This function defines the dynamic routes for the page
-export async function getStaticPaths() {
-  // Fetch the list of posts from an API
-  const res = await fetch("https://api.example.com/posts");
-  const posts = await res.json();
-  // Generate paths for each post, mapping post IDs to the URL
-  const paths = posts.map((post) => ({
-    params: { id: post.id.toString() }, // Convert ID to string for URL
-  }));
-  return {
-    paths, // Paths to be statically generated
-    fallback: true, // Enable fallback for ungenerated pages
-  };
 }
-// This function fetches data for a specific post
-export async function getStaticProps({ params }) {
-  // Fetch data for the specific post based on the URL parameter
-  const res = await fetch(`https://api.example.com/posts/${params.id}`);
-  const post = await res.json();
-  return {
-    props: {
-      post, // Pass the fetched post data as a prop
-    },
-    revalidate: 60, // Rebuild the page every 60 seconds
-  };
-}
-export default Post; // Export the Post component as the default export
 ```
+
+**API calls made at build time for ids 1-10**
+![alt text](PNG/Build1.PNG "Title")
+
+**this shouws that the pages for ids 1-10 is genereated at build time**
+![alt text](PNG/Build2.PNG "Title")
+
+**no API call made in prod for ids 1-10, we see console log for id 11**
+![alt text](PNG/Build3.PNG "Title")
+
+This is great, but how do we revalidate the stale pages?
+
+1. **Time based revalidation** - using route configs - `export const revalidate = 60`, after 60s are passed, the next req, will server cached data and for next request, the page would be re-generated
+2. **On Demand revalidation** - using `import { revalidatePath } from 'next/cache'; revalidatePath('/posts')` - useful in **server actions** (see route and server actions.md)
 
 ## Nextjs security
 
