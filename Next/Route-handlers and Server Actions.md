@@ -1,4 +1,6 @@
-# Route handlers
+# Route handlers + Server Actions
+
+## 1. Route handlers
 
 1. They handle API requests and return data (e.g., JSON), status codes, headers, etc.
 2. File name should always be route.ts/js
@@ -146,3 +148,138 @@ export const GET = () => {
   ));
 };
 ```
+
+## 2. Server Actions
+
+Server actions are used to mutate data on the server side, without needing to create APIs  
+Basically we can call server functions, directly from components (server component + client components)
+
+**Points to note**
+
+1. Server actions behind the scene uses HTTP post method to send data to server from browsers
+2. So it is just an abstraction, and developers don't need to create routes and all
+3. Server actions can only trigger **HTTP POST method**
+4. To create server actions inside server components, the function must be async and should include a directive `use server`
+5. We cannot directly create server actions in client components, but we ca create a separate actions.ts file, put all actions there and at the top of the file add `use server`, now in the client component, we can import the server actions
+6. Note server action is different from server components
+7. We cannot import server components from client components, we need to pass servercomponents as child to client components
+8. However we can import server actions in client components, but we cannot define server actions in client components
+9. Mostly server actions are added on form submissions or on button click
+
+### 1. Server actions in server components
+
+```javascript
+import { revalidatePath } from "next/cache";
+import React from "react";
+const todoList = ["ABC", "PQR"];
+function page() {
+  // function must be async and must use directive user-server
+  const addTodo = async (formData: FormData) => {
+    "use server";
+    // although below code is updating server variable
+    // here we will directly added db call
+    // mongo.db.insert()
+
+    // reading form data
+    const todo = formData.get("todo") as string;
+    todoList.push(todo);
+
+    revalidatePath("/about"); // revalidate path, so that new todList with the added todo is displayed below
+  };
+  return (
+    <div>
+      About page
+      {/* server action must be passed in form action */}
+      <form action={addTodo}>
+        <label>Enter todo</label>
+        <input name="todo" type="text"></input>
+        <button type="submit">Submit</button>
+
+        <br></br>
+        <ol>
+          {todoList.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ol>
+      </form>
+    </div>
+  );
+}
+export default page;
+```
+
+Above code works, but what about error handling, doing form valiadtion on UI and showing pending state while the api runs?
+Need to use server actions in client components
+
+### 2. Server actions in client components
+
+We cannot define server actions in client components, but we can import them
+
+```javascript
+"use client";
+import React from "react";
+import { addTodo } from "./actions"; // the todo action is same as we saw in the server component
+import { useFormStatus } from "react-dom";
+function Todoform() {
+  // use form status to get the pending state
+  const { pending } = useFormStatus();
+  const firstValidateThenCallServerAction = async (formData: FormData) => {
+    // here we can validate from
+    // and use StateState to show any validation errors on UI
+    console.log("form data");
+    try {
+      // this is where we can do error handling
+      await addTodo(formData);
+    } catch (err) {
+      console.log(err); // show error on UI
+    }
+  };
+  return (
+    <div>
+      <form action={(formData) => firstValidateThenCallServerAction(formData)}>
+        <label>Enter todo</label>
+        <input name="todo" type="text"></input>
+        <button type="submit">Submit</button>
+        <p>{pending}</p>
+        {/* use the pending for loading purposes */}
+        {pending ? "Adding todo" : "Todo Added"}
+        <br></br>
+      </form>
+    </div>
+  );
+}
+export default Todoform;
+```
+
+**We can call server actions in client components inside event handlers as well, and not just on form submission**
+
+```javascript
+"use client";
+import { incrementLike } from "./actions";
+import { useState } from "react";
+export default function LikeButton({ initialLikes }: { initialLikes: number }) {
+  const [likes, setLikes] = useState(initialLikes);
+  return (
+    <>
+      <p>Total Likes: {likes}</p>
+      <button
+        onClick={async () => {
+          // here we are calling the server action, and when it is success
+          // we update the state in client using setState
+          const updatedLikes = await incrementLike();
+          setLikes(updatedLikes);
+        }}
+      >
+        Like
+      </button>
+    </>
+  );
+}
+```
+
+### Server actions vs Route handlers
+
+| Feature      | Server Actions             | Route Handlers                                           |
+| ------------ | -------------------------- | -------------------------------------------------------- |
+| HTTP Methods | Can only trigger HTTP POST | Supports all HTTP methods (GET, POST, PUT, DELETE, etc.) |
+| Use Case     | Useful in form submissions | Useful for creating REST APIs                            |

@@ -184,6 +184,68 @@ export default async function Page({ params }: { params: { id: string } }) {
 **no API call made in prod for ids 1-10, we see console log for id 11**
 ![alt text](PNG/Build3.PNG "Title")
 
+### Parallel and Sequential data fetching
+
+1. **Sequential data fetching** - useful when API calls are dependant  
+   If the components are nested as shwon below, api calls will be made sequentially
+
+```javascript
+export default async function Page({ params: { username } }) {
+  // First get artists info based on passed username
+  const artist = await getArtist(username);
+  return (
+    <>
+      <h1>{artist.name}</h1>
+      {/* Show fallback UI while the Playlists component is loading */}
+      <Suspense fallback={<div>Loading...</div>}>
+        {/* Note we can use loading.tsx file instead of Suspense, both are same */}
+        <Playlists artistID={artist.id} />
+      </Suspense>
+    </>
+  );
+}
+async function Playlists({ artistID }) {
+  // Use the artist ID to fetch playlists
+  const playlists = await getArtistPlaylists(artistID);
+  return (
+    <ul>
+      {playlists.map((playlist) => (
+        <li key={playlist.id}>{playlist.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+2. **Parallel Data fetching**
+   APIs calls made in layout and page.tsx are run in parallel by default  
+   However if we want to make API calls in paralle for nested components, you need to define api calls outside of the component as shown below  
+   However, the enitre component will show loading until all the API calls are resolved
+
+```javascript
+import Albums from "./albums";
+async function getArtist(username) {
+  const res = await fetch(`https://api.example.com/artist/${username}`);
+  return res.json();
+}
+async function getAlbums(username) {
+  const res = await fetch(`https://api.example.com/artist/${username}/albums`);
+  return res.json();
+}
+export default async function Page({ params: { username } }) {
+  const artistData = getArtist(username);
+  const albumsData = getAlbums(username);
+  // Initiate both requests in parallel
+  const [artist, albums] = await Promise.all([artistData, albumsData]);
+  return (
+    <>
+      <h1>{artist.name}</h1>
+      <Albums list={albums} />
+    </>
+  );
+}
+```
+
 ## 2. Data fetching in client components
 
 It is exactly same as what we did in plain react, making api call to fetch data using combination of useState and useEffect hooks.  
