@@ -78,4 +78,62 @@ export async function ServerComponent() {
 export const revalidate = 10;
 ```
 
+#### Segment route config
+
+| Option           | Type                                                                                                                    | Default                    | Description                                                                                                                                                                     |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| experimental_ppr | 'true' \| 'false'                                                                                                       |                            | Enables experimental support for PPR.                                                                                                                                           |
+| dynamic          | 'auto' \| 'force-dynamic' \| 'error' \| 'force-static'                                                                  | 'auto'                     | Controls page generation behavior (if not force-dynamic, then i the page would be built at buildtime unless the component uses any dynamic functions like header(), cookies()). |
+| dynamicParams    | boolean                                                                                                                 | true                       | Determines if dynamic parameters are supported.                                                                                                                                 |
+| revalidate       | false \| 0 \| number                                                                                                    | false                      | Specifies the revalidation interval for caching.                                                                                                                                |
+| fetchCache       | 'auto' \| 'default-cache' \| 'only-cache' \| 'force-cache' \| 'force-no-store' \| 'default-no-store' \| 'only-no-store' | 'auto'                     | Sets caching strategy only for fetch requests.                                                                                                                                  |
+| runtime          | 'nodejs' \| 'edge'                                                                                                      | 'nodejs'                   | Defines the runtime environment.                                                                                                                                                |
+| preferredRegion  | 'auto' \| 'global' \| 'home' \| string \| string[]                                                                      | 'auto'                     | Specifies the preferred region for deployment.                                                                                                                                  |
+| maxDuration      | number                                                                                                                  | Set by deployment platform | Maximum duration for execution, depending on the platform.                                                                                                                      |
+
+**If you are using fecth api, or making a DB call, by default the page is generated at build time and not dynamicallt renderd unless the we are using dynamic functions like header() or cookie()**
+
+To change this behaviour as seen above use `export const dynamic = 'force-dynamic'`
+
+#### IMP caching behavior
+
+```javascript
+import { unstable_cache } from "next/cache";
+import { db, posts } from "@/lib/db";
+const getPosts = unstable_cache(
+  async () => {
+    console.log(`this function would now be called only after 1 hour,
+    but this does not mean that the page won't re-render,
+    the page rendering is controlled by revalidate config segment`);
+
+    return await db.select().from(posts);
+  },
+  ["posts"],
+  { revalidate: 3600, tags: ["posts"] }
+);
+
+// set page revalidation to 10s
+export const revalidate = 10;
+
+export default async function Page() {
+  const allPosts = await getPosts();
+  console.log(`proof that this page will be rerendered,
+  and this log message would show up after every 10s and not after 1 hour
+  because revalidate is set to 10s`);
+  return (
+    <ul>
+      {allPosts.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  );
+}
+
+// summary
+// unstable_cache will memoize function value for specified duration
+```
+
 ## 2. Data fetching in client components
+
+It is exactly same as what we did in plain react, making api call to fetch data using combination of useState and useEffect hooks.  
+But the recommended way to fecth data on client side is using **react-query tanstack** or using **SWR (stale-whle-revalidate)**
