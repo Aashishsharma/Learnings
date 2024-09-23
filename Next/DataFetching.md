@@ -97,6 +97,8 @@ To change this behaviour as seen above use `export const dynamic = 'force-dynami
 
 #### IMP caching behavior
 
+Note - below behaviour only works in production mode
+
 ```javascript
 import { unstable_cache } from "next/cache";
 import { db, posts } from "@/lib/db";
@@ -109,11 +111,11 @@ const getPosts = unstable_cache(
     return await db.select().from(posts);
   },
   ["posts"],
-  { revalidate: 3600, tags: ["posts"] }
+  { revalidate: 3600, tags: ["posts"] } // now this revalidation is handled by Nextjs
 );
 
 // set page revalidation to 10s
-export const revalidate = 10;
+export const revalidate = 10; // this revalidation is also handled by Nextjs
 
 export default async function Page() {
   const allPosts = await getPosts();
@@ -132,6 +134,55 @@ export default async function Page() {
 // summary
 // unstable_cache will memoize function value for specified duration
 ```
+
+### generateStaticParams
+
+Used to create dynamic, pre-rendered pages efficiently.  
+This means that the pages will be built at runtime, any API / DB calls would be made at the build time, so when the page is invked in prod, the API call is not made (see below code)
+
+```javascript
+// for explaination of below code, see images
+import { notFound } from "next/navigation";
+// this function shoudl return reutrn array of objects
+// the object should contain the key which is used as a dynamic param
+// in this case the dynamic param is id
+// so array should return [{id: 1}, {id:2} ...]
+export function generateStaticParams() {
+  // we are returning 10 static params
+  // this means that api call below would be made at build time for params from 1-10
+  return Array.from(Array(10).keys()).map((item) => ({ id: item.toString() }));
+}
+async function getPost(id: string) {
+  // below console log for ids 1-10 is called at build time
+  // when the page is called on prod with url /about/1
+  // below console log is not called
+  // for /about/11 - console log is called in prod
+  console.log("making a fecth api call for id", id);
+  const res = await fetch(`https://api.vercel.app/blog/${id}`);
+  const post = await res.json();
+  if (!post) notFound();
+  return post;
+}
+
+export default async function Page({ params }: { params: { id: string } }) {
+  const post = await getPost(params.id);
+  return (
+    <article>
+      <h1>{post.title}</h1>
+      <p>{post.content}</p>
+    </article>
+  );
+}
+```
+
+**API calls made at build time for ids 1-10**
+![alt text](PNG/Build1.PNG "Title")
+
+**this shouws that the pages for ids 1-10 is genereated at build time**
+![alt text](PNG/Build2.PNG "Title")
+
+**no API call made in prod for ids 1-10, we see console log for id 11**
+![alt text](PNG/Build3.PNG "Title")
 
 ## 2. Data fetching in client components
 
