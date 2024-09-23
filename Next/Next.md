@@ -1,5 +1,10 @@
 # Next.js (Fullstack React.js framework)
 
+## TODO
+
+1. Optimization - Images / Videos
+2. Authentication - local + auth0
+
 ## 1. SPA (Client Side Rendering)
 
 A Single Page Application (SPA) is a web application that loads a single HTML page and dynamically updates the content as the user interacts with the app, rather than loading new pages from the server for each interaction. SPAs rely heavily on client-side JavaScript to handle rendering and updating the user interface.
@@ -113,7 +118,19 @@ It has 2 components
 1. **Client components** - Functionality wise, same as React components we use in React, **but these client components are rendered as SSR, meaning the initial HTML is rendered server-side, and then the client component hydrates and becomes interactive on the client**
 2. **Server components** - components run on node server, can directly access DB, we cannot add interactivity
 
-In Nextjs all components are server components by default, to make a component a client component add `'use client'` as the first line of the component
+In Nextjs all components are server components by default, to make a component a client component add `'use client'` as the first line of the component.
+
+#### Rendering of server components in RSC
+
+![alt text](PNG/Capture13.PNG "Title")
+
+3 strategies for rendeing server components
+
+1. **Static rendering (Default)** - HTML pages generated at build time, see ISR section below
+2. **Dynamic rendering** - HTML page genereated for each user request dynamically, if the comp uses dynamic func like **header(), cookie() or searchParams()**, then Nextjs will do dynamic rendering, and the HTML wouln't be geberated at build time. If the comp doesn't include any dynamic function and we still want to do synamic rendering, then export route config `export const dynamic = 'force-dynamic'`;
+3. **Streaming HTML** - if we use suspense or loading.jsx file, that componen't HTML would be streamed later
+
+- **2. Rendering of client components in RSC**
 
 #### VVIP Interleaving client and Server Components
 
