@@ -3,7 +3,7 @@
 ## TODO
 
 1. Optimization - Images / Videos
-2. Authentication - local + auth0
+2. Caching summary in nextjs
 
 ## 1. SPA (Client Side Rendering)
 
