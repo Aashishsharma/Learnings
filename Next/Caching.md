@@ -3,9 +3,12 @@
 In all the other files, we have seen how caching is implemented at different levels  
 Here we will do a cahcing sumary
 
-## 1. Cahcing in dev vs prod
+## 1. Caching in Development vs. Production
 
-By default caching isn't applied when you run the app in dev, but it is applied when you run the app in prod (npm run build && npm run start)
+| Environment | Caching Behavior                                                               |
+| ----------- | ------------------------------------------------------------------------------ |
+| Development | Caching is not applied.                                                        |
+| Production  | Caching is applied when running the app with `npm run build && npm run start`. |
 
 ## 2. Static vs Dynamic rendering
 
