@@ -83,9 +83,6 @@ In SPAs we can only render components at the client side
 
 ![alt text](PNG/SSR9.PNG "Title")
 
-![alt text](PNG/SSR10.PNG "Title")
-![alt text](PNG/SSR11.PNG "Title")
-
 #### Drawback of Suspense SSR
 
 1. Increased bundle sizes leading to excessive downloads for users
