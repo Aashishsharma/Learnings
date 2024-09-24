@@ -48,6 +48,127 @@ export function SignupForm() {
 
 Now implement login middleware in API route handlers and fetch auth header and if token is valid, proceed with the request
 
+### OAuth implementation using next-auth library
+
+This library has integrations with many providers, we can alos use username passowrd login
+
+**Step 1 - setup oauth config**
+
+```javascript
+// /api/auth/[...nextauth]/route.ts file
+import NextAuth, { type NextAuthOptions } from "next-auth";
+import GithubProvider from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
+
+const options: NextAuthOptions = {
+  providers: [ // we can provide multiple providers here
+    GithubProvider({ // github provider
+      clientId: process.env.CLIENT_SECRET as string,
+      clientSecret: process.env.CLIENT_SECRET as string,
+    }),
+    CredentialsProvider({ // credentials provider which will allow user to login using username and password
+      name: "Credentials",
+      credenetials: { // by specifing this, NEXTJS AUTOMATICALLY CREATED USERNAME AND PASSOWRD FIELD IN THE UI
+      // but then how to create custom login pages? ans - add pages object (see below)
+        username: {
+          label: "username",
+          type: "text",
+          placeholder: "enter user name",
+        },
+        password: {
+          label: "username",
+          type: "password",
+          placeholder: "enter ur password",
+        },
+      },
+      async authorize(credenetials) {
+        // retrieve data from DB and validate user credentials
+        // hardcoding user for now
+        const user = { id: 1, name: "ashish", password: "ashish" };
+        if (
+          credenetials?.username === user.name &&
+          credenetials?.password === user.password
+        ) {
+          return user;
+        } else {
+          return null;
+        }
+      },
+    }),
+    // ...add more providers here
+  ],
+  pages: {
+    signIn: '/auth/signin', // nextjs will show this page on signin
+    signOut: '/auth/signout',
+    error: '/auth/error', // Error code passed in query string as ?error=
+    verifyRequest: '/auth/verify-request', // (used for check email message)
+    newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
+  }
+...
+};
+const handler = NextAuth(options);
+export { handler as GET, handler as POST };
+```
+
+**steo 2 - apply middleware to protest routes**
+
+```javascript
+// IMP - this should be at the root level inside app to protect all routes
+// Without a defined matcher, this one line applies next-auth
+// to the entire project
+export { default } from "next-auth/middleware";
+
+// Applies next-auth only to matching routes - can be regex
+// Ref: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
+export const config = { matcher: ["/extra", "/dashboard"] };
+```
+
+1. After adding middleware if we go to url - localhost:300/api/auth/signin - we will see login form
+2. This page is created by NexAuth, but we can create out own by overriding the pages object as shwon above
+3. logout url - localhost:300/api/auth/signout
+
+**step 3 - Use auth provider is client components**
+
+```javascript
+// create authcontext
+"use client";
+import { SessionProvider } from "next-auth/react";
+export default function AuthProvider({ children }) {
+  return <SessionProvider>{children}</SessionProvider>;
+}
+
+// in apps root layout page, wrap everything inside above created AuthProvider
+<AuthProvider>
+  <Navbar />
+  <main className="flex justify-center items-start p-6 min-h-screen">
+    {children}
+  </main>
+</AuthProvider>;
+
+// in client componts use session hook
+'use client'
+// Remember you must use an AuthProvider for
+// client components to useSession
+import { useSession } from 'next-auth/react'
+import { redirect } from 'next/navigation'
+export default function ClientPage() {
+    const { data: session } = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect('/api/auth/signin?callbackUrl=/client')
+            // notice the callbackUrl=/client
+            // once user successfully signs in,
+            // user is redirected to the url he hit before authentication
+        }
+    })
+    return (
+        <section className="flex flex-col gap-6">
+            <UserCard user={session?.user} pagetype={"Client"} />
+        </section>
+    )
+}
+```
+
 ## Optimizations
 
 ### 1. Image optimization
