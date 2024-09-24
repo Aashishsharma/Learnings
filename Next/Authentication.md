@@ -76,10 +76,8 @@ import Image from "next/image";
   height={300}
 />;
 // when we set width and height props in Nextjs's Image component
-// the browser will reserve that sapce in the vieweport
-// and the content below image will be renderd keeping space for the image
-// acoiding CLS issue
-// note width and height won't determine the actual width and height
+// the browser will reserve that sapce in the vieweport, you have to manually set width and height to solve CLS issue
+// with this width and height nextjs will compress the image and will not dwonlaod entire image with big size
 ```
 
 2. Reducing image sizes
@@ -89,3 +87,45 @@ For local imges Nextjs automatically creates multiple version of images with dif
 
 For remote imgaes, we procide the srcset attribute and based on what device the page is loading, the browser will pick images from that remote src url, so for mobile apps, browser will pick lower dimension imgaes based on the sizes prop  
 Note - we have to provide comma separated urls in srcset attribute along with image size
+
+3. Using sharp npm package to compress images
+
+```javascript
+// compress-images.js
+const fs = require("fs");
+const path = require("path");
+const sharp = require("sharp");
+// get all imgaes from publick folder
+const imagesFolder = path.join(__dirname, "public/images");
+
+async function compressImages() {
+  try {
+    const files = fs.readdirSync(imagesFolder);
+    for (const file of files) {
+      const filePath = path.join(imagesFolder, file);
+      //compress and store them to spearate folder, and use this folder to server your images
+      const outputFilePath = path.join(imagesFolder, `compressed-${file}`);
+      // Check if the file is an image (you can customize this)
+      if (file.match(/\.(jpg|jpeg|png|gif)$/)) {
+        await sharp(filePath)
+          .resize({ width: 800 }) // Adjust the width as needed
+          .jpeg({ quality: 80 }) // Set quality for JPEG, or use .png({ quality: 80 }) for PNG
+          .toFile(outputFilePath);
+        console.log(`Compressed: ${file} -> ${outputFilePath}`);
+
+        //here optionally delete the files from images folder and add compressed files to other folder
+        // this way next time script runs, older files are not compressed again
+      }
+    }
+    console.log("Image compression completed!");
+  } catch (error) {
+    console.error("Error compressing images:", error);
+  }
+}
+compressImages();
+
+// now in packagenjson
+// "compress-images": "node compress-images.js"
+// and change the build command to
+// "build": "npm run compress-images &&next build",
+```
