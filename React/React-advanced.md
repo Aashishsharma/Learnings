@@ -1,11 +1,11 @@
 ## CODE SPLITTING
 
 Loading all this code upfront can lead to slower initial page loads. Code splitting allows developers to split the application into smaller pieces and load them on-demand.  
-Overly aggressive code splitting may lead to increased network requests, potentially negating the performance gains.  
+Overly aggressive code splitting may lead to increased network requests, potentially negating the performance gains.
 
 Behind the scenes React uses webpack for code splitting
 
-------------------------------------------------------------------------------
+---
 
 ## ERROR BOUNDARIES
 
@@ -13,21 +13,21 @@ Error boundaries are React components that catch JavaScript errors anywhere in t
 
 Error boundaries do not catch errors for:
 
-1. Event handlers (learn more)
+1. Event handlers
 2. Asynchronous code (e.g. setTimeout or requestAnimationFrame callbacks)
-If you need to catch an error inside event handler, use the regular JavaScript try / catch statement:
-Then why not use try-catch instead of error boundaries?
-try-catch is imperative and error-boundaries are declaritive, since react is declarative we use...  
+   If you need to catch an error inside event handler, use the regular JavaScript try / catch statement:
+   Then why not use try-catch instead of error boundaries?
+   try-catch is imperative and error-boundaries are declaritive, since react is declarative we use...
 
 **Declarative programming** -
 Declarative programming is a style of programming where you describe what you want to achieve without specifying the exact steps to get there.  
 React is declarative, meaning we just say the component needs to be updated, we doon't specify how react changes the DOM to achieve this  
 Similarly Error boundaries are also declarative
 
-Error boundary feature is currently available only class components as of noe
-A class component becomes an error boundary if it defines either (or both) of the lifecycle methods static getDerivedStateFromError() or componentDidCatch().  
+Error boundary feature is currently available only class components
+A class component becomes an error boundary if it defines either (or both) of the lifecycle methods static getDerivedStateFromError() or componentDidCatch().
 
-1. Use static getDerivedStateFromError() to render a fallback UI after an error has been thrown.  
+1. Use static getDerivedStateFromError() to render a fallback UI after an error has been thrown.
 2. Use componentDidCatch() to log error information.
 
 ```javascript
@@ -37,32 +37,38 @@ class ErrorBoundary extends React.Component {
     this.state = { hasError: false };
   }
 
+  // any child componentes that throw error will be cascaded to this function
+  // this function should reurn a state variable
   static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI.
     return { hasError: true };
   }
 
+  // this function should be used to log the data
   componentDidCatch(error, errorInfo) {
-    // You can also log the error to an error reporting service
     logErrorToMyService(error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI
-      return <h1>Something went wrong.</h1>;
+      return this.props.fallback;
     }
 
-    return this.props.children; 
+    return this.props.children;
   }
 }
 
-<ErrorBoundary>
+// if we don't have error boundaries and
+// if we don't catch them, enitre screen will go blank
+// we can use try catch, but all the components need to have try catch
+// they also need to have errodtate handling and what to display
+// instead us error boundaries
+<ErrorBoundary fallback={() => <h1>Something went wrong</h1>}>
   <MyWidget />
-</ErrorBoundary>
+</ErrorBoundary>;
 ```
 
-------------------------------------------------------------------------------
+---
 
 ## Fragments
 
@@ -78,12 +84,11 @@ const MyComponent = () => (
   //above is a shorthand syntax,
   //we can replace <></> with <React.Fragment>...</React.Fragment>
 );
-
 ```
 
-usecase render multiple <td> but react comp can return only one elem, so wrap in div, but then td can't be in div so fragment  
+usecase render multiple <td> but react comp can return only one elem, so wrap in div, but then td can't be in div so fragment
 
-------------------------------------------------------------------------------
+---
 
 ## Higher-Order Components
 
@@ -102,7 +107,7 @@ HOCs are used for Cross-Cutting Concerns
 **Cross-Cutting Concerns-** a concern which is applicable throughout the application and it affects the entire application.
 e.g. logging, security, loader, manipulating props
 
-HOC names often start with "with" (e.g., withLogger, withLoader).  
+HOC names often start with "with" (e.g., withLogger, withLoader).
 
 **Render props and hooks are possible alternatives for HOCs**
 
@@ -132,7 +137,7 @@ const withLoader = (WrappedComponent) => {
   return function WithLoader(props) {
     const [loading, setLoading] = useState(true);
 
-    // STEP - 4 - Below is the reusable logic in HOC 
+    // STEP - 4 - Below is the reusable logic in HOC
     useEffect(() => {
       // Simulating an asynchronous operation (e.g., fetching data)
       const fetchData = async () => {
@@ -161,10 +166,10 @@ import React, { useEffect, useContext } from 'react';
 const TableComponentAPI = ({ propFromParent, propsFromHOC }) => {
   // here we load the tbale jsx - render the table
   // STEP 6 -note we can use propsFromHOC which would be the data from HOC (returned from API call in HOC)
-  return (  
+  return (
     <div>
       <p>Prop from Parent: {propFromParent}</p>
-      // inside table render 
+      // inside table render
     </div>
   );
 };export default TableComponentAPI;
@@ -181,7 +186,7 @@ export default App;
 
 A HOC is a pure function with zero side-effects.
 
-------------------------------------------------------------------------------
+---
 
 ## Render Props
 
@@ -189,9 +194,7 @@ It is a pattern in React where a component receives a function as a prop, often 
 which the component then calls to render its content
 
 ```javascript
-<DataProvider render={data => (
-  <h1>Hello {data.target}</h1>
-)}/>
+<DataProvider render={(data) => <h1>Hello {data.target}</h1>} />
 ```
 
 **Usecase -** - Toggle components, adding tooltip to multiple components  
@@ -257,13 +260,13 @@ export default App;
 2. If you need more dynamic and conditional rendering logic, Render Props may be a better fit
 3. HOCs are more readable and maintainable
 
-----------------------------------------------------------------------------------------
+---
 
 ## Optimizing performance
 
 1. For the most efficient Brunch production build, install the terser-brunch plugin:
-Then, to create a production build, add the -p flag to the build command:
-brunch build -p
+   Then, to create a production build, add the -p flag to the build command:
+   brunch build -p
 
 #### 2. Avoid Reconciliation
 
@@ -361,37 +364,38 @@ Keys should be stable, predictable, and unique. Unstable keys (like those produc
 
 Pure Components in React are the components which do not re-renders when the value of state and props has been updated with the same values.  
 Takes care of “shouldComponentUpdate” implicitly  
-State and Props are Shallow Compared, so use wisely  
+State and Props are Shallow Compared, so use wisely
 
 ```javascript
 class Component extends React.PureComponent {
   constructor() {
     super();
     this.state = {
-      counter: 0
-    }
+      counter: 0,
+    };
     // The value of Counter is updated to same value during continues interval
     setInterval(() => {
       this.setState({
-        counter: 0
+        counter: 0,
       });
     }, 1000);
   }
-  render() { 
+  render() {
     // This function wont be re-rendered in case when the new state is same as previous
-    return <b>Counter Value: {this.state.counter}</b>
+    return <b>Counter Value: {this.state.counter}</b>;
   }
 }
 ```
 
 #### 6. Use react-window library
+
 It is used for efficiently rendering large lists and tabular data.  
-useful when dealing with long lists of items where rendering all items at once could lead to performance issues.  
+useful when dealing with long lists of items where rendering all items at once could lead to performance issues.
 
 1. React Window implements virtualization, a technique that involves rendering only the items currently in the view, rather than rendering the entire list
 
 ```javascript
-import { FixedSizeList } from 'react-window';
+import { FixedSizeList } from "react-window";
 
 const MyList = () => (
   <FixedSizeList
@@ -400,15 +404,12 @@ const MyList = () => (
     itemSize={50} // height of ech item in px, this means this list will render 8 items in it's view (400/50)
     itemCount={1000} // total items in the list
   >
-    {({ index, style }) => (
-      <div style={style}>Item {index}</div>
-    )}
+    {({ index, style }) => <div style={style}>Item {index}</div>}
   </FixedSizeList>
 );
-
 ```
 
-------------------------------------------------------------------------------
+---
 
 ## Portals
 
@@ -418,25 +419,24 @@ E.g. If we don't want the parent components css to mess around the child compone
 Although this is renderd outside of Parent component's hierarhcy, it still act's like child, like passing props and other stuff
 
 ```javascript
-ReactDOM.createPortal(child, container)
+ReactDOM.createPortal(child, container);
 
 //The first argument (child) is any renderable React child, such as an element, string, or fragment.
 //The second argument (container) is a DOM element.
 
 //e.g.
-import React from 'react';
-import ReactDOM from 'react-dom'
+import React from "react";
+import ReactDOM from "react-dom";
 
 export const PortalDemo = () => {
   return ReactDOM.createPortal(
     <h1>New portal</h1>,
-    document.getElemenById('portal-demo')
-    )
-}
-
+    document.getElemenById("portal-demo")
+  );
+};
 ```
 
-------------------------------------------------------------------------------
+---
 
 ## Strict Mode
 
@@ -445,7 +445,7 @@ StrictMode is a tool for highlighting potential problems in an application. Like
 You can enable strict mode for any part of your application. For example:
 
 ```javascript
-import React from 'react';
+import React from "react";
 
 function ExampleApplication() {
   return (
@@ -468,10 +468,10 @@ StrictMode currently helps with:
 1. Identifying components with unsafe lifecycles - certain legacy lifecycle methods are unsafe for use in async React applications
 2. Warning about legacy string ref API usage
 3. Warning about deprecated findDOMNode usage
-4. Detecting unexpected side effects **
+4. Detecting unexpected side effects \*\*
 5. Detecting legacy context API
 
-------------------------------------------------------------------------------
+---
 
 ## Proptypes
 
@@ -511,16 +511,16 @@ Greeting.defaultProps = {
 };
 ```
 
-------------------------------------------------------------------------------
+---
 
 ## React router
 
 It enables client side routing  
 Why client side routing is needed - because in server side routing when new route is navigated all the content would be fetched from the server, as opposed to client side routing, where the layout content is already available at the client side and api call is made only for the desired component hence enabling faster user experiences because the browser doesn't need to request an entirely new document or re-evaluate CSS.
 
-```npm install react-router-dom```  
+`npm install react-router-dom`
 
-**3 main components**  
+**3 main components**
 
 1. BrowserRouter - Wrapper
 2. Route - Renders UI when a path matches the current location.
@@ -533,12 +533,12 @@ function App() {
   return (
     <Router>
       <Route path="/" component={Home} />
-      
+
     </Router>
   );
 }
 
-// Link component - 
+// Link component -
 <Link to="/">Home</Link>
 // Route parameters
 <Route path="/user/:userId" component={UserProfile} />
