@@ -164,7 +164,14 @@ Lighthouse scores -
 
 #### 2. Images - add alt text
 
-#### 3. Lists
+#### 3. Links -
+
+Use descriptive link text that conveys the purpose of the link
+
+- instead of adding a tak to just click here
+- add a tag to click here to open facebook
+
+#### 4. Lists
 
 Instead of using divs for a series of consecutive items use ol or ul
 
@@ -187,6 +194,8 @@ By default, below elemnts are accessible when keyboard tab is pressed
 - all input elemnt types
 - buttons, links, accordians
 - audio, video
+
+event though wbove elemts can be tabbed by default, make sure to add :hover css style so that it is visually apealling
 
 Default order of tabs is same as the order in which elements appear in the viewport
 
