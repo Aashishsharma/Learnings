@@ -64,7 +64,10 @@ class ErrorBoundary extends React.Component {
 // they also need to have errodtate handling and what to display
 // instead us error boundaries
 <ErrorBoundary fallback={() => <h1>Something went wrong</h1>}>
-  <MyWidget />
+  <MyWidget />{" "}
+  <p>
+    Anytime MyWidget throws error, the above fallback HTML would be displayed
+  </p>
 </ErrorBoundary>;
 ```
 
