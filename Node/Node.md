@@ -10,30 +10,30 @@ process.env.variable_name - to read an env. variable in node.
 1. All packages in node provide asynchronous APIs, so always asynchronous programming without threads
 2. Uses npm
 3. Node is fast
-runs on V8 engine which has optimised compilers - (see JS notes)
+   runs on V8 engine which has optimised compilers - (see JS notes)
 
-------------------------------------------------------------------------------
+---
 
 #### Read/Write from stdin/stdout
 
 ```javascript
-const readline = require('readline').createInterface({
+const readline = require("readline").createInterface({
   input: process.stdin,
-  output: process.stdout
-})
+  output: process.stdout,
+});
 
-readline.on(`line`, name => {
-  console.log(`Hi ${name}!`)
-  readline.close()
-})
+readline.on(`line`, (name) => {
+  console.log(`Hi ${name}!`);
+  readline.close();
+});
 
 // to convert string to number - use + unary operator before the string
-// e.g. if num1 and num2 are strings containing integers, to add them use 
+// e.g. if num1 and num2 are strings containing integers, to add them use
 // +num1 + num2
 // use parseInt(num1, 10) base10
 ```
 
-------------------------------------------------------------------------------
+---
 
 ## Node.js modules: require, exports, imports
 
@@ -51,10 +51,9 @@ readline.on(`line`, name => {
 // use global.variableName
 // global obj is similar to window obj.in browser
 // this is now available in any node module (don't use global variables)
-
 ```
 
-------------------------------------------------------------------------------
+---
 
 ## Node.js event loop
 
@@ -63,50 +62,55 @@ readline.on(`line`, name => {
 Before understanding event loop, we need to understand what is libuv.  
 Libuv is c code which is used to handle async non-blocking code.
 
-#### **Libuv has 2 components** - 
+#### **Libuv has 2 components** -
+
 #### 1. **Thread pool**
+
 no of threads available in the host machines (based on CPU cores) are available in this thread pool.
 
-**If you run sync version of crypto, the hash time for last request would be hash time for its own + hash time of other 3 requests**   
-![alt text](PNG/Capture.PNG "Title")    
+**If you run sync version of crypto, the hash time for last request would be hash time for its own + hash time of other 3 requests**  
+![alt text](PNG/Capture.PNG "Title")
 
 **Running them in async will give hast time same for all the hashes, because each async version of hash is run on a separate thread pool**  
-![alt text](PNG/Capture1.PNG "Title") 
+![alt text](PNG/Capture1.PNG "Title")
 
 **IMP - default thradpool size is 4, see below example**  
-As soon as max call is 5 or > 5, the hash time increases, because all 4 thread in the pool are busy and the 5th async task goes into queue and executes when only one of the thread from the pool becomes free   
+As soon as max call is 5 or > 5, the hash time increases, because all 4 thread in the pool are busy and the 5th async task goes into queue and executes when only one of the thread from the pool becomes free
 
-![alt text](PNG/Capture2.PNG "Title")   
+![alt text](PNG/Capture2.PNG "Title")
 
 **IMP - to increase thread pool size - process.env.UV_THREADPOOL_SIZE = 8**  
-**But you can increase the thread pool size maximum upto no. of cpu cores your machine has**  
+**But you can increase the thread pool size maximum upto no. of cpu cores your machine has**
 
-**Hence asyn operations are run on thread pool, but not all async operations are run on thread pool, see below** - 
+**Hence asyn operations are run on thread pool, but not all async operations are run on thread pool, see below** -
 ![alt text](PNG/Capture3.PNG "Title")  
 **The Network I/O async tasks are not run on thread pool, because it is not a CPU bound operation, network I/O task is delegated to kernel by nodejs**
 
 #### 2. **Event loop**
 
-![alt text](PNG/E1.PNG "Title")  
+![alt text](PNG/E1.PNG "Title")
 
 ##### 1. Microtask queue (process.nextTick(), all usercreated promises)
+
 ##### 2. Timers queue (setTimeout, setInterval)
+
 ##### 3. I/O queue (fs, http)
+
 ##### 4. Check queue (setImmediate)
-##### 5. Close queue (cbs associated with close events of asyns tasks, socket.on('close'))  
+
+##### 5. Close queue (cbs associated with close events of asyns tasks, socket.on('close'))
 
 ![alt text](PNG/E2.PNG "Title")  
-![alt text](PNG/E3.PNG "Title")   
+![alt text](PNG/E3.PNG "Title")
 
-![alt text](PNG/E4.PNG "Title")   
-![alt text](PNG/E5.PNG "Title")   
-**VVIP - Callbacks in microtask queue are executed in between the execution of callbacks in the timer queue**   
-**VVIP - Callbacks in microtask queue are executed in between the execution of callbacks in the check (setImmediate) queue** 
+![alt text](PNG/E4.PNG "Title")  
+![alt text](PNG/E5.PNG "Title")  
+**VVIP - Callbacks in microtask queue are executed in between the execution of callbacks in the timer queue**  
+**VVIP - Callbacks in microtask queue are executed in between the execution of callbacks in the check (setImmediate) queue**
 
+##### Unguranteed order of execution
 
-##### Unguranteed order of execution  
-
-![alt text](PNG/E6.PNG "Title")   
+![alt text](PNG/E6.PNG "Title")  
 **When running setTimeout with 0ms and async IO method, the order of execution can never be guranteed, because while the setTimeout is finished, the event loop might or might not have gone to IO callback queue, because main thread is empty and event queue is started**  
 **In above example, we did not have any task running in main thread, if we add for loop for million times, then we know for sure, that cb of timeout is complete, and in this case, setimeout will always be ececuted before IO CB**
 
@@ -115,52 +119,52 @@ As soon as max call is 5 or > 5, the hash time increases, because all 4 thread i
 1. **process.nextTick**
 
 ```javascript
-const EventEmitter = require('node:events');
+const EventEmitter = require("node:events");
 type ClassData = {
-    payload: string
-}
+  payload: string,
+};
 class MyClass extends EventEmitter {
-    data: ClassData
-    constructor(data: ClassData) {
-        super();
-        this.data = data;
-        // directly caaling this.emitEvent will not work, because liseners are not yet added
-        // and event would be emitted before listeners are registered
+  data: ClassData;
+  constructor(data: ClassData) {
+    super();
+    this.data = data;
+    // directly caaling this.emitEvent will not work, because liseners are not yet added
+    // and event would be emitted before listeners are registered
 
-        // this.emitEvent() - will not work
-        // fix - first task to be executed after callstack is free
-        // if can use setTimeout or setImmedaite as well, but those can get delayed since nextTick as highest priority
-        process.nextTick(() => {
-            this.emitEvent()
-        })
-    }
-    emitEvent() {
-        this.emit("initiate", this.data)
-    }
+    // this.emitEvent() - will not work
+    // fix - first task to be executed after callstack is free
+    // if can use setTimeout or setImmedaite as well, but those can get delayed since nextTick as highest priority
+    process.nextTick(() => {
+      this.emitEvent();
+    });
+  }
+  emitEvent() {
+    this.emit("initiate", this.data);
+  }
 }
-const obj = new MyClass({payload: 'hello world'})
-obj.on('initiate', (data) => {
-    console.log('event intiated ', data)
-})
+const obj = new MyClass({ payload: "hello world" });
+obj.on("initiate", (data) => {
+  console.log("event intiated ", data);
+});
 ```
 
 Disadvantage of process.nextTick - everytime using process.nextTick will starve the event loop, so use wisely
 
 ### Scaling Nodejs app (Scale async tasks + sync tasks)
+
 1. One way to scale is increase threads in the libuv pool, but this will scale only async tasks, because only async tasks can be executed in thread pool
 2. What if we need to scale the tasks running on the main thread?
 3. Use cluster module, **cluster module utilizes cpu cores and create multiple instances of nodeJS application based on CPU cores**
 4. **Threadpool size to scale async tasks, cluster module to scale sync tasks**
 
-![alt text](PNG/C1.PNG "Title")  -
+![alt text](PNG/C1.PNG "Title") -
 
 **In above code**  
 **Case 1 - call / api (retured in few ms) and then call /slow-page (returned after 5 seconds)**
 **Case 2 - call call /slow-page (returned after 5 seconds) and then call / api (retured in 5 seconds + few ms) because slow-page is still executing and / endpint is queued up**
 
 ![alt text](PNG/C2.PNG "Title")  
-Note - master node does not handle api calls, only worked nodes handle  
-
+Note - master node does not handle api calls, only worked nodes handle
 
 Note - you can only fork the no. of processes as much as cpu cores are present in the operating system
 
@@ -170,26 +174,28 @@ Note - you can only fork the no. of processes as much as cpu cores are present i
 CLuster module behind the scenes uses child_process module's fork api
 
 ```javascript
-const cluster = require('cluster');
-const http = require('http');
-const numCPUs = require('os').cpus().length;
+const cluster = require("cluster");
+const http = require("http");
+const numCPUs = require("os").cpus().length;
 if (cluster.isMaster) {
   // Fork workers
   for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
   // Listen for dying workers and fork a new one
-  cluster.on('exit', (worker, code, signal) => {
+  cluster.on("exit", (worker, code, signal) => {
     console.log(`Worker ${worker.process.pid} died. Forking a new one...`);
     cluster.fork();
   });
 } else {
   // Workers can share any TCP connection
   // In this case, it's an HTTP server
-  http.createServer((req, res) => {
-    res.writeHead(200);
-    res.end('Hello, World!');
-  }).listen(3000);
+  http
+    .createServer((req, res) => {
+      res.writeHead(200);
+      res.end("Hello, World!");
+    })
+    .listen(3000);
 
   console.log(`Worker ${process.pid} started`);
 }
@@ -199,44 +205,45 @@ if (cluster.isMaster) {
 
 1. caching becomes difficult as each worker process has different memory
 2. managing user authentication sessions - // use sticky load balancers to solve this
-what it does if a uer is authenicated in a wroker process and that workers memory has session, then sticky load balancer will send the request to same worker is request comes from the same user
+   what it does if a uer is authenicated in a wroker process and that workers memory has session, then sticky load balancer will send the request to same worker is request comes from the same user
 
 ### PM2
-1. Process manager for Node and other envs like python  
-2. Instead of using cluster module we can use pm2 to scale the nodejs app
-3. ```npm i -g pm2```
-4. ```pm2 start app.js -i 0``` - 0 indicates, we ask pm2 to pick up optimal worker processes
 
-------------------------------------------------------------------------------
+1. Process manager for Node and other envs like python
+2. Instead of using cluster module we can use pm2 to scale the nodejs app
+3. `npm i -g pm2`
+4. `pm2 start app.js -i 0` - 0 indicates, we ask pm2 to pick up optimal worker processes
+
+---
 
 ### Working with worker threads
 
 **focus on point 4 & 5 for cluster module vs worker threads**  
-![alt text](PNG/W1.PNG "Title")  
+![alt text](PNG/W1.PNG "Title")
 
 ```javascript
 // Parent file - index.js
-const { Worker } = require('node:worker_threads');
+const { Worker } = require("node:worker_threads");
 // note while creating a worker only we need to pass the workerData
-let worker = new Worker('./worker.js', {
+let worker = new Worker("./worker.js", {
   workerData: 5,
 });
 // listen to worker thread
-worker.on('message', (dataFromWorker) => {
-  console.log('data from worker ', dataFromWorker);
+worker.on("message", (dataFromWorker) => {
+  console.log("data from worker ", dataFromWorker);
 });
-worker.on('error', (err) => {
+worker.on("error", (err) => {
   console.log(err);
 });
 
 // worker.js
-const { parentPort, workerData } = require('node:worker_threads');
-console.log('data from parent ', workerData);
+const { parentPort, workerData } = require("node:worker_threads");
+console.log("data from parent ", workerData);
 parentPort.postMessage(workerData * 2);
-
 ```
 
 ##### Libuv thread pool vs worker threads vs cluster module (pm2)
+
 1. **Libuv (scale async task)** - use multiple threads to scale only async tasks (promises) and not the synchronous tasks that run on main thread
 2. **worker threads (scale sync task)** - use multiple threads to scale synchronous tasks and not async tasks
 3. **cluster module (scale sync task)** - instead of using threads it creates multiple application instances (separate node instance, separate V8 engine), so it is multi processing as opposed to multi threading
@@ -319,47 +326,47 @@ orderService.placeOrder('12345', 'customer@example.com');
 
 **event emitter functions**
 
-| Method                        | Description                                                                                     |
-| ----------------------------- | ----------------------------------------------------------------------------------------------- |
-| `on(eventName, listener)`     | Adds a listener function to the specified event.                                               |
-| `addListener(eventName, listener)` | Alias for `on`.                                                                           |
-| `once(eventName, listener)`   | Adds a one-time listener function for the specified event. The listener is removed after it's called once. |
+| Method                                   | Description                                                                                                        |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `on(eventName, listener)`                | Adds a listener function to the specified event.                                                                   |
+| `addListener(eventName, listener)`       | Alias for `on`.                                                                                                    |
+| `once(eventName, listener)`              | Adds a one-time listener function for the specified event. The listener is removed after it's called once.         |
 | `emit(eventName, [arg1], [arg2], [...])` | Emits the specified event, triggering all attached listeners. Additional arguments can be passed to the listeners. |
-| `removeListener(eventName, listener)` | Removes a specific listener for the specified event.                                       |
-| `removeAllListeners([eventName])` | Removes all listeners for the specified event. If no event is provided, it removes all listeners for all events. |
-| `setMaxListeners(n)`          | Sets the maximum number of listeners that can be added to an event. Default is unlimited.      |
-| `listeners(eventName)`        | Returns an array of listeners for the specified event.                                        |
-| `eventNames()`                | Returns an array of event names to which listeners are attached.                               |
-| `listenerCount(eventName)`    | Returns the number of listeners for the specified event.                                       |
+| `removeListener(eventName, listener)`    | Removes a specific listener for the specified event.                                                               |
+| `removeAllListeners([eventName])`        | Removes all listeners for the specified event. If no event is provided, it removes all listeners for all events.   |
+| `setMaxListeners(n)`                     | Sets the maximum number of listeners that can be added to an event. Default is unlimited.                          |
+| `listeners(eventName)`                   | Returns an array of listeners for the specified event.                                                             |
+| `eventNames()`                           | Returns an array of event names to which listeners are attached.                                                   |
+| `listenerCount(eventName)`               | Returns the number of listeners for the specified event.                                                           |
 
+1. similar to callbacks, but they trigger multiple listeners at once.
 
-1. similar to callbacks, but they trigger multiple listeners at once. 
-
-------------------------------------------------------------------------------
+---
 
 ## Working with streams
 
-It is a collection of data that might not br available all at once and don't have to fit in memory.  
+It is a collection of data that might not br available all at once and don't have to fit in memory.
 
 ![alt text](PNG/S1.PNG "Title")  
-**IMP potins**  
+**IMP potins**
+
 1. Using above code we can copy 10s of GBs of file without node getting memory out of bound error
 2. Notice the output, this is because of highWaterMark = 2, it indicates that the buffer can store only 2 bytes of data in memory and then need to flush the output to writable stream, default buffer size in nodejs is 64Kb
 
-types of streams 
+types of streams
 
-| Stream Type     | Example Code                                | Description                                                      | Key Methods                             |
-|------------------|---------------------------------------------|------------------------------------------------------------------|-----------------------------------------|
-| Readable Streams | `fs.createReadStream('file.txt').pipe(writableStream);` | Represents a source of data that can be read.                   | `read()`, `on('data')`, `on('end')`, `on('error')` |
-| Writable Streams | `readableStream.pipe(fs.createWriteStream('output.txt'));` | Represents a destination for data to be written.                | `write()`, `end()`, `on('finish')`, `on('error')` |
-| Duplex Streams (e.g. - socket)   | `const duplexStream = net.connect(3000, 'localhost');`   | Represents a stream that is both readable and writable.         | Combination of readable and writable stream methods |
-| Transform Streams (e.g. - file compression)| `readableStream.pipe(transformStream).pipe(writableStream);` | A type of duplex stream for data modification as it is written and read. | `transform(chunk, encoding, callback)`, `flush(callback)` |
+| Stream Type                                 | Example Code                                                 | Description                                                              | Key Methods                                               |
+| ------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------ | --------------------------------------------------------- |
+| Readable Streams                            | `fs.createReadStream('file.txt').pipe(writableStream);`      | Represents a source of data that can be read.                            | `read()`, `on('data')`, `on('end')`, `on('error')`        |
+| Writable Streams                            | `readableStream.pipe(fs.createWriteStream('output.txt'));`   | Represents a destination for data to be written.                         | `write()`, `end()`, `on('finish')`, `on('error')`         |
+| Duplex Streams (e.g. - socket)              | `const duplexStream = net.connect(3000, 'localhost');`       | Represents a stream that is both readable and writable.                  | Combination of readable and writable stream methods       |
+| Transform Streams (e.g. - file compression) | `readableStream.pipe(transformStream).pipe(writableStream);` | A type of duplex stream for data modification as it is written and read. | `transform(chunk, encoding, callback)`, `flush(callback)` |
 
 ```javascript
 //e.g. serving file from a server
-const fs = require('fs')
-const http = require('http').createServer();
-server.on('request', (req, res) => {
+const fs = require("fs");
+const http = require("http").createServer();
+server.on("request", (req, res) => {
   // fs.readFile('./big.file', (err, data) => {
   //   if (err) throw err;
   //     res.end(data);
@@ -367,23 +374,22 @@ server.on('request', (req, res) => {
 
   // commented code is normal code and
   // 1. If the file is in GB and node does not have that much memory, commented code will throw memory error
-   // 2. Both fs and res can be converted into streams and thus, 
-   // no matter how big the file is, data is sent in streams so chunk of data is stored in memory,
-   // so it never goes out of memory.
+  // 2. Both fs and res can be converted into streams and thus,
+  // no matter how big the file is, data is sent in streams so chunk of data is stored in memory,
+  // so it never goes out of memory.
 
+  const src = fs.createReadStream("./big.file");
 
-  const src = fs.createReadStream('./big.file');
-  
   // you can send the data to response stream as below
   src.pipe(res);
 
   // or read the data
-  src.on('data', (chunk) => {
-  console.log(`Received chunk: ${chunk}`);
-})
-src.on('end', () => {
-  console.log('No more data to read.');
-});
+  src.on("data", (chunk) => {
+    console.log(`Received chunk: ${chunk}`);
+  });
+  src.on("end", () => {
+    console.log("No more data to read.");
+  });
 });
 server.listen(8000);
 ```
@@ -395,7 +401,7 @@ server.listen(8000);
 // to create our own streams
 
 // 1. Readable Stream
-const { Readable } = require('stream');
+const { Readable } = require("stream");
 class MyReadableStream extends Readable {
   constructor(options) {
     super(options);
@@ -404,11 +410,11 @@ class MyReadableStream extends Readable {
   // untill this.push(null) is called
   _read(size) {
     // in the read method we need to push the data
-    // which would then be available in the on('data) event 
+    // which would then be available in the on('data) event
     // Push each piece of data into the stream
     this.push(data);
     // this data can be anything, maybe a chunk from file or external datasource
-    
+
     // at the end we need to push null, to notify that the stream has ended
     this.push(null);
     // if we don't push null, the read function would keep on running continuously since
@@ -417,13 +423,12 @@ class MyReadableStream extends Readable {
 }
 // above data puched in this.push(data) would be available here
 const myStream = new MyReadableStream();
-myStream.on('data', (chunk) => {
+myStream.on("data", (chunk) => {
   console.log(`Received chunk: ${chunk}`);
 });
 
-
 // 2. Writable stream
-const { Writable } = require('stream');
+const { Writable } = require("stream");
 class MyWritableStream extends Writable {
   constructor(options) {
     super(options);
@@ -431,19 +436,18 @@ class MyWritableStream extends Writable {
   // The write method gets executed each time data is written to the transform stream
   _write(chunk, encoding, callback) {
     // Simulate writing data to some destination
-    console.log(`Writing data: ${chunk.toString()}`); 
+    console.log(`Writing data: ${chunk.toString()}`);
     // Call the callback to indicate that the write operation is complete
     callback();
   }
 }
 const myWritableStream = new MyWritableStream();
-myWritableStream.write('Hello, ');
-myWritableStream.write('world!');
+myWritableStream.write("Hello, ");
+myWritableStream.write("world!");
 myWritableStream.end(); // Indicate the end of the writable stream
 
-
 // 3. Transform Stream
-const { Transform } = require('stream');
+const { Transform } = require("stream");
 class MyTransformStream extends Transform {
   constructor(options) {
     super(options);
@@ -451,7 +455,7 @@ class MyTransformStream extends Transform {
   // The _transform method gets executed each time data is written to the transform stream
   _transform(chunk, encoding, callback) {
     // Transform the data (convert to uppercase in this example)
-    const transformedData = chunk.toString().toUpperCase(); 
+    const transformedData = chunk.toString().toUpperCase();
     // Push the transformed data to the writable destination
     this.push(transformedData);
     // this data is available in the on('data') cb handler
@@ -460,31 +464,31 @@ class MyTransformStream extends Transform {
   }
 }
 
-myTransformStream.on('data', (transformedData) => {
+myTransformStream.on("data", (transformedData) => {
   console.log(`Transformed data: ${transformedData}`);
 });
 ```
 
 #### Stream video file from server to the client
 
-1. Server code 
+1. Server code
 
 ```javascript
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 const port = 3000;
 
-app.get('/video', (req, res) => {
+app.get("/video", (req, res) => {
   // Specify the path to the video file
-  const videoPath = path.join(__dirname, 'path_to_your_video.mp4');
-  
+  const videoPath = path.join(__dirname, "path_to_your_video.mp4");
+
   // Retrieve file stats, including size
   const stat = fs.statSync(videoPath);
   const fileSize = stat.size;
-  
+
   // Retrieve the 'Range' header from the request
   const range = req.headers.range;
   // this range header is sent automatically from the client
@@ -495,7 +499,7 @@ app.get('/video', (req, res) => {
 
   if (range) {
     // Parse the 'Range' header to get the start and end byte positions
-    const parts = range.replace(/bytes=/, '').split('-');
+    const parts = range.replace(/bytes=/, "").split("-");
     const start = parseInt(parts[0], 10);
     const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
     // Calculate the size of the data chunk to be sent
@@ -504,10 +508,10 @@ app.get('/video', (req, res) => {
     const file = fs.createReadStream(videoPath, { start, end });
     // Set response headers for a partial content response
     const head = {
-      'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-      'Accept-Ranges': 'bytes',
-      'Content-Length': chunkSize,
-      'Content-Type': 'video/mp4',
+      "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+      "Accept-Ranges": "bytes",
+      "Content-Length": chunkSize,
+      "Content-Type": "video/mp4",
     };
     // Respond with a 206 (Partial Content) status code and send the data chunk
     res.writeHead(206, head);
@@ -515,8 +519,8 @@ app.get('/video', (req, res) => {
   } else {
     // If no 'Range' header is present, send the entire video file
     const head = {
-      'Content-Length': fileSize,
-      'Content-Type': 'video/mp4',
+      "Content-Length": fileSize,
+      "Content-Type": "video/mp4",
     };
     // Respond with a 200 (OK) status code and send the entire file
     res.writeHead(200, head);
@@ -533,22 +537,21 @@ app.listen(port, () => {
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Streaming Example</title>
-</head>
-<body>
-  <video width="640" height="360" controls>
-    <source src="http://localhost:3000/video" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Streaming Example</title>
+  </head>
+  <body>
+    <video width="640" height="360" controls>
+      <source src="http://localhost:3000/video" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </body>
 </html>
-
 ```
 
-------------------------------------------------------------------------------
+---
 
 ## Scaling node.js apps
 
@@ -617,7 +620,7 @@ let counter = 0;
 setInterval(() => {
   process.send({counter: counter++});
 },1000);
-// on child - 
+// on child -
 // process.send(msg)
 // process.on('message', function(msg) {})
 ```
@@ -639,23 +642,23 @@ app.get("/", (req, res) => {
 
 #### Default headers set by Helmet
 
-##### 1. **Content-Security-Policy**  
+##### 1. **Content-Security-Policy**
 
 - CSP defines rules on where resources can come from (scripts, images, styles).
 - When the browser renders a page, the browser enforces these rules by blocking unauthorized resources.
 
 1. **XSS attack** - attacker injects malicious executable scripts into the code  
-**XSS attack - Cross site scripting attack** - 
-You have an input and also have document.getElemntById("a").innerHTML = userInput, and you are getting input from the url = /?userInput="", if userInput is not sanitised, whatever is passed in innerHTML wil get rendered  
-```<img src onerror="alert("document.cookie")```, and when we send this url to a user under target, the cookie would be read and we can write some email functionality in the onerror script to share the cookie on hacker email, then hacker can login.  
+   **XSS attack - Cross site scripting attack** -
+   You have an input and also have document.getElemntById("a").innerHTML = userInput, and you are getting input from the url = /?userInput="", if userInput is not sanitised, whatever is passed in innerHTML wil get rendered  
+   `<img src onerror="alert("document.cookie")`, and when we send this url to a user under target, the cookie would be read and we can write some email functionality in the onerror script to share the cookie on hacker email, then hacker can login.
 
 ```javascript
 // if we use app.use(helmet()), csp header is automatically set with default value
-// default value - 
+// default value -
 // Content-Security-Policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;
 // form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self'
 
-// to configure this value - 
+// to configure this value -
 // Sets all of the defaults, but overrides `script-src`
 // and disables the default `style-src`.
 app.use(
@@ -671,20 +674,22 @@ app.use(
 ```
 
 ##### 2. Cross origin opener policy
+
 When two documents are opened (e.g., two tabs in a browser), if one document opens the other via window.open(), these two documents can interact with each other.  
-The two domains can interract using below code 
+The two domains can interract using below code
 
 ```javascript
 // Assume we have a reference to the other window (e.g., via window.open or window.opener)
-const otherWindow = window.open('https://example.com'); // Open a tab to Domain B
+const otherWindow = window.open("https://example.com"); // Open a tab to Domain B
 // Send a message to Domain B
 otherWindow.postMessage("Hello from Domain A!", "https://example.com"); // Specify target domain to ensure security
 
-// if exmaple.com has window.addeveentLinster 
+// if exmaple.com has window.addeveentLinster
 // Listen for incoming messages from any other domains
 // then these 2 sites can communicate
 window.addEventListener("message", (event) => {
-  if (event.origin === "https://your-domain.com") { // Check the origin for security
+  if (event.origin === "https://your-domain.com") {
+    // Check the origin for security
     console.log("Received message:", event.data); // Log the message content
   } else {
     console.warn("Untrusted origin:", event.origin);
@@ -695,9 +700,10 @@ window.addEventListener("message", (event) => {
 ```
 
 TO avoid an cross comunication between different domains (which can result in data leak), set the cross origin openeer policy header
+
 ```javascript
 // default value set by helment-
-// Cross-Origin-Opener-Policy: same-origin 
+// Cross-Origin-Opener-Policy: same-origin
 
 // configuing in helmet
 // Sets "Cross-Origin-Opener-Policy: same-origin-allow-popups"
@@ -710,13 +716,12 @@ app.use(
 
 ##### 3. Referrer policy (more of a privacy header as opposed to security header)
 
-
 When your app has a link to some different site, browser automatically sets referrer header - which will include your app url (including query params), which is available for the site where the user is redirected to.  
-Now if your apps query params has some info, like user_name or something, it is shared with the new site when user redirects to that site from your site (like button or link click), let's say your site has a link to YT video, then query params are also shared with YT site which has username in it.  
+Now if your apps query params has some info, like user_name or something, it is shared with the new site when user redirects to that site from your site (like button or link click), let's say your site has a link to YT video, then query params are also shared with YT site which has username in it.
 
 **Browsers by default add referrer details for logging and statistics purposes**
 
-To avoid this, use this header 
+To avoid this, use this header
 
 ```javascript
 app.use(
@@ -728,12 +733,13 @@ app.use(
 );
 ```
 
-**In modern browsers, there is a new value (which is also a default value) - strict-origin-when-cross-origin**  
+**In modern browsers, there is a new value (which is also a default value) - strict-origin-when-cross-origin**
 
-**strict-origin-when-cross-origin** - 
- - for same origin, enire url including query params is sent
- - for cross origins - only domain name is sent
- - for https to http redirects - no-referrer gets applied
+**strict-origin-when-cross-origin** -
+
+- for same origin, enire url including query params is sent
+- for cross origins - only domain name is sent
+- for https to http redirects - no-referrer gets applied
 
 ##### 4. Strict Transport Security
 
@@ -763,12 +769,13 @@ app.use(
 
 ### 2. CORS (cross-origin-resource-sharing)
 
-**Note - helmet does not have capability to configure this header, hence need to use cors header separatley**  
+**Note - helmet does not have capability to configure this header, hence need to use cors header separatley**
 
- - By default, web browsers block cross-origin requests for security reasons.
- - CORS provides a way for a server to allow some cross-origin requests while rejecting others.
+- By default, web browsers block cross-origin requests for security reasons.
+- CORS provides a way for a server to allow some cross-origin requests while rejecting others.
 
-**3 concepts in CORS**  
+**3 concepts in CORS**
+
 1. **Preflight request** - browser first sends an OPTIONS request (other than GET/HEAD/POST) to the server to check if the CORS policy allows the actual request.
 2. **Response headers** - Access-Control-Allow-Origin, Access-Control-Allow-Methods, Access-Control-Allow-Headers
 3. **Credentials** - Cookies or authentication headers are sent only if the server permits it with the Access-Control-Allow-Credentials header set to true
@@ -823,16 +830,285 @@ app.get('/endpoint2', (req, res) => {
 });
 ```
 
-### 4. DoS attack
-### 5. SQL Injection
-### 6. Input Sanitization
-### 7. Authentication + Authorization
+### 3. DoS attack
+
+### 4. SQL Injection
+
+- Use ORM / query builders
+- Need to learn Prisma
+
+### 5. Input Sanitization
+
+- use validator - for input sanitizing, but doesn't prevent XSS attacks
+- use DOMPurify npm package - to prevent XSS attacks
+- use zod to validate input schema (frontend + backend)
+
+1. validator - for sanitising and escaping inputs
+
+```javascript
+var validator = require("validator");
+validator.isEmail("foo@bar.com");
+// is jwt, isDate and mainy other functions available on validator
+// mainly we need to use escape to safely parse any malformed data
+validator.escapt(input); // replace <, >, &, ', " and / with HTML entities.
+```
+
+2. DOMPurify -
+
+```javascript
+// DOMPurify on client
+import DOMPurify from "dompurify";
+const clean = DOMPurify.sanitize("<b>hello there</b>");
+// now we can safely add above clean object as innerHTML
+
+DOMPurify.sanitize("<img src=x onerror=alert(1)//>"); // becomes <img src="x">
+
+// DOMPurify on server
+// DOMPurify is required in server incases
+// where we need to store HTML like data on the backend
+// if we are storing data from rich text editor on server
+const createDOMPurify = require("dompurify");
+const { JSDOM } = require("jsdom");
+const window = new JSDOM("").window;
+const DOMPurify = createDOMPurify(window);
+const clean = DOMPurify.sanitize("<b>hello there</b>");
+```
+
+Zod - see Zod usage at the bottom
+
+### 6. Authentication + Authorization
 
 ## Nodejs Performance
 
-### 1. gzip
-### 2. Promise.all
-### 3. Caching - Redis
-### 4. 
+### 1. Profile Nodejs app to gather performance report
+
+- nodejs inspect
+- performance observer
+
+### 2. Use cluster module / pm2 / libuv increase thread pool size
+
+### 3. gzip
+
+### 4. Promise.all
+
+### 5. Streaming
+
+### 6. Caching - Redis
 
 ## Nodejs Error handling
+
+### Using express middleware
+
+By default if we thrown error in route handlers in express, the response is not returned and the thread os blocked, and the error is not handled.
+
+**Normal route handler**
+
+```javascript
+const express = require("express");
+const app = express();
+app.use("/login", (req, res) => {
+  if (!req.user) {
+    throw new Error("error"); // never do this,
+  }
+  res.json({ message: "login successful" });
+  // this response is never returned and we lost 1 thread
+  // always use try cacth above and return 500 errro response in catch block
+  // this will be tedious to do for every api handler
+});
+```
+
+**create a generic middleware**
+
+```javascript
+// middleware.js file
+// note the frst arg is error and only if we provide 4 args
+// the express knows that this is a error middleware
+// also this app.use should be called after every route handler is defined
+
+// the purpose of this file is to throw specific errors
+// the control to throw specific errors is with resp route handlers
+const AppError = require("../AppError");
+const errorHandler = (error, req, res, next) => {
+  console.log(error);
+
+  // check for validation error
+  if (error.name === "ValidationError") {
+    return res.status(400).send({
+      type: "ValidationError",
+      details: error.details,
+    });
+  }
+  // check if we are throwing custom error
+  // this way route handler can decide what error it needs to throw
+  if (error instanceof AppError) {
+    return res.status(error.statusCode).json({
+      errorCode: error.errorCode,
+    });
+  }
+  return res.status(500).send("Something went wrong");
+};
+module.exports = errorHandler;
+```
+
+**custom error class**
+
+```javascript
+// AppError.js
+class AppError extends Error {
+  // nothing specific, just extends the Error class
+  constructor(errorCode, message, statusCode) {
+    super(message);
+    this.errorCode = errorCode;
+    this.statusCode = statusCode;
+  }
+}
+
+module.exports = AppError;
+```
+
+**create generic tryCatch**
+
+```javascript
+// it is like a higher order function
+// it takes a function and addes a try catch behaviour
+export const tryCatch = (controller) => async (req, res, next) => {
+  try {
+    await controller(req, res);
+  } catch (error) {
+    // note, we are just forwarding the error to nect middleware
+    // ultimately the error handler middleware will handle this error
+    return next(error);
+  }
+};
+```
+
+**now after adding custom error class, generic trycatch and error handling middleware** - all the routes are noe error handled as shown below
+
+```javascript
+// now in all route handlers, just wrap it in tryCatch and
+// throw any error without breaking the app
+app.get()"/test", tryCatch(async (req, res) => {
+  const user = getUser();
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return res.status(200).json({ success: true });
+})
+```
+
+## Zod (Zero dependencies, very light weight)
+
+It is a schema declaration and validation library  
+Zod works where TS fails -
+E.g.
+
+```typescript
+type Product = {
+  id: number;
+  name: string;
+};
+// somewhere in the component
+fetch("/api/products")
+  .then((res) => res.json())
+  .then((data: Products) => {
+    // use data as intended
+  });
+// this works TS won't throw any error
+// but TS is only at compile time
+// what if the /api/products changed which is not in your control
+// and now name is not returned and we you doing somethig link
+data.name.toUperCase(); // this will fail in above case
+// TS won;t catch this becuse it checked the types at compile time only
+
+// use Zod
+```
+
+Where all we should use Zod?
+
+1. On client side, when data comes from
+
+- api call from backed
+- api call from thirdparty
+- url prarams
+- user inputs from from data
+
+2. On server, when data comes from
+
+- client
+- webhooks
+- filesystem
+- DB (not necessary if we use ORMs)
+
+**Zod usage**
+
+```javascript
+const { z } = require("zod");
+// Define a schema for user input validation
+// create all scehmas in separate files
+// for schema common on ui and server
+// create lib folder accessible to both
+const userSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters long"),
+  email: z.string().email("Invalid email address"),
+  age: z.number().int().positive("Age must be a positive integer"),
+  subscribed: z.boolean().optional(), // Optional field
+});
+// Simulate user input
+const inputData = {
+  username: "JohnDoe",
+  email: "johndoe@example.com",
+  age: 28,
+  subscribed: true,
+};
+// Validate input using Zod schema
+const validationResult = userSchema.safeParse(inputData);
+// validationResult is an object with success, error and data properties
+
+// NOTE THAT WE NEED TO USE validationResult and not inputData further in the code
+if (validationResult.success) {
+  console.log("Validation passed", validationResult.data);
+} else {
+  console.log("Validation failed", validationResult.error.errors);
+}
+```
+
+**Aprat from being lightweight library, another big benofot is we can create TS types using Zod schema directly making Zod schema, a single source of truth**  
+E.g.
+
+```javascript
+let product = productdatafromAPI;
+// validate product again the schema
+const validationResult = productSchema.safeParse(product);
+// now we can continue using validationResult safely
+// but lets say we have utility function which takes this product as input
+
+const utilityFunc = (product: Product) {
+  // process product
+}
+
+// we need to things to check the types
+// 1. zod schema
+const productSchema = z.object({
+  name: z.string(),
+  price: z.number(),
+});
+
+// 2. TS type
+// because utility function will need Product type
+// otherwise TS will complain
+type Product = {
+  name: string,
+  price: number,
+};
+
+// creating a zod schema and TS interface for product is redundant
+// because we know both will name and price
+
+// so instead of creating a TS type again with same attributes
+// we can infer the type from Zod Schema
+type Product = z.infer<typeof productSchema>;
+
+// hence not Zod becomes a single source of truth
+
+```

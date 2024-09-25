@@ -1,16 +1,16 @@
 // use this template to create express app everytime
-const express = require('express');
+const express = require("express");
 const app = new express();
-const path = require('path');
-const exphbs = require('express-handlebars');
-const logger = require('./middleware/logger');
+const path = require("path");
+const exphbs = require("express-handlebars");
+const logger = require("./middleware/logger");
 
 //use body parser to ready request body, otherwise it will not work
-// earlier body parser was separate library, now in new express it is a built-in middleware 
-// to read json body 
+// earlier body parser was separate library, now in new express it is a built-in middleware
+// to read json body
 app.use(express.json());
 // to read form data
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 //use middleware
 //express.static is express's inbuilt middleware
@@ -19,7 +19,7 @@ app.use(express.urlencoded({extended: false}));
 //like app.get('/home', ()=>{res.sendFIle(home.html)}), app.get('/about', ()=>{res.sendFile(about.html)})
 //now we can just use static, and no routes required, just type file name in the brower with .html
 //this is express static server
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 // this is a custom middle ware that is created see logger.js
 // this is application level middleware
@@ -30,32 +30,32 @@ app.use(logger);
 // use this as a view if not using react
 // when templating engines are used like handlebars/pug
 // then we are creating a complete server side web app, no need of json apis in this case
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-app.set('view engine', 'handlebars');
-app.get('/handlebars', (req, res) => {
-    res.render('index', {
-        title: 'Members App',
-        arrayExample: [
-            {
-                id: 123,
-                name: 'Ahish'
-            },
-            {
-                id: 456,
-                name: 'Temp'
-            }
-        ]
-    });
-})
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+app.get("/handlebars", (req, res) => {
+  res.render("index", {
+    title: "Members App",
+    arrayExample: [
+      {
+        id: 123,
+        name: "Ahish",
+      },
+      {
+        id: 456,
+        name: "Temp",
+      },
+    ],
+  });
+});
 // using router
-app.use('/api/members', require('./routes/api/member'));
+app.use("/api/members", require("./routes/api/member"));
 
-app.get('/', (req, res) => {
-    //res.send('<h1>hello world123</h1>'); //normal test r html can be sent via this method
-    // res.render() for templeting engines like pug/ejs, we can pass variables to html using this method
-    // res.json() to send json, it automatically converst objects to json
-    // to send static files
-    // res.sendFile(path.join(__dirname, 'public', 'index.html'));
+app.get("/", (req, res) => {
+  //res.send('<h1>hello world123</h1>'); //normal test r html can be sent via this method
+  // res.render() for templeting engines like pug/ejs, we can pass variables to html using this method
+  // res.json() to send json, it automatically converst objects to json
+  // to send static files
+  // res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
