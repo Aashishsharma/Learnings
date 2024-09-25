@@ -149,7 +149,8 @@ Lighthouse scores -
 
 1. Color contrast
 2. Use descriptive tags
-3. Use ARIA attributes
+3. Keyboard and skip navigation
+4. Use ARIA attributes
 
 ### 1. Color contrast
 
@@ -176,6 +177,69 @@ Instead of using divs for a series of consecutive items use ol or ul
 ![alt text](PNG/Capture3.PNG "Title")
 
 Adv of using lists is, screen readers can announce list start, list end and list items when encountering lists, not possible in divs
+
+### 3. Keyboard and skip navigation
+
+#### 1. Keyboard navigation
+
+By default, below elemnts are accessible when keyboard tab is pressed
+
+- all input elemnt types
+- buttons, links, accordians
+- audio, video
+
+Default order of tabs is same as the order in which elements appear in the viewport
+
+divs are not cauught by tabs, so use tabindex, if required in cases where you make div a button
+
+```HTML
+<div tabindex="0">THI IS DIV </div>
+<!-- 0 - indicates the div would be highlighted as per it's order
+ mostly it would be 0 only,
+ however if we want to chage the order in which they are tabbed vs the order in which they are displayed
+ then use positive integers in tabindex
+ -->
+```
+
+#### 2. Skip navigation link (VVIP)
+
+Mostly there are lot of links in the navbar, now normal users can directly choose to see the main content, not focusing on the nav / side bars  
+For visually impaierd users, they need to press a ton of tab keys to get to the main content.
+
+So we create a skip navigation link
+
+```HTML
+<!-- create a link, which should be the first elemtn of the body
+ so that when users press tab, this link is shown
+  which will point to the main content -->
+<a href="#mainContent" class="skip-link">Skip to main content</a>
+<nav>
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+    </ul>
+</nav>
+<main id="mainContent">
+    <h1>Main Content Title</h1>
+    <p>This is the main content of the page.</p>
+</main>
+
+<!-- CSS is where the logic is -->
+<style>
+  /*  Make sure the link is positioned outside of the view port */
+.skip-link {
+    position: absolute; /* REAL LIFE USECASE OF ABSOULTE POSITION */
+    top: -40px; /* Move off-screen */
+    left: 0;
+    z-index: 100; /* Ensure it’s above other elements */
+}
+  /*  as soon as tab is pressed, below css will be trigerred and we bring the link in the viewport */
+.skip-link:focus {
+    top: 10px; /* Move into view when focused */
+}
+<.style>
+```
 
 ### 4. Heading tags (their purpose is for navigation and strucuture of the page)
 
