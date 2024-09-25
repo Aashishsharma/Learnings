@@ -165,6 +165,7 @@ Instead of using divs for a series of consecutive items use ol or ul
 ![alt text](PNG/Capture2.PNG "Title")
 
 **Good example** -
+
 ![alt text](PNG/Capture3.PNG "Title")
 
 Adv of using lists is, screen readers can announce list start, list end and list items when encountering lists, not possible in divs
@@ -196,9 +197,12 @@ H1-6 tags are not meant for sizing text, we can always use font-size for that
 ```
 
 **bad form with no labels**
+
 ![alt text](PNG/Capture16.PNG "Title")  
 **form with lables, but redundant place holders**
-![alt text](PNG/Capture17.PNG "Title")  
+
+![alt text](PNG/Capture17.PNG "Title")
+
 **good example of a form**
 ![alt text](PNG/Capture1.PNG "Title")
 
@@ -242,16 +246,36 @@ If we are building a complex button component for a UI library
 
 ![alt text](PNG/Capture18.PNG "Title")
 
-| ARIA Attribute     | Description & Use Case                                                                                                                                                            | Example                                                                                            |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `aria-label`       | Provides a text label that describes an element's purpose when a visible label is not present. Use it when adding a label to a button with an icon only.                          | `<button aria-label="Close"></button>`                                                             |
-| `aria-labelledby`  | References the ID of an element that serves as a label for the current element. Useful for when the screen reader should announce multiple elements for context.                  | `<div id="title">Page Title</div> <h1 aria-labelledby="title"></h1>`                               |
-| `aria-describedby` | References the ID of an element that provides additional description or information about the current element. Helps screen readers read additional content (e.g., instructions). | `<input aria-describedby="instructions"> <div id="instructions">Please enter your username.</div>` |
-| `aria-hidden`      | Indicates whether an element and its contents should be visible or hidden to assistive technologies. Ideal for hiding decorative or redundant elements from screen readers.       | `<div aria-hidden="true">Hidden content</div>`                                                     |
-| `aria-disabled`    | Indicates whether an element is interactive or disabled. Use it for marking interactive elements as disabled.                                                                     | `<button aria-disabled="true">Disabled</button>`                                                   |
-| `aria-expanded`    | Indicates whether a collapsible element, such as an accordion, is currently expanded or collapsed. Use to show the state of expandable elements like accordions.                  | `<button aria-expanded="true">Expand</button>`                                                     |
-| `aria-controls`    | Lists the IDs of elements controlled by the current element, typically used with interactive controls. Use for connecting controls to elements they affect.                       | `<button aria-controls="popup">Open Popup</button> <div id="popup"></div>`                         |
-| `aria-haspopup`    | Indicates whether an element, such as a menu, has a popup menu, dialog, or submenu. Use to indicate that a button or element triggers a popup.                                    | `<button aria-haspopup="true">Menu</button>`                                                       |
-| `aria-live`        | Indicates that content will be updated dynamically and how screen readers should handle those updates. Use for live updates (e.g., notifications) for screen reader users.        | `<div aria-live="polite">New message: Hello!</div>`                                                |
-| `role`             | Defines the role or type of an element, providing semantic information about its purpose and behavior. Use to assign specific roles to custom elements.                           | `<nav role="navigation"></nav>`                                                                    |
-|  |
+| ARIA Attribute          | Description & Use Case                                                                                                                                                                                                                                                 | Example                                                                                            |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `aria-label`            | Provides a text label that describes an element's purpose when a visible label is not present. Use it when adding a label to a button with an icon only.                                                                                                               | `<button aria-label="Close"></button>`                                                             |
+| `aria-labelledby`       | screenreader will read content (innerHTML) of the elemnt whose id is mentioned in aria-labelledby (can have multiple ids), not same as `<label for >` attribute, for addes additional functionality like focus, aria labelledby is only used by assistive technologies | `<h1 id="form-title">Registration Form</h1> <input type="text" aria-labelledby="form-title">`      |
+| `aria-describedby`      | Same as labelled by, just that screen reader will first read content of labelledby then content of describedby                                                                                                                                                         | `<input aria-describedby="instructions"> <div id="instructions">Please enter your username.</div>` |
+| `aria-hidden`           | Indicates whether an element and its contents should be visible or hidden to **assistive technologies**, this doesnot affect the visibility of the element. Ideal for hiding decorative or redundant elements from screen readers.                                     | `<div aria-hidden="true" class="decorative-icon">some random SVG</div>`                            |
+| `aria-disabled`         | Indicates whether an element is interactive or disabled. Use it for marking interactive elements as disabled.                                                                                                                                                          | `<button aria-disabled="true">Disabled</button>`                                                   |
+| `aria-expanded`         | Indicates whether a collapsible element, such as an accordion, is currently expanded or collapsed. Use to show the state of expandable elements like accordions.                                                                                                       | `<button aria-expanded="true">Expand</button>`                                                     |
+| `aria-controls`         | Lists the IDs of elements controlled by the current element, typically used with interactive controls. Use for connecting controls to elements they affect.                                                                                                            | `<button aria-controls="popup">Open Popup</button> <div id="popup"></div>`                         |
+| `aria-haspopup`         | Indicates whether an element, such as a menu, has a popup menu, dialog, or submenu. Use to indicate that a button or element triggers a popup.                                                                                                                         | `<button aria-haspopup="true">Menu</button>`                                                       |
+| `aria-live` (see below) | Indicates that content will be updated dynamically and how screen readers should handle those updates. Use for live updates (e.g., notifications) for screen reader users.                                                                                             | `<div aria-live="polite">New message: Hello!</div>`                                                |
+| `role`                  | Defines the role or type of an element, providing semantic information about its purpose and behavior. Use to assign specific roles to custom elements.                                                                                                                | `<nav role="navigation"></nav>`                                                                    |
+|                         |
+
+**aria-live** - use when some content of a web page updates dynamically, like a form is submitted and the response is shown on the UI (loading / success / failure)  
+It can have 3 values
+
+- aria-live="off" - default
+- aria-live="polite" - when the content in this tag changes, screen reader will read this content whenever there is a natural pause in screen reader (e.g. - on success responses of forms)
+- aria-live="assertive" - screen reader will immediately read the content, halting any content that it was reading (e.g. error received from server in critical forms)
+
+```HTML
+
+<form id="contactForm" onsubmit="handleSubmit(event)">
+    <label for="name">Name:</label>
+    <input type="text" id="name" required>
+    <button type="submit">Submit</button>
+</form>
+
+<!-- assume form handleSubmit make a DB call the the response is updated in the below div -->
+<div id="submissionMessage" aria-live="polite" class="message" aria-hidden="true"></div>
+<!-- since it has aria-live="polite", whenever the content of this div is updated, screenreader will read it -->
+```
