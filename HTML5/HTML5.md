@@ -72,6 +72,11 @@ Before these semantic tags, we were using divs everywhere
 But dive doesnot give enough context about the HTML strucutre
 <body>
     <header>
+      <h1>There should onyl be 1 H1 tag per page
+        - and after H1 you should not skip the hierarchy, you should not directly use H4
+        - H1-6 tags are not meant for sizing text, we can always use font-size for that
+        - H1-6 tags are mainly used to outline the page assisting screen readers
+      </h1>
         <nav> it describes that this would be a navigation
             <ul>
                 <li><a href="#home">Home</a></li>
@@ -268,32 +273,6 @@ Note - worker loaded from a different domain won't be able to access resources f
 
 **Service worker example see webpush notification**
 
-## Accessibility
-
-| Topic                                            | Description                                                                                                                                  |
-| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Web Content Accessibility Guidelines (WCAG)**  | Set of international standards by WAI for creating accessible web content. Principles: Perceivable, Operable, Understandable, Robust (POUR). |
-| **Semantic HTML**                                | Use appropriate HTML elements for accurate interpretation by assistive technologies.                                                         |
-| **Keyboard Navigation**                          | Design interfaces navigable via keyboard for users unable to use a mouse.                                                                    |
-| **Focus Management**                             | Ensure visually distinguishable and managed keyboard focus on interactive elements.                                                          |
-| **Color Contrast**                               | Maintain readable content by providing sufficient color contrast for users with visual impairments.                                          |
-| **Alternative Text (Alt Text)**                  | Give images meaningful alt text to convey content and purpose to users unable to see them.                                                   |
-| **Labels and Form Controls**                     | Use descriptive labels and proper associations for form controls to assist screen reader users.                                              |
-| **Accessible Media**                             | Add captions for videos, audio transcripts, and descriptive text for complex images.                                                         |
-| **ARIA (Accessible Rich Internet Applications)** | Use ARIA attributes to enhance dynamic and interactive content accessibility for screen reader users.                                        |
-| **Testing Tools**                                | Learn to use accessibility testing tools to identify issues and improve web content.                                                         |
-| **User Testing**                                 | Involve users with disabilities in testing to understand real-world accessibility challenges.                                                |
-| **Responsive Design**                            | Ensure designs adapt well to various screen sizes and devices.                                                                               |
-| **User Experience Focus**                        |                                                                                                                                              |
-
-|                           | **Web Content Accessibility Guidelines (WCAG)**                                                                                                                                                                                                                                                                                |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Description**           | WCAG is a set of standards developed by the Web Accessibility Initiative (WAI) of the World Wide Web Consortium (W3C).                                                                                                                                                                                                         |
-| **Purpose**               | It provides guidelines for making digital content accessible to individuals with disabilities, ensuring usability for all.                                                                                                                                                                                                     |
-| **Principles (POUR)**     | - **Perceivable:** Presenting content so users can perceive it. <br> - **Operable:** Ensuring interaction is possible. <br> - **Understandable:** Making content clear and usable. <br> - **Robust:** Ensuring compatibility with various user agents.                                                                         |
-| **Guidelines and Levels** | - Organized into guidelines, success criteria, and techniques. <br> - Conformance levels: A (basic), AA (minimum), AAA (advanced).                                                                                                                                                                                             |
-| **Conformance Levels**    | - **Level A:** The most basic accessibility requirements. Failure to meet these would make content inaccessible to some users. <br> - **Level AA:** Addresses significant barriers and is the minimum for most web content. <br> - **Level AAA:** Highest level, addressing advanced features for a more inclusive experience. |
-
 **Example implementation of WCAG guidelines**
 
 ```html
@@ -347,18 +326,3 @@ Note - worker loaded from a different domain won't be able to access resources f
   </article>
 </body>
 ```
-
-**ARIA (Accessible Rich Internet Applications)** - They provide additional information to assistive technologies like screen readers, that may not be adequately described using standard HTML
-
-| ARIA Attribute     | Description                                                                                                    | Example                                                                                            | Use Case                                                                                                                                                              |
-| ------------------ | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `aria-label`       | Provides a text label that describes an element's purpose when a visible label is not present.                 | `<button aria-label="Close"></button>`                                                             | Adding a label to a button with an icon only.                                                                                                                         |
-| `aria-labelledby`  | References the ID of an element that serves as a label for the current element.                                | `<div id="title">Page Title</div> <h1 aria-labelledby="title"></h1>`                               | the screen reader would announce both "Page Title" and "Main Heading" when encountering the h1 element, providing context and information to users with disabilities. |
-| `aria-describedby` | References the ID of an element that provides additional description or information about the current element. | `<input aria-describedby="instructions"> <div id="instructions">Please enter your username.</div>` | Screenreader would read div content when it reaches input elem.                                                                                                       |
-| `aria-hidden`      | Indicates whether an element and its contents should be visible or hidden to assistive technologies.           | `<div aria-hidden="true">Hidden content</div>`                                                     | Hiding decorative or redundant elements from screen readers.                                                                                                          |
-| `aria-disabled`    | Indicates whether an element is interactive or disabled.                                                       | `<button aria-disabled="true">Disabled</button>`                                                   | Marking interactive elements as disabled.                                                                                                                             |
-| `aria-expanded`    | Indicates whether a collapsible element, such as an accordion, is currently expanded or collapsed.             | `<button aria-expanded="true">Expand</button>`                                                     | Indicating the state of an expandable element.                                                                                                                        |
-| `aria-controls`    | Lists the IDs of elements controlled by the current element, typically used with interactive controls.         | `<button aria-controls="popup">Open Popup</button> <div id="popup"></div>`                         | Connecting controls and controlled elements.                                                                                                                          |
-| `aria-haspopup`    | Indicates whether an element, such as a menu, has a popup menu, dialog, or submenu.                            | `<button aria-haspopup="true">Menu</button>`                                                       | Indicating that a button triggers a menu.                                                                                                                             |
-| `aria-live`        | Indicates that content will be updated dynamically and how screen readers should handle those updates.         | `<div aria-live="polite">New message: Hello!</div>`                                                | Announcing live updates to screen reader users.                                                                                                                       |
-| `role`             | Defines the role or type of an element, providing semantic information about its purpose and behavior.         | `<nav role="navigation"></nav>`                                                                    | Assigning specific roles to custom elements.                                                                                                                          |

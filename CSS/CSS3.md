@@ -7,29 +7,29 @@
 ## CSS2 and CSS3
 
 Importing css in a css, possible only in css3  
-@import "heading.css"  
+@import "heading.css"
 
-| Selector Type            | Example              | Description                                                                                                        |
-|--------------------------|--------------------- |--------------------------------------------------------------------------------------------------------------------|
-| ID Selector   | `#myElement`      | Targets an element with a specific unique ID attribute, such as `<div id="myElement">`.                |
-| Tag Selector  | `div`             | Targets all elements of a specific HTML tag, such as `<div>`, `<p>`, or `<h1>`.                        |
-| Class Selector| `.myClass`        | Targets elements with a specific class attribute, like `<div class="myClass">`.                        |
-| Multiple Selector      | `div, p`              | Selects all `<div>` and `<p>` elements                                           |
-| Multiple Selector      | `ul.important`              | ul.important selects all ul elements that have class="important"                |
-| Multiple selector      | `bento orange.small` |                                                                                        |
-| Descendant Selector      | `div p`              | Selects all `<p>` elements inside of a `<div>` element. (direct / indirect, all p elems are selected)                                           |
-| Child Selector           | `div > p`            | Selects all `<p>` elements that are direct children of a `<div>` element. (indirect p elems are not selected)                                        |
-| Adjacent Sibling Selector | `h2 + p`            | Selects only the first `<p>` element that immediately follows an `<h2>` element and have same parent                                           |
-| General Sibling Selector | `h2 ~ p`             | Selects all `<p>` elements that come after (not before) `<h2>` element and share the same parent.                   |
-| Attribute Selector    | `[type="text"]`           | Targets elements with a specific attribute and value, such as `<input type="text">`.                      |
-| Pseudo-Class Selector | `a:hover`                 | Targets elements in a specific state, like when hovered over, using the `:pseudo-class` notation.          |
-| Pseudo-Element Selector | `p::first-line`         | Targets a specific part of an element's content, like the first line of a paragraph, using the `::pseudo-element` notation. |
-| :matches() Selector    | `p:matches(.special, .important)` | Targets elements that match any of the provided selectors inside the `:matches()` pseudo-class.              |
-| :not() Selector        | `input:not([type="submit"])`  | Targets elements that do not match the provided selector inside the `:not()` pseudo-class.                    |
-| :nth-child() Selector  | `li:nth-child(odd)`           | Targets elements that are specified numeric positions within their parent, using the `:nth-child()` pseudo-class. |
-| :nth-of-type() Selector| `div:nth-of-type(3)`          | Targets elements of a specific type that are specified numeric positions within their parent.               |
-| `::before`               | `p::before { content: "Read this: "; }` | Inserts content before the paragraph element. (this way we can add content to a webpage using only css) |
-| `::after`               | `p::after { content: "Read this: "; }` | Inserts content after the paragraph element. (this way we can add content to a webpage using only css) |
+| Selector Type             | Example                                 | Description                                                                                                                 |
+| ------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| ID Selector               | `#myElement`                            | Targets an element with a specific unique ID attribute, such as `<div id="myElement">`.                                     |
+| Tag Selector              | `div`                                   | Targets all elements of a specific HTML tag, such as `<div>`, `<p>`, or `<h1>`.                                             |
+| Class Selector            | `.myClass`                              | Targets elements with a specific class attribute, like `<div class="myClass">`.                                             |
+| Multiple Selector         | `div, p`                                | Selects all `<div>` and `<p>` elements                                                                                      |
+| Multiple Selector         | `ul.important`                          | ul.important selects all ul elements that have class="important"                                                            |
+| Multiple selector         | `bento orange.small`                    |                                                                                                                             |
+| Descendant Selector       | `div p`                                 | Selects all `<p>` elements inside of a `<div>` element. (direct / indirect, all p elems are selected)                       |
+| Child Selector            | `div > p`                               | Selects all `<p>` elements that are direct children of a `<div>` element. (indirect p elems are not selected)               |
+| Adjacent Sibling Selector | `h2 + p`                                | Selects only the first `<p>` element that immediately follows an `<h2>` element and have same parent                        |
+| General Sibling Selector  | `h2 ~ p`                                | Selects all `<p>` elements that come after (not before) `<h2>` element and share the same parent.                           |
+| Attribute Selector        | `[type="text"]`                         | Targets elements with a specific attribute and value, such as `<input type="text">`.                                        |
+| Pseudo-Class Selector     | `a:hover`                               | Targets elements in a specific state, like when hovered over, using the `:pseudo-class` notation.                           |
+| Pseudo-Element Selector   | `p::first-line`                         | Targets a specific part of an element's content, like the first line of a paragraph, using the `::pseudo-element` notation. |
+| :matches() Selector       | `p:matches(.special, .important)`       | Targets elements that match any of the provided selectors inside the `:matches()` pseudo-class.                             |
+| :not() Selector           | `input:not([type="submit"])`            | Targets elements that do not match the provided selector inside the `:not()` pseudo-class.                                  |
+| :nth-child() Selector     | `li:nth-child(odd)`                     | Targets elements that are specified numeric positions within their parent, using the `:nth-child()` pseudo-class.           |
+| :nth-of-type() Selector   | `div:nth-of-type(3)`                    | Targets elements of a specific type that are specified numeric positions within their parent.                               |
+| `::before`                | `p::before { content: "Read this: "; }` | Inserts content before the paragraph element. (this way we can add content to a webpage using only css)                     |
+| `::after`                 | `p::after { content: "Read this: "; }`  | Inserts content after the paragraph element. (this way we can add content to a webpage using only css)                      |
 
 ```html
 <!-- Challenge 1 -->
@@ -37,15 +37,17 @@ Importing css in a css, possible only in css3
   <bento>
     <orange />
   </bento>
-  <orange class="small" />   
+  <orange class="small" />
   <bento>
-    <orange class="small" /> <!-- ANS - `bento orange.small` -->
+    <orange class="small" />
+    <!-- ANS - `bento orange.small` -->
   </bento>
   <bento>
     <apple class="small" />
   </bento>
   <bento>
-    <orange class="small" />  <!-- ANS - `bento orange.small` -->
+    <orange class="small" />
+    <!-- ANS - `bento orange.small` -->
   </bento>
 </div>
 
@@ -55,9 +57,11 @@ Importing css in a css, possible only in css3
     <apple class="small" />
   </bento>
   <plate />
-  <apple class="small" /> <!-- ANS - `plate + apple` -->
+  <apple class="small" />
+  <!-- ANS - `plate + apple` -->
   <plate />
-  <apple /> <!-- and this -->
+  <apple />
+  <!-- and this -->
   <apple class="small" />
   <apple class="small" />
 </div>
@@ -65,10 +69,12 @@ Importing css in a css, possible only in css3
 <!-- Challenge 3 -->
 <div class="table">
   <plate>
-    <apple />  <!-- ANS - `plate > apple, plate > pickle` -->
+    <apple />
+    <!-- ANS - `plate > apple, plate > pickle` -->
   </plate>
   <plate>
-    <pickle /> <!-- and this -->
+    <pickle />
+    <!-- and this -->
   </plate>
   <bento>
     <pickle />
@@ -84,7 +90,8 @@ Importing css in a css, possible only in css3
 <div class="table">
   <plate />
   <plate />
-  <plate /> <!-- ANS - :nth-child(3) -->
+  <plate />
+  <!-- ANS - :nth-child(3) -->
   <plate id="fancy" />
 </div>
 
@@ -94,86 +101,87 @@ Importing css in a css, possible only in css3
     <apple class="small" />
   </plate>
   <plate>
-    <apple /> <!-- ANS - `apple:not(.small)` -->
+    <apple />
+    <!-- ANS - `apple:not(.small)` -->
   </plate>
-  <apple /> <!-- and this -->
+  <apple />
+  <!-- and this -->
   <plate>
     <orange class="small" />
   </plate>
   <pickle class="small" />
 </div>
-
 ```
 
 **Types of units in css**  
-| Unit Type | Example              | Description                                                                                          |
+| Unit Type | Example | Description |
 |-----------|----------------------|------------------------------------------------------------------------------------------------------|
-| Absolute  | `px`                 | Represents a fixed length unit. Commonly used for precise control over element dimensions.          |
-|           | `pt`                 | Represents points, a unit of length used primarily in typography.                                   |
-|           | `cm`, `mm`, `in`     | Represents physical units like centimeters, millimeters, and inches.                                |
-|           |                       | These are mostly used for print styles rather than web design.                                      |
-| Relative  | `em`  `p { font-size: 16px; } .child { font-size: 1.5em; }`               | font size of child elem  = 16*1.5 = 24px. Represents a unit relative to the font size of its parent element.                                  |
-|           | `rem`                |Similar to em, but instead of relative to parent, it is relative to finc-size of html elem. Represents a unit relative to the root (html - level) font size.                                 |
-|           | `vw`, `vh`, `vmin`, `vmax` | Represents a percentage of the viewport width/height, or the smaller/larger of the two.      |
-|           | `%`                  | Represents a percentage of a parent element's property (like width or height).                     |
-| Flexible  | `fr`                 | Represents a fraction of available space in a **CSS Grid layout**.                                      |
-|           | `auto`               | Represents a value that is automatically calculated based on context (e.g., element text content).      |
+| Absolute | `px` | Represents a fixed length unit. Commonly used for precise control over element dimensions. |
+| | `pt` | Represents points, a unit of length used primarily in typography. |
+| | `cm`, `mm`, `in` | Represents physical units like centimeters, millimeters, and inches. |
+| | | These are mostly used for print styles rather than web design. |
+| Relative | `em` `p { font-size: 16px; } .child { font-size: 1.5em; }` | font size of child elem = 16\*1.5 = 24px. Represents a unit relative to the font size of its parent element. |
+| | `rem`, default 1rem = 16px |Similar to em, but instead of relative to parent, it is relative to finc-size of html elem. Represents a unit relative to the root (html - level) font size. |
+| | `vw`, `vh`, `vmin`, `vmax` | Represents a percentage of the viewport width/height, or the smaller/larger of the two. |
+| | `%` | Represents a percentage of a parent element's property (like width or height). |
+| Flexible | `fr` | Represents a fraction of available space in a **CSS Grid layout**. |
+| | `auto` | Represents a value that is automatically calculated based on context (e.g., element text content). |
 
 ### CSS Text Properties
 
-| Property                 | Example Value                          | Description                                           |
-|--------------------------|----------------------------------------|-------------------------------------------------------|
-| `font-size`              | `font-size: 16px;`                    | Sets the size of the font.                          |
-| `font-weight`            | `font-weight: bold; (100 - 800)`                 | Specifies the thickness of the font.                |
-| `font-style`             | `font-style: italic;`                 | Defines the style of the font (italic, oblique).    |
-| `text-align`             | `text-align: center;`                 | Aligns the text horizontally within its container.  |
-| `text-decoration`        | `text-decoration: underline;`         | Adds decoration to the text (underline, line-through). |
-| `text-transform`         | `text-transform: uppercase;`          | Changes the capitalization of the text to uppercase. |
-|                          | `text-transform: lowercase;`          | Changes the capitalization of the text to lowercase. |
-|                          | `text-transform: capitalize;`         | Capitalizes the first letter of each word.          |
-| `line-height`            | `line-height: 1.5;`                   | the space between lines will be 1.5 times the font size of the text               |
-| `letter-spacing`         | `letter-spacing: 2px;`                | Adjusts the space between characters.               |
-| `word-spacing`           | `word-spacing: 3px;`                  | Controls the space between words.                  |
-| `text-shadow`            | `text-shadow: 1px 1px 1px black;`     | Adds a shadow to the text.                         |
-| `white-space`            | `white-space: nowrap;`               | Controls how whitespace within an element is handled. |
-| `overflow`               | `overflow: hidden;`                   | Specifies how overflowed content is displayed.       |
-| `font-family`            | `font-family: Arial, sans-serif;`      | Defines the font family for the text.  3 default available, serif(edgey characters) sans-serif (opp. of serif - good readibility), monospace (each character has same width)
-Other common available - times new roman, aerial on users computer font-family: "Times New Roman", serif - it basically says - use font family as TNR, if not available on users computer, use default as serif               |
+| Property                                                                                                                                                                                                        | Example Value                     | Description                                                                                                                                                                 |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `font-size`                                                                                                                                                                                                     | `font-size: 16px;`                | Sets the size of the font.                                                                                                                                                  |
+| `font-weight`                                                                                                                                                                                                   | `font-weight: bold; (100 - 800)`  | Specifies the thickness of the font.                                                                                                                                        |
+| `font-style`                                                                                                                                                                                                    | `font-style: italic;`             | Defines the style of the font (italic, oblique).                                                                                                                            |
+| `text-align`                                                                                                                                                                                                    | `text-align: center;`             | Aligns the text horizontally within its container.                                                                                                                          |
+| `text-decoration`                                                                                                                                                                                               | `text-decoration: underline;`     | Adds decoration to the text (underline, line-through).                                                                                                                      |
+| `text-transform`                                                                                                                                                                                                | `text-transform: uppercase;`      | Changes the capitalization of the text to uppercase.                                                                                                                        |
+|                                                                                                                                                                                                                 | `text-transform: lowercase;`      | Changes the capitalization of the text to lowercase.                                                                                                                        |
+|                                                                                                                                                                                                                 | `text-transform: capitalize;`     | Capitalizes the first letter of each word.                                                                                                                                  |
+| `line-height`                                                                                                                                                                                                   | `line-height: 1.5;`               | the space between lines will be 1.5 times the font size of the text                                                                                                         |
+| `letter-spacing`                                                                                                                                                                                                | `letter-spacing: 2px;`            | Adjusts the space between characters.                                                                                                                                       |
+| `word-spacing`                                                                                                                                                                                                  | `word-spacing: 3px;`              | Controls the space between words.                                                                                                                                           |
+| `text-shadow`                                                                                                                                                                                                   | `text-shadow: 1px 1px 1px black;` | Adds a shadow to the text.                                                                                                                                                  |
+| `white-space`                                                                                                                                                                                                   | `white-space: nowrap;`            | Controls how whitespace within an element is handled.                                                                                                                       |
+| `overflow`                                                                                                                                                                                                      | `overflow: hidden;`               | Specifies how overflowed content is displayed.                                                                                                                              |
+| `font-family`                                                                                                                                                                                                   | `font-family: Arial, sans-serif;` | Defines the font family for the text. 3 default available, serif(edgey characters) sans-serif (opp. of serif - good readibility), monospace (each character has same width) |
+| Other common available - times new roman, aerial on users computer font-family: "Times New Roman", serif - it basically says - use font family as TNR, if not available on users computer, use default as serif |
 
 External fonts -
 Fonts.google.com
 
 1. Add link tag to <head> before your custom css file links, or else you can use external font if they are loaded after your styles are set
 2. Add styling
-font-family: "lato", "sarabun", sans-serif
+   font-family: "lato", "sarabun", sans-serif
 
 - use font family as lato, if not available (no internet, external site down) use sarabun, if not available use sans-serif
 
 **Block vs Inline elements**
 Block elements have line break, so every block element comes to new line.  
 BLock elements have display: block/none, and inline have display: inline/none  
-```<span> <a> <br> <strong>``` are inline elems  
-```<p>, <div>, <h1-h6>``` are block elems  
+`<span> <a> <br> <strong>` are inline elems  
+`<p>, <div>, <h1-h6>` are block elems
 
 **both inline and block elems have margin, padding and border**
 
-**inline block elements** - display: inline-block  
+**inline block elements** - display: inline-block
 
-- elements appear alongside them on the same line (similar to inline elements)  
+- elements appear alongside them on the same line (similar to inline elements)
 - elements can have dimensions (width and height), margins, paddings, and borders applied to them, (similar to block elements)
 
 **postioning**  
-| Positioning Type | Description                                   | Impact on Viewport                       | Differences from Normal Flow        | When to Use                                             |
+| Positioning Type | Description | Impact on Viewport | Differences from Normal Flow | When to Use |
 |------------------|-----------------------------------------------|-----------------------------------------|------------------------------------|--------------------------------------------------------|
-| `static`         | Default positioning. Follows normal flow.    | No impact.                             | No difference, remains in flow.    | Default. Elements are placed based on document flow.   |
-| `relative`       | Positioned relative to its normal position. | May affect other content, but respects document flow. | Slight shift, respects flow.      | Minor adjustments while keeping document flow.        |
-| `absolute`       | Positioned relative to nearest positioned ancestor (means the nearest ancestor element that also has a position property set to a value other than the default value, if no parent has position property set, then it is relative to the root HTML element). | Can overlap content.                     | Removed from flow, overlaps others. | To create overlays, tooltips, popups within a container. |
-| `fixed`          | Positioned relative to the viewport.         | Stays fixed while scrolling.             | Removed from flow, fixed on screen. | Sticky headers, navigation bars, fixed elements.      |
-| `sticky` `top: 0`         | Toggles between relative and fixed      | Temporarily sticks, then becomes relative. | Switches between `relative` and `fixed`. | Sticky headers, navigation, sidebars, table headers.   |
+| `static` | Default positioning. Follows normal flow. | No impact. | No difference, remains in flow. | Default. Elements are placed based on document flow. |
+| `relative` | Positioned relative to its normal position. | May affect other content, but respects document flow. | Slight shift, respects flow. | Minor adjustments while keeping document flow. |
+| `absolute` | Positioned relative to nearest positioned ancestor (means the nearest ancestor element that also has a position property set to a value other than the default value, if no parent has position property set, then it is relative to the root HTML element). | Can overlap content. | Removed from flow, overlaps others. | To create overlays, tooltips, popups within a container. |
+| `fixed` | Positioned relative to the viewport. | Stays fixed while scrolling. | Removed from flow, fixed on screen. | Sticky headers, navigation bars, fixed elements. |
+| `sticky` `top: 0` | Toggles between relative and fixed | Temporarily sticks, then becomes relative. | Switches between `relative` and `fixed`. | Sticky headers, navigation, sidebars, table headers. |
 
 All postion type should have top, right, bottom, left parameters, or at lest one of them
 Absoulte vs fixed -
-Unlike absolute positioning, a fixed-positioned element remains fixed relative to the viewport. It doesn't move when the page is scrolled.  
+Unlike absolute positioning, a fixed-positioned element remains fixed relative to the viewport. It doesn't move when the page is scrolled.
 
 #### Variables aka custom properties
 
@@ -209,7 +217,7 @@ Fallback values - if --main-color variable is not defined, use the fllback value
 variables can be changes using javascript
 
 ```javascript
-document.documentElement.style.setProperty('--main-color', '#ff5733');
+document.documentElement.style.setProperty("--main-color", "#ff5733");
 ```
 
 **variable scope** -
@@ -224,88 +232,84 @@ document.documentElement.style.setProperty('--main-color', '#ff5733');
 
   background-color: var(--background-color);
 }
-
 ```
 
 #### Specificty
 
 CSS specificity is a set of rules that determine which styles are applied to elements when there are conflicting style declarations.  
 specificty value is a b c d
-where  
+where
 
-| Part | Description                                                         | Example                      |
-|------|---------------------------------------------------------------------|------------------------------|
-| `a`  | The number of inline styles applied directly to elements using the `style` attribute. If none, it's 0. | `style="color: red;"`        |
-| `b`  | The number of ID selectors in the selector. If none, it's 0.        | `#intro`                     |
-| `c`  | The number of class selectors, pseudo-classes, and attribute selectors in the selector. If none, it's 0. | `.text:hover`                |
-| `d`  | The number of element selectors and pseudo-elements in the selector. If none, it's 0. | `p::before`                  |
+| Part | Description                                                                                              | Example               |
+| ---- | -------------------------------------------------------------------------------------------------------- | --------------------- |
+| `a`  | The number of inline styles applied directly to elements using the `style` attribute. If none, it's 0.   | `style="color: red;"` |
+| `b`  | The number of ID selectors in the selector. If none, it's 0.                                             | `#intro`              |
+| `c`  | The number of class selectors, pseudo-classes, and attribute selectors in the selector. If none, it's 0. | `.text:hover`         |
+| `d`  | The number of element selectors and pseudo-elements in the selector. If none, it's 0.                    | `p::before`           |
 
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-<style>
-  /* Specificity: 0,0,1,0 */
-  p {
-    color: red;
-  }
-  /* Specificity: 0,1,0,0 */
-  #intro {
-    color: blue;
-  }
-  /* Specificity: 0,0,1,0 */
-  .text {
-    color: green;
-  }
-  /* Specificity: 0,1,1,0 */
-  p#intro {
-    color: purple;
-  }
-</style>
-</head>
-<body>
-
-<p>This is a normal paragraph.</p>
-<p id="intro">This is a paragraph with an id.</p>
-<p class="text">This is a paragraph with a class.</p>
-<p id="intro" class="text">This is a paragraph with both id and class.</p>
-
-</body>
+  <head>
+    <style>
+      /* Specificity: 0,0,1,0 */
+      p {
+        color: red;
+      }
+      /* Specificity: 0,1,0,0 */
+      #intro {
+        color: blue;
+      }
+      /* Specificity: 0,0,1,0 */
+      .text {
+        color: green;
+      }
+      /* Specificity: 0,1,1,0 */
+      p#intro {
+        color: purple;
+      }
+    </style>
+  </head>
+  <body>
+    <p>This is a normal paragraph.</p>
+    <p id="intro">This is a paragraph with an id.</p>
+    <p class="text">This is a paragraph with a class.</p>
+    <p id="intro" class="text">This is a paragraph with both id and class.</p>
+  </body>
 </html>
-
 ```
 
 Output
-| Selector          | Style Rule          | Specificity  | Applied Color |
+| Selector | Style Rule | Specificity | Applied Color |
 |-------------------|---------------------|--------------|---------------|
-| `p`               | `color: red;`       | 0,0,1,0      | Red           |
-| `#intro`          | `color: blue;`      | 0,1,0,0      | Blue          |
-| `.text`           | `color: green;`     | 0,0,2,0      | Green         |
-| `p#intro`         | `color: purple;`    | 0,1,1,0      | Purple        |
-| `p.text#intro`    | `color: orange;`    | 0,1,2,1      | N/A           |
+| `p` | `color: red;` | 0,0,1,0 | Red |
+| `#intro` | `color: blue;` | 0,1,0,0 | Blue |
+| `.text` | `color: green;` | 0,0,2,0 | Green |
+| `p#intro` | `color: purple;` | 0,1,1,0 | Purple |
+| `p.text#intro` | `color: orange;` | 0,1,2,1 | N/A |
 
 **Note** - p#intro means target p elems where id = intro, similaly p.text#intro = p elem with id = intro and class = text, hence no color is applied
 
 #### CSS naming conventions
 
 **Use BEM (Block-Element-Modifier) standard**  
-| Type      | Description                                                             | Example                     |
+| Type | Description | Example |
 |-----------|-------------------------------------------------------------------------|-----------------------------|
-| Block     | Standalone entity that is meaningful on its own.                       | Header, Container, Checkbox |
-| Element   | A part of a block that has no standalone meaning and is semantically tied to its block. | Menu item, List item, Checkbox caption |
-| Modifier  | A flag on a block or element. Things that change appearance or behavior. | Disabled, Highlighted, Checked, Size big |
+| Block | Standalone entity that is meaningful on its own. | Header, Container, Checkbox |
+| Element | A part of a block that has no standalone meaning and is semantically tied to its block. | Menu item, List item, Checkbox caption |
+| Modifier | A flag on a block or element. Things that change appearance or behavior. | Disabled, Highlighted, Checked, Size big |
 
 **naming syntax**  
-**block-name__elem-name_mod-name_mod-val**  
-notice when to use - and _ and how many times  
+**block-name\_\_elem-name_mod-name_mod-val**  
+notice when to use - and \_ and how many times
 
-#### CSS layouts  
+#### CSS layouts
 
-#### 1. CSS Box Model  
+#### 1. CSS Box Model
 
-describes how elements in a web page are structured and how their dimensions are calculated  
+describes how elements in a web page are structured and how their dimensions are calculated
 
-![alt text](PNG/css-box-model.png "Title")  
+![alt text](PNG/css-box-model.png "Title")
 
 Padding - space between border and content
 Margin - soace between border and other elems
@@ -323,19 +327,19 @@ Set dispaly:flex - to parent div/any other elem to start with flexbox
 
 (add wd/ht to entire container by default all items are stretched to container ht)
 
-| Property         | Values and Description                                     | Possible Values                                   |
-|------------------|------------------------------------------------------------|---------------------------------------------------|
-| `display`        | `flex` (block-level flex container) or `inline-flex` (inline-level flex container). | `flex`, `inline-flex`                           |
-| `flex-direction` | `row` (default), `row-reverse`, `column`, `column-reverse`. | `row`, `row-reverse`, `column`, `column-reverse` |
-| `flex-wrap`      | `nowrap` (default), `wrap`, `wrap-reverse`.                 | `nowrap`, `wrap`, `wrap-reverse`                |
-| `flex-flow`      | Shorthand for `flex-direction` and `flex-wrap`.             | Combinations of `flex-direction` and `flex-wrap` |
-| `justify-content`| Aligns flex items along the main axis.                     | `flex-start`, `flex-end`, `center`, `space-between`, `space-around`, `space-evenly` |
-| `align-items`    | Aligns flex items along the cross axis.                     | `flex-start`, `flex-end`, `center`, `baseline`, `stretch` |
-| `align-content`  | Aligns flex lines when there's extra space along the cross axis (applies when `flex-wrap: wrap`). | `flex-start`, `flex-end`, `center`, `space-between`, `space-around`, `stretch` |
-| `gap`            | Defines the gap between flex items.                         | Any length value or `normal`                  |
+| Property          | Values and Description                                                                            | Possible Values                                                                     |
+| ----------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `display`         | `flex` (block-level flex container) or `inline-flex` (inline-level flex container).               | `flex`, `inline-flex`                                                               |
+| `flex-direction`  | `row` (default), `row-reverse`, `column`, `column-reverse`.                                       | `row`, `row-reverse`, `column`, `column-reverse`                                    |
+| `flex-wrap`       | `nowrap` (default), `wrap`, `wrap-reverse`.                                                       | `nowrap`, `wrap`, `wrap-reverse`                                                    |
+| `flex-flow`       | Shorthand for `flex-direction` and `flex-wrap`.                                                   | Combinations of `flex-direction` and `flex-wrap`                                    |
+| `justify-content` | Aligns flex items along the main axis.                                                            | `flex-start`, `flex-end`, `center`, `space-between`, `space-around`, `space-evenly` |
+| `align-items`     | Aligns flex items along the cross axis.                                                           | `flex-start`, `flex-end`, `center`, `baseline`, `stretch`                           |
+| `align-content`   | Aligns flex lines when there's extra space along the cross axis (applies when `flex-wrap: wrap`). | `flex-start`, `flex-end`, `center`, `space-between`, `space-around`, `stretch`      |
+| `gap`             | Defines the gap between flex items.                                                               | Any length value or `normal`                                                        |
 
 Tip - to align flex items exactly at the center of div
-justify-content: center - horizontal center align-items:  center - vertical center  
+justify-content: center - horizontal center align-items:  center - vertical center
 
 So basically
 .abc {
@@ -344,80 +348,80 @@ display: flex, justify-content and align-items to center
 
 #### 2. Items properties
 
-| Property         | Description                                            | Possible Values                        |
-|------------------|--------------------------------------------------------|----------------------------------------|
-| `order`          | Specifies the order of the flex item.                 | Integer (default: 0)                   |
-| `flex-grow`      | Determines how much the item grows relative to others. | Number (default: 0)                    |
-| `flex-shrink`    | Determines how much the item shrinks relative to others. | Number (default: 1)                  |
-| `flex-basis`     | Specifies the initial size of the item.                | Length value, auto (default: auto)     |
-| `flex`           | Shorthand for `flex-grow`, `flex-shrink`, and `flex-basis`. | Combination of values (default: 0 1 auto) |
-| `align-self`     | Overrides the alignment set by the container.         | `auto`, `flex-start`, `flex-end`, `center`, `baseline`, `stretch` |
+| Property      | Description                                                 | Possible Values                                                   |
+| ------------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
+| `order`       | Specifies the order of the flex item.                       | Integer (default: 0)                                              |
+| `flex-grow`   | Determines how much the item grows relative to others.      | Number (default: 0)                                               |
+| `flex-shrink` | Determines how much the item shrinks relative to others.    | Number (default: 1)                                               |
+| `flex-basis`  | Specifies the initial size of the item.                     | Length value, auto (default: auto)                                |
+| `flex`        | Shorthand for `flex-grow`, `flex-shrink`, and `flex-basis`. | Combination of values (default: 0 1 auto)                         |
+| `align-self`  | Overrides the alignment set by the container.               | `auto`, `flex-start`, `flex-end`, `center`, `baseline`, `stretch` |
 
 #### 3. CSS GRID
 
 Grid vs flexbox
-| Use Case                | Flexbox | CSS Grid |
+| Use Case | Flexbox | CSS Grid |
 |-------------------------|---------|----------|
-| Flexibility            | Yes     | Yes      |
-| Alignment and Ordering | Yes     | Yes      |
-| Simple UI Components   | Yes     | No       |
-| Fixed-Sized Layouts    | Yes     | Yes      |
-| Complex Alignment      | Yes     | Yes      |
-| Uneven Space            | Yes     | No       |
-| One-Dimensional Layouts | Yes     | No       |
-| Two-Dimensional Layouts | No      | Yes      |
-| Regular Grids           | No      | Yes      |
-| Grid Tracks Control    | No      | Yes      |
+| Flexibility | Yes | Yes |
+| Alignment and Ordering | Yes | Yes |
+| Simple UI Components | Yes | No |
+| Fixed-Sized Layouts | Yes | Yes |
+| Complex Alignment | Yes | Yes |
+| Uneven Space | Yes | No |
+| One-Dimensional Layouts | Yes | No |
+| Two-Dimensional Layouts | No | Yes |
+| Regular Grids | No | Yes |
+| Grid Tracks Control | No | Yes |
 
 ### Grid -
 
 ### 1. Container properties
 
 Container (add wd/ht to entire container, by default all items are stretched to container ht)
-| Property             | Values and Description                                        | Possible Values and Examples          |
+| Property | Values and Description | Possible Values and Examples |
 |----------------------|---------------------------------------------------------------|--------------------------------------|
-| `display`            | `grid` (creates a block-level grid container) or `inline-grid` (creates an inline-level grid container). | `grid`, `inline-grid`                |
-| `grid-template-columns` | Defines the columns of the grid. Can use fixed lengths, flexible units, or the `fr` unit for fractions of available space. | `100px 1fr 2fr`, `repeat(3, 1fr)`   |
-| `grid-template-rows` | Defines the rows of the grid. Similar to `grid-template-columns`, but for rows. | `200px auto`, `repeat(2, 1fr)`       |
+| `display` | `grid` (creates a block-level grid container) or `inline-grid` (creates an inline-level grid container). | `grid`, `inline-grid` |
+| `grid-template-columns` | Defines the columns of the grid. Can use fixed lengths, flexible units, or the `fr` unit for fractions of available space. | `100px 1fr 2fr`, `repeat(3, 1fr)` |
+| `grid-template-rows` | Defines the rows of the grid. Similar to `grid-template-columns`, but for rows. | `200px auto`, `repeat(2, 1fr)` |
 | `grid-template-areas` | The `grid-template-area` property in CSS Grid Layout is used to visually define a grid template by assigning names to grid cells or areas within a grid container. It allows you to create a layout using named areas, simplifying complex grid structures. By specifying the arrangement of areas in the `grid-template-areas` property and assigning those area names to grid items using `grid-area`, you can manage layouts more intuitively and efficiently. This is especially helpful for responsive designs where grid areas might need to adapt based on screen sizes. See example below | `"header header header" "main . sidebar" "footer footer footer"` |
-| `grid-template`      | Shorthand for defining columns, rows, and areas in a single property. | See `grid-template-columns`, `grid-template-rows`, and `grid-template-areas` values. |
-| `grid-column-gap`    | Defines the size of gaps between columns.                     | Length values (`10px`, `1rem`)      |
-| `grid-row-gap`       | Defines the size of gaps between rows.                        | Length values (`10px`, `1rem`)      |
-| `grid-gap`           | Shorthand for `grid-row-gap` and `grid-column-gap`.           | Length values (`10px 20px`)         |
-| `grid-auto-columns`  | Defines the size of columns that aren't explicitly defined. Explitily meaning when there are more grid items than explicitly defined columns in gird-template-columns property.    | Length values, `minmax()`, `auto`   |
-| `grid-auto-rows`     | Defines the size of rows that aren't explicitly defined.       | Length values, `minmax()`, `auto`   |
-| `grid-auto-flow`     | Controls how auto-placed items are positioned.                | `row`, `column`, `dense`, `row dense`, `column dense` |
-| `justify-items`      | Aligns grid items along the inline (horizontal) axis. Aligns grid items at the center of their grid cells if justify-items: center         | `start`, `end`, `center`, `stretch` |
-| `align-items`        | Aligns grid items along the block (vertical) axis.            | `start`, `end`, `center`, `stretch` |
-| `place-items`        | Shorthand for `align-items` and `justify-items`.             | `start end`, `center stretch`       |
+| `grid-template` | Shorthand for defining columns, rows, and areas in a single property. | See `grid-template-columns`, `grid-template-rows`, and `grid-template-areas` values. |
+| `grid-column-gap` | Defines the size of gaps between columns. | Length values (`10px`, `1rem`) |
+| `grid-row-gap` | Defines the size of gaps between rows. | Length values (`10px`, `1rem`) |
+| `grid-gap` | Shorthand for `grid-row-gap` and `grid-column-gap`. | Length values (`10px 20px`) |
+| `grid-auto-columns` | Defines the size of columns that aren't explicitly defined. Explitily meaning when there are more grid items than explicitly defined columns in gird-template-columns property. | Length values, `minmax()`, `auto` |
+| `grid-auto-rows` | Defines the size of rows that aren't explicitly defined. | Length values, `minmax()`, `auto` |
+| `grid-auto-flow` | Controls how auto-placed items are positioned. | `row`, `column`, `dense`, `row dense`, `column dense` |
+| `justify-items` | Aligns grid items along the inline (horizontal) axis. Aligns grid items at the center of their grid cells if justify-items: center | `start`, `end`, `center`, `stretch` |
+| `align-items` | Aligns grid items along the block (vertical) axis. | `start`, `end`, `center`, `stretch` |
+| `place-items` | Shorthand for `align-items` and `justify-items`. | `start end`, `center stretch` |
 
 grid-template-area example
 
 ```html
--- Note we need to use grid-template-columns and gird-template-rows property as well
--- below creates a 2 cols 3 rows 2 X 3 layout with named areas
+-- Note we need to use grid-template-columns and gird-template-rows property as
+well -- below creates a 2 cols 3 rows 2 X 3 layout with named areas
 <style>
- .grid-container {
-  display: grid;
-  grid-template-areas:
-    "header header"
-    "sidebar main"
-    "footer footer";
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 500px 1fr 1fr;
-}
-.header {
-  grid-area: header;
-}
-.sidebar {
-  grid-area: sidebar;
-}
-.main {
-  grid-area: main;
-}
-.footer {
-  grid-area: footer;
-}
+  .grid-container {
+    display: grid;
+    grid-template-areas:
+      "header header"
+      "sidebar main"
+      "footer footer";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 500px 1fr 1fr;
+  }
+  .header {
+    grid-area: header;
+  }
+  .sidebar {
+    grid-area: sidebar;
+  }
+  .main {
+    grid-area: main;
+  }
+  .footer {
+    grid-area: footer;
+  }
 </style>
 <body>
   <div class="grid-container">
@@ -426,86 +430,116 @@ grid-template-area example
     <main class="main">Main Content</main>
     <footer class="footer">Footer</footer>
   </div>
-  
 </body>
-
 ```
 
 ### 2. Item properties
 
-| Property Name     | Description                                          | CSS Syntax and Possible Values             |
-|-------------------|------------------------------------------------------|--------------------------------------------|
-| `grid-column`     | Placement along columns, from start to end lines.   | `grid-column: <start> / <end>;`<br>e.g., `grid-column: 2 / 4;` |
-| `grid-row`        | Placement along rows, from start to end lines.      | `grid-row: <start> / <end>;`<br>e.g., `grid-row: 1 / 3;`    |
-| `grid-area`       | Assign to named area or use row/column lines. (see grid-templat-area above)      | `grid-area: <row-start> / <column-start> / <row-end> / <column-end>;`<br>e.g., `grid-area: 2 / 1 / 4 / 3;` |
-| `grid-column-start` | Starting column line for item's placement.       | `grid-column-start: <line>;`<br>e.g., `grid-column-start: 2;` |
-| `grid-column-end`   | Ending column line for item's placement.         | `grid-column-end: <line>;`<br>e.g., `grid-column-end: 4;`   |
-| `grid-row-start`    | Starting row line for item's placement.          | `grid-row-start: <line>;`<br>e.g., `grid-row-start: 1;`      |
-| `grid-row-end`      | Ending row line for item's placement.            | `grid-row-end: <line>;`<br>e.g., `grid-row-end: 3;`        |
-| `justify-self`      | Alignment within grid cell along inline axis.   | `justify-self: start | end | center | stretch;`<br>e.g.,`justify-self: center;` |
-| `align-self`        | Alignment within grid cell along block axis.    | `align-self: start | end | center | stretch;`<br>e.g.,`align-self: stretch;` |
+| Property Name       | Description                                                                 | CSS Syntax and Possible Values                                                                             |
+| ------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --- | ------ | ----------------------------------------- |
+| `grid-column`       | Placement along columns, from start to end lines.                           | `grid-column: <start> / <end>;`<br>e.g., `grid-column: 2 / 4;`                                             |
+| `grid-row`          | Placement along rows, from start to end lines.                              | `grid-row: <start> / <end>;`<br>e.g., `grid-row: 1 / 3;`                                                   |
+| `grid-area`         | Assign to named area or use row/column lines. (see grid-templat-area above) | `grid-area: <row-start> / <column-start> / <row-end> / <column-end>;`<br>e.g., `grid-area: 2 / 1 / 4 / 3;` |
+| `grid-column-start` | Starting column line for item's placement.                                  | `grid-column-start: <line>;`<br>e.g., `grid-column-start: 2;`                                              |
+| `grid-column-end`   | Ending column line for item's placement.                                    | `grid-column-end: <line>;`<br>e.g., `grid-column-end: 4;`                                                  |
+| `grid-row-start`    | Starting row line for item's placement.                                     | `grid-row-start: <line>;`<br>e.g., `grid-row-start: 1;`                                                    |
+| `grid-row-end`      | Ending row line for item's placement.                                       | `grid-row-end: <line>;`<br>e.g., `grid-row-end: 3;`                                                        |
+| `justify-self`      | Alignment within grid cell along inline axis.                               | `justify-self: start                                                                                       | end | center | stretch;`<br>e.g.,`justify-self: center;` |
+| `align-self`        | Alignment within grid cell along block axis.                                | `align-self: start                                                                                         | end | center | stretch;`<br>e.g.,`align-self: stretch;`  |
 
-#### Media queries  
+#### Media queries
 
 For media queries to work, we need to add this link in html  
-```<meta name="viewport" content="width=device-width,initial-scale=1">```
+`<meta name="viewport" content="width=device-width,initial-scale=1">`
 
 The @media rule, introduced in CSS2, made it possible to define different style rules for different media types (like for computer screen, tv, mobile).  
-CSS 3 introduces Media Queries  
+CSS 3 introduces Media Queries
 
-Media queries in CSS3 extended the CSS2 media types idea: Instead of looking for a type of device, they look at the capability of the device such as width  and height, orientation and resolution  
+Media queries in CSS3 extended the CSS2 media types idea: Instead of looking for a type of device, they look at the capability of the device such as width and height, orientation and resolution
 
-| Property Name     | Description                                     | Possible Values                |
-|-------------------|-------------------------------------------------|--------------------------------|
-| `@media`          | Specifies the type of media to apply styles to. | `screen`, `print`, `all`, etc. |
-| `and`             | Combines media features.                        |                                |
-| `<condition>`     | Defines the conditions for applying styles.     | e.g., `(max-width: 768px)`    |
+| Property Name | Description                                     | Possible Values                |
+| ------------- | ----------------------------------------------- | ------------------------------ |
+| `@media`      | Specifies the type of media to apply styles to. | `screen`, `print`, `all`, etc. |
+| `and`         | Combines media features.                        |                                |
+| `<condition>` | Defines the conditions for applying styles.     | e.g., `(max-width: 768px)`     |
 
 ```css
-e.g. 1 - it will execute when screen size is less than 500px
-@media screen and (max-width: 500px) {
- body {
-  color: red;
- }
-} 
-screen & and words can be omitted fomr above as all is default
-
-e.g. 2
-@media (orientation: landscape) {
- body {
-  color: blue;
- }
+e.g.
+  1
+  -
+  it
+  will
+  execute
+  when
+  screen
+  size
+  is
+  less
+  than
+  500px
+  @media
+  screen
+  and
+  (max-width: 500px) {
+  body {
+    color: red;
+  }
 }
-use landscape/portrait
-
-e.g. combinations
-@media (orientation: portrait) and (max-width: 500px) {
- body {
-  color: red
- }
+screen
+  &
+  and
+  words
+  can
+  be
+  omitted
+  fomr
+  above
+  as
+  all
+  is
+  default
+  e.g.
+  2
+  @media
+  (orientation: landscape) {
+  body {
+    color: blue;
+  }
+}
+use
+  landscape/portrait
+  e.g.
+  combinations
+  @media
+  (orientation: portrait)
+  and
+  (max-width: 500px) {
+  body {
+    color: red;
+  }
 }
 // to use or -  replace and with ,
 
 // tu use between
-@media screen and (max-width: 500px) and (min-width: 400px){
- body {
-  color: red;
- }
-} 
+@media screen and (max-width: 500px) and (min-width: 400px) {
+  body {
+    color: red;
+  }
+}
 ```
 
 #### CSS Transitions
 
 1. Transition
-Transition is applied on the base selector, and which property to transition is applied on the pseudo selector
+   Transition is applied on the base selector, and which property to transition is applied on the pseudo selector
 
-| Property Name             | Description                                          | Possible Values                 |
-|---------------------------|------------------------------------------------------|---------------------------------|
-| `transition`              | Specifies properties to transition and their timing. | `property duration timing delay` |
-| `transition-property`     | Specifies the properties to transition.             | `width`, `opacity`, `color`      |
-| `transition-duration`     | Specifies the duration of the transition.           | `0.3s`, `1s`, `300ms`            |
-| `transition-timing-function` | Specifies the easing function for the transition. | `ease`, `linear`, `ease-in-out` |
-| `transition-delay`        | Specifies a delay before the transition starts.     | `0.2s`, `500ms`, `1s`            |
+| Property Name                | Description                                          | Possible Values                  |
+| ---------------------------- | ---------------------------------------------------- | -------------------------------- |
+| `transition`                 | Specifies properties to transition and their timing. | `property duration timing delay` |
+| `transition-property`        | Specifies the properties to transition.              | `width`, `opacity`, `color`      |
+| `transition-duration`        | Specifies the duration of the transition.            | `0.3s`, `1s`, `300ms`            |
+| `transition-timing-function` | Specifies the easing function for the transition.    | `ease`, `linear`, `ease-in-out`  |
+| `transition-delay`           | Specifies a delay before the transition starts.      | `0.2s`, `500ms`, `1s`            |
 
 ```html
 <!DOCTYPE html>
@@ -542,7 +576,7 @@ selector {
 
 transfrom: rotate(+-deg)
 transfrom: scale(2.5) maked it 2.5 times bigger - makes sense to use on pseudo selectors
-transform: skew(20deg, -10deg) // skew (<x-angle>, <y-angle>) -  tilts the element either horizontally or vertically or both
+transform: skew(20deg, -10deg) // skew (<x-angle>, <y-angle>) - tilts the element either horizontally or vertically or both
 
 #### Css animation
 
