@@ -136,7 +136,14 @@ Here Page speed insights show you which part is taking time and based on time ta
 Again we can use lighthouse in chrome dev tools to generate accessibility report.  
 `press ctrl + shift +c` and then whenever you hover over a html tag on the oage, it will give you accessibility details for that page
 
-**3 Levels - A (not accessible), AA (accessible), AAA (good to have)**
+**3 Levels - A (very less accessible), AA (accessible), AAA (good to have)**
+
+Lighthouse scores -
+
+- 100% - AAA
+- 80-100% - AA
+- 60-80% - A (needs attentition)
+- less than 60% - needs attentiion
 
 ### 3 things to look into to improve accessibility of a website
 
