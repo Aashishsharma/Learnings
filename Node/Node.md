@@ -1112,3 +1112,31 @@ type Product = z.infer<typeof productSchema>;
 // hence not Zod becomes a single source of truth
 
 ```
+
+**Common Zod types** -
+
+| Zod Type      | Description with Chaining Example                                                                      |
+| ------------- | ------------------------------------------------------------------------------------------------------ |
+| `z.string()`  | `z.string().min(2, "Must be at least 2 characters")` - Validates string length.                        |
+| `z.number()`  | `z.number().int().positive("Must be a positive integer")` - Validates numbers.                         |
+| `z.boolean()` | `z.boolean().optional()` - Validates boolean values, allowing it to be optional.                       |
+| `z.object()`  | `z.object({ name: z.string(), age: z.number().optional() })` - Validates objects with key-value pairs. |
+| `z.array()`   | `z.array(z.string()).nonempty("Array cannot be empty")` - Validates non-empty arrays of strings.       |
+
+**Applying custom validation logic using refine() method** -
+
+```javascript
+const passwordSchema = z
+  .object({
+    password: z.string().min(6, "Password must be at least 6 characters long"),
+    confirmPassword: z
+      .string()
+      .min(6, "Confirm Password must be at least 6 characters long"),
+  })
+  .refine(
+    (data) => data.password === data.confirmPassword, // Custom validation: passwords must match
+    {
+      message: "Passwords do not match", // Error message
+    }
+  );
+```
