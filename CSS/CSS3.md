@@ -617,3 +617,32 @@ transform: skew(20deg, -10deg) // skew (<x-angle>, <y-angle>) - tilts the elemen
 2. Inline critical styles directly into the HTML to render the essential content faster.
 3. Externalize non-critical styles to load them asynchronously. using the defer attribute
 4. Use <link rel="preload"> to preload critical stylesheets, fonts, or other resources.
+5. Use new properties - `content-visibility and  contain-intrinsic-size`
+
+```css
+.lazy-load {
+  content-visibility: auto;
+  /*the element is not painted (including layout and painting) 
+  until it is comes closer to the viewport on scroll*/
+  contain-intrinsic-size: 1px 200px; /* Width: 1px, Height: 5000px */
+  /* some randon value in width and height provided
+  1px width - by default element with these content properites are block
+  hence each elem is on nee line
+  height 5000px - this will shift the element below the fold and hence browser won't paint this elemm
+  browser will only paint when user scrolls to this position
+  Note - actal height of the elem is not changed to 5000px, this is just a placholder value
+  for the browser, when browser will paint this elem, it will pick up it's actual height*/
+}
+
+/*
+other values - 
+content-visibility: auto - expalained above
+| visible (no effect of this prop) 
+| hidden - elem always hidden but available when we do Cntrl + F (i.e, elem is browser accessible)
+
+
+IMP NOTE - 
+Although if the elemnts are not yet painted, the elements can still be searched with Ctrl + F
+unlike endless scrolls JS techniques, where if elem not available then not found in Ctrl + F
+*/
+```

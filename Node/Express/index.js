@@ -51,6 +51,7 @@ app.get("/handlebars", (req, res) => {
 app.use("/api/members", require("./routes/api/member"));
 
 app.get("/", (req, res) => {
+  console.log("endpoint hit");
   //res.send('<h1>hello world123</h1>'); //normal test r html can be sent via this method
   // res.render() for templeting engines like pug/ejs, we can pass variables to html using this method
   // res.json() to send json, it automatically converst objects to json

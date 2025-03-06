@@ -880,10 +880,48 @@ Zod - see Zod usage at the bottom
 
 ## Nodejs Performance
 
-### 1. Profile Nodejs app to gather performance report
+1. Need to avoid memory leak
 
-- nodejs inspect
-- performance observer
+- Memory leak happens when the object is still in memeory even when we didn't wanted it to be in the memory
+- if you attach objects to global variable, it won't be garbage collected (see global.heapArr in --inspect code below)
+- when short lived objects are attached to long lived object (assigning locally created obj to global variable)
+- not closing connections on error / exception
+- obj getting in closure unintentionally
+- not clearing intervals of setTImeout / setInterval
+- use WeakMap and WeakSet to remove obj references
+
+**Analyze memory and CPU utilization (2 ways)**
+
+- Memory utilization - (using --inspect)
+- API profiling = (using --perf)
+
+### 1. node --inspect app.js
+
+- run above command
+- in chrome open node devtools
+- before httint app endpoint, take the snapshot
+- hit your endpoint, again take the snapshot and comare the 2 snapshots
+- you will see varibales created by you in the memory. along with the size its taking
+
+```javascript
+// need to create a global variable to see it in memory
+
+global.heapArr = [];
+router.get("/", (req, res) => {
+  console.log("members api");
+  for (let i = 0; i < 1000; i++) {
+    global.heapArr.push({ name: "ASHISHS", id: i });
+  }
+  res.json({ members: global.heapArr });
+});
+```
+
+![alt text](PNG/Capture4.PNG "Title")
+
+- if you keep on hetting the ednpoint 20-30 times
+- you will see % of memory this variables takes increases
+
+### 2. performance observer (--perf)
 
 ### 2. Use cluster module / pm2 / libuv increase thread pool size
 
