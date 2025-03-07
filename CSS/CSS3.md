@@ -16,6 +16,46 @@ Importing css in a css, possible only in css3
 ![alt text](PNG/selectors3.PNG "Title")  
 ![alt text](PNG/selectors4.PNG "Title")
 
+#### Pseudo elements
+
+- majorly only 2 - before and after
+- as opposed to names, the conent is added inside the elements and not before / after
+- hence self closing elems like input, img cannot have pseudo elems
+- usecase - to add asterik(\*) besides form labels, to create tooltips
+
+```css
+/*1. add * when input elems have required attribute*/
+
+/*html - 
+<label class="required">Enter Name</label><input required type="text" />
+*/
+.required::after {
+  content: "*";
+  color: red;
+}
+
+/*html - 
+<div data-tooltip="I am a div">Tooltip on me</div>
+*/
+
+[data-tooltip] {
+  /* need to make parent position relative, so that we can apply absoulte to child elem */
+  position: relative;
+  cursor: pointer;
+}
+
+[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  /* attr function in css retireves the value of the specified attribute */
+  position: absolute;
+  top: 100%;
+  background-color: red;
+  margin-top: 5px;
+  display: block;
+  width: 100px;
+}
+```
+
 ```html
 <!-- Challenge 1 -->
 <div class="table">
