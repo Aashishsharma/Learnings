@@ -11,7 +11,7 @@ Importing css in a css, possible only in css3
 
 ### ALL CSS Selectors
 
-![alt text](PNG/selectors1.png "Title")
+![alt text](PNG/selectors1.PNG "Title")
 
 ```html
 <!-- Challenge 1 -->
