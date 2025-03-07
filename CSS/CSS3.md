@@ -11,7 +11,10 @@ Importing css in a css, possible only in css3
 
 ### ALL CSS Selectors
 
-![alt text](PNG/selectors1.PNG "Title")
+![alt text](PNG/selectors1.PNG "Title")  
+![alt text](PNG/selectors2.PNG "Title")  
+![alt text](PNG/selectors3.PNG "Title")  
+![alt text](PNG/selectors4.PNG "Title")
 
 ```html
 <!-- Challenge 1 -->
@@ -291,7 +294,7 @@ notice when to use - and \_ and how many times
 
 describes how elements in a web page are structured and how their dimensions are calculated
 
-![alt text](PNG/css-box-model.png "Title")
+![alt text](PNG/css-box-model.PNG "Title")
 
 Padding - space between border and content
 Margin - soace between border and other elems
