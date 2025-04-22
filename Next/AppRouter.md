@@ -23,6 +23,10 @@ export default function DashboardLayout({
 }
 ```
 
+**Mutliple root layouts**
+
+![alt text](image.png)
+
 ### 3. template.tsx
 
 **Template vs Layout**
