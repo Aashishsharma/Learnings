@@ -134,6 +134,23 @@ fetch().then().catch((err) => throw new Error("error fetching user data"))
 {error.message}
 ```
 
+This error.tsx file won't work if the error us thrown from layout / template files, because of how the comp-hierarchy works.
+
+#### Component hierarchy
+
+![alt text](PNG/comp-hierarchy.png "Title")
+
+Now since error.tsx uses ErrorBoundary, and error file is renderd inside layout / template file, error.tsx won't work.
+
+**Solution - move error.tsx file at higher level**.
+
+Then what if error is thrown in the root layout / template files?
+
+**Solution - use global-error.tsx file**
+
+1. global-error.tsx - works only in production mode and not in development mode
+2. since global-error will replace entire root layout / template code, global-error.tsx file needs to have html and body tags inside it, bcause the root layout file will always have html, head and body tags
+
 ### 7. route.ts
 
 Used to handle API requests and return data (e.g., JSON), status codes, headers, etc. (see Route-handler.md file)
@@ -194,10 +211,6 @@ default.tsx file server as fallback to render the content, when framework cannon
 ### 10. instrumentation.ts (To-Do)
 
 The instrumentation.js|ts file is used to integrate observability tools into your application, allowing you to track the performance and behavior, and to debug issues in production.
-
-### Component hierarchy
-
-![alt text](PNG/comp-hierarchy.png "Title")
 
 ## Dynamic routes
 
