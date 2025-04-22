@@ -191,7 +191,7 @@ The instrumentation.js|ts file is used to integrate observability tools into you
 
 ### Component hierarchy
 
-![alt text](PNG/comp-hierarchy.PNG "Title")
+![alt text](PNG/comp-hierarchy.png "Title")
 
 ## Dynamic routes
 
