@@ -114,7 +114,7 @@ export default function Error({
 
   return (
     <div>
-      <h2>Something went wrong!</h2>
+      <h2>Something went wrong! {error.message}</h2>
       <button
         onClick={
           // Attempt to recover by trying to re-render the segment
@@ -126,6 +126,12 @@ export default function Error({
     </div>
   );
 }
+
+// in some server component we can throw error and the closes error.tsx file would be shown
+
+fetch().then().catch((err) => throw new Error("error fetching user data"))
+// now in error.tsx file the above message can me accessed via
+{error.message}
 ```
 
 ### 7. route.ts
