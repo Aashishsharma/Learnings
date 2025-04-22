@@ -25,7 +25,16 @@ export default function DashboardLayout({
 
 **Mutliple root layouts**
 
-![alt text](image.png)
+![alt text](PNG/image.png)
+
+Usecase - for login and register show different navbar, for behind logged in pages show a different navbar
+
+Analyse the folder structure -
+We don't have root level layout / page.tsx, but we have route groups, so page.tsx and layout.tsx from (marketing) folder will be root layout / page.tsx becuase of (), and we dont have page.tsx in (auth) folder.
+
+Now when we go to /login or / register, the page.tsx within those folders will execute, and the layout.tsx from (auth) folder will run
+
+This is not possible if we have layout.tsx at root level, because if we have separate navbar in auth, the nested layouts are merged and not overridden. **Same case with metadata objs, they are merged and not overridden**
 
 ### 3. template.tsx
 
@@ -190,6 +199,7 @@ The instrumentation.js|ts file is used to integrate observability tools into you
 2. Inside this folder, create page.tsx file, which can handle route params
 
 ```typescript
+// NEXT-14
 // products/[productId]/page.tsx
 export default function PageDetails({ params }) {
   return <p>Prodct details - {params.productId}</p>;
@@ -197,9 +207,45 @@ export default function PageDetails({ params }) {
 }
 // example.com/products/12 - will return Product details -12
 
-// we can alos have nested dynamic routes
+// we can also have nested dynamic routes
 // example.com/products/12/reviews/45
 // here inside reviews/[reviewId]/page.tsx will have access to both path params (productId and reviewId)
+
+// NEXT-15 - we need to await for params
+export default async function PageDetails({ params }: Promise<productId: string>) {
+  const productId = (await params).productId
+  return <p>Prodct details - {productId}</p>;
+}
+
+// There are 2 types of props available inside page.tsx / layout.tsx
+// 1. params - gives the route parameters /product/123 - returns 123
+// 2. searchParams - gives query parameters /products/123?lang=en - will give lang=en
+
+export default async function PageDetails({ params, searchParams }: {
+  params: Promise<productId: string>,
+  searchParams: Promise<lang?: "en" | "fr">}) {
+  const productId = (await params).productId;
+  const lang = (await searchParams).lang;
+
+  // or use destructuring
+  const {productId} = await params;
+  const {lang="en"} = await searchParams;
+  return <p>Prodct details - {productId}</p>;
+}
+
+// Another imp point - async functional components only work with server components
+// you cannot use async keyword for functions in client components
+// to use params / searchParams in client components use the "use" hook
+import {use} from "react";
+// use hook allows you to unwrap promises
+// useful to simplify async logic without needing useEffect or useState
+export default function PageDetails({ params, searchParams }: {
+  params: Promise<productId: string>,
+  searchParams: Promise<lang?: "en" | "fr">}) {
+  const productId = use(params).productId;
+  const lang = use(searchParams).lang;
+  }
+
 ```
 
 **catch-all segment**
@@ -257,20 +303,42 @@ export const generateMetadata = ({ params }): Metadata => {
     title: `Product ${params.productId}`,
   };
 };
+
+// in nested metadata, the metadata obj is merged, if both metadata objs have few properties same, then inner most metadata prop gets precedence
+
+// Metadata only works in server components,
+// for client components, move metadata obj above client components
 ```
 
 ### Navigation
 
 ```javascript
+// 1. On user link click - <Link></Link>
+// 2. programatically navigating in client components - useRouter from next/navigation
+// 3. programatically navigating in server components components - redirect from next/navigation
+
+// 1. On user link click - <Link></Link>
 import Link from "next/link";
+<Link href="/about/as">as</Link>;
+// for active links, use hook - const pathName = usePathName()
+const isActive = pathName.startsWith("about")
+<Link className={isActive? 'a' : 'b'} href="/about/as">as</Link>;
 
-<Link href={"/about/as"}>as</Link>;
-
-// programatically navigating
+// 2. programatically navigating in client components - useRouter from next/navigation
 // this cannot be a server component
 import { useRouter } from "next/navigation";
 const router = useRouter();
 router.push("/about");
+
+// 3. programatically navigating in server components components - redirect from next/navigation
+import { redirect } from 'next/navigation';
+export default function Page() {
+  const isLoggedIn = readFromCookies
+  if (!authToken) {
+    redirect('/login'); // Redirects immediately
+  }
+  return <div>Welcome to your dashboard</div>;
+}
 ```
 
 ### Parallel routes (render multiple routes in parallel, for complex dashboards)
