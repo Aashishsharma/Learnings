@@ -382,6 +382,17 @@ Now the content returned from each of the page.tsx files from the slot folder is
 
 ![alt text](PNG/Capture5.PNG "Title")
 
+**Hence we can render** -
+
+```jsx
+return (
+  <>
+    <div>{users}</div>
+    <div>{notifications}</div>
+  </>
+);
+```
+
 Then why to use **parallel routes**
 
 1. It gives independent routing for each slot  
