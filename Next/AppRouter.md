@@ -64,6 +64,18 @@ function Loading() {
 export default Loading;
 ```
 
+**loading.tsx vs using Suspense in Next.js**
+
+```javascript
+<Suspense fallback={<LoadingSkeleton />}>
+  <SomeComponentThatTakesTimeToLoad />
+</Suspense>
+
+// so whether to use Suspense or loading.tsx? to shpow fallback UI?
+// 1. loading.tsx is applied only at page-level or layout-level loading screens.
+// 2. Suspense can be applied for showing fallback for components withing the same route (aka - fine-grained control) over  (e.g. charts, feeds, widgets).
+```
+
 ### 5. not-found.tsx
 
 In root app folder, it will work as global 404  
@@ -379,10 +391,8 @@ The folder name should start with @, these folders are called as slots
 ![alt text](PNG/Capture4.PNG "Title")
 
 Now the content returned from each of the page.tsx files from the slot folder is available as props in the layout file
-
+**The slots are paased as props to the layout file along with other childrens** -
 ![alt text](PNG/Capture5.PNG "Title")
-
-**Hence we can render** -
 
 ```jsx
 return (

@@ -1,9 +1,9 @@
 # Next.js (Fullstack React.js framework)
 
-## TODO
+## Next 14 vs Next 15
 
-1. Optimization - Images / Videos
-2. Caching summary in nextjs
+1. By default all server components are rendered statically in Next14 do make them render dynamically, we need to use export const dynamic = 'force-dynamic'
+1. By default all server components are rendered dynamically in Next15 do make them render statically, we need to use export const dynamic = 'force-static'
 
 ## 1. SPA (Client Side Rendering)
 
@@ -190,6 +190,12 @@ export function ClientComponent({ children }) {
 2. SSR - HTML generated on server, later js sent to client, once js is available hydration starts and UI becomes interactive (inital page load solved, but UI non-interactive)
 3. Suspense SSR - HTML streaming and does selective hydration (initial page load probelm + UI non-interactive problem solved, but cannot reduce bundle size)
 4. RSC - server component never sent to client reducing bundle size (all above problems solved, but it cannot be interactve)
+
+### SSR vs RSC
+
+1. In SSR HTML if generated at server, and HTML along with .js files is sent to the client
+2. In RSC, JS is not sent to the client, JS is executed at server and HTML is generated once JS code is executed on server and then final HTML is sent to the client without JS.
+3. Hence, JS code in SSR can have event handlers, JS code in RSC soesn't allow browser specific APIs
 
 **Two other parts in SSR**
 
