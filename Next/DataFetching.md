@@ -1,14 +1,15 @@
 # Data Fetching
 
-Data fecthing would include
-
-1. Making external API calls
-2. Fetching data from DB
-
 Datafetching in Next can be done in 2 ways
 
 1. Data fetching in server components (External API call, or DB query)
 2. Data fecthing in client components (External API call, or call to route handler to get data from DB)
+
+**Preferred to do data fetching in server components, by why?** -
+
+1. Direct DB calls in server components, no need to send request / data over the network
+2. Server can sit closer to the data soruces, as opposed to client browsers sitting remote
+3. Reduced client-side bundles, since data is fetched in server and html is send to client, no need to send JS to client which will then make API call, and then JS will update state on the client side
 
 ## 1. Data Fetching in server components
 
