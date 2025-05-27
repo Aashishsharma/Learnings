@@ -18,7 +18,7 @@ When to use server components for data fetching
 1. Direct DB calls
 2. Leveraging high computational powers for rendering server components and only sending generated HTML of server component to the client
 
-No need to use useEffect, useState in server compeonts to fecth data, just need to make the component async
+No need to use useEffect, useState in server compeonts to fecth data, just need to make the component async 
 
 ```javascript
 export async function ServerComponent() {

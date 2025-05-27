@@ -2,8 +2,37 @@
 
 ## Next 14 vs Next 15
 
-1. By default all server components are rendered statically in Next14 do make them render dynamically, we need to use export const dynamic = 'force-dynamic'
-1. By default all server components are rendered dynamically in Next15 do make them render statically, we need to use export const dynamic = 'force-static'
+| Feature                                                       | Next.js 14                                                             | Next.js 15                                                                          |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **Component Rendering**                                       | Server components rendered **statically** by default                   | Server components rendered **dynamically** by default                               |
+| **Override Rendering Behavior**                               | Use `export const dynamic = 'force-dynamic'`                           | Use `export const dynamic = 'force-static'`                                         |
+| **Request APIs (`params`, etc.) why Promise? see below code** | Synchronous — directly accessible `const productId = params.productId` | Asynchronous — exposed as **Promises** `const productId = (await params).productId` |
+| **Caching**                                                   | **Aggressive caching** by default                                      | Aggressive caching **removed**; more manual control                                 |
+| **React Version**                                             | React 18                                                               | React 19 new features (e.g. new hooks, improved `useEffect`, transitions)           |
+
+```javascript
+export default function ProductPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>,
+  searchParams: Promise<{ q: string }>,
+}) {
+  // still synchronous function
+  return (
+    <div>
+      <Header />
+      <Suspense fallback={<LoadingProduct />}>
+        <ProductDetails params={params} />
+      </Suspense>
+    </div>
+  );
+}
+// here Header comp is not blocked from rendering due to promise
+```
+
+3. Agressive caching gone
+4. Next 15 uses react 19, so all features of react 19 available
 
 ## 1. SPA (Client Side Rendering)
 
