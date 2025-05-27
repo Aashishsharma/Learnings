@@ -22,9 +22,11 @@ Components might perform some data fetching in componentDidMount and componentDi
 There are no plans to remove classes from React.
 You can’t use Hooks inside a class component
 
-------------------------------------------------------------------------------
+---
 
 ## Using the State Hook
+
+**state variables are preserved by React across re-renders**
 
 ```javascript
 1:  import React, { useState } from 'react';
@@ -49,19 +51,19 @@ Group logically making sense of all states into one state object
 
 ### Key points
 
-1. use functional form of setstate -- setCnt(cnt => cnt+1)  
+1. use functional form of setstate -- setCnt(cnt => cnt+1)
 2. setState here is different from the class componente's setState method, classe setState method merges the state, where is in useState, stats aren't merged.  
-e.g. ```setState({...state, state.firstName: 'abc2'})```
+   e.g. `setState({...state, state.firstName: 'abc2'})`
 3. Using single state variable vs multiple state variables - if multiple state variables are closely related, then group them in one obj, else create multiple state variables
 
 ## Using the Effect Hook
 
 The Effect Hook lets you perform side effects in function components.
 Data fetching, setting up a subscription, and manually changing the DOM in React components are all examples of side effects.
-You can think of useEffect Hook as componentDidMount, componentDidUpdate, and componentWillUnmount combined.  
+You can think of useEffect Hook as componentDidMount, componentDidUpdate, and componentWillUnmount combined.
 
 ```javascript
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 function Example() {
   const [count, setCount] = useState(0);
@@ -75,15 +77,14 @@ function Example() {
   return (
     <div>
       <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
     </div>
   );
 }
 ```
 
 ### Key points
+
 1. **useEffect us run after the component is renderd (VVIP)**
 2. Only use useEffect for sideeffects (making api call, maybe ise usequery, adding event listeners)
 3. Since it is run after redner method, if we again update another state variable (not the same state that useEffect listens to in dep array), then it will again cause re-render
@@ -107,26 +108,26 @@ function Tooltip() {
   // ...use tooltipHeight in the rendering logic below...
 }
 ```
-In aboove code if we use useEffect instead of useLayoutEffect, the tooltip is first renderd, then the height is calculated and then again, the tooltip is renderd at correct position
 
+In aboove code if we use useEffect instead of useLayoutEffect, the tooltip is first renderd, then the height is calculated and then again, the tooltip is renderd at correct position
 
 ### Key points
 
-1. useEffect Hook as componentDidMount, componentDidUpdate, and componentWillUnmount combined.  
-2. useEffect second arg - 
-  a. if not passed - use effect will run on every component re-render (component did mount + component did update)
-  b. If empty array is passed - [] - will only run once (component did mount)
-  c. If some value is passed - [count] - will get called when count value is changed (shouldComponentUpdate)
+1. useEffect Hook as componentDidMount, componentDidUpdate, and componentWillUnmount combined.
+2. useEffect second arg -
+   a. if not passed - use effect will run on every component re-render (component did mount + component did update)
+   b. If empty array is passed - [] - will only run once (component did mount)
+   c. If some value is passed - [count] - will get called when count value is changed (shouldComponentUpdate)
 3. If your effect returns a function, React will run it when it is time to clean up:
 4. Use Multiple Effects to Separate Concerns
 5. **usecase** - making api call, (maybe use usequery), listening to events
 6. **when not to use** - if the second arg is a state variable and you update same state variable inside useeffect (instead use useMemo)
-5. **order of execution**  -
-1. State initializations - component body is executed
-2. Render method
-3. UseEffect func  
+7. **order of execution** -
+8. State initializations - component body is executed
+9. Render method
+10. UseEffect func
 
-------------------------------------------------------------------------------
+---
 
 ## Rules of Hooks
 
@@ -136,7 +137,7 @@ Don't use inside a condition or a loop
 But why?
 
 So how does React know which state corresponds to which useState call?
-The answer is that React relies on the order in which Hooks are called.  
+The answer is that React relies on the order in which Hooks are called.
 
 #### 2. Only Call Hooks from React Functions
 
@@ -148,25 +149,25 @@ Don’t call Hooks from regular JavaScript functions. Instead, you can:
 ESLint plugin called eslint-plugin-react-hooks enforces these two rules.
 This plugin is included by default in Create React App.
 
-------------------------------------------------------------------------------
+---
 
-## Other Commonly used hooks  
+## Other Commonly used hooks
 
-### 1. useContext - same as context API in React  
+### 1. useContext - same as context API in React
 
 Context provides a way to pass data through the component tree without having to pass props down manually at every level.
 
 ```javascript
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext } from "react";
 
 // Step 1: Create a Context
 const ThemeContext = createContext();
 // Step 2: Create a Provider
 const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState("light");
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
   return (
@@ -178,7 +179,7 @@ const ThemeProvider = ({ children }) => {
 export { ThemeContext, ThemeProvider };
 
 // Step 3: Create a Component that Consumes the Context
-import { ThemeContext } from './ThemeContextProvider';
+import { ThemeContext } from "./ThemeContextProvider";
 const ThemedComponent = () => {
   // Consume the context using useContext hook
   const { theme, toggleTheme } = useContext(ThemeContext); // import the ThemeContext
@@ -186,11 +187,16 @@ const ThemedComponent = () => {
   //When the toggleTheme function is called in the below code, it will cause a re-render of the components that are consuming the theme from the ThemeContext
   // also note, re-rendering means all the function body, and render method and useEffects would be executed
   return (
-    <div style={{ background: theme === 'light' ? '#f0f0f0' : '#333', color: theme === 'light' ? '#333' : '#f0f0f0', padding: '20px' }}>
+    <div
+      style={{
+        background: theme === "light" ? "#f0f0f0" : "#333",
+        color: theme === "light" ? "#333" : "#f0f0f0",
+        padding: "20px",
+      }}
+    >
       <h2>Themed Component</h2>
       <p>Current Theme: {theme}</p>
       <button onClick={toggleTheme}>Toggle Theme</button>
-      
     </div>
   );
 };
@@ -207,7 +213,6 @@ const App = () => {
   );
 };
 export default App;
-
 ```
 
 **Usecase for context api** =
@@ -228,13 +233,13 @@ useReducer is usually preferable to useState when
 3. your logic have related state tranistions (setLoading(false), setError(false), setData(data))
 
 ```javascript
-const initialState = {count: 0};
+const initialState = { count: 0 };
 function reducer(state, action) {
   switch (action.type) {
-    case 'increment':
-      return {count: state.count + 1};
-    case 'decrement':
-      return {count: state.count - 1};
+    case "increment":
+      return { count: state.count + 1 };
+    case "decrement":
+      return { count: state.count - 1 };
     default:
       throw new Error();
   }
@@ -244,15 +249,15 @@ function Counter() {
   return (
     <>
       Count: {state.count}
-      <button onClick={() => dispatch({type: 'decrement'})}>-</button>
-      <button onClick={() => dispatch({type: 'increment'})}>+</button>
+      <button onClick={() => dispatch({ type: "decrement" })}>-</button>
+      <button onClick={() => dispatch({ type: "increment" })}>+</button>
     </>
   );
 }
 ```
 
 Usecase - in case of comples state object  
-How not to do  
+How not to do
 
 ```javascript
 // local variables
@@ -274,108 +279,104 @@ How not to do
 ```
 
 The problem
-Reducers allow pieces of state that depend on each other to be updated predictably (whereas multiple useState’s might not)  
+Reducers allow pieces of state that depend on each other to be updated predictably (whereas multiple useState’s might not)
 
-How to do  
+How to do
 
 ```javascript
 // local variables
-  const MODAL_TYPES = {
-    SMALL: 'small',
-    MEDIUM: 'medium',
-    LARGE: 'large'
+const MODAL_TYPES = {
+  SMALL: "small",
+  MEDIUM: "medium",
+  LARGE: "large",
+};
+const ACTION_TYPES = {
+  SET_USER_FIELD: "setUserField",
+  TOGGLE_MODAL: "toggleModal",
+  CHANGE_MODAL_TYPE: "changeModalType",
+};
+// initial state for useReducer
+const initialState = {
+  isModalOpen: false,
+  modalType: MODAL_TYPES.LARGE,
+  modalData: {
+    userPhone: "",
+    userJob: "",
+    userEmail: "",
+  },
+};
+// reducer is just methods which invokes depends of action type
+const reducer = (store, action) => {
+  switch (action.type) {
+    case ACTION_TYPES.SET_USER_FIELD:
+      return {
+        ...store,
+        modalData: { ...store.modalData, [action.fieldName]: action.value },
+      };
+    case ACTION_TYPES.TOGGLE_MODAL:
+      return { ...store, isModalOpen: !store.isModalOpen };
+    case ACTION_TYPES.CHANGE_MODAL_TYPE:
+      return { ...store, modalType: action.modalType };
+    default:
+      return store;
   }
-  const ACTION_TYPES = {
-    SET_USER_FIELD: 'setUserField',
-    TOGGLE_MODAL: 'toggleModal',
-    CHANGE_MODAL_TYPE: 'changeModalType'
-  }
-  // initial state for useReducer
-  const initialState = {
-    isModalOpen: false,
-    modalType: MODAL_TYPES.LARGE,
-    modalData: {
-      userPhone: '',
-      userJob: '',
-      userEmail: ''
-    }
-  }
-  // reducer is just methods which invokes depends of action type
-  const reducer = (store, action) => {
-    switch (action.type) {
-      case ACTION_TYPES.SET_USER_FIELD:
-        return {
-          ...store,
-          modalData: { ...store.modalData, [action.fieldName]: action.value }
-        }
-      case ACTION_TYPES.TOGGLE_MODAL:
-        return { ...store, isModalOpen: !store.isModalOpen }
-      case ACTION_TYPES.CHANGE_MODAL_TYPE:
-        return { ...store, modalType: action.modalType }
-      default:
-        return store
-    }
-  }
-  const ReducerStateComponent = () => {
-    // use hook to extract dispatch and state value
-    const [userData, dispatch] = React.useReducer(
-      reducer,
-      initialState
-    )
-    const handleSetUserName = fieldName => value => {
-      // example of how to set user field
-      dispatch({ type: ACTION_TYPES.SET_USER_FIELD, value, fieldName })
-    }
-    const handleChangeModalType = () => {
-      // example of how to change modal type
-      dispatch({
-        type: ACTION_TYPES.CHANGE_MODAL_TYPE,
-        modalType: MODAL_TYPES.SMALL
-      })
-    }
-    const handleToggleModal = () => {
-      // example of how toggle modal
-      dispatch({ type: ACTION_TYPES.TOGGLE_MODAL })
-    }
-    return <div>...</div>
-  }
-
+};
+const ReducerStateComponent = () => {
+  // use hook to extract dispatch and state value
+  const [userData, dispatch] = React.useReducer(reducer, initialState);
+  const handleSetUserName = (fieldName) => (value) => {
+    // example of how to set user field
+    dispatch({ type: ACTION_TYPES.SET_USER_FIELD, value, fieldName });
+  };
+  const handleChangeModalType = () => {
+    // example of how to change modal type
+    dispatch({
+      type: ACTION_TYPES.CHANGE_MODAL_TYPE,
+      modalType: MODAL_TYPES.SMALL,
+    });
+  };
+  const handleToggleModal = () => {
+    // example of how toggle modal
+    dispatch({ type: ACTION_TYPES.TOGGLE_MODAL });
+  };
+  return <div>...</div>;
+};
 ```
 
 ### 3. useMemo
 
-Returns a memoized callback.  
+Returns a memoized callback.
 
 ```javascript
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo } from "react";
 function Counter() {
-  const [counterOne, setCounterOne] = useState(0)
-  const [counterTwo, setCounterTwo] = useState(0)
+  const [counterOne, setCounterOne] = useState(0);
+  const [counterTwo, setCounterTwo] = useState(0);
   const incrementOne = () => {
-    setCounterOne(counterOne + 1)
-  }
+    setCounterOne(counterOne + 1);
+  };
   const incrementTwo = () => {
-    setCounterTwo(counterTwo + 1)
-  }
+    setCounterTwo(counterTwo + 1);
+  };
   const isEven = useMemo(() => {
-    let i = 0
-    while (i < 2000000000) i++
-    return counterOne % 2 === 0
-  }, [counterOne])
+    let i = 0;
+    while (i < 2000000000) i++;
+    return counterOne % 2 === 0;
+  }, [counterOne]);
   return (
     <div>
       <div>
         <button onClick={incrementOne}>Count One - {counterOne}</button>
-        <span>{isEven ? 'Even' : 'Odd'}</span>
+        <span>{isEven ? "Even" : "Odd"}</span>
       </div>
       <div>
         <button onClick={incrementTwo}>Count Two - {counterTwo}</button>
       </div>
     </div>
-  )
+  );
 }
-export default Counter
-```  
+export default Counter;
+```
 
 If we don't use useMemo -
 If we click on counter One - UI update slowly  
@@ -383,7 +384,7 @@ If we click on counter Two - UI still updates slowly (which we don't want)
 
 If we use useMemo -
 If we click on counter One - UI update slowly  
-If we click on counter Two - UI updates fast as expected  
+If we click on counter Two - UI updates fast as expected
 
 **Explaination if we don't use useMemo**
 
@@ -392,21 +393,22 @@ If we click on counter Two - UI updates fast as expected
 3. Componet re-render - new isEven function created which is called in the render method in the span tag, hence it cause slowness
 4. If we use useMemo, the return value of the isEven function is cached and the function will only run if the counter one state is changed
 
-#### Usecases - 
+#### Usecases -
 
 1. when you want to call slow function synchronously
 2. Referential integrity check
+
 ```javascript
 // without useMemo
-const [count, setCount] = useState(0)
+const [count, setCount] = useState(0);
 const [dark, setDark] = useState(false);
 
 const theme = {
-  color: dark? 'black': 'white'
-}
+  color: dark ? "black" : "white",
+};
 useEffect(() => {
-  console.log('current theme color : ', theme.color)
-}, [theme])
+  console.log("current theme color : ", theme.color);
+}, [theme]);
 // useEffect is run everytime event id count state variable is changed
 // because of referential integrity, if count state variable is changed, component rerenders, new theme obj is created
 // so theme used as second arg in useEffect got changed because new theme variable is created
@@ -414,33 +416,34 @@ useEffect(() => {
 // fix this with useMemo
 const theme = useMemo(() => {
   return {
-    color: dark? 'black': 'white'
-  }
-}, [dark])
+    color: dark ? "black" : "white",
+  };
+}, [dark]);
 useEffect(() => {
   // only called when dark variable is updated and not when count variable is changed
-  console.log('current theme color : ', theme.color)
-}, [dark])
+  console.log("current theme color : ", theme.color);
+}, [dark]);
 ```
+
 3. to Avoid re-rendeing replace useEffect with useMemo where ever possible (see performance optimization section below)
 
 ### 4. useCallback() - use when making a component controlled (passing the handleCLick functions to parent component)
 
 Returns a memoized callback.
-This is useful when passing callbacks functions to optimized child components that rely on reference equality to prevent unnecessary renders.  
+This is useful when passing callbacks functions to optimized child components that rely on reference equality to prevent unnecessary renders.
 
 ```javascript
 function ParentComponent() {
-  const [age, setAge] = useState(25)
-  const [salary, setSalary] = useState(50000)
+  const [age, setAge] = useState(25);
+  const [salary, setSalary] = useState(50000);
 
   const incrementAge = useCallback(() => {
-    setAge(age + 1)
-  }, [age])
+    setAge(age + 1);
+  }, [age]);
 
   const incrementSalary = useCallback(() => {
-    setSalary(salary + 1000)
-  }, [salary])
+    setSalary(salary + 1000);
+  }, [salary]);
 
   return (
     <div>
@@ -450,9 +453,9 @@ function ParentComponent() {
       <Count text="Salary" count={salary} />
       <Button handleClick={incrementSalary}>Increment Salary</Button>
     </div>
-  )
+  );
 }
-export default ParentComponent
+export default ParentComponent;
 ```
 
 In above code if we don't use useCallback and click on any button below is what would hapen
@@ -467,18 +470,18 @@ In above code if we don't use useCallback and click on any button below is what 
 
 **useMemo vs useCallback vs React.memo**  
 useMemo will remember the returned value from your function.  
-useCallback will remember your actual function.  
+useCallback will remember your actual function.
 
 By default in react, when parent component is re-rendered, child component is also re-rendered, even if we don't want it to, React.memo (is a HOC) when applied to a react component will cause component re-render only when it's props are changed. So in child component
 
 ```javascript
-import React from 'react'
+import React from "react";
 
 const Child = () => {
-  return <div>Child</div>
-}
+  return <div>Child</div>;
+};
 
-export const memoizedChild = React.memo(Child)
+export const memoizedChild = React.memo(Child);
 /// by default memo does a shallow comparison of props
 // it also accepts second arg which is a function for custom comparison
 ```
@@ -505,42 +508,94 @@ function TextInputWithFocusButton() {
 ```
 
 #### Key points
+
 1. useRef is exactly same as useState, that is the value of variables used in useRef persists across re-renders, same as useState
 2. But useRef does not trigeer a component re-render
 
-**useCases** - 
+Useref returns obj which has a property called current
+const abc = useRef(0)
+Is same as abc.current =0
+
+**useCases** -
+
 1. to reference HTML elements (see above code)
+
 ```javascript
+// Custom file icon
 // here we hide the default choose file html button
 // and use our cutom icon button, and when that button is clicked
 // we simulate the file clic event
-const ref = useRef(null)
-  return (<>
+const ref = useRef(null);
+return (
+  <>
     <input type="file" ref={ref} hidden></input>
     <button onClick={() => ref.current.click()}>Custom file icon</button>
   </>
-  )
-```
-2. **To calculate how many times component is re-renderd**
-```javascript
+);
 
+//exmaple 2 -
+// focus input elem on button click
+const inputElem = useRef(null)
+
+<input ref={inputElem} >
+
+handleClick = () => {
+ inputElrm.current.focus()
+}
+
+// Here when ref is attached to html elem, the value for ref === document.getElementBy...
+// So inputElem.current, we can have all other properties loke value, .appendChild, .innerText
+```
+
+2. **To calculate how many times component is re-renderd** -
+
+```javascript
 const renderCount = useRef(0);
-renderCount.current = renderCount.current+1;
+renderCount.current = renderCount.current + 1;
 // since useRef value is maintained acress re-renders, whenever component re-renders, just like state variables
 // the renderCount value is preserved and it is not 0 ()
 
-return(
-  <div>ABC
-  {console.log('render count ', renderCount.current)}
+return (
+  <div>
+    ABC
+    {console.log("render count ", renderCount.current)}
   </div>
-)
+);
 ```
-3. to store previous value of your state
+
+if we use usstate - it will go in infinite loop if setSTate is called directly inside comp body, state is updated only in useEffect or event handlers
+
+3. to store previous value of your state -
+
+```javascript
+import React, { useState, useRef } from "react";
+export function App(props) {
+  const [cnt, setCnt] = useState(0);
+  const refCnt = useRef(cnt);
+
+  return (
+    <div className="App">
+      Comp renderd {refCnt.current} times, stateVal={cnt}
+      <button
+        onClick={() =>
+          setCnt((prevVal) => {
+            //before updating state val, store prevVal to ref
+            refCnt.current = cnt;
+            return prevVal + 1;
+          })
+        }
+      >
+        inc cnt{" "}
+      </button>
+    </div>
+  );
+}
+```
 
 **They are used to handle uncontrolled components**
 
-
 ### 6. forwardRef
+
 forwardRef lets your component expose a DOM node to parent component with a ref.  
 **Real life usecase - to pause/play a video of a child component**
 
@@ -575,9 +630,10 @@ export default function App() {
 }
 ```
 
-### 7. useTransition 
+### 7. useTransition
 
 #### Key points
+
 1. Imporve performance based on priority based state updates
 2. How? - We know that react does batch updates of multiple state changes
 3. see below code - in useEffect, we are doing setName as well as setList, but setList is slow because of filtering largeList(> 1000 list)
@@ -589,14 +645,14 @@ export default function App() {
 
 ```javascript
 function App() {
-  const [name, setName] = useState("")
-  const [list, setList] = useState(largeList)
-  const [isPending, startTransition] = useTransition()
+  const [name, setName] = useState("");
+  const [list, setList] = useState(largeList);
+  const [isPending, startTransition] = useTransition();
   function handleChange(e) {
-    setName(e.target.value)
+    setName(e.target.value);
     startTransition(() => {
-      setList(largeList.filter(item => item.name.includes(e.target.value)))
-    })
+      setList(largeList.filter((item) => item.name.includes(e.target.value)));
+    });
   }
   return (
     <>
@@ -604,10 +660,10 @@ function App() {
       {isPending ? (
         <div>Loading...</div>
       ) : (
-        list.map(item => <ListComponent key={item.id} item={item} />)
+        list.map((item) => <ListComponent key={item.id} item={item} />)
       )}
     </>
-  )
+  );
 }
 ```
 
@@ -615,13 +671,13 @@ function App() {
 
 ```javascript
 export default function App() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query);
   return (
     <>
       <label>
         Search albums:
-        <input value={query} onChange={e => setQuery(e.target.value)} />
+        <input value={query} onChange={(e) => setQuery(e.target.value)} />
       </label>
       <Suspense fallback={<h2>Loading...</h2>}>
         <SearchResults query={deferredQuery} />
@@ -632,11 +688,12 @@ export default function App() {
 ```
 
 ##### Key points
+
 1. The query will update immediately, so the input will display the new value. However, the deferredQuery will keep its previous value until the data has loaded, so SearchResults will show the stale results for a bit.
-2. indicate that data shown is stale ```<div style={{opacity: query !== deferredQuery ? 0.5 : 1}}>```
-3. **useTransition vs useDeferredValue** - 
-useTransition - to make a particular state update a lower priority  
-useDeferredValue - any piece of code that need to have a lower priority, not just state
+2. indicate that data shown is stale `<div style={{opacity: query !== deferredQuery ? 0.5 : 1}}>`
+3. **useTransition vs useDeferredValue** -
+   useTransition - to make a particular state update a lower priority  
+   useDeferredValue - any piece of code that need to have a lower priority, not just state
 
 ### 9. useId - for generating unique IDs that can be passed to accessibility attributes.
 
@@ -651,6 +708,7 @@ function PasswordField() {
   )
 }
 ```
+
 **useId should not be used to generate keys in a list. Keys should be generated from your data.**  
 **useId vs Math.random() - useId Ensures that IDs remain consistent across server and client rendering (SSR)**
 
@@ -716,23 +774,23 @@ function ComponentF() {
 export default ComponentF
 ```
 
-------------------------------------------------------------------------------
+---
 
 ## Building Your Own Hooks
 
 Custom hooks are used to reuse Stateful logic -
-**What is stateful logic?**  - stateful logic includes the use of state management hooks like useState, useEffect, useReducer, or a combination of them. The goal is to abstract away the complexity of managing state within a component and provide a clean interface for components to use that logic.
+**What is stateful logic?** - stateful logic includes the use of state management hooks like useState, useEffect, useReducer, or a combination of them. The goal is to abstract away the complexity of managing state within a component and provide a clean interface for components to use that logic.
 
 **HOC vs Custom hooks** -
 
 1. custom hooks are more readable
 2. When you want to reuse JSX code use HOC - in example of withLoader
 
-1. useApiData
+3. useApiData
 
 ```javascript
 // custom hook - useApiData.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 function useApiData(apiEndpoint) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -756,9 +814,9 @@ function useApiData(apiEndpoint) {
 export default useApiData;
 
 // using the custom hook
-import useApiData from './useApiData';
+import useApiData from "./useApiData";
 function MyComponent() {
-  const apiEndpoint = 'https://api.example.com/data';
+  const apiEndpoint = "https://api.example.com/data";
   const { data, loading, error } = useApiData(apiEndpoint);
   if (loading) {
     return <p>Loading...</p>;
@@ -772,59 +830,60 @@ function MyComponent() {
     </div>
   );
 }
-
 ```
 
 2. useLocalStorage
 
 ```javascript
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 const setInitialVal = (key, initialVal) => {
-  if(localStorage.getItem(key)) {
-    return (localStorage.getItem(key))
-  } 
-  return initialVal
-}
-const useLocalStorage = (key, initialVal ) => {
-  const [value, setValue] = useState(() => setInitialVal(key, initialVal))
+  if (localStorage.getItem(key)) {
+    return localStorage.getItem(key);
+  }
+  return initialVal;
+};
+const useLocalStorage = (key, initialVal) => {
+  const [value, setValue] = useState(() => setInitialVal(key, initialVal));
   useEffect(() => {
     localStorage.setItem(key, initialVal);
-  }, [value]); 
+  }, [value]);
   return [value, setValue];
 };
 export default useLocalStorage;
 
-import React, {useState} from 'react';
-import useLocalStorage from './useLocalStorage'; 
+import React, { useState } from "react";
+import useLocalStorage from "./useLocalStorage";
 export function App(props) {
-  let [state, setState] = useLocalStorage('abc', 123);
-  let [state2, setState2] = useLocalStorage('abc2', 1232);
-  console.log({state}); console.log({state2})
-  return (<>
-    <button onClick={() => setState((state) => state+1)}>Abc</button> 
-    <button onClick={() => setState2((state) => state+1)}>Pqr</button>
-  </>);
+  let [state, setState] = useLocalStorage("abc", 123);
+  let [state2, setState2] = useLocalStorage("abc2", 1232);
+  console.log({ state });
+  console.log({ state2 });
+  return (
+    <>
+      <button onClick={() => setState((state) => state + 1)}>Abc</button>
+      <button onClick={() => setState2((state) => state + 1)}>Pqr</button>
+    </>
+  );
 }
 ```
 
-------------------------------------------------------------------------------
-
+---
 
 ## FAQs
 
 1. Do Hooks cover all use cases for classes?
- There are no Hook equivalents to the uncommon getSnapshotBeforeUpdate, getDerivedStateFromError and componentDidCatch lifecycles yet, but would be added soon.
+   There are no Hook equivalents to the uncommon getSnapshotBeforeUpdate, getDerivedStateFromError and componentDidCatch lifecycles yet, but would be added soon.
 
 2. State vs Props
 
 - Similarities
-    1. Both props and state are plain JS objects
-    2. Both state and props changes trigger a render update - (only is the prop is changed in the parent component, then only child-rerenders, if prop is changed in child component, child component doesn't re-render)
+  1. Both props and state are plain JS objects
+  2. Both state and props changes trigger a render update - (only is the prop is changed in the parent component, then only child-rerenders, if prop is changed in child component, child component doesn't re-render)
 - Differences
-    1. State is mutable, props are not - 
-    2. Component cannot change it's props, state can be changed - (both can be changed, but updaing props in child component doesn't cause re-render)
+  1. State is mutable, props are not -
+  2. Component cannot change it's props, state can be changed - (both can be changed, but updaing props in child component doesn't cause re-render)
 - Which to use when
-    If a Component needs to alter one of its attributes at some point in time, that attribute should be part of its state, otherwise it should  just be a prop for that Component.
+  If a Component needs to alter one of its attributes at some point in time, that attribute should be part of its state, otherwise it should just be a prop for that Component.
 
 ## Performance optimization in React
 
@@ -832,7 +891,7 @@ export function App(props) {
 
 **Using Dynamic import + React suspense**
 
-With Code splitting, the bundle can be split to smaller chunks where the most important chunk can be loaded first and then every other secondary one lazily loaded.  
+With Code splitting, the bundle can be split to smaller chunks where the most important chunk can be loaded first and then every other secondary one lazily loaded.
 
 ```javascript
 import React, {lazy, Suspense, useEffect, useState} from "react";
@@ -860,36 +919,47 @@ const Home = lazy(() => import("./routes/Home"));
 ```
 
 ### 2. use unique keys while rendering list
+
 **dont' use map indexes / sequential numbers as keys to list, why?**
 
 ```javascript
-list.map((item, index) => <div key={index}>{item}</div>)
-```  
+list.map((item, index) => <div key={index}>{item}</div>);
+```
+
 if we add a elem at the end of list, it's fine, but if we add item at the start of the list, then new item's index would be 0 and the item who earlier had index of 0 will have index of 1,  
-so react will have to re-redner all of the list items since keys are changed for all the list items, hence use some unique ids 
+so react will have to re-redner all of the list items since keys are changed for all the list items, hence use some unique ids
 
 ### 3. conditionally run useEffect - (using second arg)
-### 4. Avoid re-rendering (replace useEffect with useMemo) - 
-e.g. 
+
+### 4. Avoid re-rendering (replace useEffect with useMemo) -
+
+e.g.
+
 ```javascript
 const getSaluation = (name) => `Hi, ${name}`;
 const App = () => {
-  const [name, setName] = useState('');
-  const [fullName, setFullName] = useState('');
+  const [name, setName] = useState("");
+  const [fullName, setFullName] = useState("");
   const renderCount = useRef(0);
-  renderCount.current = renderCount.current+1;
+  renderCount.current = renderCount.current + 1;
 
   useEffect(() => {
-    setFullName(() => getSaluation(name))
-  }, [name])
+    setFullName(() => getSaluation(name));
+  }, [name]);
 
-  return(<>
-    <input type="text" value={name} onChange={((e) => setName(e.target.value))}></input>
-     Name - {fullName} 
-     {console.log('render order ', renderCount.current) /* here component is twice everytime the name variable is changed by the user */}
-     </>
-  )
-}
+  return (
+    <>
+      <input type="text" value={name} onChange={(e) => setName(e.target.value)}></input>
+      Name - {fullName}
+      {
+        console.log(
+          "render order ",
+          renderCount.current
+        ) /* here component is twice everytime the name variable is changed by the user */
+      }
+    </>
+  );
+};
 // plus un above code we need to unnecessary create fullName state variable
 // component is renderd twice everytime
 // reason - name variable changed, component re-renders, after rerender, useEffect is called, there we are setting fullName, again render method is called
@@ -897,19 +967,16 @@ const App = () => {
 
 // use useMemo
 
-const getSaluation = (name) => `Hi, ${name}`
+const getSaluation = (name) => `Hi, ${name}`;
 const App = () => {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const renderCount = useRef(0);
-  renderCount.current = renderCount.current+1;
-  const fullName = useMemo(() => getSaluation(name),[name]);
-  return (
-    <>
-    </>
-  )
-}
+  renderCount.current = renderCount.current + 1;
+  const fullName = useMemo(() => getSaluation(name), [name]);
+  return <></>;
+};
 // we eliminated useEffect + now we don;t need fullName state variable as well/
-// because when name state variable is changed, component re-renders, 
+// because when name state variable is changed, component re-renders,
 // and everytime fullName variable is calculated from useMemo
 // and since useMemo is run before the render method is called
 // we have latest value of fullName and component renders only
@@ -917,37 +984,38 @@ const App = () => {
 
 ### 5. use useMemo, useCallback, useTransition, useDerivedValue
 
-## React 18 new features - 
+## React 18 new features -
 
 ### 1. Automatic batching -
 
 automatic batching used to happen only within React event handlers, and not inside other event handlers like setTimeout or user realted promises cbs
+
 ```javascript
 // Before: only React events were batched.
 setTimeout(() => {
-  setCount(c => c + 1);
-  setFlag(f => !f);
+  setCount((c) => c + 1);
+  setFlag((f) => !f);
   // React will render twice, once for each state update (no batching), because setTimeout is not a react event handler
 }, 1000);
-// however if we used React event handlers like 
+// however if we used React event handlers like
 const handleCLick = () => {
-  setCount(c => c + 1);
-  setFlag(f => !f);  // these 2 state updates used to get batched
-}
+  setCount((c) => c + 1);
+  setFlag((f) => !f); // these 2 state updates used to get batched
+};
 // but if we had user defined promises or fecth apis even in react event handlers
 // then multiple re-renders for both state updates
 // because technically both stateupdates are inside fecth and not inside handleCLick
 const handleCLick = () => {
   fetchSomething().then(() => {
-      setCount(c => c + 1); // Causes a re-render
-      setFlag(f => !f); // Causes a re-render
-  })
-}
+    setCount((c) => c + 1); // Causes a re-render
+    setFlag((f) => !f); // Causes a re-render
+  });
+};
 // After: updates inside of timeouts, promises,
 // native event handlers or any other event are batched.
 setTimeout(() => {
-  setCount(c => c + 1);
-  setFlag(f => !f);
+  setCount((c) => c + 1);
+  setFlag((f) => !f);
   // React will only re-render once at the end (that's batching!)
 }, 1000);
 ```
@@ -955,5 +1023,5 @@ setTimeout(() => {
 ### 2 useTransitions, useDerivedValue hooks
 
 ### 3. New Suspense
-earlier suspense was only available with lazy loading, now in any component we can use suspense
 
+earlier suspense was only available with lazy loading, now in any component we can use suspense
