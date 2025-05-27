@@ -85,10 +85,48 @@ function Example() {
 
 ### Key points
 
-1. **useEffect us run after the component is renderd (VVIP)**
+1. **useEffect runs after the component is renderd (VVIP)**
 2. Only use useEffect for sideeffects (making api call, maybe ise usequery, adding event listeners)
 3. Since it is run after redner method, if we again update another state variable (not the same state that useEffect listens to in dep array), then it will again cause re-render
 4. In such cases use useMemo (see performance optimization below)
+
+**e.g. of using useMemo instead of useEffect** - Deriving Data from Props or State
+
+```javascript
+// Bad example -
+function ProductList({ products }) {
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  useEffect(() => {
+    const expensiveFilter = products.filter((p) => p.inStock);
+    setFilteredProducts(expensiveFilter);
+  }, [products]);
+
+  return (
+    <ul>
+      {filteredProducts.map((p) => (
+        <li key={p.id}>{p.name}</li>
+      ))}
+    </ul>
+  );
+}
+//useEffect causes a double render (initial + after setState).
+//You're deriving state from props, which can be computed directly.
+
+//use useMemo instead
+function ProductList({ products }) {
+  const filteredProducts = useMemo(() => {
+    return products.filter((p) => p.inStock);
+  }, [products]);
+
+  return (
+    <ul>
+      {filteredProducts.map((p) => (
+        <li key={p.id}>{p.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
 
 ## Using useLayoutEffect hook
 
