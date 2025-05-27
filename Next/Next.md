@@ -144,7 +144,8 @@ It has 2 components
 1. **Client components** - Functionality wise, same as React components we use in React, **but these client components are rendered as SSR, meaning the initial HTML is rendered server-side, and then the client component hydrates and becomes interactive on the client**
 2. **Server components** - components run on node server, can directly access DB, we cannot add interactivity
 
-In Nextjs all components are server components by default, to make a component a client component add `'use client'` as the first line of the component.
+**In Nextjs all components are server components by default, to make a component a client component add `'use client'` as the first line of the component.**  
+**VVIP - Even if you make a component a client component, it is renderd as SSR (you should no why? hint - SSR is diferent than RSC, server component are rendered as RSC, client components as SSR, then when is CSR - when API call is made from client component)**
 
 #### Rendering of server components in RSC
 
@@ -228,15 +229,16 @@ export function ClientComponent({ children }) {
 
 **Two other parts in SSR**
 
-1. SSG (Static Site Generation) - static HTML content generated at build time only, saves server's computation power by generating HTML at run time. Limitation - **if there are 10's of 1000s pages, build will take time**
+1. SSG (Static Site Generation) **achieved via generateStaticParams** - static HTML content generated at build time only, saves server's computation power by generating HTML at run time. Limitation - **if there are 10's of 1000s pages, build will take time**
+
+Used to create dynamic, pre-rendered pages efficiently.  
+This means that the pages will be built at runtime, any API / DB calls would be made at the build time, so when the page is invked in prod, the API call is not made (see below code)
+
 2. ISR (Incremental Static Regeneration) - **generate page at build time**, **ISR will rebuild pages in the background after a specified interval without redeploying the app**
 
 **How does ISR rebuilds the pages in the background without redeploying**
 
-### ISR is achieved via - exporting function generateStaticParams
-
-Used to create dynamic, pre-rendered pages efficiently.  
-This means that the pages will be built at runtime, any API / DB calls would be made at the build time, so when the page is invked in prod, the API call is not made (see below code)
+### ISR is achieved via - `export const revalidate = 60;` Revalidate every 60 seconds
 
 ```javascript
 // for explaination of below code, see images

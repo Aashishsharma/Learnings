@@ -233,16 +233,16 @@ console.log(get_arr[3]()); // 4
 1. To create private functions/variables
 
 ```javascript
-a = (function () {
-  var privatefunction = function () {
-    alert("hello");
-  };
+let a = (() => {
+  let b = 123;
   return {
-    publicfunction: function () {
-      privatefunction();
+    methodToAccessPrivateMember: function () {
+      console.log("b accessible here ", b);
     },
   };
 })();
+a.methodToAccessPrivateMember(); // 123
+console.log(a.b); // undefined
 ```
 
 As you can see there, a is now an object, with a method publicfunction ( a.publicfunction() ) which calls privatefunction, which only exists inside the closure. You can NOT call privatefunction directly (i.e. a.privatefunction() ), just publicfunction()
@@ -460,20 +460,59 @@ Compare to regular script below:
 
 ## Cookies
 
-| **Configuration**           | **Description**                                                                                                                                                                                         | **Example**                                                                                |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| **Creating a Cookie**       | Set a cookie using the `Set-Cookie` HTTP response header. A cookie typically has a name and value, and optional attributes like expiration time, domain, and path.                                      | `res.setHeader('Set-Cookie', 'username=johndoe'); `                                        |
-| **Reading a Cookie**        | Access cookie values in subsequent HTTP requests using the `Cookie` HTTP request header. In JavaScript, you can access cookies through `document.cookie` in the browser.                                | `const username = req.headers.cookie; `                                                    |
-| **Expiring a Cookie**       | Define an expiration time for a cookie using the `expires` attribute in the future. When the expiration time is reached, the browser automatically removes the cookie.                                  | `res.setHeader('Set-Cookie', 'username=johndoe; expires=Thu, 01 Jan 2024 00:00:00 GMT'); ` |
-| **Session Cookies**         | Create session cookies by not specifying an expiration time. These cookies are stored in memory and are deleted when the browser session ends.                                                          | `res.setHeader('Set-Cookie', 'sessionID=123456'); `                                        |
-| **Persistent Cookies**      | Set a cookie with a specific expiration time using the `expires` attribute. Persistent cookies are stored on the client-side until the expiration time is reached.                                      | `res.setHeader('Set-Cookie', 'rememberMe=true; expires=Thu, 01 Jan 2025 00:00:00 GMT'); `  |
-| **Domain-Specific Cookies** | Specify a domain for the cookie using the `domain` attribute. This allows the cookie to be accessible only on the specified domain and its subdomains.                                                  | `res.setHeader('Set-Cookie', 'username=johndoe; domain=example.com'); `                    |
-| **Path-Specific Cookies**   | Set a cookie with a specific path using the `path` attribute. The cookie is only sent to the server for URLs that match the specified path or its subpaths.                                             | `res.setHeader('Set-Cookie', 'token=abc; path=/app'); `                                    |
-| **Secure Cookies**          | Create secure cookies by including the `secure` attribute. These cookies are only transmitted over secure HTTPS connections, not over HTTP.                                                             | `res.setHeader('Set-Cookie', 'authToken=xyz; secure'); `                                   |
-| **HttpOnly Cookies**        | Make cookies inaccessible to JavaScript by using the `HttpOnly` attribute. This enhances security by preventing client-side scripts from accessing the cookie.                                          | `res.setHeader('Set-Cookie', 'sessionID=123; HttpOnly'); `                                 |
-| **Same-Site Cookies**       | Control when cookies are sent in cross-origin requests using the `SameSite` attribute. It helps protect against Cross-Site Request Forgery (CSRF) attacks. Options include `Lax`, `Strict`, and `None`. | `res.setHeader('Set-Cookie', 'authToken=xyz; SameSite=Lax'); `                             |
-| **Reading Cookies in JS**   | Access cookies in JavaScript on the client-side using `document.cookie`. You can read, modify, and delete cookies using this property.                                                                  | `const cookies = document.cookie; `                                                        |
-| **Deleting a Cookie**       | Remove a cookie by setting its expiration time to a past date. This instructs the browser to delete the cookie immediately.                                                                             | `res.setHeader('Set-Cookie', 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT'); `           |
+Cookies are automatically sent to server on every request by default, irrespective of weather the cookie is set on client side or on server side.
+
+**for sensitive info set cookie on server side using HttpOnly and Secure flags**  
+**for user preference - set cookies on client side**
+
+### Setting cookies in Client-Side JavaScript
+
+| Operation                 | Code                                                                                   | Description                                             |
+| ------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| **Set a cookie**          | `document.cookie = "username=John";`                                                   | Basic way to set a cookie                               |
+| **Set with options**      | `document.cookie = "username=John; path=/; expires=Fri, 31 Dec 2025 23:59:59 GMT";`    | Set cookie with path and expiry                         |
+| **Read all cookies**      | `console.log(document.cookie);`                                                        | Returns a string of all cookies (`key=value; key2=...`) |
+| **Get specific cookie**   | `document.cookie.split("; ").find(row => row.startsWith("username="))?.split("=")[1];` | Extracts value of a specific cookie key                 |
+| **Delete a cookie**       | `document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";`        | Expire the cookie immediately                           |
+| **Set secure cookie**     | `document.cookie = "token=abc123; secure";`                                            | Cookie only sent over HTTPS                             |
+| **Set HttpOnly (not JS)** | ❌ Not possible via JS (must be set server-side)                                       | Prevents access via `document.cookie`                   |
+| **Set SameSite**          | `document.cookie = "id=123; SameSite=Strict";`                                         | Controls cross-site sending behavior                    |
+
+### Setting cookie on server side -
+
+```javascript
+//Set-Cookie: sessionId=abc123; HttpOnly; Secure; SameSite=Strict; Path=/
+// in Nodejs -
+app.get("/login", (req, res) => {
+  res.cookie("sessionId", "abc123", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    path: "/",
+  });
+
+  res.send("Cookie set");
+});
+// Next.js
+import { NextResponse } from "next/server";
+export async function GET() {
+  const response = NextResponse.json({ message: "Cookie set" });
+  response.cookies.set({
+    name: "sessionId",
+    value: "abc123",
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    path: "/",
+  });
+  return response;
+}
+```
+
+**What are httponly and Secure cookie flags** -
+
+1. HttpOnly flag - tells browser that this cookie should not be accessible to JavaScript (like document.cookie). It can only be sent automatically in HTTP requests to the server
+2. Secure flag- Send this cookie only over HTTPS connections
 
 ## Debouncing and Throttling
 
