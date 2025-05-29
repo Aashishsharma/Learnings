@@ -16,58 +16,47 @@ In addtion we also have call, apply and this, which is discussed below
 4. **this** property -
    The this keyword in JavaScript refers to the object to which the current function belongs or is invoked
 
-when used inside a function this‘s value will change depending on
-| Invocation Type | Description | Example |
-|------------------------|---------------------------------------------------------------------------------------|---------------------------------------------------|
-| **Global Context** | Outside of any function or object, `this` is empty. | `console.log(this); // output {}`|
-| **Function Context** | In a regular function, `this` refers to the global object unless it's a method of an object. | `obj.method(); // this refers to the obj object` |
-| **Method Invocation** | When a function is a method of an object and is invoked using dot notation, `this` refers to the object on which the method was called. | `obj.method(); // this refers to the obj object` |
-| **Constructor Invocation** | When a function is used as a constructor (invoked with `new`), `this` refers to the newly created instance of the object. | `const instance = new ConstructorFunction();` |
-| **Event Handler** | In an event handler, such as a click event, `this` often refers to the element that triggered the event. | `javascript document.getElementById('myButton').addEventListener('click', function() { console.log(this); // this refers to the button element }); ` |
-| **Arrow Functions** | Arrow functions inherit `this` from the surrounding lexical scope. If there is no surrounding function for arrow func this is empty {} | `javascript const obj = { arrowFunction: () => { console.log(this); // this refers to the outer context (lexical scope) } }; obj.arrowFunction(); ` |
-| **Explicit Binding** | `this` can be explicitly set using methods like `call()`, `apply()`, or `bind()`. | `javascript const explicitObj = { name: 'Explicit Object' }; explicitFunction.call(explicitObj); // this refers to explicitObj ` |
+Before understanding this, we should know execution scope in JS
+
+1. Global scope
+2. Function scope
+3. Block scope
+
+--
+
+1. In global scope this referes to window in browser and global in Node.js
+2. In normal function in strict mode, this is undefined, in non-strict mode this refers to window
+3. In method invocation, this refers to the obj, on which method is invoked
+4. Arrow functions have no this, so this in arraw function refers to this of it's parent's scope, for e.g. if arrow function is written inside global context - this refers to window
+5. this inside event handlers in DOM refer to the HTML element
 
 **this keyword example and explaination** -
 Remember all the above rules
 
 ```javascript
-function video() {
-  console.log(this); // here since this function is called as function invocation
-  // this refers to the global object
-  var title = "abc"; // any variables defined in this function using let, var, const, are not part
-  // any this
-  // don;t define varibales like below (should always have let, car, const assigned)
-  tags = [1, 2, 3]; // here there is not let, var, const hence
-  // tags varibale is assgined to global this
-  function showTag() {
-    // here this again refers to global object
-    this.tags.forEach(function (tag) {
-      // in this anonymous function as well
-      // this refers to global object because it is normal func invocation
-      console.log(this.title, tag); // this.tile would be undefined, becuase title is not part of global this
-      // tag would be printed
-    });
-
-    let abc = () => {
-      console.log(this.title); // undefined since this refers to global object,
-      // because arrow functions this refers to outer functions this, and in this case
-      // outer functions (video) this refers to global object
-    };
-    abc();
-  }
-  showTag();
+console.log(this); // window (in browser)
+function abc() {
+  console.log(this); // undefined in strict mode, window otherwise
 }
-
-// below function is function invocation
-// hence this will refer to global object
-video();
-
-let abc = () => {
-  console.log("this = ", this.title); // output - this = {}
-  // since array functions have no this and abc is a seprate function and not a nested function
-  // if it was a nested function, this = surrounding function
-  // if it was not a arrow function, this = global in node and this = window in browser
+let obj = {
+  a: 10,
+  arrowFunc: () => {
+    console.log(this); // window - because objects don't have lexical scoping like global or functional scope, hence this arrow function's lexical scope is global and as per pt. 4 arrow function's this refers to enclosing lexical scope
+  },
+  normalMethod: function () {
+    console.log(this.a); // 10, if invoked as obj.normalMethod, if invoked with bind, apply, call is used then this refers different
+  },
+  normalMethod2: function () {
+    let y = () => {
+      console.log(this.a); // 10, lexical scope of this arrow func is outer func, so this refers to whatever value of this is there for myFunction2, and in this case myFInction2 is a method invocation, so this refers to the enclosing obj
+    };
+    y();
+  },
 };
+abc(); // window or undefined depending on strict mode
+obj.arrowFunc(); // // will print window obj
+obj.normalMethod(); //// will print 10
+obj.normalMethod2(); // will print 10
 ```
 
 ##### losing this
