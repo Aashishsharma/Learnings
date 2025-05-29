@@ -401,8 +401,9 @@ const htmlElem = document.getElementByID("myCanvas")
 const htmlElem = <HTMLCanvasElement>(
   document.getElementByID("myCanvas").innerHTML
 );
-// angled bracket syntax can't be used in .jsx files, hence use as keyword
 ```
+
+**angled bracket syntax can't be used in .jsx files, hence use as keyword**
 
 ```typescript
 type One = string;
