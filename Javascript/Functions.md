@@ -27,8 +27,9 @@ Before understanding this, we should know execution scope in JS
 1. In global scope this referes to window in browser and global in Node.js
 2. In normal function in strict mode, this is undefined, in non-strict mode this refers to window
 3. In method invocation, this refers to the obj, on which method is invoked
-4. Arrow functions have no this, so this in arraw function refers to this of it's parent's scope, for e.g. if arrow function is written inside global context - this refers to window
-5. this inside event handlers in DOM refer to the HTML element
+4. Arrow functions have no this, so this in arrow function's this refers to the lexical scopt of it's, for e.g. if arrow function is written inside global context - this refers to window, if arrow func is within a func, then this would be undefined in strict mode
+5. We can explicitly set this using call, apply and bind
+6. this inside event handlers in DOM refer to the HTML element
 
 **this keyword example and explaination** -
 Remember all the above rules
@@ -57,6 +58,60 @@ abc(); // window or undefined depending on strict mode
 obj.arrowFunc(); // // will print window obj
 obj.normalMethod(); //// will print 10
 obj.normalMethod2(); // will print 10
+```
+
+**TEST on this**
+
+```javascript
+"use strict";
+const name = "Global";
+function sayHello() {
+  console.log("sayHello:", this.name);
+}
+const obj = {
+  name: "Object",
+  sayHello: sayHello,
+  arrowHello: () => {
+    console.log("arrowHello:", this.name);
+  },
+  nested: {
+    name: "Nested",
+    sayHello: function () {
+      const inner = {
+        name: "Inner",
+        regularFunc: function () {
+          console.log("regularFunc:", this.name);
+        },
+        arrowFunc: () => {
+          console.log("arrowFunc:", this.name);
+        },
+      };
+
+      inner.regularFunc();
+      inner.arrowFunc();
+    },
+  },
+  delayedHello: function () {
+    setTimeout(function () {
+      console.log("delayedHello (regular):", this.name);
+    }, 0);
+
+    setTimeout(() => {
+      console.log("delayedHello (arrow):", this.name);
+    }, 0);
+  },
+};
+
+obj.sayHello();
+obj.arrowHello();
+obj.nested.sayHello();
+obj.delayedHello();
+// object - sayHello called as methiod invocation
+// undefined // why not global - just because we do name="global" in global scope does not make it a property of window/global obj, we need to do window.name
+// inner // regularFunc is called as methid invocation so this = inner obj
+// nested // arrow func will use this of sayHello func, and sayHello func's this.name value is nested
+// undefined // inside set timeout there is normal function and we are using strict mode, and normal function have this = undefined in strict mode
+// object // settimeout uses arrow func, and arrow func is inside delayedHello function's lexical scope, so this = delayedHello.s this, and it is invoked as method invocation
 ```
 
 ##### losing this
