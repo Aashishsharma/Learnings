@@ -161,10 +161,6 @@ Basically we can call server functions, directly from components (server compone
 3. Server actions can only trigger **HTTP POST method**
 4. To create server actions inside server components, the function must be async and should include a directive `use server`
 5. We cannot directly create server actions in client components, but we ca create a separate actions.ts file, put all actions there and at the top of the file add `use server`, now in the client component, we can import the server actions
-6. Note server action is different from server components
-7. We cannot import server components from client components, we need to pass servercomponents as child to client components
-8. However we can import server actions in client components, but we cannot define server actions in client components
-9. Mostly server actions are added on form submissions or on button click
 
 ### 1. Server actions in server components
 
@@ -189,7 +185,8 @@ function page() {
   return (
     <div>
       About page
-      {/* server action must be passed in form action */}
+      {/* here server action is passed in form action, hence
+      inside toDo method we get formData obj, but we can also pass server actions on button click (see below)*/}
       <form action={addTodo}>
         <label>Enter todo</label>
         <input name="todo" type="text"></input>
@@ -204,6 +201,14 @@ function page() {
       </form>
     </div>
   );
+}
+
+// server aciton on button click
+<button onClick={() => addTodo(todoName: string, id: number)}>Add TODO
+</button>
+// in this case addTodo would be
+const addTodo = async (todoName, id) => {
+  // DB query to directly insert data
 }
 export default page;
 ```
