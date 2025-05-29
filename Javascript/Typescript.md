@@ -772,20 +772,12 @@ interface TransactionObj {
 }
 console.log(todaysNet(todaysTransactions));
 
-// but then we can have below problem
-// property Dave doesn't exists but ts won't throw error because we use index signatures
+// 2 problems with index signatures
+// Problem 1 - (loosing type safety) property Dave doesn't exists but ts won't throw error because we use index signatures
+// this way we loose type safety while using index signatures
 console.log(todaysTransactions["Dave"]); // undefined
 
-// if we know that obj will definately have fixed properties and can have more
-interface TransactionObj {
-  [index: string]: number;
-  Pizza: number;
-  Books: number;
-  Job: number;
-}
-
-///////////////////////////////////
-
+// Problem 2 -
 interface Student {
   //[key: string]: string | number | number[] | undefined
   // since we have different datattypes of values below, we need to
@@ -797,11 +789,7 @@ interface Student {
   classes?: number[];
 }
 
-const student: Student = {
-  name: "Doug",
-  GPA: 3.5,
-  classes: [100, 200],
-};
+// to fix both problems, use keyof
 
 // console.log(student.test)
 
