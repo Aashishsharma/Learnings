@@ -3,93 +3,92 @@
 A function in JavaScript is a value.  
 Functions, in JavaScript, are essentially objects. Like objects they can be assigned to variables, passed to other functions and returned from functions.  
 As functions are objs, thay have properties
-| Property              | Description                                                                           | Example Use                                                                                           |
+| Property | Description | Example Use |
 |-----------------------|---------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `name`                | Returns the name of the function.                                                    | `console.log(myFunction.name);`                                                                     |
-| `length`              | Returns the number of parameters expected by the function.                            | `console.log(myFunction.length);`                                                                   |
-| `prototype`           | Allows adding properties and methods to all instances of a function when used as a constructor. | `MyConstructor.prototype.newMethod = function() {...};`                                             |
-| `toString()`          | Returns a string representation of the function. (gives the entire func code base in string).This can be used in debugging, or while creating documentation                                      | `const functionString = myFunction.toString();`                                                    |
-| `arguments`           | An array-like object containing the arguments passed to the function.                   | `console.log(arguments[0]);`                                                                        |
+| `name` | Returns the name of the function. | `console.log(myFunction.name);` |
+| `length` | Returns the number of parameters expected by the function. | `console.log(myFunction.length);` |
+| `prototype` | Allows adding properties and methods to all instances of a function when used as a constructor. | `MyConstructor.prototype.newMethod = function() {...};` |
+| `toString()` | Returns a string representation of the function. (gives the entire func code base in string).This can be used in debugging, or while creating documentation | `const functionString = myFunction.toString();` |
+| `arguments` | An array-like object containing the arguments passed to the function. | `console.log(arguments[0]);` |
 
 In addtion we also have call, apply and this, which is discussed below
 
-4. **this** property  -
-The this keyword in JavaScript refers to the object to which the current function belongs or is invoked  
+4. **this** property -
+   The this keyword in JavaScript refers to the object to which the current function belongs or is invoked
 
 when used inside a function this‘s value will change depending on
-| Invocation Type        | Description                                                                           | Example                                           |
+| Invocation Type | Description | Example |
 |------------------------|---------------------------------------------------------------------------------------|---------------------------------------------------|
-| **Global Context**     | Outside of any function or object, `this` is empty.                | `console.log(this); // output {}`|
-| **Function Context**   | In a regular function, `this` refers to the global object unless it's a method of an object. | `obj.method(); // this refers to the obj object`   |
-| **Method Invocation**  | When a function is a method of an object and is invoked using dot notation, `this` refers to the object on which the method was called. | `obj.method(); // this refers to the obj object`   |
-| **Constructor Invocation** | When a function is used as a constructor (invoked with `new`), `this` refers to the newly created instance of the object. | `const instance = new ConstructorFunction();`       |
-| **Event Handler**      | In an event handler, such as a click event, `this` often refers to the element that triggered the event. | ```javascript document.getElementById('myButton').addEventListener('click', function() { console.log(this); // this refers to the button element }); ``` |
-| **Arrow Functions**    | Arrow functions inherit `this` from the surrounding lexical scope. If there is no surrounding function for arrow func this is empty {}                     | ```javascript const obj = { arrowFunction: () => { console.log(this); // this refers to the outer context (lexical scope) } }; obj.arrowFunction(); ``` |
-| **Explicit Binding**   | `this` can be explicitly set using methods like `call()`, `apply()`, or `bind()`.     | ```javascript const explicitObj = { name: 'Explicit Object' }; explicitFunction.call(explicitObj); // this refers to explicitObj ``` |
+| **Global Context** | Outside of any function or object, `this` is empty. | `console.log(this); // output {}`|
+| **Function Context** | In a regular function, `this` refers to the global object unless it's a method of an object. | `obj.method(); // this refers to the obj object` |
+| **Method Invocation** | When a function is a method of an object and is invoked using dot notation, `this` refers to the object on which the method was called. | `obj.method(); // this refers to the obj object` |
+| **Constructor Invocation** | When a function is used as a constructor (invoked with `new`), `this` refers to the newly created instance of the object. | `const instance = new ConstructorFunction();` |
+| **Event Handler** | In an event handler, such as a click event, `this` often refers to the element that triggered the event. | `javascript document.getElementById('myButton').addEventListener('click', function() { console.log(this); // this refers to the button element }); ` |
+| **Arrow Functions** | Arrow functions inherit `this` from the surrounding lexical scope. If there is no surrounding function for arrow func this is empty {} | `javascript const obj = { arrowFunction: () => { console.log(this); // this refers to the outer context (lexical scope) } }; obj.arrowFunction(); ` |
+| **Explicit Binding** | `this` can be explicitly set using methods like `call()`, `apply()`, or `bind()`. | `javascript const explicitObj = { name: 'Explicit Object' }; explicitFunction.call(explicitObj); // this refers to explicitObj ` |
 
-**this keyword example and explaination** - 
+**this keyword example and explaination** -
 Remember all the above rules
 
 ```javascript
-
 function video() {
-  console.log(this) // here since this function is called as function invocation
+  console.log(this); // here since this function is called as function invocation
   // this refers to the global object
-    var title='abc' // any variables defined in this function using let, var, const, are not part 
-    // any this
-    // don;t define varibales like below (should always have let, car, const assigned)
-     tags=[1,2,3]; // here there is not let, var, const hence
-     // tags varibale is assgined to global this
-    function showTag() {
-      // here this again refers to global object
-    this.tags.forEach(function (tag) { // in this anonymous function as well
-    // this refers to global object because it is normal func invocation
-     console.log(this.title,tag) // this.tile would be undefined, becuase title is not part of global this
-     // tag would be printed    
-    })
+  var title = "abc"; // any variables defined in this function using let, var, const, are not part
+  // any this
+  // don;t define varibales like below (should always have let, car, const assigned)
+  tags = [1, 2, 3]; // here there is not let, var, const hence
+  // tags varibale is assgined to global this
+  function showTag() {
+    // here this again refers to global object
+    this.tags.forEach(function (tag) {
+      // in this anonymous function as well
+      // this refers to global object because it is normal func invocation
+      console.log(this.title, tag); // this.tile would be undefined, becuase title is not part of global this
+      // tag would be printed
+    });
 
     let abc = () => {
-      console.log(this.title) // undefined since this refers to global object, 
+      console.log(this.title); // undefined since this refers to global object,
       // because arrow functions this refers to outer functions this, and in this case
       // outer functions (video) this refers to global object
-    }
-    abc()
-    
-}
-showTag()
+    };
+    abc();
+  }
+  showTag();
 }
 
 // below function is function invocation
 // hence this will refer to global object
-video()
+video();
 
 let abc = () => {
-      console.log('this = ', this.title) // output - this = {}
-      // since array functions have no this and abc is a seprate function and not a nested function
-      // if it was a nested function, this = surrounding function
-      // if it was not a arrow function, this = global in node and this = window in browser
-    }
+  console.log("this = ", this.title); // output - this = {}
+  // since array functions have no this and abc is a seprate function and not a nested function
+  // if it was a nested function, this = surrounding function
+  // if it was not a arrow function, this = global in node and this = window in browser
+};
 ```
 
 ##### losing this
 
 ```javascript
 const obj = {
-    data: 'some data',
-    method: function() {
-        setTimeout(function() {
-          // here we loose this since not this refers to global object
-            console.log(this.data); // 'this' refers to the global object (or undefined in strict mode)
-            // to avoid this scenario use array func ot store this in outer func like context = this or use bind, call, apply methods
-        }, 1000);
-    }
+  data: "some data",
+  method: function () {
+    setTimeout(function () {
+      // here we loose this since not this refers to global object
+      console.log(this.data); // 'this' refers to the global object (or undefined in strict mode)
+      // to avoid this scenario use array func ot store this in outer func like context = this or use bind, call, apply methods
+    }, 1000);
+  },
 };
 
 obj.method();
-
 ```
 
 #### Call, Apply and Bind methods
+
 ```javascript
 // 1. Call -
 // The call() method is used to invoke a function with a specified this value and individual arguments.
@@ -139,6 +138,33 @@ greetBob('Hola');
 **They also don’t have super**
 **Arrow functions also don't have arguments property**
 
+**Implement custom bind function** -
+
+```javascript
+let obj = {
+  name: "ashish",
+};
+function a() {
+  console.log(this.name);
+}
+let p = a.bind1(obj, 123);
+// crux is we are doing a.bind(obj)
+// but in js if we do obj.a() - then this will point to obj, which is what the bind function does
+Function.prototype.bind1 = function (context, ...boundArgs) {
+  // store this of a current func in variable
+  let obj = this;
+  return function () {
+    // add temp property to the passed obj
+    context.some_temp_prop = obj;
+    // now call func in reverse format
+    // instead of a.bind(obj), we do obj.a()
+    return context.some_temp_prop(...boundArgs);
+  };
+};
+a(); // undefined
+p(); // ashish
+```
+
 ### The "new Function" syntax
 
 There’s one more way to create a function. It’s rarely used, but sometimes there’s no alternative.
@@ -180,31 +206,31 @@ Decorator a special function that takes another function and alters its behavior
 ```javascript
 // slow is a function and cachingdecorator adds caching ability to slow function
 let abc = (a) => {
-    console.log('sloq compute ', a)
-}
+  console.log("sloq compute ", a);
+};
 
 let decorator = (func) => {
-
-    let map = new Map();
-    return function() { // here we can;t return arrow function
+  let map = new Map();
+  return function () {
+    // here we can;t return arrow function
     // because they do not have this and arguments object, need to return a normal function only
-        let me = this;
-        let args = arguments[0];
-        console.log(args)
-        if (map.has(args)) {
-            console.log(' not calling slow compute')
-            return map.get(args)
-        }
-        let res = func.call(me, args);
-        map.set(args, res)
-        return res
+    let me = this;
+    let args = arguments[0];
+    console.log(args);
+    if (map.has(args)) {
+      console.log(" not calling slow compute");
+      return map.get(args);
     }
-}
+    let res = func.call(me, args);
+    map.set(args, res);
+    return res;
+  };
+};
 
 let pqr = decorator(abc);
-pqr(1)
-pqr(1)
-pqr(2)
+pqr(1);
+pqr(1);
+pqr(2);
 
 //The idea is that we can call cachingDecorator for any function, and it will return the caching wrapper
 //all we need to do is to apply cachingDecorator to them.
@@ -235,7 +261,7 @@ When to use?
 partial application is useful when we have a very generic function and want a less universal variant of it for convenience.
 For instance, we have a function send(from, to, text). Then, inside a user object we may want to use a partial variant of it: sendTo(to, text) that sends from the current user
 
-------------------------------------------------------------------------------
+---
 
 ## Currying
 
@@ -244,9 +270,10 @@ Currying is a transformation of functions that translates a function from callab
 Currying doesn’t call a function. It just transforms it.
 
 ```javascript
-function curry(f) { // curry(f) does the currying transform
-  return function(a) {
-    return function(b) {
+function curry(f) {
+  // curry(f) does the currying transform
+  return function (a) {
+    return function (b) {
       return f(a, b);
     };
   };
@@ -256,7 +283,7 @@ function sum(a, b) {
   return a + b;
 }
 let curriedSum = curry(sum);
-alert( curriedSum(1)(2) ); // 3
+alert(curriedSum(1)(2)); // 3
 // The result of curry(func) is a wrapper function(a).
 // When it is called like curriedSum(1), the argument is saved in the Lexical Environment, and a new wrapper is returned function(b).
 // Then this wrapper is called with 2 as an argument, and it passes the call to the original sum.
@@ -266,8 +293,8 @@ function sum(a, b) {
   return a + b;
 }
 let curriedSum = _.curry(sum); // using _.curry from lodash library
-alert( curriedSum(1, 2) ); // 3, still callable normally
-alert( curriedSum(1)(2) ); // 3, called partially
+alert(curriedSum(1, 2)); // 3, still callable normally
+alert(curriedSum(1)(2)); // 3, called partially
 ```
 
 When can it be used?
@@ -298,18 +325,17 @@ debugNow("message"); // [HH:mm] DEBUG message
 |----------|-----------|----------------------|
 | **Use Case** | Best when arguments are supplied one by one or reused in different contexts. | Best for fixing several arguments in advance for a more convenient function call later. |
 
-
 Implement currying function for n arguments
 
 ```javascript
 // currying for n args
 let fun = (x) => {
-    return (y) => {
-        if(!y) {
-            return x;
-        }
-        return fun(x+y)
+  return (y) => {
+    if (!y) {
+      return x;
     }
-}
-console.log(fun(1)(2)(3)(4)(5)(6)()) // 21
+    return fun(x + y);
+  };
+};
+console.log(fun(1)(2)(3)(4)(5)(6)()); // 21
 ```
