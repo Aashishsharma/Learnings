@@ -670,6 +670,10 @@ if (isNumber(x)) {
 }
 ```
 
+**Type predicate vs type assertion** -
+**Assertion** - tells TS that in this scenario the type would be whatever we specify, E.g. getElembyId(.img) as HTMLImgElem - this tells TS I know better than you, it is not html elem but it is html img elem  
+**Type predicate** is used to narrowdown a type, used for creating custom guards
+
 ### Type compatibility / type inference
 
 It is a feature that determines whether one type is assignable to another type
