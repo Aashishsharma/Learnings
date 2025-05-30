@@ -678,11 +678,11 @@ export default function App() {
 #### Key points
 
 1. Imporve performance based on priority based state updates
-2. How? - We know that react does batch updates of multiple state changes
-3. see below code - in useEffect, we are doing setName as well as setList, but setList is slow because of filtering largeList(> 1000 list)
+2. How? - We know that react does batch updates of multiple state changes, if in the same function, there are multiple setSTate calls, react will batch both the updates at once
+3. see below code - in useEffect, we are doing setName as well as setList, but setList is not yet called because of large filter data(> 1000 list)
 4. Now react will do batch update, that is, setName and setList will be batched and updates at once in the actual DOM
 5. Due to this the input filed becomes slow, becasue setList is not run yet, because of setList
-6. using transtiion we specufy that setName should be rendered immediately and setList can be run later (or even get cancelled if name input filed is again changed)
+6. using transtiion we specufy that setName should be run immediately and setList can be run later (or even get cancelled if name input filed is again changed)
 7. Disadvantages - multiple rerenders because setName is renderd and then setList, (earlier react would have updated both at once, once the setList was finished)
 8. usecase - see below code - input + list filtering
 
@@ -732,7 +732,9 @@ export default function App() {
 
 ##### Key points
 
-1. The query will update immediately, so the input will display the new value. However, the deferredQuery will keep its previous value until the data has loaded, so SearchResults will show the stale results for a bit.
+**useDeferredValue is similar to debouncing, only difference is in debounce, we specifiy the timelimt after which the debounced func needs to be called, and in deferredVal, react will decide that time before the deferred variable is updated**
+
+1. The query will update immediately, so the input will display the new value. However, the deferredQuery will keep its previous value until some time as passed (which react determined). and when sufficinet amount of time is passed, react will update deferedQuery variable value to the query value
 2. indicate that data shown is stale `<div style={{opacity: query !== deferredQuery ? 0.5 : 1}}>`
 3. **useTransition vs useDeferredValue** -
    useTransition - to make a particular state update a lower priority  
