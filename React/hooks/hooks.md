@@ -52,7 +52,7 @@ Group logically making sense of all states into one state object
 ### Key points
 
 1. use functional form of setstate -- setCnt(cnt => cnt+1)
-2. setState here is different from the class componente's setState method, classe setState method merges the state, where is in useState, stats aren't merged.  
+2. setState here is different from the class component's setState method, classe setState method merges the state, where is in useState, stats aren't merged.  
    e.g. `setState({...state, state.firstName: 'abc2'})`
 3. Using single state variable vs multiple state variables - if multiple state variables are closely related, then group them in one obj, else create multiple state variables
 
@@ -270,6 +270,11 @@ useReducer is usually preferable to useState when
 2. State is a complex obj, and not a plain string or a nummber
 3. your logic have related state tranistions (setLoading(false), setError(false), setData(data))
 
+**Solve 2 main problems of useState hook** -
+
+1. **Predictable state update** - If state is complex object, and if you use multiple setState function, then state updation becomes unpredictable
+2. **Maintability** - As dev, you just look at reducer func, and you exactly know what all different states value can be, and what actions to call to update this state
+
 ```javascript
 const initialState = { count: 0 };
 function reducer(state, action) {
@@ -317,7 +322,7 @@ How not to do
 ```
 
 The problem
-Reducers allow pieces of state that depend on each other to be updated predictably (whereas multiple useState’s might not)
+**Reducers allow pieces of state that depend on each other to be updated predictably (whereas multiple useState’s might not)**
 
 How to do
 
@@ -447,7 +452,7 @@ const theme = {
 useEffect(() => {
   console.log("current theme color : ", theme.color);
 }, [theme]);
-// useEffect is run everytime event id count state variable is changed
+// useEffect is run everytime count state variable is changed
 // because of referential integrity, if count state variable is changed, component rerenders, new theme obj is created
 // so theme used as second arg in useEffect got changed because new theme variable is created
 
@@ -460,7 +465,7 @@ const theme = useMemo(() => {
 useEffect(() => {
   // only called when dark variable is updated and not when count variable is changed
   console.log("current theme color : ", theme.color);
-}, [dark]);
+}, [theme]);
 ```
 
 3. to Avoid re-rendeing replace useEffect with useMemo where ever possible (see performance optimization section below)
