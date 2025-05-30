@@ -66,30 +66,15 @@ Interface between JS and HTML, another API provided by the run-time (i.e, browse
 
 ```javascript
 const h1 = document.querySelector('h1')
-
-// 1. going downwards
-// (notice that querySelector is working on html elem and not just on document obj)
-h1.querySelectorAll('.highlight') // select all html elems (including indirect childs) inside h1 having class 'highlight'
-// for direct childrens
-h1.childNodes // returns nodes which is not live
-h1.children // returns collection which is live
-h1.first/lastElementChild
-
-// 2. going upwards (parent)
-h1.parentNode // direct parent
-h1.closest('.header').style.backgroundColor = 'red' // indirect parent closest having class header
-
-// 3. Siblings (only 2 methods available, then how to get all siblings? see below)
-h1.previousElementSibling
-h1.nextElementSibling
-
-// using only these 3 direction we can traverse enitre DOM tree
 // get all siblings
 h1.parentNode.children
 [...h1.parentNode.children].forEach((el) => {
   el.style.transform = 'scale(0.5)'
 })
 //reduce size of all siblings (to h1 elem with class highlight) to half
+
+// event delegation
+// crux is use .closest method to get to the
 ```
 
 ## DOM lifecycle
@@ -257,8 +242,8 @@ It will use event.target to get the clicked element and highlight it.
 ```javascript
 let selectedTd;
 table.onclick = function (event) {
-  let target = event.target; // where was the click?
-  if (target.tagName != "TD") return; // not on TD? Then we're not interested
+  // where was the click?
+  if (event.target.tagName != "TD") return; // not on TD? Then we're not interested
   highlight(target); // highlight it
 };
 function highlight(td) {
