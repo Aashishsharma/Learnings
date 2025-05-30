@@ -4,71 +4,65 @@ Interface between JS and HTML, another API provided by the run-time (i.e, browse
 
 ## Dom Manipulation
 
-| Method                                     | Description                                                  | Example                                           |
-|--------------------------------------------|--------------------------------------------------------------|---------------------------------------------------|
-| `getElementById`                           | Selects a single element by its `id` attribute.               | `const element = document.getElementById('myElementId');` |
-| `getElementsByClassName`                   | Selects elements by their `class` attribute. Returns a live `HTMLCollection`. | `const elements = document.getElementsByClassName('myClassName');` |
-| `getElementsByTagName`                     | Selects elements by their tag name. Returns a live `HTMLCollection`. | `const elements = document.getElementsByTagName('div');` |
-| `getElementsByName`                        | Selects elements by their `name` attribute. Returns a live `NodeList`. | `const elements = document.getElementsByName('myName');` |
-| `querySelector`                            | Selects the first element that matches a CSS selector.         | `const element = document.querySelector('.myClass');` |
-| `querySelectorAll`                         | Selects all elements that match a CSS selector. Returns a static `NodeList`. | `const elements = document.querySelectorAll('p.myClass');` |
-| `querySelector` on a specific element      | Use `querySelector` on a specific element to find a descendant. | `const descendant = parentElement.querySelector('.descendantClass');` |
-| `querySelector` on the Document            | Use `querySelector` on the document to select an element anywhere in the document. | `const element = document.querySelector('#uniqueElementId');` |
-| Using Data Attributes                      | Select elements using data attributes.                         | `const elements = document.querySelectorAll('[data-custom="value"]');` |
+| Method                                | Description                                                                        | Example                                                                |
+| ------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `getElementById`                      | Selects a single element by its `id` attribute.                                    | `const element = document.getElementById('myElementId');`              |
+| `getElementsByClassName`              | Selects elements by their `class` attribute. Returns a live `HTMLCollection`.      | `const elements = document.getElementsByClassName('myClassName');`     |
+| `getElementsByTagName`                | Selects elements by their tag name. Returns a live `HTMLCollection`.               | `const elements = document.getElementsByTagName('div');`               |
+| `getElementsByName`                   | Selects elements by their `name` attribute. Returns a live `NodeList`.             | `const elements = document.getElementsByName('myName');`               |
+| `querySelector`                       | Selects the first element that matches a CSS selector.                             | `const element = document.querySelector('.myClass');`                  |
+| `querySelectorAll`                    | Selects all elements that match a CSS selector. Returns a static `NodeList`.       | `const elements = document.querySelectorAll('p.myClass');`             |
+| `querySelector` on a specific element | Use `querySelector` on a specific element to find a descendant.                    | `const descendant = parentElement.querySelector('.descendantClass');`  |
+| `querySelector` on the Document       | Use `querySelector` on the document to select an element anywhere in the document. | `const element = document.querySelector('#uniqueElementId');`          |
+| Using Data Attributes                 | Select elements using data attributes.                                             | `const elements = document.querySelectorAll('[data-custom="value"]');` |
 
 **HTMLCollection is live meaning if the element is changed / new elements are added they are reflected in the result of getElementsByClassName() methods which return HTMLCollection**  
 **querySelector and querySelectorAll return static NodeList but these methods can be called in other HTML elements as well, where as other methods can be called only in the document (global) object**
 
 2. Creating and inserting elements
+   | Operation | Method / Property | Description | Example Code |
+   | ---------- | -------------------------- | --------------------------------------------- | -------------------------------------------- |
+   | **Create** | `document.createElement()` | Creates a new HTML element | `const msg = document.createElement("div");` |
+   | | `element.textContent` | Sets plain text inside the element | `msg.textContent = "ABC";` |
+   | | `element.innerText` | Sets plain text inside the element | `msg.innerText = "ABC";` |
+   | | `element.innerHTML` | Sets HTML content inside the element | `msg.innerHTML = "<button>Test</button>";` |
+   | **Insert** | `element.append()` | Adds as the **last child** of the target | `parent.append(msg);` |
+   | | `element.prepend()` | Adds as the **first child** of the target | `parent.prepend(msg);` |
+   | | `element.before()` | Inserts element **before** the target element | `target.before(msg);` |
+   | | `element.after()` | Inserts element **after** the target element | `target.after(msg);` |
 
-```javascript
-//creating
-const message = document.creatElement('div');
-message.textContent = 'ABC'
-message.innerHTML = '<button>Test</button>'
+**innerText vs textContent**
 
-//inserting
-// prepend, append, before, after (before/after - add elem as a sibling, append/prepend - add the elem as child)
-document.getElementById('Abc').prepend(message)
-```
+| Feature         | `innerText`                                                          | `textContent`                       |
+| --------------- | -------------------------------------------------------------------- | ----------------------------------- |
+| **Hidden Text** | hidden element's text content is not returned(e.g., `display: none`) | Includes hidden text                |
+| **Performance** | Slower (triggers layout + style calculations)                        | Faster (direct access to node text) |
 
-3. Deleting elements
-
-```javascript
-document.querySelector('.removeButton').addEventListener('click', () => {
-  document.querySelector('div').remove()
-})
-```
+3. **Deleting elements - element.remove()**
 
 4. Manipulating Style, attributs and Classes
 
-```javascript
-const message = document.getElementsByClassName('message');
+| Category       | Property / Method              | Description                 | Example Code                                                         |
+| -------------- | ------------------------------ | --------------------------- | -------------------------------------------------------------------- |
+| **Styles**     | `element.style.property`       | Sets inline style           | `msg.style.width = "1.2em";`<br>`msg.style.backgroundColor = "red";` |
+| **Attributes** | `element.src` / `element.alt`  | Set or read HTML attributes | `img.src = "/abc.png";`<br>`img.alt = "img not loaded";`             |
+| **Data Attrs** | `element.dataset.name`         | Access `data-*` attributes  | `img.dataset.customAttr;`                                            |
+| **Classes**    | `element.classList.add()`      | Adds class                  | `img.classList.add("highlight");`                                    |
+|                | `element.classList.remove()`   | Removes class               | `img.classList.remove("hidden");`                                    |
+|                | `element.classList.toggle()`   | Toggles class on/off        | `img.classList.toggle("active");`                                    |
+|                | `element.classList.contains()` | Checks if class exists      | `img.classList.contains("error");`                                   |
 
-// 1. Styles (this adds inline style)
-message.style.width = '1.2em'
-message.style.backgroundColor = 'red'
+## DOM Traversal
 
-const img = document.getElementsByClassName('img');
-
-// 2. Attributes
-img.src='/abc.png'
-img.alt = 'img not loaded'
-
-// 3. Data attributes - these attributes start with data
-img.dataset.<Data-attribute>
-
-// 4. Classes
-// adding new classes to elems
-img.classList.add('<new-class-name>')
-.remove()
-.toggle() // if added then remove and vice versa
-.containes()
-
-```
-
-5. Traversing Dom (useful when you don't know the DOM tree beforehand)
-Traversing - selecting and element based on another element
+| Direction    | Method/Property                         | Description                              | Example Code                |
+| ------------ | --------------------------------------- | ---------------------------------------- | --------------------------- |
+| **Downward** | `element.querySelectorAll()`            | Select all matching child elements       | `div.querySelectorAll('p')` |
+|              | `element.children`                      | Get all direct child elements            | `ul.children`               |
+| **Upward**   | `element.closest(selector)`             | Finds the nearest ancestor that matches  | `btn.closest('.card')`      |
+|              | `element.parentElement` / `.parentNode` | Gets the parent element                  | `li.parentElement`          |
+| **Sideways** | `element.previousElementSibling`        | Gets previous sibling element            | `li.previousElementSibling` |
+|              | `element.nextElementSibling`            | Gets next sibling element                | `li.nextElementSibling`     |
+|              | `element.parentNode.children`           | Get all siblings (including the element) | `li.parentNode.children`    |
 
 ```javascript
 const h1 = document.querySelector('h1')
@@ -89,28 +83,28 @@ h1.closest('.header').style.backgroundColor = 'red' // indirect parent closest h
 h1.previousElementSibling
 h1.nextElementSibling
 
-// using only these 3 direction we can traverse enitre DOM tree 
+// using only these 3 direction we can traverse enitre DOM tree
 // get all siblings
 h1.parentNode.children
 [...h1.parentNode.children].forEach((el) => {
   el.style.transform = 'scale(0.5)'
 })
-//reduce size of all siblings (to h1 elem with class highlight) to half 
+//reduce size of all siblings (to h1 elem with class highlight) to half
 ```
 
 ## DOM lifecycle
 
 ```javascript
 // runs when enitre Dom content is loaded, doen't wait for external links/imgs to be loaded
-document.addEventListener('DOMContentLoaded', (e) => {
-  console.log('abc ', e)
-})
+document.addEventListener("DOMContentLoaded", (e) => {
+  console.log("abc ", e);
+});
 
 // runs when entire Dom is loaded alog with external links/imgs
-window.addEventListener('load')
+window.addEventListener("load");
 
 //runs before window is closed
-window.addEventListener('beforeunload')
+window.addEventListener("beforeunload");
 ```
 
 ## Browser events
@@ -123,21 +117,21 @@ An event is a signal that something has happened. **All DOM nodes generate such 
 3. mouseover / mouseout – when the mouse cursor comes over / leaves an element.
 4. mousedown / mouseup – when the mouse button is pressed / released over an element.
 5. mousemove – when the mouse is moved.  
-**keyboard events**  
-1. keydown and keyup – when a keyboard key is pressed and released
-**Form element events:**  
-1. submit – when the visitor submits a <form>.
-2. focus – when the visitor focuses on an element, e.g. on an <input>.
-**Document events:**  
-1. DOMContentLoaded – when the HTML is loaded and processed, DOM is fully built.
-**CSS events:**
-1. transitionend – when a CSS-animation finishes.
+   **keyboard events**
+6. keydown and keyup – when a keyboard key is pressed and released
+   **Form element events:**
+7. submit – when the visitor submits a <form>.
+8. focus – when the visitor focuses on an element, e.g. on an <input>.
+   **Document events:**
+9. DOMContentLoaded – when the HTML is loaded and processed, DOM is fully built.
+   **CSS events:**
+10. transitionend – when a CSS-animation finishes.
 
 #### Event handlers
 
 To react on events we can assign a handler – a function that runs in case of an event.  
 Handlers are a way to run JavaScript code in case of user actions.  
-Only one event handler can be added  
+Only one event handler can be added
 
 ```javascript
 <input type="button" id="elem" onclick="alert('Before')" value="Click me">
@@ -164,7 +158,7 @@ element.removeEventListener(event, handler, [options]);
 
 //options
 //1. once: if true, then the listener is automatically removed after it triggers.
-//2. capture (false/true): the phase where to handle the event, to be covered later 
+//2. capture (false/true): the phase where to handle the event, to be covered later
 //in the chapter Bubbling and capturing. For historical reasons.
 //3. passive: if true, then the handler will not call preventDefault()
 
@@ -186,7 +180,7 @@ element.removeEventListener(event, handler, [options]);
 //this doesn't work
 elem.addEventListener( "click" , () => alert('Thanks!'));
 elem.removeEventListener( "click", () => alert('Thanks!'));
-//if we don’t store the function in a variable, then we can’t remove it. 
+//if we don’t store the function in a variable, then we can’t remove it.
 //There’s no way to “read back” handlers assigned by addEventListener
 ```
 
@@ -195,16 +189,16 @@ So, There are 3 ways to assign event handlers:
 1. HTML attribute: onclick="...".
 2. DOM property: elem.onclick = function.
 3. Methods: elem.addEventListener(event, handler[, phase]) to add, removeEventListener to remove.  
-**Which to use**  
-When we assign an event handler to the document object, we should always use addEventListener, not document.on<event>, because the latter will cause conflicts: new handlers overwrite old ones.  
-For real projects it’s normal that there are many handlers on document set by different parts of the code.  
-So always 3 is better, 1 is only restricted to htmls  
+   **Which to use**  
+   When we assign an event handler to the document object, we should always use addEventListener, not document.on<event>, because the latter will cause conflicts: new handlers overwrite old ones.  
+   For real projects it’s normal that there are many handlers on document set by different parts of the code.  
+   So always 3 is better, 1 is only restricted to htmls
 
-## Event Bubbling and capturing  
+## Event Bubbling and capturing
 
 When an event happens on an element, it first runs the handlers on it, then on its parent, then all the way up on other ancestors.
 ![alt text](PNG/bubbling.PNG "Title")  
-Almost all events bubble. (a focus event does not bubble)  
+Almost all events bubble. (a focus event does not bubble)
 
 **Stopping event bubbling**  
 The method for it is event.stopPropagation()
@@ -220,35 +214,35 @@ The method for it is event.stopPropagation()
 
 Don’t stop bubbling without a need! Why? Why do bubbling exist?  
 If you click on an image inside a button, you also click on the button.  
-This means you just need to add the event to the button element, rather than also adding it to every (img in this case) element inside it.  
+This means you just need to add the event to the button element, rather than also adding it to every (img in this case) element inside it.
 
 When to stop bubbling?  
 When you don't want parent's event handler to execute  
-When you have an img, where onclick enlarges the image, and inside that image you have a button which shoes modal, when button is clicked modal is shown (which is ok) and img also enlarges (not ok)  
+When you have an img, where onclick enlarges the image, and inside that image you have a button which shoes modal, when button is clicked modal is shown (which is ok) and img also enlarges (not ok)
 
 ## Event capturing
 
-DOM Events have 3 phases of event propagation:  
+DOM Events have 3 phases of event propagation:
 
 1. Capturing phase – the event goes down to the element.
 2. Target phase – the event reached the target element.
-3. Bubbling phase – the event bubbles up from the element.  
+3. Bubbling phase – the event bubbles up from the element.
 
 Capturing is opposite of bubbling and when event happens first capture phase starts  
 To catch an event on the capturing phase, we need to set the handler capture option to true:
 
 ```javascript
-elem.addEventListener(event, handler, {capture: true})
+elem.addEventListener(event, handler, { capture: true });
 ```
 
 ![alt text](PNG/capturing.PNG "Title")  
 When capture is set to true, all event-handlers having capturing set to true are executed starting from the outermost parent to the target element where the event happened in above case on a <td>, and then bubbling happens in reverse order  
-**Summary**  
+**Summary**
 
 1. When an event happens – the most nested element where it happens gets labeled as the “target element” (event.target).
 2. Then the event moves down from the document root to event.target, calling handlers assigned with addEventListener(..., true) on the way (true is a shorthand for {capture: true}).
 3. Then handlers are called on the target element itself.
-4. Then the event bubbles up from event.target to the root, calling handlers assigned using on<event>, HTML attributes and addEventListener without the 3rd argument or with the 3rd argument false/{capture:false}.  
+4. Then the event bubbles up from event.target to the root, calling handlers assigned using on<event>, HTML attributes and addEventListener without the 3rd argument or with the 3rd argument false/{capture:false}.
 
 ## Event delegation
 
@@ -258,27 +252,28 @@ E.g. - highlight/change color of a cell <td> on click.
 The table could have many cells 99 or 9999, doesn’t matter.  
 Adding onClick on each td is not feasible/recommended  
 Instead of assigning an onclick handler to each <td> (can be many) – we’ll setup the “catch-all” handler on <table> element.  
-It will use event.target to get the clicked element and highlight it.  
+It will use event.target to get the clicked element and highlight it.
 
 ```javascript
 let selectedTd;
-table.onclick = function(event) {
+table.onclick = function (event) {
   let target = event.target; // where was the click?
-  if (target.tagName != 'TD') return; // not on TD? Then we're not interested
+  if (target.tagName != "TD") return; // not on TD? Then we're not interested
   highlight(target); // highlight it
 };
 function highlight(td) {
-  if (selectedTd) { // remove the existing highlight if any
-    selectedTd.classList.remove('highlight');
+  if (selectedTd) {
+    // remove the existing highlight if any
+    selectedTd.classList.remove("highlight");
   }
   selectedTd = td;
-  selectedTd.classList.add('highlight'); // highlight the new td
+  selectedTd.classList.add("highlight"); // highlight the new td
 }
 ```
 
 Becuse of bubbling, click on <td> will also trigger click on <table>  
 Still, there’s a drawback.  
-The click may occur not on the <td>, but inside it.  
+The click may occur not on the <td>, but inside it.
 
 ```javascript
 <td>
@@ -287,12 +282,12 @@ The click may occur not on the <td>, but inside it.
 </td>
 ```
 
-if a click happens on that <strong> then it becomes the value of event.target and our code will fail  
+if a click happens on that <strong> then it becomes the value of event.target and our code will fail
 
 ```javascript
 //improved code
-table.onclick = function(event) {
-  let td = event.target.closest('td'); // (1)
+table.onclick = function (event) {
+  let td = event.target.closest("td"); // (1)
   if (!td) return; // (2)
   if (!table.contains(td)) return; // (3)
   highlight(td); // (4)
@@ -300,11 +295,11 @@ table.onclick = function(event) {
 ```
 
 It’s often used to add the same handling for many similar elements, but not only for that.  
-**Event delegation algorithm**  
+**Event delegation algorithm**
 
 1. Put a single handler on the container.
 2. In the handler – check the source element event.target.
-3. If the event happened inside an element that interests us, then handle the event.  
+3. If the event happened inside an element that interests us, then handle the event.
 
 **The “behavior” pattern**  
 We can also use event delegation to add “behaviors” to elements declaratively, with special attributes and classes.  
@@ -325,11 +320,11 @@ One more counter: <input type="button" value="2" data-counter>
 </script>
 ```
 
-**Benifits of event delegation**  
+**Benifits of event delegation**
 
 1. Simplifies initialization and saves memory: no need to add many handlers.
 2. Less code: when adding or removing elements, no need to add/remove handlers.
 3. DOM modifications: we can mass add/remove elements with innerHTML and the like.  
-**Disadvantages**  
-1. The event must be bubbling. Some events do not bubble. Also, low-level handlers should not use event.stopPropagation().
-2. The delegation may add CPU load, because the container-level handler reacts on events in any place of the container, no matter whether they interest us or not. But usually the load is negligible, so we don’t take it into account.
+   **Disadvantages**
+4. The event must be bubbling. Some events do not bubble. Also, low-level handlers should not use event.stopPropagation().
+5. The delegation may add CPU load, because the container-level handler reacts on events in any place of the container, no matter whether they interest us or not. But usually the load is negligible, so we don’t take it into account.
