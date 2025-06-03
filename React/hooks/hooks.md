@@ -639,8 +639,13 @@ export function App(props) {
 
 ### 6. forwardRef
 
-forwardRef lets your component expose a DOM node to parent component with a ref.  
+forwardRef lets your component expose a DOM node of parent component to a child component with a ref.  
 **Real life usecase - to pause/play a video of a child component**
+
+**Implementation -**
+
+1. In parent component create and useRef as usual
+2. Wrap child component in forwardRef function and second arg will have ref as argument
 
 ```javascript
 //child component exposing it's input element's ref to parent
@@ -755,7 +760,7 @@ function PasswordField() {
 ```
 
 **useId should not be used to generate keys in a list. Keys should be generated from your data.**  
-**useId vs Math.random() - useId Ensures that IDs remain consistent across server and client rendering (SSR)**
+**useId vs Math.random() - useId Ensures that IDs remain consistent across server and client rendering (SSR) avoiding hydration errors**
 
 ### 10. useReducer + useContext
 
