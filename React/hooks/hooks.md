@@ -639,7 +639,28 @@ export function App(props) {
 
 ### 6. forwardRef
 
-forwardRef lets your component expose a DOM node of parent component to a child component with a ref.  
+forwardRef lets your component expose a DOM node of parent component to a child component with a ref.
+
+**Real life usecase -Building a Reusable Button in a Design System**
+
+```javascript
+import React, { forwardRef } from 'react';
+const FancyButton = forwardRef((props, ref) => {
+  return (
+    <button className="fancy" ref={ref}>
+      {props.children}
+    </button>
+  );
+});
+export default FancyButton;
+// then in the code that uses our library can use refs to our custom components
+const buttonRef = useRef();
+<FancyButton ref={buttonRef}>Click Me</FancyButton>
+<button onClick={() => buttonRef.current.focus()}>
+  Focus the Fancy Button
+</button>
+```
+
 **Real life usecase - to pause/play a video of a child component**
 
 **Implementation -**
@@ -762,7 +783,113 @@ function PasswordField() {
 **useId should not be used to generate keys in a list. Keys should be generated from your data.**  
 **useId vs Math.random() - useId Ensures that IDs remain consistent across server and client rendering (SSR) avoiding hydration errors**
 
-### 10. useReducer + useContext
+### 10. useDebugValue
+
+Bascially in react dev tools we get all details of the component like props, all the hooks used and all.  
+If we create custom hook, and instead of showing all the component details, we can use useDebugValue hook which will show the value we want to be shown besides the component un react dev tools
+**useDebugValue(<anyVariable-state-or-prop-or-any-variable>)**  
+then besides the localStorage custom hook, we can see that value
+![alt text](image.png)
+
+**useDebugValue only in production or when val is calculated slowly - useDebugValue(val, val => getValueSlowly(val))**
+
+### 11. useImperativeHandle
+
+WIth useRef we can call ref.current.focus(), but only if the native dom node supports focus property.
+With using useImperativeHandle, we can attach new properites to our ref in react components
+
+Usecase - similar to useRef, but in this case we can use only one ref from parent to control multiple elements
+
+```javascript
+// syntax
+// 1st arg - ref - parent ref
+// 2nd arg - custom function to add new properties to ref
+// 3rd arg - [] - dep array similar to useEffect
+useImperativeHandle(
+  ref,
+  () => ({
+    yourExposedMethodOrValue,
+  }),
+  []
+);
+
+// use case when we want to validate or reset multiple form fields
+
+import React, { useRef, forwardRef, useImperativeHandle } from "react";
+
+// Child component with two input fields
+const MyInput = forwardRef((props, ref) => {
+  const input1Ref = useRef();
+  const input2Ref = useRef();
+
+  useImperativeHandle(ref, () => ({
+    focusFirst: () => input1Ref.current.focus(),
+    reset: () => {
+      input1Ref.current.value = "";
+      input2Ref.current.value = "";
+    },
+  }));
+
+  return (
+    <div>
+      <input ref={input1Ref} placeholder="First Name" />
+      <input ref={input2Ref} placeholder="Last Name" />
+    </div>
+  );
+});
+
+// Parent component that interacts with MyInput
+function Parent() {
+  const myInputRef = useRef();
+
+  return (
+    <div>
+      <MyInput ref={myInputRef} />
+      <button onClick={() => myInputRef.current.focusFirst()}>
+        Focus First Input
+      </button>
+      <button onClick={() => myInputRef.current.reset()}>Reset Form</button>
+    </div>
+  );
+}
+
+export default Parent;
+```
+
+**Note - in forwardRef, we can pass only 1 ref, to pass multiple refs, we can pass the refs as props, instead of passing ref as second arg inside forwardRef function**  
+Then what is the real usecase for forward Ref? - in design system to create component libraries, forwardRef is preferred as opposed to passing ref as a prop -
+
+```javascript
+// good example using forwardRef to create a button library in component library
+import React, { forwardRef } from 'react';
+const FancyButton = forwardRef((props, ref) => {
+  return (
+    <button className="fancy" ref={ref}>
+      {props.children}
+    </button>
+  );
+});
+export default FancyButton;
+// then in the code that uses our library can use refs to our custom components
+const buttonRef = useRef();
+<FancyButton ref={buttonRef}>Click Me</FancyButton>
+<button onClick={() => buttonRef.current.focus()}>
+  Focus the Fancy Button
+</button>
+
+// bad example creating a button component in a library by passing ref as a prop
+const FancyButton = ((props) => {
+  return (
+    <button className="fancy" ref={props.customMyRref}>
+      {props.children}
+    </button>
+  );
+});
+
+<FancyButton customMyRref={buttonRef}>Click Me</FancyButton>
+```
+
+### 12. useReducer + useContext
 
 In smaller apps we don't need Redux we can achieve same Redux functionality using useReducer and useContext hooks  
 **Steps**
