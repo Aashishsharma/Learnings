@@ -66,9 +66,97 @@
 | `docker-compose pull`                | Pull images defined in Compose                    |
 | `docker-compose push`                | Push images defined in Compose                    |
 
+## Reading docker compose file
+
+### 📌 Predefined keys (must be written exactly like this)
+
+- `version`
+- `services`
+- `volumes`
+- `networks`
+
+**Inside `services`:**
+
+- `image`
+- `build`
+- `ports`
+- `volumes`
+- `environment`
+- `depends_on`
+- `restart`
+- `deploy`
+- etc.
+
+---
+
+### 🛠️ Custom names (you choose)
+
+- **Service names:** `app`, `db`, `frontend`, etc.
+- **Volume names:** `db_data`, `app_data`, etc.
+- **Network names:** `app_network`
+
+# ===========================================================
+
+# 🐳 Docker Compose Reference Skeleton
+
+# ===========================================================
+
+```yaml
+version: "3.9" # Compose file format version
+
+# -------------------------------
+# Services = containers to run
+# -------------------------------
+services:
+  app: # 👈 custom name (you choose, e.g., app, api, backend)
+    image: node:18 # Use prebuilt image
+    # OR build from Dockerfile instead of image:
+    build:
+      context: ./app # Path to Dockerfile directory
+      dockerfile: Dockerfile.dev # Specific Dockerfile name
+      args: # Build arguments
+        NODE_ENV: production
+
+    container_name: my_app # Optional custom container name
+
+    command: ["npm", "start"] # Override default CMD
+    entrypoint: ["node", "server.js"] # Override ENTRYPOINT
+
+    working_dir: /usr/src/app # Set working directory inside container
+
+    ports: # Map host:container ports
+      - "8080:3000"
+      - "443:443"
+
+    volumes: # Mount volumes
+      - ./src:/usr/src/app # Bind mount (local dir → container dir)
+      - app_data:/data # Named volume
+
+    environment: # Environment variables
+      - NODE_ENV=production
+      - PORT=3000
+    env_file: # Load env vars from file
+      - .env
+
+    depends_on: # Service dependencies (startup order)
+      - db
+
+    restart: always # Restart policy: no, always, on-failure, unless-stopped
+
+  db: # 👈 Another service
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+```
+
 **for docker run commands flags need to be in sequence - docker run --name my-container -p 3000:3000 my-image** - here you cannot give port flag before --name flag
 
-**port binding -**  
+**port binding -**
 Docker allows multiple apps with diff versions run simultaneously like 2 diff ver of redis can be run, here redis is opened to default port (6379), so now there are 2 containers (running instances of 2 diff redis version) and both exposing to port 6379, so this is possible because of -p hostport:containerport, no issues as long as host port is always diff.
 
 ## Sample application - create 3 node instances which servers APIs, and use NginX for loadbalancing
@@ -93,11 +181,11 @@ EXPOSE 3000
 CMD ["npm", "start"]
 ```
 
-```docker-compose.yml
+```yaml
 version: "3"
 
 services:
-  app1:
+  app1: # creating 3 upstream servers from the same Docker image for load balancing demo in nginx-project
     build: .
     ports:
       - "3001:3000"
@@ -110,16 +198,15 @@ services:
       - "3002:3000"
     environment:
       - SERVER=SERVER2
+
   app3:
     build: .
     ports:
       - "3003:3000"
     environment:
       - SERVER=SERVER3
-
 ```
 
-We do this using docker push command  
 `docker push <image-name:version>` also first do docker login  
 Image names in docker registries (like AWS ECR)  
 registryDomain/imageName:tag  
