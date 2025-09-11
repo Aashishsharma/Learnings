@@ -1,0 +1,32 @@
+# Ignore the node_modules directory commonly found in Node.js projects
+node_modules/
+
+# Ignore all log files
+*.log
+
+# Ignore environment configuration files
+.env
+.env.local
+
+# Ignore build output directories
+/build
+/dist
+
+# Ignore Git-related files and directories
+.git
+.gitignore
+
+# Ignore temporary or cache files
+tmp/
+.cache/
+
+# Ignore specific files
+passwords.txt
+secrets.json
+
+# Exclude everything by default, then re-include specific necessary files
+# This is useful for projects with many files where only a few are needed
+# *
+# !Dockerfile
+# !src/
+# !package.json

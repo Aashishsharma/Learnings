@@ -1,0 +1,7 @@
+2025/09/09 17:05:34 [emerg] 19420#11744: CreateFile() "C:\git\Learnings\Docker + kubernetes\nginx-project/conf/nginx.conf" failed (2: The system cannot find the file specified)
+2025/09/09 17:06:32 [emerg] 11736#14688: no "events" section in configuration
+2025/09/09 17:10:08 [emerg] 10108#17384: unknown directive "orker_processes" in C:\git\Learnings\Docker + kubernetes\nginx-project/conf/nginx.conf:2
+2025/09/09 17:10:17 [emerg] 1068#2212: CreateFile() "C:\git\Learnings\Docker + kubernetes\nginx-project/conf/mime.types" failed (2: The system cannot find the file specified) in C:\git\Learnings\Docker + kubernetes\nginx-project/conf/nginx.conf:12
+2025/09/09 17:10:38 [emerg] 8520#6404: unexpected "}" in C:\git\Learnings\Docker + kubernetes\nginx-project/conf/nginx.conf:29
+2025/09/09 17:11:27 [emerg] 1784#3384: unexpected "}" in C:\git\Learnings\Docker + kubernetes\nginx-project/conf/nginx.conf:18
+2025/09/09 17:11:54 [emerg] 14024#11096: CreateDirectory() "C:\git\Learnings\Docker + kubernetes\nginx-project/temp/client_body_temp" failed (3: The system cannot find the path specified)
