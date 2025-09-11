@@ -95,11 +95,7 @@
 - **Volume names:** `db_data`, `app_data`, etc.
 - **Network names:** `app_network`
 
-# ===========================================================
-
 # 🐳 Docker Compose Reference Skeleton
-
-# ===========================================================
 
 ```yaml
 version: "3.9" # Compose file format version
@@ -206,6 +202,9 @@ services:
     environment:
       - SERVER=SERVER3
 ```
+
+now run `docker-compose up --build` command to start all services within docker-copmose file  
+then run start nginx command to start nginx server, which will load balance all these 3 nodejs services
 
 `docker push <image-name:version>` also first do docker login  
 Image names in docker registries (like AWS ECR)  
