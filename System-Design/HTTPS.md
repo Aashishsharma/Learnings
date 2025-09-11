@@ -1,5 +1,7 @@
 # TLS Handshake Steps
 
+![alt text](PNG/HTTPS.PNG "Title")
+
 1. **Client Hello**  
    → Browser (client) sends a **Client Hello** message to the server.
 
