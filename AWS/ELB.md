@@ -31,3 +31,11 @@
 4. Configure sizing - min, max and desired EC2 instances (keep max instance to 4 for testing)
 5. once finished, the loadbalancer that we selected in step 3, while creating ASG, then go to that ELB, open the DNS name, and it will redirect the request to any of the (4EC2) created in ASG template, becuase we kept desired / max EC2 instances to 4
 6. under EC2, we will see new 4 instances created, and while cleaning up, we first need to delete ASG, otherwise if we terminate the instances from EC2 tab without deleteing ASG, then ASG will keep on creating new instances do meet the desired number if EC2 instances in ASG config
+
+#### ASG scaling strategies
+1. Manual - the one we did where me manually added min, max EC2 instances
+2. Dynamic - 
+2.1 - Simple / Step scaling - When cloudwatch alarm trigerred (CPU utilization > 70%) then add 2 EC2 instance, when CPU < 30% remove 2 EC2s
+2.2 - Target tracking - I want avg ASG CPU utilization to be 50%, ASG, will decide then when to add / remove, based on this tracking
+2.3 - Scheduled - Every Mon, Tue, Wed - 10 AM, increase min capacity to 10 EC2 instances
+3. Predictive - AWS analysis trafic load, and scales EC2 instance based on future load prediction
