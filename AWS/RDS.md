@@ -20,4 +20,38 @@
 - AWS managed Redis / memcache
 
 ## DynamoDB
-- 
+- NoSQL AWS DB
+- it is serverless DB, so you just directly create tables (NoSQL), no need for DB instance
+- DynamoDB can have only 1 table
+- similar to Elastic cache, we have DAX (DynamoDB Accelerator) - caching, but just for DynamoDB
+- we can use Elastic cache for DynamoDB as well, but DAX is more performant and specially designed for DynamoDB
+
+## Redshift
+![alt text](PNG/Redshift.PNG "Title") 
+
+## EMR
+![alt text](PNG/EMR.PNG "Title") 
+
+## Athena
+![alt text](PNG/Athena.PNG "Title") 
+
+## Quicksight
+![alt text](PNG/Quicksight.PNG "Title") 
+
+## DocumentDB
+![alt text](PNG/DocumentDB.PNG "Title") 
+
+## Neptune
+![alt text](PNG/Neptune.PNG "Title") 
+
+## Timestream
+![alt text](PNG/Timestream.PNG "Title") 
+
+## ManagedBlockchain
+![alt text](PNG/ManagedBlockchain.PNG "Title") 
+
+## Glue
+![alt text](PNG/Glue.PNG "Title") 
+
+## Database migration service
+![alt text](PNG/DMS.PNG "Title") 
