@@ -64,3 +64,39 @@ Outputs:t a
 - once the clouf formation is created under template section
 
 ![alt text](PNG/CF.PNG "Title") 
+
+**Instead of creating yml file by hand, we can use CDK (Cloud development kit)**  
+- Using CDK we can write cloudformation template in JS/TS/Python, and using CDK, we can complie our ts file to cloudformation.yml file
+
+e.g. CDK for Typescript for creating lambda function
+
+```typescript
+const { Stack } = require('aws-cdk-lib');
+const lambda = require('aws-cdk-lib/aws-lambda');
+const apigw = require('aws-cdk-lib/aws-apigateway');
+class HelloLambdaStack extends Stack {
+  /**
+   *
+   * @param {Construct} scope
+   * @param {string} id
+   * @param {StackProps=} props
+   */
+  constructor(scope, id, props) {
+    super(scope, id, props);
+    const fn = new lambda.Function(this, 'MyFunction', {
+      code: lambda.Code.fromAsset('lib/lambda-handler'), // relative path to your lambda function
+      runtime: lambda.Runtime.NODEJS_LATEST,
+      handler: 'index.handler'
+    });
+
+    const endpoint = new apigw.LambdaRestApi(this, 'MyEndpoint', {
+      handler: fn,
+      restApiName: "HelloApi"
+    });
+
+  }
+}
+module.exports = { HelloLambdaStack }
+```
+
+**then run cdk synth** - this will synthesize AWS Cloudformation file for us
