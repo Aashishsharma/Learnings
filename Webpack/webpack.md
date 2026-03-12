@@ -193,6 +193,31 @@ module.exports = {
 };
 ```
 
+### Webpack dev server
+
+1. Runs the build on the server - so we see ui with localhost:3000
+2. does Hot module replacement (HMR) - so changes are propagated to the UI
+3. Almost all UI frameworks like react / angular internally use webpack dev server
+4. for react we see script like react start - which internall dies webpack serve
+
+```npm i webpack-dev-server```  
+in pkg.json  
+```.js
+"dev": "webpack server --open --mode development"
+```
+
+in webpack.config.js
+```.js
+module.exposrts = {
+  entry: ...
+  output: ...
+  devServer: {
+    port: 3000
+  }
+}
+```
+
+
 ## 5. Tree shaking
 
 Tree shaking is a technique that eliminates dead code from your final bundle. It removes unused exports, reducing the bundle size.
