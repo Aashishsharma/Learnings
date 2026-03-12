@@ -18,3 +18,6 @@
 - here we configure different steps to push the code to prod
 
 **use AWS code commit to comit the code, AWS code build will build the code, and Codepipeline will deploy it to beanstalk (or any other AWS servcie, not just beanstalk)**
+
+### CodeArtifact
+- similar to npm registry or Maven repository. It's a managed artifact repository service that acts as a private repository for packages (npm, Python, Maven, etc.) 
