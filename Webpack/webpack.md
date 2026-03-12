@@ -109,49 +109,87 @@ module.exports = {
         // then css-loader is run - which allows import statemnts of css
         // then style-loader is run - which injects styles into DOM
       },
+      // 5 ts-loader - convert ts files to js and bundle them
       {
-        
-        use: {
-          loader: 'babel-loader',
-        },
+        test: '/\.ts$/'
+        use: 'ts-loader'
+        // note - ts-loader internally using tsc command instead of we running tsc commands
+        // same is with sass-loader above, it runs sass commands to convert .scss to css
       },
-      {},
     ],
   },
 };
 ```
 
-another example using css-loader-  
-
-css-loader is used to bundle css files and include then in js files using @import statements 
-
-```javascript
-// npm install --save-dev css-loader ts-loader
-//similarly ts-loader us used to convert ts code to js
-module.exports = {
-  module: {
-    rules: [
-      { test: /\.css$/, use: 'css-loader' },
-      { test: /\.ts$/, use: 'ts-loader' }
-    ]
-  }
-};
-```
-
 ## 4. Plugins
 
-Plugins perform a wide range of tasks such as bundle optimization, asset management, and environment-specific configurations.
+Plugins perform a wide range of tasks such as bundle optimization, environment-specific configurations, minification.
 
+We can also create custom webpack plugins to add more functionalit to the build process if required. 
+
+**loaders just allow to load differnt file types to build, plugins help optimize build files like minify and add more functionality**
+
+##### 1. html-webpack-plugin
+1. copy html files to build folder
+2. replace reference if js files in html with approproate chunks
+3. Minify htmls= files
 ```javascript
-// helps in minifying html files for prod
+// node that unlike loaders, plugins need to be imported in webpack.config.js file
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: './src/index.html', // copy code from src/index.html to build folder
+      chunks: ['index'] // include index.js as script tag in index.html
+      filename: 'index.html' // filename in build directory
+      inject: 'head' / 'body' // where to inject js file in the DOM
+      minify: true
     }),
   ],
+};
+```
+
+##### 2. copy-webpack-plugin
+1. the default asset/resource loader we saw in the loaders section only copys images / fonts from assets directory.
+2. what if we need to copy files / images / text files from diff locations? use this plugin
+```javascript
+// node that unlike loaders, plugins need to be imported in webpack.config.js file
+const HtmlWebpackPlugin = require('copy-webpack-plugin');
+
+module.exports = {
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src/assets/images'),
+          to: path.resolve(__dirname, 'dist', "assets/images"),
+          transform: // this will be a function, if we want to transform files, like text files
+        }        
+      ]
+    }),
+  ],
+};
+```
+
+##### 3. mini-css-extract-plugin
+1. the style-loader we saw in the loaders section will load styles in the head section of html, it won't generate a separate file, also it is not minified.
+```javascript
+// node that unlike loaders, plugins need to be imported in webpack.config.js file
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name]-[contenthash].css'
+    }),
+  ],
+  // note we also need to remove style loader and use MiniCssExtractPlugin's loader from the loaders
+  // so loaders will now be
+  {
+    test: /\.scss$/
+    use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+  }
 };
 ```
 
@@ -159,6 +197,11 @@ module.exports = {
 
 Tree shaking is a technique that eliminates dead code from your final bundle. It removes unused exports, reducing the bundle size.
 
+### How webpack works
+1. From entry files - create dependency graph
+2. Each graph node beaing a file - traverse the graph and run loaders for each file based on the loader rules
+3. Run plugins
+4. Generate output files
 
 # Babel
 
