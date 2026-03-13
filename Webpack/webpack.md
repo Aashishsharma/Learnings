@@ -46,6 +46,8 @@ module.exports = {
   output: {
   filename: "[name].bundle.js" // [name is place holder for each field in entry obj]
   // instead of name, we and use [contenthash].bundle.js
+  // always use contenthash - because the files would be cached
+  // so if content of file changes, new hash, and new file, so caching issue won't occur
 }
 };
 ```
@@ -259,7 +261,9 @@ module.exposrts = {
 
 ## 5. Tree shaking
 
-Tree shaking is a technique that eliminates dead code from your final bundle. It removes unused exports, reducing the bundle size.
+- technique that eliminates dead code from your final bundle. It removes unused exports, reducing the bundle size.  
+- webpack 5 by default does tree shaking
+- need to use ES6 modules for tree shaking to work, commonjs modules will not work
 
 ### How webpack works
 1. From entry files - create dependency graph
