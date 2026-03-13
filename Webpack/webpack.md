@@ -178,6 +178,8 @@ module.exports = {
 // node that unlike loaders, plugins need to be imported in webpack.config.js file
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+// note - this will not minify css, it will onlt create separate css file
+// to minify css files - we need to use different package - see optimization section
 module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
@@ -191,6 +193,43 @@ module.exports = {
     use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
   }
 };
+
+// another plugin to remove unused css
+
+const {PurgeCssPlugin } = require('purgecss-webpack-plugin');
+const {glob} = require('glob')
+
+module.exports = {
+  plugins: [
+    // this will remove unused css
+    // glob will scan the files from procided directory and pass result to purgecss plugin
+    new PurgeCssPlugin({
+      paths: glob.sync(`${path.resolve(__dirname, 'src')}/**/*`)''
+    }),
+  ],
+  // note we also need to remove style loader and use MiniCssExtractPlugin's loader from the loaders
+  // so loaders will now be
+  {
+    test: /\.scss$/
+    use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+  }
+};
+```
+
+## 5. Optimization
+This is another property which can be added at the root of module.export
+
+```js
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+module.export = {
+  entry: ...
+  optimization: {
+    minimizer: {
+      `...`, // spread operator, so that other minifications are also done, not just css
+      new CssMinimizerPlugin() // note that this goes in optimization section, not in plugins section
+    }
+  }
+}
 ```
 
 ### Webpack dev server
