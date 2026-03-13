@@ -258,6 +258,47 @@ module.exposrts = {
 }
 ```
 
+#### Code splitting
+- to analyze how bundle is split use plugin - **webpack-bundle-analyzer**
+
+```javascript
+const {BundleAnalyzerPlgin} = require('webpack-bundle-analuzer')
+module.export = {
+  entry: ...,
+  plugins: [
+    new BundleAnalyzerPlgin(), // this will show in webpage how bundle is aplit
+  ],
+  // index.js - imports lodash
+  // index2.js - imports lodash
+  // if below optimization is not provided then
+  // in most cases, in both the bundle files lodash dep is added
+  optimization: {
+    splitChunks: {
+      chunks: "all"
+    }
+    // if we add above optimization, then chunk would be
+    // index1/2.bundle.js
+    // vendor.bundle.js - this will have lodash code
+    // in Next.js apps, where we don't directly touch webpack, this
+    // optimization field is already added by default
+  }
+}
+```
+
+- another way to code split is by using dynamic imports
+
+```javascript
+const handleAddButtonClick = () => {
+  // lodash lib is loaded as separate chunk only when user clicks on add button
+  // instead of loading the js for lodash on page load
+  import("lodash").then(({default: _}) => {
+    let ans = _.add(2+2)
+    document.getElembyId("ans").innerHtml = ans
+  })
+}
+```
+
+
 
 ## 5. Tree shaking
 
