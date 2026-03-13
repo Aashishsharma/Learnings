@@ -298,7 +298,33 @@ const handleAddButtonClick = () => {
 }
 ```
 
+#### SourceMaps
+- map minified code to actual source code
+- need for debugging
+- webpack enables it by default in dev mode, alway false in prod mode
+- not recommended to enable in prod mode due to
+- 1. code seen in browser devtools - security issue
+- 2. performance issue - because source-map gets downloaded
+- but then how to debug on prod? - enable source maps on prod, only for specific IPs, so that we can see sourcemaps, but not end user
+- enabeling sourcemap on prod - and devtools field in webpack.config.js```devtools: "source-map"```
+- in Next.js -  
+```javascript
+// next.config.js
+module.exports = {
+  productionBrowserSourceMaps: true
+}
+```
 
+**Enabling prod sourcemaps for spefici IPs** - 
+- need to configure it at server level - 
+```yml
+# nginx
+location ~ \.map$ {
+    allow 10.0.0.1;
+    allow 192.168.1.5;
+    deny all;
+}
+```
 
 ## 5. Tree shaking
 
