@@ -143,3 +143,35 @@ see how ```git reflog``` - gives all the commits to which the head was pointed t
 - the data in reflog will be available only till certain days - 
 - 90 days -if the commit is rechable
 - 30 days if the commit is not reachable
+
+## Diff and patch
+- diff - git uses some alog to compute diff between 2 commits / files / string
+- patch - extension of diff, such that by reading patch file, git excalty knows who to get to a particular version of a file by reading patch
+
+![alt text](PNG/Git9.PNG "Title")  -
+- when we run ```git diff HEAD~1 HEAD``` - it gives the excat changes the last commit had pushed  
+- oberve the output - the imp part is patch head (everythign between to @@)
+- this tells git that starting from line 108 in file from prev version, 7 lines got changed (inclusing context lines), and in new versio of the file - staring from line 108, 7 lines got changed
+- --- means lines removed in newer version
+- +++ lines added in new version
+- all other lines not having + or - are called context lines, git references these lines to know where excatly the changes are done
+- when we run ```git diff HEAD~1 HEAD > my-patch.patch``` - git copies the output of git diff and stores in in my-patch.patch file, later we can apply this patch using ```git apply my-patch.patch```
+- summary - **patch is a text file that represents the differences (changes) between two versions of code.**, so git can ready this file and can apply changes
+
+## Merge
+- When we say we are merging 2 branches, we are acutally merging 2 commits of the branches where the respective branches point to
+- **3 way merge**
+- 1. git finds the common commit between the 2 branches - it is called as base-commit
+- 2. git calculates diff between branch-1 pointer and base-commit (patch 1) as well as bracnh-2 pointer and base-commit (patch 2)
+- 3. git then apply both the patches to the brnach on which merge is performed
+- **merge commits** - once all the patches are applied, git run the commit for us, which is called as merge-commit, and it has pointer to both the commits of the 2 branches
+- so merge commits has 2 parents, thats how git know that this is a merge commit
+
+### Merge cases
+#### 1. fast forward
+- when you create a brnach from main, push commits and then merge it back to main, if main branch has not changes, git does fast-forward and branches are merged
+#### 2. diverged branched
+- if main brach is updated with new commits, git will still merge your brnach if there are no conflicts
+- even if the common file is changed in both the branches, git can still automerge as long as context lines are not conflicting as we discussed in diff and patch section
+#### 3. conflicts
+- if conflicts occur, if multiple devs change same file, which have common context lines (i.e. same line numbers changed), git ask users to manually resolve the conflicts
