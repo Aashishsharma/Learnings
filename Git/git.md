@@ -175,3 +175,48 @@ see how ```git reflog``` - gives all the commits to which the head was pointed t
 - even if the common file is changed in both the branches, git can still auto merge as long as context lines are not conflicting as we discussed in diff and patch section
 #### 3. conflicts
 - if conflicts occur, if multiple devs change same file, which have common context lines (i.e. same line numbers changed), git ask users to manually resolve the conflicts
+
+## Rebase
+- it re-writes history
+- if you are on main branch and run ```git rebase dev```
+1. git finds the merge-base commit of both the branched
+2. replays all the commits from merge-base upto main branch pointer into branch dev
+3. move current branch pointer (main) to the last replayed commit 
+
+**before rebase**
+A---B---C (dev)
+     \
+      D---E (main)
+
+run ```git rebase dev```
+
+**after rebase**
+A---B---C (dev)
+         \
+          D'---E' (main)
+
+**Why to rebase?** - to make history clean, using interactive rebase
+e.g. - on dev you pushed 5 commits, but those should be part of a single commit
+- then we can do interactive rebase  
+```git rebase -i dev``` - 
+![alt text](PNG/Git10.PNG "Title")  -
+- git will open editor and from the merge-base, all the commits that are going to be replayed, git will allow us the option to pick, drop or squash for each of the commit
+- pick - picks the commit, drop - git will not replay that commit, squash -git will merge that commit to it's parent commit, so only one commit will be shown in the history
+
+- **remember in the project Estore - I pushed all trial and error commits in dev branch to fix a P1 issue, by bypassing the branch policy and directly commiting to dev, meanwhile, all other devs pushed there commits, and once the issue was identified, I did an interactive rebase and removed (drop) all my trial and error commits, and kept all the other dev's commits**  
+- **had to do interactive rebase - because my commits were above and below of other dev's changes**
+
+**Scenario** - 
+![alt text](PNG/Git11.PNG "Title")  -
+you created a brnach from feature-brnach_1, but actually wanted to create it from main, you already have multiple commits on your new brnach (feature_branch_2), and feature-branch_1 from which you created the brnach was already ahead of the main branch.
+-- now after 10 days, you want your feature-brnach_2 to have been created from main branch (Commit 12 and not commit 13)  
+
+- switch to feature-branch_2
+- run ```git rebase --onto main <SHA1 of commit-13>```
+- this command will replay all the commits of feature-branch-2 (commit 13 and 14) on the main brnach commit (commit 12) 
+
+**desired result** - 
+![alt text](PNG/Git12.PNG "Title")  -
+
+- syntax of rebase --onto - 
+- ```git rebase --onto <new -parent-of commits to be replaced> <old-parent of commits to be replaced>```
