@@ -108,7 +108,7 @@ below commands can be used to undo errors committed in git
 ![alt text](PNG/Git7.PNG "Title")  
 - does whatever --mixed does + updates the working area to what the head points to
 - so, now the 2.txt file is gone from working directory, because working area is also updated
-- so, now file lost, but not forever (we can still recover using reflog command)
+- so, now file lost forever (not exactly - we can still recover using reflog command) - see reflog command
 
 #### When to use which flag
 - reset is mainly used to manipulte local repo, not remote repo
@@ -131,3 +131,15 @@ below commands can be used to undo errors committed in git
 - ```git revert <commit-hash>``` - all the changes intrduced by coomit-hash will get reversed using this command
 
 ## 4. reflog
+- we did ```git reset --hard HEAD~1``` - all changes made lost forever (not exctly)
+- git by default stores wherever the head has moved
+- so when we run git reflog we get all the commits which HEAD had pointed to, even if the commits are not reachable from any branch
+- so using this command, get the commit which was lost because of --hard, and then run
+- ```git reset --hard <SHA1>``` here SHA1 is the commit of the lost changes, which we need
+
+![alt text](PNG/Git8.PNG "Title")  -
+see how ```git reflog``` - gives all the commits to which the head was pointed to, along with the commit message, so if you know the commit message which, in which the files were present, get the commit id and run ```reset --hard <SHA1>```  
+- notice in the git reflog response, how we also know from git reflog, thet which branches we have swtiched in the past, since checking out a brnach also moves head
+- the data in reflog will be available only till certain days - 
+- 90 days -if the commit is rechable
+- 30 days if the commit is not reachable
