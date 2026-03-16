@@ -172,6 +172,6 @@ see how ```git reflog``` - gives all the commits to which the head was pointed t
 - when you create a brnach from main, push commits and then merge it back to main, if main branch has not changes, git does fast-forward and branches are merged
 #### 2. diverged branched
 - if main brach is updated with new commits, git will still merge your brnach if there are no conflicts
-- even if the common file is changed in both the branches, git can still automerge as long as context lines are not conflicting as we discussed in diff and patch section
+- even if the common file is changed in both the branches, git can still auto merge as long as context lines are not conflicting as we discussed in diff and patch section
 #### 3. conflicts
 - if conflicts occur, if multiple devs change same file, which have common context lines (i.e. same line numbers changed), git ask users to manually resolve the conflicts
