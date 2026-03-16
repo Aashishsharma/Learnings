@@ -59,3 +59,4 @@
 #### 4 Index
 - this is a file which stores metadata of all the files which are to be staged to the next commit
 - so it is a snapshot of the current staging area
+- once we commit, INDEX file will have contents of the latest commit
