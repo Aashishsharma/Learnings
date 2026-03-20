@@ -253,6 +253,16 @@ you created a brnach from feature-brnach_1, but actually wanted to create it fro
 
 **usecase -** small team, short release cycles, np long PRs, since changes are daily merged to main
 
+## Git stash
+- puch changes to temp to git's hidden place to work on somthign else, without need to commit the changes
+
+```git stash push```  
+```git stash push -m "stash message"```  
+```git stash list```
+```git stash pop```
+```git stash pop 'stash{}'```
+```git stash apply 'stash{n}'``` - not remove from stack
+  
 ## Git worktrees (work on multiple bracnhes at the same time, now popluar because AI agents can parallely work on diff branches)
 - Need to change branch inbetween current work
 - git does not allow switching branch unless current working tree is clean
@@ -289,3 +299,5 @@ you created a brnach from feature-brnach_1, but actually wanted to create it fro
   ```git clone <repo-url> --bare .git``` 
   - this will only download the .git folder
   - from hereon, you can create worktress and work on the desired branches
+
+## Git cheatsheet
