@@ -479,13 +479,21 @@ git rebase --abort
 git rebase --continue
 ```
 
-### 8 fetch and pull
+### 8. reset, revert and restore
+```bash
+git reset (---soft, --hard, --mixed) HEAD~1 or <specific sha1>
+git revert <sha1> - revert all the changes made by this commit, (this adds a new commit)
+git restore <file> - discard changes in working directory, for this file
+git restore .   --- dicard all changes in working dir, making working tree clean, and losing all uncommited / unstaged changes
+```
+
+### 9 fetch and pull
 ```bash
 git fetch     ----- only download commits, don't update working fir
 git pull      ------ fetch + merge to working dir, can cause conflicts
 ```
 
-### 9 stash
+### 10 stash
 ```bash
 git stash      ----- push to stash
 git stash -m "message for stash push"
@@ -495,14 +503,21 @@ git stash pop 'stash{n}'
 git stash drop
 ```
 
-### 10 tags
+### 11 tags
 ```bash
 git tag v1.0
 git tag -a v1.0 -m "release"
 git push --tags
 ```
 
-### 11 cherry-pick
+### 12 cherry-pick
 ```bash
 git cherry-pick <sha1>
+```
+
+### 13 remote
+```bash
+git remote -v   --- Shows remote names + URLs
+git remote add origin <url>  ---- connect local repo to remote repo
+git remote remove origin 
 ```
