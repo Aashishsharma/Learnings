@@ -242,7 +242,15 @@ you created a brnach from feature-brnach_1, but actually wanted to create it fro
 - **hotfix brnach** - the only branch that can be created directly from main and merged to main, to fix P1 issues
 - **main branch** - The production branch. Every commit here represents a deployed version. Versions are tagged (v1.0, v1.1,…).
 
-**usecase -** big team, long release cycles
+**usecase -** big team, long release cycles, **used in financial / medical instutation (Philips), because very proper testing**
+
+### 2. Github flow
+- simpler than got flow
+- **main brnach** - same as git flow
+- **no dev / release branch** - only feature / hotfix branch
+- **feature brnach** - created from main, merged to main, only when full feature is complete
+- **no wait** - main brnach is auto deployed on new commit, features available for users, right after merge, no release cycles
+- **hence simple and fast** - but to release cycles, so no kind of traditional testing
 
 ### 3. Trunk based development
 - **main / trunk branch** - the only long lived branch
@@ -251,7 +259,7 @@ you created a brnach from feature-brnach_1, but actually wanted to create it fro
 - **feature toggles** - even if feature is still being developed, we use feature toggles, so that the code does not tun in prod
 - **build run on each brnach** - run build on each branch so we now the build is green and code can be merged to main, because the incomplete feature is not breaking anything during build
 
-**usecase -** small team, short release cycles, np long PRs, since changes are daily merged to main
+**usecase -** small team, short release cycles, np long PRs, since changes are daily merged to main, **used for rapid development**
 
 ## Feature toggles / feature flags  
 - where to store feature flags - 
