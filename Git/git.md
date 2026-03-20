@@ -522,6 +522,6 @@ git cherry-pick <sha1>
 ### 13 remote
 ```bash
 git remote -v   --- Shows remote names + URLs
-git remote add origin <url>  ---- connect local repo to remote repo
+git remote add origin <url>  ---- connect local repo to remote repo, to add multiple origins
 git remote remove origin 
 ```
