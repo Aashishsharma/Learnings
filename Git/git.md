@@ -487,10 +487,14 @@ git restore <file> - discard changes in working directory, for this file
 git restore .   --- dicard all changes in working dir, making working tree clean, and losing all uncommited / unstaged changes
 ```
 
-### 9 fetch and pull
+### 9 fetch and pull and push
 ```bash
 git fetch     ----- only download commits, don't update working fir
-git pull      ------ fetch + merge to working dir, can cause conflicts
+git pull      ------ fetch + merge to working dir, can cause conflicts, pull from brnach where HEAD is pointed to
+git pull origin branch   ------- if upstream not set (or have multiple upstreams), and need to pull specific branch
+git push      ------- push to remote brnach where head is pointed to 
+push push -u origin brnach  -------- if upstream not set, it sets - feature/login → origin/feature/login
+after running push with -u, on subsequent push we can just do git push
 ```
 
 ### 10 stash
