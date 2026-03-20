@@ -407,4 +407,102 @@ function userIsWithinPercentage(
   - this will only download the .git folder
   - from hereon, you can create worktress and work on the desired branches
 
-## Git cheatsheet
+## Git commands
+
+### 1. Setup and config
+**Setup config**
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "you@email.com"
+```
+
+**View config**
+```bash
+git config --list
+git config user.name
+```
+
+### 2. Status
+- use when you want to know what's my current state
+- shows files in differet stages - working area vs staging area and statging area vs local repo
+- shows - untracked files, modified but not stages, staged but not committed
+```bash
+git status
+```
+
+### 3. diff
+- use when you want to know what lines of code has changed
+```bash
+git diff            -------- working dir vs staging area, what lines of codes changes
+git diff --staged   -------- staging vs local repo
+git diff HEAD       -------- working area vs local repo
+```
+
+### 4. log
+- give all commit history
+```bash
+git log            --------- list all commits with commit metadata
+git log --oneline --graph -------     show only commit hash and message, no other metadata like author, time
+git log -p         --------- show ctual code changes diff in each commit 
+```
+
+### 5. show
+```bash
+git show <any-commit-sha>  ----- show one specific commit (diff + metadata)
+```
+
+### 6. Branching
+1. Checkout
+```bash
+git checkout <branch>     ---- checkout to existing brnach
+git checkout -b <branch>  ---- create new brnach and checkout
+git checkout <sha1>       ---- checkout to a particular commit <will result in detached head>
+git checkout -d <branch>  ---- delete the branch
+```
+2. Switch (same as checkout, newer command, only for branches)
+```
+git switch <branch>
+git switch -c <branch>
+```
+3. branch
+```bash
+git branch <branch>    --- only create a new brnach, but don't checkout to that branch
+```
+
+### 7. merge and rebase
+```bash
+git merge <branch>
+git rebase <branch>
+git rebase -i HEAD~3
+git merge --abort
+git rebase --abort
+git rebase --continue
+```
+
+### 8 fetch and pull
+```bash
+git fetch     ----- only download commits, don't update working fir
+git pull      ------ fetch + merge to working dir, can cause conflicts
+```
+
+### 9 stash
+```bash
+git stash      ----- push to stash
+git stash -m "message for stash push"
+git stash list
+git stash apply 'stash{n}' - dont remove from stack
+git stash pop 'stash{n}'
+git stash drop
+```
+
+### 10 tags
+```bash
+git tag v1.0
+git tag -a v1.0 -m "release"
+git push --tags
+```
+
+### 11 cherry-pick
+```bash
+git cherry-pick <sha1>
+```
