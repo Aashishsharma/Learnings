@@ -220,3 +220,72 @@ you created a brnach from feature-brnach_1, but actually wanted to create it fro
 
 - syntax of rebase --onto - 
 - ```git rebase --onto <new -parent-of commits to be replaced> <old-parent of commits to be replaced>```
+
+## Fork
+- in open source projects, no one apart from mainteainers will have access to the repo, because not feasible to give thousands of user write access to the open source repo, but people still need to contribute, in that case fork is used
+- A fork is your own copy of someone else’s repo **under your account**. - so now you have full access to the repo under your account
+- when you fork, a link is generated between the 2 repo's (original repo, and repo under your account)
+- repo under your account is nothing but a clone, with a link to parent repo
+- note- you still need to clone the forked repo, to bring the repo to your machine
+- you make changes and create a PR against the original repo, where maintainers can approve, and your changes would be merged
+
+## Branching strategies
+1. Gitflow
+2. Github flow
+3. Trunk based development
+
+### 1. Git flow
+![alt text](PNG/Git13.PNG "Title")
+- **feature branch** - multiple - allow multiple features to be developed parallely
+- **develop branch** - The integration branch. All new features are merged here before moving to a release. (deployed to dev)
+- **release branch** - when a set of features is ready for release, a release brnach from the dev is created, this brnach is then deployed to an env (lets's say tst), where testers test the app for 1-2 sprints and raise any bugs. If bugs are found, then small lived brnaches are created from release brnach and fixes are applied. Once app is stable in tst, the release branch is merged to both main and dev brnach (merged in dev, so that the fixes are available in dev as well). Also other devs can still work on their individual feature brnaches for the features that will be deployed in the future release
+- **hotfix brnach** - the only branch that can be created directly from main and merged to main, to fix P1 issues
+- **main branch** - The production branch. Every commit here represents a deployed version. Versions are tagged (v1.0, v1.1,…).
+
+**usecase -** big team, long release cycles
+
+### 3. Trunk based development
+- **main / trunk branch** - the only long lived branch
+- **feature / bugix** - all branches created from main brnach and are very short lived, changes merged daily to main.
+- **IMP** - if feature is not fully developed, how can I commit to trunk / main? Using feature toggles
+- **feature toggles** - even if feature is still being developed, we use feature toggles, so that the code does not tun in prod
+- **build run on each brnach** - run build on each branch so we now the build is green and code can be merged to main, because the incomplete feature is not breaking anything during build
+
+**usecase -** small team, short release cycles, np long PRs, since changes are daily merged to main
+
+## Git worktrees (work on multiple bracnhes at the same time, now popluar because AI agents can parallely work on diff branches)
+- Need to change branch inbetween current work
+- git does not allow switching branch unless current working tree is clean
+- need to commit changes anyhow (not a good practice), or stash the changes
+- stash is good, but with AI into the picture, when we stash, we can at a time work on only one brnach
+- we know how slow claude is, so can't run these AI agents on multiple branches at once
+- **solution - use git worktrees - let you check out multiple branches of the same repository into different directories at the same time.**
+
+#### working of git worktrees
+- when you create a new git worktree - it created new directory in your local computer
+- with the branch you specify while creating the worktree
+- so multiple folders of same repo on local, allowing you run work on diff branches simultaneously
+- this is not a clone, if you still do git fetch in any of the worktree, all the worktrees are updated
+- so you cd to the newly created folder and start working and comitting the changes
+
+#### Commands
+- Create a new worktree (existing branch)
+  ```git worktree add ../feature-branch feature-branch``` - ../feature-branch is the destination folder in your comp, where this code will be downloaded
+
+- Create a new worktree (new branch)
+  ```git worktree add -b feature-branch ../feature-branch```
+
+- List all worktrees
+  ```git worktree list```
+
+- Remove a worktree
+  ```git worktree remove ../feature-branch```
+
+- Clean up stale worktrees
+  ```git worktree prune```
+
+- download only bare repo - by default, when you clone, the latest commit of default brnach of the rpo is downloaded in your comp
+- if we don't want the code base to be downloaded on local, and if we only work work on worktrees, the use below command 
+  ```git clone <repo-url> --bare .git``` 
+  - this will only download the .git folder
+  - from hereon, you can create worktress and work on the desired branches
