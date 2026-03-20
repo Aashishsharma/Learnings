@@ -9,6 +9,9 @@
 - select model (GPT 5.3, clause opus 4.3) **selecting clause model will run clause model, not a clause agent, for that need to use claude agent, this will just be a wrapper to clause model API**
 
 ## 2. Instructions
+- you create this file - Instructions.md file at the root of your project
+- add all high level project info in that file
+- now whenever we chat with copilot, copilot will use this file as context for each chat by default
  
 ## 3. Prompts
 - these files should be prompt-name.prompt.md
@@ -21,7 +24,6 @@ description: "Create a pull request on Azure Devops. Use when: creating PR, rais
 agent: "agent"
 argument-hint: "Target branch (testing or development)"
 tools: ["mcp_azure_devops_create_pull_request", "mcp_azure_devops_update_work_item", "mcp_azure_devops_update_pull_request", "mcp_gitkraken_git_status", "mcp_gitkraken_git_log_or_diff"]
-
 ---
 
 # Create Pull Request
@@ -58,7 +60,9 @@ Show me the PR number and a clickable link to the PR.
 
 ## 4. Skills
 
-## 5. Adding MCP servers
+## 5. commands
+
+## 6. Adding MCP servers
 - create file mcp.json under .vscode folder
 ```json
 {
