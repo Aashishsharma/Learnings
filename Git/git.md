@@ -253,6 +253,105 @@ you created a brnach from feature-brnach_1, but actually wanted to create it fro
 
 **usecase -** small team, short release cycles, np long PRs, since changes are daily merged to main
 
+## Feature toggles / feature flags  
+- where to store feature flags - 
+![alt text](PNG/Git14.PNG "Title")  
+- **Implementation** - 
+- prod feature flags should have below capabilities - 
+1. ON/OFF boolean switch
+2. ON/OF - based on user roles / user segments
+3. ON/OFF - based on multiple conditions (e.g. based on role, and % of users)
+
+```jsx
+// calling component - 
+ <FeatureEnabled featureFlag="ADVANCED_ANALYTICS">
+    <Card>
+       <CardTitle>Advanced Analytics</CardTitle>
+    </Card>
+</FeatureEnabled>
+<FeatureEnabled featureFlag="EXPERIMENTAL_FEATURE">
+    <Card>
+        <CardTitle>Experimental Feature</CardTitle>
+    </Card>
+</FeatureEnabled>
+
+// wrapper component - 
+import { canViewFeature, FeatureFlagName } from "@/lib/featureFlags"
+import { getUser } from "@/lib/getUser"
+import { ReactNode } from "react"
+
+// if feature flag is enabled render children of this comp, otherwise skip
+export function FeatureEnabled({
+  featureFlag,
+  children,
+}: {
+  featureFlag: FeatureFlagName
+  children: ReactNode
+}) {
+  return canViewFeature(featureFlag, getUser()) ? children : null
+}
+
+// utils - define rules for feature flag - 
+import { User, UserRole } from "./getUser"
+import { murmurhash } from "./murmurhash"
+
+export type FeatureFlagName = keyof typeof FEATURE_FLAGS
+
+type FeatureFlagRule = {
+  percentageOfUsers?: number
+  userRoles?: UserRole[]
+} & (
+  | {
+      percentageOfUsers: number
+    }
+  | { userRoles: UserRole[] }
+)
+
+export const FEATURE_FLAGS = {
+  TEST_NEW_PRODUCTS_QUERY: true,
+  ADVANCED_ANALYTICS: true,
+  DISABLED_FEATURE: false,
+  EXPERIMENTAL_FEATURE: false,
+  MULTIPLE_ALLOWANCES: [
+    { percentageOfUsers: 0.25, userRoles: ["user"] },
+    { userRoles: ["admin", "tester"] },
+  ],
+} as const satisfies Record<string, FeatureFlagRule[] | boolean>
+
+export function canViewFeature(featureName: FeatureFlagName, user: User) {
+  const rules = FEATURE_FLAGS[featureName]
+  if (typeof rules === "boolean") return rules
+  return rules.some(rule => checkRule(rule, featureName, user))
+}
+
+function checkRule(
+  { userRoles, percentageOfUsers }: FeatureFlagRule,
+  featureName: FeatureFlagName,
+  user: User
+) {
+  return (
+    userHasValidRole(userRoles, user.role) &&
+    userIsWithinPercentage(featureName, percentageOfUsers, user.id)
+  )
+}
+function userHasValidRole(
+  allowedRoles: UserRole[] | undefined,
+  userRole: UserRole
+) {
+  return allowedRoles == null || allowedRoles.includes(userRole)
+}
+const MAX_UINT_32 = 4294967295
+function userIsWithinPercentage(
+  featureName: FeatureFlagName,
+  allowedPercent: number | undefined,
+  flagId: string
+) {
+  if (allowedPercent == null) return true
+
+  return murmurhash(`${featureName}-${flagId}`) / MAX_UINT_32 < allowedPercent
+}
+```
+
 ## Git stash
 - puch changes to temp to git's hidden place to work on somthign else, without need to commit the changes
 
@@ -262,7 +361,7 @@ you created a brnach from feature-brnach_1, but actually wanted to create it fro
 ```git stash pop```
 ```git stash pop 'stash{}'```
 ```git stash apply 'stash{n}'``` - not remove from stack
-  
+
 ## Git worktrees (work on multiple bracnhes at the same time, now popluar because AI agents can parallely work on diff branches)
 - Need to change branch inbetween current work
 - git does not allow switching branch unless current working tree is clean
