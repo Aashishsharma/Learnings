@@ -17,3 +17,4 @@
 **MCP Architecture flow**
 - scenario - user interacts with our cutom created chatbot to get the list of the repos from github
 ![alt text](PNG/MCP5.PNG "Title")
+- **key part** - when we send user query and list of tools to AI model, it is the AI model which decides if the tool should be invoked or not. Since LLMs are good with NPL, and english sentence which symantically means getUserRepo, LLM model will trigger the appropriate MCP tool
