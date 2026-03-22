@@ -15,4 +15,5 @@
 ![alt text](PNG/MCP4.PNG "Title")
 
 **MCP Architecture flow**
+- scenario - user interacts with our cutom created chatbot to get the list of the repos from github
 ![alt text](PNG/MCP5.PNG "Title")
