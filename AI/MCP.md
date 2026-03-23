@@ -29,6 +29,12 @@ e.g. - Need to create Web dashbord to display repo, PR details across teams, so 
 5. MCP would be a candidate if we wanted to summarize the PR changes
 
 ## Creating MCP server
+**MCP server has 4 things that it is made up of** - 
+1. **tools** - A function exposed by an MCP server that an LLM can call to perform real-world actions or fetch data
+2. **resources** - A read-only piece of data exposed by an MCP server that an LLM can access for context (like files, docs, or state).
+3. **prompts** - A reusable, predefined instruction template exposed by an MCP server that guides how the LLM should perform a task
+4. **samplings** - A way for an MCP server to request the client’s LLM to generate a response (i.e., ask the model to “think” or produce text as part of a workflow)
+
 **use ts SDK**
 1. @modelcontextprotocol/sdk
 2. modelcontextprotocol/inspector - consider this as postman of MCP server, lets us test our server without having to connect it to the client
@@ -103,7 +109,143 @@ server.tool(
 ```
 
 ### 2. Creating resources in MCP server
-### 3. Adding this MCP server into copilot
+```typescript
+server.resource(
+  "users", // resource name
+  "users://all", //the URI template for this resource. The client will request data from this URI, and we can use it to determine what data to return. In this case, it's a simple URI that doesn't have any parameters, but it could be something like "users://{userId}" if we wanted to return data for a specific user.
+  {
+    // desc for AI model to know when to call this url
+    description: "Get all users data from the database",
+    title: "Users",
+    mimeType: "application/json",
+  },
+  async uri => {
+    const users = await import("./data/users.json", {
+      with: { type: "json" },
+    }).then(m => m.default)
+
+    return {
+      contents: [
+        {
+          uri: uri.href,
+          text: JSON.stringify(users),
+          mimeType: "application/json",
+        },
+      ],
+    }
+  }
+)
+
+```
+
+### 3. Creating prompts in MCP server
+```typescript
+server.prompt(
+  "generate-fake-user", // prompt name
+  "Generate a fake user based on a given name", // desc for AI model
+  {
+    name: z.string(), // prompt parameter
+  },
+  ({ name }) => {
+    return {
+      messages: [
+        {
+          role: "user", // the role can be "user", "assistant", or "system". This is just a convention to help the model understand the context of the message, but it doesn't have any inherent meaning
+          content: {
+            type: "text",
+            text: `Generate a fake user with the name ${name}. The user should have a realistic email, address, and phone number.`,
+            // so basically when user invokes this prompt with command #generate-fake-user
+            // LLM will give use this above text
+            // useful when prompts are going to be complicted
+          },
+        },
+      ],
+    }
+  }
+)
+```
+
+### 4. Creating samplings in MCP server
+- we already know it allows our MCP server to run a prompt on user's LLM
+```typescript
+// notice we are using server.tool and not server.sampling
+// because we want to request user's LLM only when
+// user is wanting to do smehting on our MCP server
+server.tool(
+  "create-random-user", // name
+  "Create a random user with fake data", // desc
+  {
+    title: "Create Random User", // metadata for AI
+    readOnlyHint: false,
+    destructiveHint: false,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
+  // fun which will run when user invokes 
+  // create-random-user tool
+  async () => {
+    // notice that in sampling we are calling server.server.reques - this will invoke LLM
+    const res = await server.server.request(
+      {
+        method: "sampling/createMessage", // tell LLM to run a prompt
+        params: {
+          messages: [
+            {
+              role: "user",
+              // basically here we are running below prompt on user's LLM
+              content: {
+                type: "text",
+                text: "Generate fake user data. The user should have a realistic name, email, address, and phone number. Return this data as a JSON object with no other text or formatter so it can be used with JSON.parse.",
+              },
+            },
+          ],
+          maxTokens: 1024,
+        },
+      },
+      CreateMessageResultSchema
+    )
+
+    // now this res contains whatever response user's LLM has returned
+
+    if (res.content.type !== "text") {
+      return {
+        content: [{ type: "text", text: "Failed to generate user data" }],
+      }
+    }
+
+    // now we create random user
+    // and the details of this users we asked user's LLM to generate
+
+    try {
+      const fakeUser = JSON.parse(
+        res.content.text
+          .trim()
+          .replace(/^```json/, "")
+          .replace(/```$/, "")
+          .trim()
+      )
+
+      const id = await createUser(fakeUser)
+      return {
+        content: [{ type: "text", text: `User ${id} created successfully` }],
+      }
+    } catch {
+      return {
+        content: [{ type: "text", text: "Failed to generate user data" }],
+      }
+    }
+  }
+)
+
+// flow - 
+// 1. user chat with LLM
+// 2. LLM decides if tool needs to be run
+// 3. our tool inside server.server.request ask LLM to run a promt
+// 4. LLM sends response to out MCP server
+// 5. we complete out tools flow and send response back to LLM
+```
+
+### 5. Adding this MCP server into copilot
 - inside mcp.json file add this content
 ```json
 {
