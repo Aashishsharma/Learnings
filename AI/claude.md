@@ -234,4 +234,9 @@ which skill will claude execute if there is mathcing skill name at different lev
 3. Project
 4. Plugin relayed skills
 
+**Sharing skills**
+1. using git
+2. you can push skills as plugins to market place (similar to publishing npm package)
+3. you can add skills at enterpirze level, so that all the teams inside org can use the skill
+
 ## 3. Claude cowork
