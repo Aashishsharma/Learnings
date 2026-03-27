@@ -1,6 +1,25 @@
 # Calude
 
-## Calude code
+3 ways of working with claude
+1. Claude.ai - chat interface like chatGPT
+2. Claude code - coding assistant
+3. Claude cowork - TODO
+
+## 1. Claude.ai
+### 1. Projects
+- Projects is a workspace feature that organizes conversations, context, and resources around a shared goal.
+- projects enable collaboration
+
+**Key features** - 
+1. **Instructions** - inside a project add common instructions which the claude will follow for every promot
+2. **knowledge base** - upload files, so these files claude will use in the context for evry converstion you have with claude
+3. **share** - you can share project with team mambers - so everyone will use this tailored version of claude
+4. **access control** - you can restirct access to project
+4. **auto scaling** - when knowledge base limit is hit claude enables RAG mode to expand context capacity
+
+**e.g.** - use claud's project when you want to rReference materials you'll use repeatedly (meeting notes, survey results, reports, historical data, etc.)
+
+## 2. Calude code
 - it is a coding assistant, generally run in terminal, unlike co-pilot which is incuded in IDE
 - **coding assistant** - it is a cutom program which calls LLM models, **LLMs can only generate texts, they cannot do any particular task**, like read / write to a file, so coding assistants talk to LLM, if LLMs want to read a file, these coding assistant's will do that and send the data back to LLMs for further porcessing
 
@@ -79,7 +98,7 @@ Coverage:
 
 ![alt text](PNG/Claude4.PNG "Title")
 
-## Hooks
+### 5. Hooks
 ![alt text](PNG/Claude5.PNG "Title")
 
 **when are hooks run? - before and after claude code runs any tool**
@@ -134,7 +153,7 @@ main()
 - logic would be once claude code does the update, we run tsc command to run ts, if occurances are missing, tsc command would fail, and it's response we can send again to calude, claude will read error message, and will fix. (similar hook we can create for failed test cases after claud's tool run)
 
 
-## Claude code SDK
+### 6. Claude code SDK
 - way to access Claude code programatically
 
 ![alt text](PNG/Claude10.PNG "Title") 
@@ -152,3 +171,67 @@ for await (const message of query({
   console.log(JSON.stringify(message, null, 2));
 }
 ```
+
+### 7. Skills
+- Skills are folders of instructions that Claude Code can discover and use to handle tasks more accurately. - - Each skill lives in a SKILL.md file 
+- personal skills - .C:/users/.../commit-message/SKILL,md
+- project skills - .claude/skills/pr-review/SKILL.md
+- **Claude.md vs skill** - Claude.md loads for every chat (increase context window), Skills loads on-demand (**again - LLM decides when to invoe a skill by using it in the context**)
+- **slash commands vs skill** - slash commands needs to be invoked explicitly, skill - LLM will decide
+- Skills load on demand when they match your request. Claude only loads the name and description initially, so they don't fill up your entire context window. When LLM thinks a particular skill should be invoked for a given user query, then enitre content of the Skill will be loaded in the context.
+- Under ```.claude/skills```, each subfolder can contain its own SKILL.md, and Claude Code can load multiple skills from those folders.
+- **e.g.** - In skills you can add
+1. code review standards
+- commit message formats
+
+```markdown
+---
+name: pr-description
+description: Writes pull request descriptions. Use when creating a PR, writing a PR, or when the user asks to summarize changes for a pull request.
+---
+
+When writing a PR description:
+
+1. Run `git diff main...HEAD` to see all changes on this branch
+2. Write a description following this format:
+
+## What
+One sentence explaining what this PR does.
+
+## Why
+Brief context on why this change is needed
+
+## Changes
+- Bullet points of specific changes made
+- Group related changes together
+- Mention any files deleted or renamed
+```
+
+**Fields in SKILL.md file**
+1. **name field** - needs to match the directory name
+2. **description field** - claude uses this field to make a judgement if a particular skills needs to be invoked or not
+3. **allowed-tools: Read | Grep | Glob** - only these specified tools, this skill can use
+4. **model: sonnet** - which model this skill need to use (for simpler task, as we know sonnet is better and also cost effective), so we are using sonnet in this case
+
+**Skills best practices**
+- SKILLS.md file should not be more than 500 lines
+- use **progressive disclosure** - Cramming everything into one 2,000-line file has problems: it takes up a lot of context window space
+- **progressive disclosure** - Keep essential instructions in SKILL.md and put detailed reference material in separate files that Claude reads only when needed.
+- lets say you have to execute a large script or add more files to context when a skill is invoked, then instead of stroing the file context or script code in Skill.md, store it in directory (same level as the skill-name folder)
+- use folder .calude/skills/pr-review/scripts/ — Executable code
+- (same hierarchy as that of script).../references/ — Additional documentation
+- (same hierarchy as that of script).../assets/ — Images, templates, or other data files,
+- then in SKILL.md file only reference these files - 
+```md
+**only load when user request for additional details** - [See architecure.md](references/architecture.md).
+```
+- now clade will load architecure.md file in context only when user requests for more details when this particular skill is invoked
+
+**Skills priority** - 
+which skill will claude execute if there is mathcing skill name at different levels? (below is the priority level with Enterprize at highest level)
+1. Enterprise
+2. Personal
+3. Project
+4. Plugin relayed skills
+
+## 3. Claude cowork

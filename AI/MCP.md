@@ -18,7 +18,8 @@
 - scenario - user interacts with our cutom created chatbot to get the list of the repos from github
 ![alt text](PNG/MCP5.PNG "Title")
 - **key part** - when we send user query and list of tools to AI model, it is the AI model which decides if the tool should be invoked or not. Since LLMs are good with NPL, and english sentence which symantically means getUserRepo, LLM model will trigger the appropriate MCP tool
-- note that the MCP client doens't call MCP server to getToolList() - it is called only once per session, or if mcp.json file changes
+- note that the MCP client doens't call MCP server to getToolList() for very chat, - it is called only once per session, or if mcp.json file changes
+- **it is the MCP client (our server) - which makes a tool call, not the LLM, LLM just suggests which tool should be invoked, based on user's query**
 
 ### MCP vs RestAPI
 e.g. - Need to create Web dashbord to display repo, PR details across teams, so should I use github APIs, our create MCP client in webapp which will talk to github server
