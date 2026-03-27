@@ -266,3 +266,82 @@ server.tool(
 - **Note - how below now out tool is available inside copilot with #create-user command**
 
 ![alt text](PNG/MCP7.PNG "Title")
+
+## Creating MCP client
+- this is created on our custom server (where we want to integrate MCP server) - e.g. - node.js server
+```typescript
+import { Client } from "@modelcontextprotocol/sdk/client/index.js"
+import {
+  CreateMessageRequestSchema,
+  Prompt,
+  PromptMessage,
+  Tool,
+} from "@modelcontextprotocol/sdk/types.js"
+import { generateText, jsonSchema, ToolSet } from "ai"
+const mcp = new Client(
+  {
+    name: "text-client-video",
+    version: "1.0.0",
+  },
+  { capabilities: { sampling: {} } }
+)
+const transport = new StdioClientTransport({
+  command: "node",
+  args: ["build/server.js"],
+  stderr: "ignore",
+}
+
+async function main() {
+  await mcp.connect(transport)
+  // list the tools/prompts the server has
+  const [{ tools }, { prompts }, { resources }, { resourceTemplates }] =
+    await Promise.all([
+      mcp.listTools(),
+      mcp.listPrompts(),
+      mcp.listResources(),
+      mcp.listResourceTemplates(),
+    ])
+}
+main()
+
+// calling tools directly
+// although LLM should decide, but we can also call programatically if needed
+
+const res = await mcp.callTool({
+    name: tool.name,
+    arguments: args,
+  })
+
+// passing user query along with the list of tools, so that LLM decides if tool call needs to be made and it will make the tool call for us, if required
+const query = await input({ message: "Enter your query" })
+  // e.g. if we are using gemini LLM on our server
+  const { text, toolResults } = await generateText({
+    model: google("gemini-2.0-flash"),
+    prompt: query, // provide the user prompt
+    tools: tools.reduce( // along with prompt, pass all the tools available so that LLM can decide if it needs to use any tools or not
+      (obj, tool) => ({
+        ...obj,
+        [tool.name]: {
+          description: tool.description,
+          parameters: jsonSchema(tool.inputSchema),
+          execute: async (args: Record<string, any>) => {
+            // once LLM decides, then we call the tool
+            // and return the tool output
+            // Note - that out server makes a tool call
+            // not LLM, LLM will suggest which tool to run
+            return await mcp.callTool({
+              name: tool.name,
+              arguments: args,
+            })
+          },
+        },
+      }),
+      {} as ToolSet
+    ),
+  })
+
+  console.log(
+    // @ts-expect-error
+    text || toolResults[0]?.result?.content[0]?.text || "No text generated."
+  )
+```
