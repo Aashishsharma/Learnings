@@ -23,14 +23,14 @@
 - it is a coding assistant, generally run in terminal, unlike co-pilot which is incuded in IDE
 - **coding assistant** - it is a cutom program which calls LLM models, **LLMs can only generate texts, they cannot do any particular task**, like read / write to a file, so coding assistants talk to LLM, if LLMs want to read a file, these coding assistant's will do that and send the data back to LLMs for further porcessing
 
-![alt text](PNG/Claude1.PNG "Title") - 
+![alt text](../PNG/Claude1.PNG "Title") - 
 - so coding assistants sit between LLM and user
 - they add wrapper texts, like they say to the model, that if you want to read a file, then reply with **ReadFile: filename**, then this custom program (coding assistant), read's LLM output, and since this output is kinf of a commnd, than the coding assistants perform that task thorugh code
 
 **Anthropic team says that what separates claude code from other AI coding assistant's is it's strong use of tools**
 
 Default tools available with Claude code - 
-![alt text](PNG/Claude2.PNG "Title")
+![alt text](../PNG/Claude2.PNG "Title")
 
 ### 1. Context
 - **IMP for a user to include ideal amount of context in the conversation** - to0 little context will make the assistant do more work, too much context might take coding assistant to wrong direction
@@ -52,7 +52,7 @@ Default tools available with Claude code -
 
 ### 2. commands
 1. built-in
-![alt text](PNG/Claude3.PNG "Title")
+![alt text](../PNG/Claude3.PNG "Title")
 2. custom
 - create .claude/commands folder in the project root
 - then create a audit.md - name of the file (in this case audit) would be the name of the command
@@ -96,27 +96,27 @@ Coverage:
 - claude.yml and claude-code-review.yml inside .github/workflows folder
 - these files will allow claude to
 
-![alt text](PNG/Claude4.PNG "Title")
+![alt text](../PNG/Claude4.PNG "Title")
 
 ### 5. Hooks
-![alt text](PNG/Claude5.PNG "Title")
+![alt text](../PNG/Claude5.PNG "Title")
 
 **when are hooks run? - before and after claude code runs any tool**
-![alt text](PNG/Claude6.PNG "Title")
+![alt text](../PNG/Claude6.PNG "Title")
 
 **configuring hooks** - inside ./claude/setting.json file
-![alt text](PNG/Claude7.PNG "Title")
+![alt text](../PNG/Claude7.PNG "Title")
 
 -- **pretool hooks get the args as input of what claude code is trying to do (metadata)**
 -- **posttool hooks can send data for further processing for claude**
 
-![alt text](PNG/Claude8.PNG "Title")
+![alt text](../PNG/Claude8.PNG "Title")
 
 **Defining hooks**
 -- Scenario - don't allow claude code to read .env variables which have sensetive access tokens
 
 **- frst configure hook**
-![alt text](PNG/Claude9.PNG "Title")
+![alt text](../PNG/Claude9.PNG "Title")
 - so this hook will be run before claude code tries to execute **read or grep tool** (see tools sections to see list of available tools)
 **second - define hook**
 ```javascript
@@ -156,7 +156,7 @@ main()
 ### 6. Claude code SDK
 - way to access Claude code programatically
 
-![alt text](PNG/Claude10.PNG "Title") 
+![alt text](../PNG/Claude10.PNG "Title") 
 
 - by default SDK only has readonly access
 - to give edit access 
@@ -307,4 +307,4 @@ and identify issues that could impact reliability, security, maintainability, or
 ## 3. Claude cowork
 - An agentic AI workspace that collaborates like a developer—planning, executing, and iterating on tasks using tools and persistent context.
 
-![alt text](PNG/Claude11.PNG "Title") - 
+![alt text](../PNG/Claude11.PNG "Title") - 
