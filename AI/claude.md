@@ -256,6 +256,42 @@ which skill will claude execute if there is mathcing skill name at different lev
 1. **General purpose subagent ```/agent general```**- for multi-step tasks that require both exploration and action
 2. **Explore ```/agent explore```** - for fast searching and navigation of codebases
 3. **Plan ```/agent plan```** - used during plan mode for research and analysis of your codebase before presenting a plan
+
+**creating custom subagents**
+- run ```/agents command```
+- claude will prompt for scope of agent (personal (in user dir), project (in the root of the project))
+- claude will prompt for how you want to create a subagent (manually or using claude)
+- choose what tool this subagent can access (read-only tools, edit tools, execute tools)
+- choose a model (haiku, sonnet, opus or inherit - use the parent's model)
+
+**.claude/agents/your-agent-name.md**
+- everything between two --- in md files for (agents/prompts/hook/etc) is called as **frontmatter**, and everything after that is called **body**
+```markdown
+---
+name: code-quality-reviewer
+description: Use this agent when you need to review recently written or modified code for quality, security, and best practice compliance.
+tools: Bash, Glob, Grep, Read, WebFetch, WebSearch
+model: sonnet
+color: purple
+---
+You are an expert code reviewer specializing in quality assurance, security best practices, and
+adherence to project standards. Your role is to thoroughly examine recently written or modified code
+and identify issues that could impact reliability, security, maintainability, or performance.
+```
+- the body of this agent is passed as system prompt (one of the inputs subagent receives) when agaent is invoked
+
+**best practices while creating subagents** - 
+- When you send a message to the main context window agent, the name and description of every available subagent are included in the system prompt.
+- This is how the main agent decides which subagent to launch and when
+- so give appropriate desc, if subagent is not getting invoked
+- When the main agent launches a subagent, it writes an input prompt to the subagent on what it needs to do
+- the main agent uses the description field as guidance for writing input prompt to the subagent
+- so again, if you want main agent to pass a diff input prompt to a subagent, modify the description
+- in the body, clearly define a format on how and what a subgent should return as output
+- defning output parameters helps subagent know when to stop
+- **reporting obstacles** -  Include a section in the output format for workarounds, and problems so the main thread doesn't have to rediscover them.
+- **tool control** - use tools field to control what actions a subgent can perform
+
 ## 3. Claude cowork
 - An agentic AI workspace that collaborates like a developer—planning, executing, and iterating on tasks using tools and persistent context.
 
