@@ -3,7 +3,7 @@
 3 ways of working with claude
 1. Claude.ai - chat interface like chatGPT
 2. Claude code - coding assistant
-3. Claude cowork - TODO
+3. Claude cowork - agentic AI workspace that collaborates like a developer—planning, executing, and iterating on tasks using tools and persistent context.
 
 ## 1. Claude.ai
 ### 1. Projects
@@ -239,4 +239,24 @@ which skill will claude execute if there is mathcing skill name at different lev
 2. you can push skills as plugins to market place (similar to publishing npm package)
 3. you can add skills at enterpirze level, so that all the teams inside org can use the skill
 
+### 8. Subagents
+- **specialized agents that claude cowrok delegates tasks to**
+- each agent works in it's own context window
+- when finished, it returns sumary to main thread
+- they help manage context window usage
+- use subagent to they break up your taks, keep context window clean
+
+**working of subagents** - 
+- subagents receive 2 things
+1. **A custom system prompt** - use this to define subagent role and behaviour
+2. **Task description** - written by the parent agent based on what you asked for
+- then subagent works in it's own context window, read/write to files, and only send the summary output back to the main agent, all files read and used in subagent are only available in subagent's context window
+
+**built-in sub agents** - 
+1. **General purpose subagent ```/agent general```**- for multi-step tasks that require both exploration and action
+2. **Explore ```/agent explore```** - for fast searching and navigation of codebases
+3. **Plan ```/agent plan```** - used during plan mode for research and analysis of your codebase before presenting a plan
 ## 3. Claude cowork
+- An agentic AI workspace that collaborates like a developer—planning, executing, and iterating on tasks using tools and persistent context.
+
+![alt text](PNG/Claude11.PNG "Title") - 
