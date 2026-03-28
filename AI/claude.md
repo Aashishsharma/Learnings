@@ -292,6 +292,18 @@ and identify issues that could impact reliability, security, maintainability, or
 - **reporting obstacles** -  Include a section in the output format for workarounds, and problems so the main thread doesn't have to rediscover them.
 - **tool control** - use tools field to control what actions a subgent can perform
 
+**when to use subagents and when to not**
+**when to use**
+1. when exploration is separate from execution
+2. Code review - don't make code review from the main agent, because it only wrote the code, if we use subagents, then they start with a fresh context, and can give more diversed view
+3. save main agent context window
+
+**when not to use**
+1. using subagents as experts (expert in JS/Python) - main agent is already equally good, creating subgents for this purpose, and passing info back and forth will only cause losing the info and extra tokens
+2. using subgents in **sequential pipelines** - e.g. creating 3 subagents (1st to reproduce bug, 2nd to debug it, 3rd to verify), subgents should always be used in **independant pipelines**
+
+**key question** - if intermediate steps don't matter? delegate it to subagent, else no subagent 
+
 ## 3. Claude cowork
 - An agentic AI workspace that collaborates like a developer—planning, executing, and iterating on tasks using tools and persistent context.
 
