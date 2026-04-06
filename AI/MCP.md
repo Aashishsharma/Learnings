@@ -168,6 +168,13 @@ server.prompt(
 
 ### 4. Creating samplings in MCP server
 - we already know it allows our MCP server to run a prompt on user's LLM
+- e.g. - user make a prompt to generate report for some topic
+- MCP server has a report tool, which makes wikipedia calls
+- but we also need to summarixe the report, byt MCP server can't do that
+- so MCP server asks MCP client to ask user's LLM to summarzie the text
+- so server is making a prompt to the client's LLM and client then sends LLM response back to the server
+![alt text](PNG/MCP8.PNG "Title") -
+
 ```typescript
 // notice we are using server.tool and not server.sampling
 // because we want to request user's LLM only when

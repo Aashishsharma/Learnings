@@ -417,3 +417,22 @@ messages: [
 - behind the scenes, we are just doing mathemetical calculation, to get closest vector
 
 #### 6. Once we get relevant chunk pass this chunk as context along with user query to get the proper response from LLM
+
+**RAG workflow example code**
+```typescript
+// 1. embed query
+const queryEmbedding = await embed(query)
+
+// 2. search vector DB
+const docs = await vectorDB.search(queryEmbedding)
+
+// 3. send to LLM
+const response = await llm.generate({
+  prompt: `
+  Answer based only on context:
+  ${docs}
+  
+  Question: ${query}
+  `
+})
+```
