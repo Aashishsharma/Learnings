@@ -374,3 +374,46 @@ messages: [
 ![alt text](../PNG/Claude14.PNG "Title") -
 - we frst ipload the file to claude, and calude will send us the fileid
 - now wherver we need to pass that file again, notice that instead os sending raw bytes to claude, we just pass the fileID, and claude will take care of it beacuse we had already uploaded that file
+
+## Agents and workflows
+#### Workflow
+- A defined sequence of steps to complete a task
+- When you know exact steps claude needs to follow, then we create a workflow
+
+#### Agent
+- When you are not sure what steps needs to be followed
+- but you send claude what goal needs to be achieved, and provide it with the list of tools, then we use agents
+
+## RAG - Retrival Agumented Generation
+- 1. User sends query → 
+- 2. Our code retrieves relevant data from your source →
+- 3. pass query + data to LLM → 
+- 4. generate grounded answer with sources
+
+**usecases** - 
+1. building company specific chatbot, where we feed company docs
+
+### Stpes to implement RAG workflow
+
+#### 1. Text cunking
+- we will have huge amount of data that we need to input into the RAG workflow as knowledgebase
+- when user make a query, we need to pass only relevant chunk to LLM along with user's query, we cannot pass the entire knowlege base
+- so we need to split data into chunks
+- 3 ways
+![alt text](../PNG/Claude15.PNG "Title") -
+
+#### 2. Create text embeddings
+- in this step we need to identify the most relevant chunk to the user query which we need to pass to LLM
+- to identify which chunk matches user query, we create embeddings
+![alt text](../PNG/Claude16.PNG "Title") -
+![alt text](../PNG/Claude17.PNG "Title") -
+
+#### 3. Store embedding for each chunk into Vectro DB
+#### 4. When user fires a query, calculate embedding for that user query
+![alt text](../PNG/Claude18.PNG "Title") -
+
+#### 5. Make query to vector DB to get closest chunk to user's query based on embeddings
+![alt text](../PNG/Claude19.PNG "Title") -
+- behind the scenes, we are just doing mathemetical calculation, to get closest vector
+
+#### 6. Once we get relevant chunk pass this chunk as context along with user query to get the proper response from LLM
