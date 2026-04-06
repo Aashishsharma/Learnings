@@ -447,3 +447,9 @@ client.on("progress", (event) => {
 - then server response with SSE (Sever Sent Events) response
 - with SSE, the connection is open for longer duration, making progress logging possible
 ![alt text](PNG/MCP12.PNG "Title") 
+
+#### Stateless HTTP flag
+- while creating MCP server (with Streamable HTTP transport protocol), we have option to pass **stateless_http=true** flag, which is false by default 
+- **turn this flag on, if you wan't to horizontally scale your MCP servers**
+- this flag removes mcp-session-id, which allows load balancers to pass any client req, to any MCP server behind a load balancer, making scaling feasible, but when we loose progress logger functionality, since it requires mcp-session-id
+- **then why not use sticky load-balancers?** - recommended to use **stateless_http=true** flag
