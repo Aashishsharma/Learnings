@@ -245,6 +245,25 @@ server.tool(
   }
 )
 
+// inside MCP client we need to add this code
+// assuming MCP client is using anthropic SDK
+// if our client is a coding assistant like copilot or claude code
+// then this is already handled
+client.on("sampling", async (req) => {
+  const response = await anthropic.messages.create({
+    model: "claude-3-7-sonnet-latest",
+    max_tokens: 1024,
+    messages: [
+      {
+        role: "user",
+        content: req.prompt,
+      },
+    ],
+  });
+
+  return response.content[0].text;
+});
+
 // flow - 
 // 1. user chat with LLM
 // 2. LLM decides if tool needs to be run
@@ -353,3 +372,78 @@ const query = await input({ message: "Enter your query" })
     text || toolResults[0]?.result?.content[0]?.text || "No text generated."
   )
 ```
+
+### Sending progress logs 
+- most times, server tools might take long, not a good experience to keep user waiting unitl the tool call is complete
+- instead we can share the progress along with logs
+```typescript
+// tool with progress + logs
+server.tool(
+  "long_task",
+  {
+    input: {},
+  },
+  // the second arg here (ctx is what we use to share intermediate results)
+  async function* (_args, ctx) {
+    // 1. start log
+    yield {
+      type: "text",
+      text: "Starting task...",
+    };
+
+    // 2. step 1
+    ctx.reportProgress?.({
+      progress: 0.2,
+      message: "Fetching data...",
+    });
+
+    await delay(1000);
+
+    // 3. step 2
+    ctx.reportProgress?.({
+      progress: 0.5,
+      message: "Processing...",
+    });
+
+    await delay(1000);
+
+    // 5. final result
+    return {
+      content: [
+        {
+          type: "text",
+          text: "✅ Task completed successfully",
+        },
+      ],
+    };
+  }
+);
+
+// in MCP client - we need to add this code - 
+client.on("progress", (event) => {
+  console.log(event.progress, event.message);
+});
+
+```
+
+## MCP message types
+![alt text](PNG/MCP9.PNG "Title") 
+
+## MCP transport
+### 1. STDIO
+![alt text](PNG/MCP10.PNG "Title") 
+
+### 1. Streamable HTTP
+- some requests in MCP needs to be sent from server to client
+- for .eg. progress logging requires MCP server to initiate req to client
+- but this is not possible with HTTP transport, we need to use Streamable HTTP
+![alt text](PNG/MCP11.PNG "Title") 
+
+**Streamable HTTP flow**
+- Similar to TCP connection client sends initiate request
+- server sends initiate result (with mcp-session-id, to identify the client)
+- client sents initialzed notification (similar to acknowledge in TCP)
+- now client sends GET /mcp-url
+- then server response with SSE (Sever Sent Events) response
+- with SSE, the connection is open for longer duration, making progress logging possible
+![alt text](PNG/MCP12.PNG "Title") 
