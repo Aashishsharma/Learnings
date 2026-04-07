@@ -306,5 +306,30 @@ and identify issues that could impact reliability, security, maintainability, or
 
 ## 3. Claude cowork
 - An agentic AI workspace that collaborates like a developer—planning, executing, and iterating on tasks using tools and persistent context.
+- in cowork, you give claude access to a folder, this way Claude can read, create, and edit files there directly. No uploading, no downloading.
+- main diff with noraml claude chat is, we don't need to upload files, if we have 100 files which needs to be researched on updated, we can't put everthing in chat, no need to upload as well, cowork will read / update files in the same place
 
 ![alt text](../PNG/Claude11.PNG "Title") - 
+
+- you gove prompt to cowrk
+- cowork will ask few question to get more details if necessary
+- cowork will create plan, and ask you to approve
+- then cowork will work
+
+![alt text](../PNG/Claude20.PNG "Title") - 
+
+**Projects in Cowork** - 
+![alt text](../PNG/Claude21.PNG "Title") -
+- projects can be shared across team for collab, so other teammembers can continuw work from where you left off 
+
+**Cowork plugins** - 
+- each plugin will have specialized skill, connector and subagents
+![alt text](../PNG/Claude22.PNG "Title") -
+
+![alt text](../PNG/Claude23.PNG "Title") -
+
+**Scheduled Tasks** - 
+![alt text](../PNG/Claude24.PNG "Title")
+
+**Cowork safety** - 
+![alt text](../PNG/Claude25.PNG "Title")
