@@ -12,3 +12,8 @@
 ![alt text](PNG/VPC3.PNG "Title") 
 
 **AWS Private link** - allows us to connect a service running in our VCP to a service running in another VPC
+
+#### Connecting onprem datacenter with cloud - 
+1. using site-to-site VPN
+![alt text](PNG/VPC4.PNG "Title") 
+2. Direct connect (DX) - a private phical network needs to be build, which takes upto months, adv - private so secure, and fast
