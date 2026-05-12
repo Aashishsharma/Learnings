@@ -8,4 +8,30 @@
 - billing alarm is only available in region - us-east-1
 
 ## 2. Cloudwatch logs
-- 
+- to send logs from EC2 to cloud watch, Cloudwatch agaent needs to be installed onto EC2 instance
+
+## 3. Eventbridge
+- when some action happens trigger action
+- example and EC2 instance starts, trigger lambda  
+
+![alt text](PNG/Eventbridge.PNG "Title") 
+
+## 4. CloudTrail
+- it logs every action of every user, and sends those logs to cloudwatch / s3
+- inside AWS root account, there can be 100 IAM users, and they can login via various ways, console, CLI, SDK, so every action done by any user, vai any login method will get logged
+- e.g. a user deleted something, so if we ant to know who deleted, what deleted and when deleted, cloudtrail will tell
+- it is enabled by default
+
+## 5. AWS X-Ray
+- you can do visual analysis of your app
+- kind of dashboard of cloudwatch
+
+## 6. Codeguru - decommissioned
+- does automated PR review
+
+## 7. AWS health dashboard
+1. Service health dashboard 
+  - Shows global/public health status of AWS services
+  - Example: “EC2 issue in ap-south-1”
+2. AWS health dashboard 
+  - show health of services that you are using in your account
