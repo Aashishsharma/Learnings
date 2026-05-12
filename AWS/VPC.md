@@ -17,3 +17,6 @@
 1. using site-to-site VPN
 ![alt text](PNG/VPC4.PNG "Title") 
 2. Direct connect (DX) - a private phical network needs to be build, which takes upto months, adv - private so secure, and fast
+
+managing and communicating between VPC can become complicated, solution - **Transit Gateway** 
+![alt text](PNG/VPC5.PNG "Title")  
