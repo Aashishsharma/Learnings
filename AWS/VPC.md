@@ -10,3 +10,5 @@
 ![alt text](PNG/VPC2.PNG "Title") 
 
 ![alt text](PNG/VPC3.PNG "Title") 
+
+**AWS Private link** - allows us to connect a service running in our VCP to a service running in another VPC
