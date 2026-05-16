@@ -30,3 +30,6 @@
 ## Amazon Personalize
 - Managed service to build apps with real-time personalized recommendation
 - same technology is used in Amazon.com when we buy products
+
+## Amazon textract
+- extract text, handwritten and other data from scanned documents
