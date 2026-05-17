@@ -25,3 +25,12 @@
 ## AWS contorl tower
 - Inseatd of we manually create AWS org, and adding AWS acc, we can use this service
 - benefit - this has inbuild guardrails (as per best practices), and AWS detectives to handle issues
+
+## AWS RAM
+![alt text](PNG/RAM.PNG "Title") 
+
+# Pricing
+
+### Compute
+1. EC2
+![alt text](PNG/EC2-price.PNG "Title") 
