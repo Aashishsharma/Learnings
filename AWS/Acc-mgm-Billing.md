@@ -47,3 +47,21 @@
 - then ernter all resources you are going to use
 - select duration, compute / storage resources
 - then it will calculate your estimated price for a given year / month
+
+### Billing alarm in cloudwatch
+- when cost goes above threshould, billing alarm can send email notification
+- billing alarm can only send notification when the cost actually goes above threshould
+- use **AWS budget** - if you want alarms if **forecasted bill** goes above threshold
+
+### AWS cost anamoly detection
+- managed service which uses ML to detect unusual spends
+
+### AWS service quotas
+- notify when a service reached quota value threshold
+- for e.g. if lambda can run 1000 req / sec, then service quota will notify if lambda is reaching that limit
+
+### AWS trusted advisor
+- high level AWS account management assessment
+- analyse your AWS acc, and provide recommendation on 
+- 1. cost optimization
+- 2. Performance, 3. Security, 4. Fault tolerance
