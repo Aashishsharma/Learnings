@@ -35,4 +35,15 @@
 ![alt text](PNG/EC2-price.PNG "Title") 
 ![alt text](PNG/Compute.PNG "Title") 
 ![alt text](PNG/S3.PNG "Title") 
-![alt text](PNG/EC2-price.PNG "Title") 
+![alt text](PNG/EBS.PNG "Title")
+![alt text](PNG/RDS.PNG "Title")
+![alt text](PNG/RDS1.PNG "Title")
+![alt text](PNG/Cloudfront.PNG "Title")
+![alt text](PNG/Network.PNG "Title") 
+![alt text](PNG/SP.PNG "Title") 
+
+### AWS Price calculator
+- goto calculator.aws
+- then ernter all resources you are going to use
+- select duration, compute / storage resources
+- then it will calculate your estimated price for a given year / month
