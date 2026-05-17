@@ -32,5 +32,7 @@
 # Pricing
 
 ### Compute
-1. EC2
+![alt text](PNG/EC2-price.PNG "Title") 
+![alt text](PNG/Compute.PNG "Title") 
+![alt text](PNG/S3.PNG "Title") 
 ![alt text](PNG/EC2-price.PNG "Title") 
