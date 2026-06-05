@@ -22,3 +22,15 @@
 - Amplify vs Beanstalk
 - Amplify - easiest way to build and host modern frontend/serverless applications
 - Beanstalk - platform-as-a-service for deploying and managing web applications with more infrastructure control.
+
+## AWS Infrastructure composer
+- drag and drop service to build AWS infra for your app
+- behind the scenes it will generate Infrastrucutre as code using cloudfomration
+
+## AWS Device farm
+- lets us run web application on different browsers / mobiles/ tabs, to test how app is rendered on different devices
+- similar to browserstack
+
+## AWS backup
+![alt text](PNG/backup.PNG "Title") 
+![alt text](PNG/backup2.PNG "Title") 
