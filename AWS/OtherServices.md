@@ -99,3 +99,12 @@
 - Integrates with services like AWS Application Discovery Service, AWS Database Migration Service (DMS), and AWS Application Migration Service (MGN).
 
 **Example:** If you're migrating 100 servers and 20 databases using different AWS migration tools, Migration Hub lets you see the overall migration status in one place.
+
+## AWS Fault Injection Simulator (FIS)
+
+- A managed service used to perform controlled chaos engineering experiments on AWS workloads.
+- Intentionally injects failures (e.g., stop EC2 instances, throttle APIs, simulate network issues) to test application resilience.
+- Helps identify weaknesses before real outages occur.
+- Integrates with AWS services such as EC2, ECS, EKS, RDS, and CloudWatch.
+
+**Example:** Randomly stop one EC2 instance in an Auto Scaling Group to verify that the application remains available and recovers automatically.
