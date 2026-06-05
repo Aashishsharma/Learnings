@@ -108,3 +108,19 @@
 - Integrates with AWS services such as EC2, ECS, EKS, RDS, and CloudWatch.
 
 **Example:** Randomly stop one EC2 instance in an Auto Scaling Group to verify that the application remains available and recovers automatically.
+
+## AWS Step Functions
+
+- A workflow orchestration service that coordinates multiple tasks and AWS services.
+- Each step in the workflow can be a Lambda function, ECS task, API call, database operation, email notification, or even a human approval action.
+- AWS Step Functions manages the sequence, retries, error handling, and state between steps.
+- Useful when a business process involves multiple actions that must happen in a specific order.
+
+**Example: Leave Approval Workflow**
+1. Lambda: Store leave request in database.
+2. Lambda: Send approval request to manager.
+3. Human: Manager approves or rejects the request.
+4. Lambda: Update leave status in database.
+5. Lambda: Send notification to employee.
+
+AWS Step Functions orchestrates all these steps and keeps track of the workflow state.
