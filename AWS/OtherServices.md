@@ -124,3 +124,26 @@
 5. Lambda: Send notification to employee.
 
 AWS Step Functions orchestrates all these steps and keeps track of the workflow state.
+
+## AWS Ground Station
+
+- A fully managed service that lets you communicate with and process data from satellites using AWS-managed ground stations.
+- Eliminates the need to build and maintain your own satellite antenna infrastructure.
+- Satellite data is received directly into AWS, where it can be stored, processed, and analyzed using AWS services.
+- Commonly used for weather monitoring, earth observation, mapping, and space missions.
+
+**Example:** A satellite captures images of the Earth. AWS Ground Station receives the satellite data and sends it to AWS for processing and analysis.
+
+## AWS Pinpoint
+
+- A customer engagement service used to send targeted communications to users.
+- Supports Email, SMS, Push Notifications, Voice messages, and in-app messaging.
+- Allows user segmentation, campaigns, scheduling, analytics, and tracking user engagement.
+- Commonly used for marketing campaigns, promotions, and customer notifications.
+
+**Example:** Send a promotional SMS only to users in Pune who haven't logged into the app in the last 30 days.
+
+| AWS Pinpoint | AWS SNS |
+|-------------|----------|
+| Designed for targeted customer engagement and marketing campaigns. | Designed for simple notifications and pub/sub messaging. |
+| Supports user segmentation, campaigns, and engagement analytics. | Focuses on message delivery; no customer segmentation or campaign management. |
