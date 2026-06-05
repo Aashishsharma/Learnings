@@ -86,4 +86,16 @@
 1. AWS Application Discovery service - understand what all needs to be migrated, and there counterpart AWS service
 ![alt text](PNG/DS.PNG "Title") 
 2. AWS Application Migration Service - Do the actual migration 
-![alt text](PNG/DS2.PNG "Title") 
+![alt text](PNG/DS2.PNG "Title")
+3. AWS Migration Evaluator 
+- Used **before migration planning** to estimate costs and build a business case for migrating to AWS.
+- Analyzes on-premises infrastructure and provides **TCO (Total Cost of Ownership)** comparisons.
+- **Example:** "If we move 500 servers to AWS, how much money can we save?"
+- **Migration Evaluator = Cost and business justification.**
+- **Application Discovery Service = Infrastructure and dependency discovery.**
+
+4. AWS Migration Hub
+- A central dashboard to track and monitor migrations across multiple AWS migration tools.
+- Integrates with services like AWS Application Discovery Service, AWS Database Migration Service (DMS), and AWS Application Migration Service (MGN).
+
+**Example:** If you're migrating 100 servers and 20 databases using different AWS migration tools, Migration Hub lets you see the overall migration status in one place.
