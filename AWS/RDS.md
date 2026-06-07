@@ -40,6 +40,7 @@
 
 ## DocumentDB
 ![alt text](PNG/DocumentDB.PNG "Title") 
+- DynamoDB - fully serverless, DocumentDB - it will have instance of NoSQL like MondoDB
 
 ## Neptune
 ![alt text](PNG/Neptune.PNG "Title") 
