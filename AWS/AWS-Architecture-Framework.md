@@ -46,3 +46,38 @@
 - A reporting tool that helps customers measure the carbon emissions associated with their AWS usage.
 - Provides insights into the estimated carbon footprint of AWS workloads over time.
 - Helps organizations track sustainability goals and identify opportunities to reduce environmental impact.
+
+### AWS Cloud Adoption Framework
+- it is not a service but a white paper to adoptin Cloud
+
+# AWS Cloud Adoption Framework (AWS CAF) - 6 Perspectives
+
+## 1. Business Perspective
+- Ensures cloud adoption aligns with business goals and delivers value.
+- Focuses on business cases, costs, benefits, and outcomes.
+- **Example:** Calculating ROI and cost savings from migrating to AWS.
+
+## 2. People Perspective
+- Prepares employees with the skills, roles, and organizational changes needed for cloud adoption.
+- Focuses on training and change management.
+- **Example:** Upskilling developers and operations teams on AWS services.
+
+## 3. Governance Perspective
+- Ensures cloud usage complies with organizational policies and regulations.
+- Focuses on risk management, compliance, and financial governance.
+- **Example:** Defining account structures, budgets, and compliance controls.
+
+## 4. Platform Perspective
+- Focuses on building and managing the cloud infrastructure and landing zone.
+- Covers networking, compute, storage, and migration planning.
+- **Example:** Setting up VPCs, IAM, and multi-account AWS environments.
+
+## 5. Security Perspective
+- Protects cloud workloads, identities, and data.
+- Focuses on security controls, monitoring, and incident response.
+- **Example:** Implementing IAM policies, encryption, and security monitoring.
+
+## 6. Operations Perspective
+- Ensures workloads are operated, monitored, and supported effectively.
+- Focuses on automation, monitoring, backups, and incident management.
+- **Example:** Using CloudWatch alarms and automated operational runbooks.
