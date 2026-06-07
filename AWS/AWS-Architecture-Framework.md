@@ -106,3 +106,13 @@
 
 ## AWS Support
 ![alt text](PNG/Support.PNG "Title")
+
+### AWS IQ
+
+- A service that connects AWS customers with AWS-certified professionals and AWS consulting partners.
+- These experts hold AWS certifications (e.g., Solutions Architect, Developer, SysOps Administrator) and can help with migrations, architecture design, troubleshooting, and cloud projects.
+- Customers can submit project requirements, receive proposals, and hire experts directly through AWS IQ.
+- Useful when an organization needs AWS expertise but does not have the required skills in-house.
+
+**Example:** A company wants to migrate its applications to AWS. It uses AWS IQ to hire an AWS-certified Solutions Architect to design and execute the migration.
+```
