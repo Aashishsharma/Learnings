@@ -115,4 +115,10 @@
 - Useful when an organization needs AWS expertise but does not have the required skills in-house.
 
 **Example:** A company wants to migrate its applications to AWS. It uses AWS IQ to hire an AWS-certified Solutions Architect to design and execute the migration.
-```
+
+### AWS re:Post
+- A community-driven Q&A platform where AWS users can ask questions and get answers about AWS services and best practices.
+- Questions are answered by AWS experts, AWS employees, and the AWS community.
+- Provides troubleshooting guidance, architectural recommendations, and service-specific knowledge.
+- Useful when you need technical guidance, best practices, or help debugging AWS issues.
+- **Do not use** when you need guaranteed response times or dedicated support; use AWS Support plans instead.
