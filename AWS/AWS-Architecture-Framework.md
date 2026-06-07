@@ -122,3 +122,12 @@
 - Provides troubleshooting guidance, architectural recommendations, and service-specific knowledge.
 - Useful when you need technical guidance, best practices, or help debugging AWS issues.
 - **Do not use** when you need guaranteed response times or dedicated support; use AWS Support plans instead.
+
+### AWS Managed Services (AMS)
+
+- A service where AWS operates and manages parts of your AWS environment on your behalf.
+- The AWS Managed Services team handles operational tasks such as provisioning, monitoring, patching, backup management, incident response, and change management.
+- Helps organizations follow AWS best practices for security, compliance, and operations without needing a large cloud operations team.
+- Useful for enterprises that want AWS expertise managing day-to-day infrastructure operations.
+
+**Example:** A company runs its applications on AWS, while the AMS team manages server patching, monitoring, backups, and operational support, allowing the company to focus on application development.
