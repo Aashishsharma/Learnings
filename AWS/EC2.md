@@ -73,3 +73,8 @@ Apart from EBS, each EC2 instance also has something called as EC2 instance stor
 - It can be based on AWS-provided images or custom ones which we can create, or can use AMIs created by others from marketplace
 1. right click on EC2 instance -> images and template -> create image
 2. while creating new ec2 instance - instead of selecing os as windows,linux, select your own AMI
+
+## EC2 user data scripts
+- shell command that we can run when the machine starts
+- Run only during the instance's initial boot by default. 
+- Restarting or stopping/starting the instance does not rerun the script unless the instance is specifically configured to do so.

@@ -15,8 +15,6 @@ Four sections in IAM
 1. IAM User - A normal employee having access to AWS via IAM credentials
 2. IAM policies - JSON documents that define permissions specifying which actions can be performed on which resources
 3. IAM User groups - simplify permission management by assigning permissions to groups instead of individual users. 
-### IAM User Groups
-
 - IAM policies are typically attached to **groups** (though they can also be attached directly to users).
 - Users are added to groups such as **Developers**, **DevOps**, or **Marketing**, and inherit the group's permissions.
 - A user can belong to multiple groups and receive permissions from all of them.
