@@ -1,4 +1,4 @@
-# IAM - Identity and Access Management
+# IAM - Identity and Access Management (Global service)
 
 ## 4 ways to log in to AWS
 1. Using root credentials - typically only one or two per organization
@@ -42,3 +42,15 @@ Here's a sample IAM policy in JSON format, with comments explaining each field:
   ]
 }
 ```
+
+### IAM Access advisor
+- now it's name is changed to last access
+- works at user level, you goto a particular IAM user, and select access advisor
+- it shows which service was last accessed by this user, we if few services are never accessed by this user, or were accessed long time back, we can remove this
+- this aligns with AWS's least access previlage principle
+
+### Cloudshell
+- AWS CLI on cloud
+- login to console, you will see option for cloudshell, then it will open terminal in the browser, and that terminal is already autenticated to AWS via the IAM role, that you are logged in with
+- this service is not available for all the regions
+
