@@ -27,12 +27,27 @@ Security Groups act as virtual firewalls for your EC2 instances, controlling inb
 
 - **Key Features**:
   - Rules specify allowed protocols (TCP, UDP, ICMP), ports, and sources (IP addresses, CIDR blocks, or other security groups) for inbound traffic, and destinations for outbound.
-  - Default behavior: Deny all inbound traffic, allow all outbound traffic.
+  - Default behavior: Deny all inbound traffic, allow all outbound traffic, only allow rules can be specified
   - Can be attached to multiple instances and are VPC-specific.
   - Changes take effect immediately.
+  - sec grp is region / VPC specific
+  - if you get timeout issue on your site - it is securoty grp is blocking the req
+  - if you get connection refused - app error
 
 - **Inbound Rules**: Define what traffic can reach your instances (e.g., allow SSH on port 22 from your IP).
 - **Outbound Rules**: Define what traffic your instances can send (e.g., allow HTTP on port 80 to anywhere (so that your ec2 instance can access outside internet)).
+**Defning rules** - 
+![alt text](PNG/Sec-grp.PNG "Title")
+- we can define rules using security groups
+- create sec grp, attach multiple sec grp to EC2, then all the other EC2s which are attached to those sec grp can communicate directly, insttead of specific IPs of all EC2, which btw can be dynamic 
+![alt text](PNG/Sec-grp2.PNG "Title") 
+
+**Common ports** - 
+1. 22 - SSH
+2. 21 - FTP
+3. 80 - HTTP
+4. 442 - HTTPS
+5. 3389 - Remote desktop connection
 
 ## SSH into EC2
 1. Login to AWS cli - ```aws configure``` - then it will prompt for accessId and accessKey
