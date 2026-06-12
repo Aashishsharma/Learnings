@@ -3,11 +3,15 @@
 ## EC2 Purchase Options
 
 - **On-Demand Instances**: Pay for compute capacity by the hour or second with no long-term commitments or upfront payments.
-- **Reserved Instances**: Provide a significant discount (up to 75%) compared to On-Demand pricing for committing to use EC2 for 1 or 3 years.
-- **Spot Instances**: Bid for unused EC2 capacity, potentially saving up to 90% off On-Demand prices, but instances can be terminated if capacity is needed elsewhere.
-- **Dedicated Hosts**: Physical servers fully dedicated to your use, allowing you to use existing server-bound software licenses and meet compliance requirements.
-- **Dedicated Instances**: Instances that run on hardware dedicated to a single customer within a VPC, but not a full physical host.
+- **Reserved Instances**: Provide a significant discount (up to 75%) compared to On-Demand pricing for committing to use EC2 for 1 or 3 years. **Convirtable Reserver Instance** - withing the lockin period, you can change EC2 instance type - like from micro to x-large
+- **Spot Instances**: Bid for unused EC2 capacity, potentially saving up to 90% off On-Demand prices, but instances can be terminated if capacity is needed elsewhere hence unreliable.
+- **Dedicated Hosts**: provides an entire physical server dedicated to a customer, offering visibility and control over host-level resources and supporting BYOL licensing.
+- **Dedicated Instances**: provides hardware isolation from other AWS customers, but AWS manages the underlying physical server.
 - **Savings Plans**: A flexible pricing model offering lower prices on EC2 usage in exchange for a commitment to a consistent amount of compute usage (measured in $/hour) for 1 or 3 years.
+- **EC2 Capacity Reservation** - Reserves EC2 capacity in a specific Availability Zone so that instances can be launched whenever needed, even during periods of high demand.
+- Charged for the reserved capacity whether you use it or not
+- then why not use on-demand - for on-demand, you pay price for compute, but in cap reservation, only pay reservation price
+**Use Case:** A critical production application must be able to launch additional EC2 instances during a traffic spike, even if the AZ is experiencing capacity shortages.
 
 ## EC2 Instance Types
 
