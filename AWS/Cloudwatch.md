@@ -22,6 +22,14 @@
 - e.g. a user deleted something, so if we ant to know who deleted, what deleted and when deleted, cloudtrail will tell
 - it is enabled by default
 
+You may see use-cases asking you to select one of CloudWatch vs CloudTrail vs Config. Just remember this thumb rule -
+
+Think resource performance monitoring, events, and alerts; think CloudWatch.
+
+Think account-specific activity and audit; think CloudTrail.
+
+Think resource-specific change history, audit, and compliance; think Config.
+
 ## 5. AWS X-Ray
 - you can do visual analysis of your app
 - kind of dashboard of cloudwatch

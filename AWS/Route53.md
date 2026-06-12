@@ -46,6 +46,18 @@
 - hence reduces latency, so req does not need to go to AWS data centers
 - useful when users have 5G connection
 
-### AWS local zones
-- AWS has regions, which has availability zones
-- local zones target differnet cities, which are near availability zones, for lower latency
+## Memory Trick
+**Region** → A city-sized AWS area (e.g., Mumbai)
+**Availability Zone** → A data center (or group of data centers) inside that city (1 region as min 3 availability zones)
+**Local Zone** → A small AWS extension closer to users outside the main city, connected via ultra-low latency
+**Edge Location** → A cache point that brings content very close to users
+
+Region > Availability Zone > Local Zone > Edge Location
+
+### How to Choose a Region when building apps?
+- **Latency:** Choose a region close to your users.
+  - Example: Indian users → Mumbai region.
+- **Compliance/Data Residency:** Some regulations require data to stay in a specific country or region.
+- **Service Availability:** Not all AWS services are available in every region.
+- **Cost:** Pricing varies between regions.
+- **Disaster Recovery:** Choose additional regions if you need cross-region failover.
