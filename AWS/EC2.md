@@ -13,11 +13,13 @@
 
 EC2 instance types are categorized into families based on their use cases, with varying combinations of CPU, memory, storage, and networking capabilities. Instance names follow the pattern: family.generation.size (e.g., t3.micro).
 
-- **General Purpose (e.g., t, m)**: Balanced resources for a variety of workloads, including web servers and small databases.
-- **Compute Optimized (e.g., c)**: High CPU performance for compute-intensive applications like batch processing and gaming.
-- **Memory Optimized (e.g., r, x, z)**: Large amounts of RAM for memory-intensive tasks such as in-memory databases and big data analytics.
-- **Storage Optimized (e.g., i, d)**: High storage capacity and I/O performance for data-intensive applications like NoSQL databases and data warehousing.
-- **Accelerated Computing (e.g., p, g, f)**: Hardware accelerators like GPUs or FPGAs for machine learning, graphics, and high-performance computing.
+| Instance Family | Examples | Description | Common Use Cases |
+|----------------|----------|-------------|------------------|
+| **General Purpose** | t, m | Balanced CPU, memory, and networking resources. | Web servers, application servers, small databases. |
+| **Compute Optimized** | c | High CPU performance for compute-intensive workloads. | Batch processing, gaming servers, scientific computing. |
+| **Memory Optimized** | r, x, z | Large amounts of RAM for memory-intensive applications. | In-memory databases, caching, big data analytics. |
+| **Storage Optimized** | i, d | High storage capacity and high I/O performance. | NoSQL databases, data warehousing, Elasticsearch. |
+| **Accelerated Computing** | p, g, f | Hardware accelerators such as GPUs and FPGAs. | Machine learning, graphics rendering, video processing, HPC. |
 
 ## Security Groups in EC2
 
@@ -78,3 +80,12 @@ Apart from EBS, each EC2 instance also has something called as EC2 instance stor
 - shell command that we can run when the machine starts
 - Run only during the instance's initial boot by default. 
 - Restarting or stopping/starting the instance does not rerun the script unless the instance is specifically configured to do so.
+
+### EC2 public and private IPs
+### Why Does an EC2 Instance Have Both Private and Public IPs?
+
+- **Private IP:** Used for communication within the VPC. It remains the same for the lifetime of the instance.
+- **Public IP:** Used for communication with the internet. AWS maps it to the instance's private IP.
+- The Public IP Changes when you start and stop the instance, unless we use elastic IP
+
+**Example:** Your laptop accesses the EC2 instance using its public IP, while another EC2 instance in the same VPC communicates using the private IP.
