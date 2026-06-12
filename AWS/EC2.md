@@ -53,6 +53,16 @@ Security Groups act as virtual firewalls for your EC2 instances, controlling inb
 1. Login to AWS cli - ```aws configure``` - then it will prompt for accessId and accessKey
 2. ```ssh -i .\ec2-login.pem ec2-user@13.232.74.85``` - the .pem file is option is available wjen creating ec2 instance
 
+## EC2 instance connect
+- doing SSH into EC2, but this time, in the browser, simiar to cloudshell for cli
+- only works with Amazon Linux AMI
+
+- below I am in EC2 instance connect, so I am into EC2 server
+- now if this EC2 server needs to call IAM service it cannot do, because we need to attach IAM role which can access IAM service
+- note- as shwon in below image, we can call aws configure and provide our IAM user's accessid and secret key, but then anyone, using this EC2, can maybe see our user's secrtet key, hence we should use IAM role
+- this is the reason why IAM role's exists, other wise any developer might see any other develper's IAM secret if those are configured in any of the AWS's services, hence IAM roles are used for AWS services and not IAM users
+![alt text](PNG/EC2-Iam.PNG "Title") 
+
 ## Storage on EC2
 3 types
 1. Elastic Block store (EBS)
