@@ -31,6 +31,11 @@ After that, all DNS queries for `example.com` are forwarded to Route 53's author
 - These hosted zones holds the actual records, name servers just look into these records
 - one organization can have 20-30 sub domains, and AWS manages 1000 such orgs, so even if record data is small the list of records is still large, so hosted zones are used to store this info
 
+- **Public Hosted Zone** stores DNS records that are resolvable from the internet.
+- **Private Hosted Zone** stores DNS records that are resolvable only from associated VPCs.
+- hence in a company, internal websites are not accessible over normal internet, e.g. dev.principal.com cannot be access from a device which is not connect to the company's internal network
+- becasue, the DNS record (dev.principal.com) is resolvable only from the company's VPC/network.
+
 ## R53 Policies
 ![alt text](PNG/R532.PNG "Title") 
 1. simple - give url, get IP
