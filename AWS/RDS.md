@@ -4,7 +4,10 @@
 - AWS provides managed DB services, for relation DB it is called RDS
 - so DB server patching, montioring is done by AWS
 - but we cannot SSH into AWS RDS
-- AWS RDS supports MySQL, SQL Server, Postgres and others
+- AWS RDS supports MySQL, SQL Server, Postgres and others  
+
+**RDS Storage auto-scaling** - 
+![alt text](PNG/RDSStorageScaling.PNG "Title") 
 
 ## AWS Aurora vs AWS RDS
 - Auror is built by AWS, built as cloud optimize DB
