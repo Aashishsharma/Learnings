@@ -24,6 +24,10 @@
 - also, in our app, we don;t need to configure multiple DB URLs, only one, and standby DB will takeover if main DB fails
 
 ### Creating RDS
+- Open RDS service, click on create RDS
+- select 1 option - Full configuration or Easy create (below is e.g. of full config)
+- select DB engine (MySQL, Postgress, SQL server, Aurora), then select DB engine version
+- select availability type - 1. Single AZ deploy (1 instance), 2. Multi AZ (2 DB instance), 2nd DB instance will be standby, it is not a read replica, it cannot be accessed unless main BD fails, this is only for disaster recovery, 3. Multi-AZ DB CLuster deploy (3 instance), 2 are read replica
 - 
 
 ## AWS Aurora vs AWS RDS
