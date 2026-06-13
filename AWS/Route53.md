@@ -35,6 +35,11 @@ After that, all DNS queries for `example.com` are forwarded to Route 53's author
 - **Private Hosted Zone** stores DNS records that are resolvable only from associated VPCs.
 - hence in a company, internal websites are not accessible over normal internet, e.g. dev.principal.com cannot be access from a device which is not connect to the company's internal network
 - becasue, the DNS record (dev.principal.com) is resolvable only from the company's VPC/network.
+- so we need to connect to VPN
+- but internal websites are not just protected via Private hosted zones, they are also protected by
+1. **Private IPs** - private IPs are routable only inside the VPC/corporate network. 
+2. **Security groups** - if private IPs are not used then protected via security groups
+3. **Firewalls**
 
 ## R53 Policies
 ![alt text](PNG/R532.PNG "Title") 
