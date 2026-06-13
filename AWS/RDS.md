@@ -9,6 +9,10 @@
 **RDS Storage auto-scaling** - 
 ![alt text](PNG/RDSStorageScaling.PNG "Title") 
 
+**RDSReadReplica** - Main purpose - perf optimization for read operations
+![alt text](PNG/RDSReadReplica.PNG "Title") 
+- Note - since this is async replication, we will have eventual consistency
+
 ## AWS Aurora vs AWS RDS
 - Auror is built by AWS, built as cloud optimize DB
 - 5x time faster then MySQL and 3x fater that postgres, if we used MySQL or Postgres, since they are not cloud optimized
