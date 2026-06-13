@@ -141,13 +141,36 @@ const [rows] = await reader.execute(
 - so as long as EC2 instacnes are withing same VPC, it will work
 - but same code from local comp will not work, we might have to use VPN then
 
-## DB Replication
-- Read replica - we can create upto 15 read replicas of RDS
-- Multi-AZ replica - same region but in multiple AZs
-- Multi-region replica - replica across multiple regions
-
 ## Elastic cache
 - AWS managed Redis / memcache
+- use case - performance, store user's session, so all EC2 instances can access user sessions, and we don't need sticky sessions any more
+
+#### Creating Elastic cache
+- note in below Valkey is Redis only
+- ![alt text](PNG/Ecache.PNG "Title")  
+- rest steps are more or less similar ro RDS creation
+- it will give us Redis's primary and read replica endpoints, which we can use in app code to connect
+
+#### Caching strategies
+| Pattern | Flow | Key Idea |
+|--------|------|----------|
+| **Lazy Loading (Cache Aside)** | Read → Cache Miss → DB → Cache | Cache populated on **read miss**. |
+| **Write Through** | Write → Cache → DB *(or DB → Cache in some implementations)* | Cache updated at **write time**, so future reads hit the cache. |
+
+#### Cache Eviction policies
+1. Delete from cache on DB delete
+2. LRU
+3. TTL
+
+#### AWS MemoryDB for Redis
+
+- A **Redis-compatible, durable in-memory database** managed by AWS.
+- Stores data in memory for low latency while also persisting it across multiple AZs for durability.
+
+**Use Cases** -
+- **Real-time leaderboards** in gaming.
+- **User profiles/shopping carts** requiring microsecond latency and durability.
+- Applications that need Redis performance **without losing data** on node failures.
 
 ## DynamoDB
 - NoSQL AWS DB
