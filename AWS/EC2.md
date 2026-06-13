@@ -88,6 +88,14 @@ After creating EC2 instance, go to storage section, and click on create volume
 3. Under snapshot - click on create volume from snapshot  
 Thus you have created exact same volume in a new region
 
+**EBS Volume types** - 
+1. SSD = Fast access (IOPS-focused) → gp3, io2
+2. HDD = Cheap storage (throughput-focused) → st1, sc1
+3. gp3 = Default
+4. io2 = Database
+5. st1 = Big Data
+6. sc1 = Archive
+
 
 ### 2. Elastic instance store 
 Apart from EBS, each EC2 instance also has something called as EC2 instance store to store data, but this will vanish once EC2 instance is terminated.
@@ -96,7 +104,6 @@ Apart from EBS, each EC2 instance also has something called as EC2 instance stor
 ### 3. EFS - Elastic File System
 - This is shared file systems and multiple EC2 instances even from different availability zones can access same EFS, not possible in EBS
 
-# AMI - Amazon Machine Image
 
 # AMI - Amazon Machine Image
 - similar to docker images, you can launch new EC2 instances from this AMIs
