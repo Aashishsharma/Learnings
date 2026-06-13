@@ -1,8 +1,32 @@
 - all the servies listed below are to make our application globally accessible, and improve performance
 # Route53
 - it is a managed DNS - i.e, DNS service is managed by AWS
+- it is Authorative DNS - that means we can update the DNS records, it is not just a normal DNS lookup server
+- it is also a DNS registrar - it is like Godady, we can purchase domain names here
 - so in Route53, we map the IP of a server (where our app is deployed, maybe EC2). with a domain url
 ![alt text](PNG/R531.PNG "Title") 
+
+### Route 53 record types
+| Record Type | Purpose | Example | Resolves To |
+|------------|---------|---------|-------------|
+| **A** | Maps a domain name to an **IPv4** address. | `api.example.com → 54.12.34.56` | IPv4 address |
+| **AAAA** | Maps a domain name to an **IPv6** address. | `api.example.com → 2406:da1c::1234` | IPv6 address |
+| **CNAME** | Makes one domain an alias of another domain, if you don't want users to see .elb.amazonaws.com, then CNAME is to be updated | `my-alb-123.ap-south-1.elb.amazonaws.com → api.example.com` | Another domain name |
+| **NS** | These tell the internet: "If you want DNS records for example.com, ask these name servers." | `example.com → ns-123.awsdns-45.com` | Name servers |
+
+- Seems like AWS has 4 authorative name servers (NS), which will include all the above 4 records
+```
+- ns-123.awsdns-45.com
+- ns-678.awsdns-12.net
+- ns-910.awsdns-56.org
+- ns-111.awsdns-78.co.uk
+```
+
+The public DNS system knows to query AWS Route 53 because your **registrar** publishes **NS records** that say:
+> "For `example.com`, ask these Route 53 name servers."
+After that, all DNS queries for `example.com` are forwarded to Route 53's authoritative name servers (the 4 NS servers we listed above).
+- then these NS servers already know the IP for a domain name by looking at A and AAAA records
+
 
 ## R53 Policies
 ![alt text](PNG/R532.PNG "Title") 
