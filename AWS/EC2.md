@@ -96,14 +96,53 @@ Thus you have created exact same volume in a new region
 5. st1 = Big Data
 6. sc1 = Archive
 
+#### EBS Multi-attach
+- one EBS can connect to only 1 EC2, and that too in same AZ
+- multi-attach allows to connect to upto 16 EC2 instances in same AZ
+- only io1 and io2 EBS volums can be multi-attached
+- usecase - when multi-cluser (app running on multiple servers) apps need to access same disk storage, e.g. Oracle RAC (Real appliction cluster), rarely a use case for web devs
+
+**How to attach EBS to EC2** - out of scope for certified DEV
 
 ### 2. Elastic instance store 
-Apart from EBS, each EC2 instance also has something called as EC2 instance store to store data, but this will vanish once EC2 instance is terminated.
+- this will vanish once EC2 instance is terminated.
 - So EC2 instance store for caching the data, and EBS for storing permanent data
+
+**How to attach Elastic instance store to EC2** - this is physically attached to EC2 instance
 
 ### 3. EFS - Elastic File System
 - This is shared file systems and multiple EC2 instances even from different availability zones can access same EFS, not possible in EBS
+- highly scalable, and pay per use. no need to reserve capacity
+- **EFS** → Shared folder for many servers.
+- **Usecase** - Content Management Systems (e.g., WordPress) running on multiple EC2 instances that need shared plugins, themes, and uploaded files. Mostly used in legacy systems, or if we are bringing legacy systems to Cloud, mostly se is suitable
 
+**EFS Storage classes** - 
+1. Standard → Hot data
+2. Infrequent Access (IA) → Warm data
+3. Archive → Cold data
+
+**EFS Performance categories** - 
+1. Performance Mode = "How Fast?"
+- **General Purpose** → Low latency (default)
+- **Max I/O** → Massive scale, higher latency
+
+2. Throughput Mode = "How Much Data per Second?"
+- **Elastic** → AWS automatically adjusts throughput
+- **Provisioned** → You specify throughput
+- **Bursting** → Throughput depends on file system size (legacy)
+
+**How to attach EFS to EC2** - 
+- create EFS volume
+- speficy security groups, VPC
+- while creating EC2, specify EFS volume
+- ![alt text](PNG/EFS.PNG "Title")
+**note** - the checbox above - auto moutn shared FS by attaching user data scripts - make saure that the EFS will be attached to this EC2, and AWS will handle the userdata script which will run on instance boot (1st time)
+- this way our EC2 now has access to this file system **/mnt/efs/fs1**
+- **accessing this fs in multiple EC2 instance**
+- **Instance A** - create a new file hello-world.txt and writes content (we connected to EC2 via AWS instance connect)
+- ![alt text](PNG/EFS1.PNG "Title")
+- **Instance B** - can directly read the file contents, becuase this is now a shared FS 
+- ![alt text](PNG/EFS2.PNG "Title")
 
 # AMI - Amazon Machine Image
 - similar to docker images, you can launch new EC2 instances from this AMIs
