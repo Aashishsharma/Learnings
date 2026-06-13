@@ -43,6 +43,10 @@
    - **Weighted Random**
 5. Save the changes.
 
+**What if I need to use consistent hashing algo, instead of the defaul algos provided by ALB?** - 
+1. Use a self-managed load balancer such as **NGINX** or **HAProxy** on EC2.
+2. Implement routing logic in your application or API gateway layer.
+
 **Routing rules vs Load balancers routing algorithm** - 
 - **Routing rules** - they route request to a specific target groups (routing req. to group of EC2 instances)
 - **Routing algo** - within a target group, there can be 50 EC2 instances, so to which specific EC2 instance the req, needs to be routed is determined bu routing algorithm
