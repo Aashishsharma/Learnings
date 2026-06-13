@@ -8,9 +8,7 @@
 3. Gateway load balancer - layer 3 () at IP level
 4. Classic load balancer (retired) - layer 4 and 7
 
-## How to configure routing algo for load balancer
-
-### Steps to create ELB
+### Steps to create ALB
 1. Create multiple EC2 instances
 2. Got to Loadbalancers
 3. Click on create
@@ -24,7 +22,8 @@
 - target groups can be for **group of EC2 instances, lambda function, ECS tasks, list of private IP addresses**
 - ALB can route request to multiple target groups, so we can create 1 TG for EC2s, 1 TG for lambdas
 
-#### Routing based on query params
+#### Routing rules
+- based on query params
 ![alt text](PNG/ALB2.PNG "Title") 
 - similarly routing can be done based below options
 ![alt text](PNG/ALB3.PNG "Title") 
@@ -34,6 +33,19 @@
 - ony security grp of load balancer, will have allow inbound rules of 80 and 443, with source IP range (0.0.0.0/0) - making the loadbalancer publicly accessible
 - but the underneath EC2 instance will only HTTP port open and this time source won't be range of IPs, but soruce will be the security grp of the load balancer, so only loadbalancer can access EC2 on port 80
 
+## How to configure routing algo for load balancer
+1. Open **EC2 Console** → **Target Groups**.
+2. Select the target group attached to your ALB.
+3. Go to **Attributes** → **Edit**.
+4. Under **Load Balancing Algorithm**, choose:
+   - **Round Robin** *(default)*
+   - **Least Outstanding Requests**
+   - **Weighted Random**
+5. Save the changes.
+
+**Routing rules vs Load balancers routing algorithm** - 
+- **Routing rules** - they route request to a specific target groups (routing req. to group of EC2 instances)
+- **Routing algo** - within a target group, there can be 50 EC2 instances, so to which specific EC2 instance the req, needs to be routed is determined bu routing algorithm
 
 ## Auto scaling group (ASG)
 - In ELB, if instances goes down due to some reason (app crashed), then new instances are not created, and if all instances go down, then APP is down.
