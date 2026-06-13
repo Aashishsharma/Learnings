@@ -51,6 +51,21 @@
 - **Routing rules** - they route request to a specific target groups (routing req. to group of EC2 instances)
 - **Routing algo** - within a target group, there can be 50 EC2 instances, so to which specific EC2 instance the req, needs to be routed is determined bu routing algorithm
 
+```text
+Client Request
+      |
+      v
+ALB Listener
+      |
+      |-- Routing Rule: path=/api/*
+      v
+Target Group (API)
+      |
+      |-- Load Balancing Algorithm: Round Robin
+      v
+EC2-1 / EC2-2 / EC2-3
+```
+
 ## Auto scaling group (ASG)
 - In ELB, if instances goes down due to some reason (app crashed), then new instances are not created, and if all instances go down, then APP is down.
 - in ASG, we define min, max EC2 instances, and AWS takes care that minimum EC2 instances are up, all the time, if instances goes down, ASG will spin up new instances for us, enabling auto scaling
