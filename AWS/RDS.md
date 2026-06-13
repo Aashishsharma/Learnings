@@ -127,6 +127,20 @@ const [rows] = await reader.execute(
 - rest all steps remain similar to RDS DB creation
 - after creation, Aurora DB will give 2 endpoints, reader endpoint and writer endpoint
 
+![alt text](PNG/RDSSec.PNG "Title") 
+
+### RDS Proxy
+- this will manage DB connection pool
+- but we can create DB conn pool in code then why RDS proxy
+- If we have 50 EC2 instances, and the app code creates 20 DB coons, then total 100 DB connections will be opened to with the DB
+- more over if Lambdas connect to DB, then there can be 10 lambda's so more DB conns, plus every time labda does cold start, it will have to establish new DB conn
+- so instead use RDS proxy, which will maintain DB pool for us
+![alt text](PNG/RDSProxy.PNG "Title") 
+- RDS proxy is not publicly available
+- to connect to RDS proxy from code, provide RDS proxy conn, string
+- so as long as EC2 instacnes are withing same VPC, it will work
+- but same code from local comp will not work, we might have to use VPN then
+
 ## DB Replication
 - Read replica - we can create upto 15 read replicas of RDS
 - Multi-AZ replica - same region but in multiple AZs
