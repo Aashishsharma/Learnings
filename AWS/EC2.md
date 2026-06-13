@@ -53,6 +53,8 @@ Security Groups act as virtual firewalls for your EC2 instances, controlling inb
 4. 442 - HTTPS
 5. 3389 - Remote desktop connection
 
+**Note** - security group is not just attched to EC2, it can be attached to almost all AWS services
+
 ## SSH into EC2
 1. Login to AWS cli - ```aws configure``` - then it will prompt for accessId and accessKey
 2. ```ssh -i .\ec2-login.pem ec2-user@13.232.74.85``` - the .pem file is option is available wjen creating ec2 instance

@@ -9,6 +9,10 @@
 4. Classic load balancer (retired) - layer 4 and 7
 
 ## How to stop access of target Ec2 instances which are hidden behind ELB
+![alt text](PNG/ELB.PNG "Title") 
+- ony security grp of load balancer, will have allow inbound rules of 80 and 443, with source IP range (0.0.0.0/0) - making the loadbalancer publicly accessible
+- but the underneath EC2 instance will only HTTP port open and this time source won't be range of IPs, but soruce will be the security grp of the load balancer, so only loadbalancer can access EC2 on port 80
+
 ## How to configure routing algo for load balancer
 
 ### Steps to create ELB
