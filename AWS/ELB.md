@@ -96,7 +96,7 @@ EC2-1 / EC2-2 / EC2-3
 - SSL certs are provided by 3rd party Certification Authority like Symantec
 - SSL encrypts data in transit between client and ALB
 
-1. Request/import certificate in **ACM**.
+1. Request/import certificate in **ACM** (Certificates Manager).
 2. Open **EC2 Console → Load Balancers → Your ALB**.
 3. Go to **Listeners**.
 4. Create or edit the **HTTPS (443)** listener.
@@ -104,6 +104,9 @@ EC2-1 / EC2-2 / EC2-3
 6. Configure listener rules to forward traffic to target groups.
 
 ![alt text](PNG/ALB7.PNG "Title")
+
+**Connection draining** - 
+![alt text](PNG/ALB8.PNG "Title")
 
 ## Network Loadbalancer
 - works at TCP / UDP layer
