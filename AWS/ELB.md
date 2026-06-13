@@ -66,6 +66,20 @@ Target Group (API)
 EC2-1 / EC2-2 / EC2-3
 ```
 
+## Network Loadbalancer
+- works at TCP / UDP layer
+- ultra fast, millions of req / sec
+
+## Gateway load balancer
+- works at Network / IP layer
+- This LB first routes packets to Firewall instances, to analyze Network packets, and if firewalls allow the request, then it is forwarded further
+- ![alt text](PNG/GLB.PNG "Title")
+- why can't we use ALB, instead of using GLB?
+- ALB can only access HTTP packets (cookies, headers), but can't access IP packets
+- 3rd Party firewalls need access to IP packets
+- How are 3rd party firewalls invoked? 
+- using **route tables** - (will explore in Solutions architect)
+
 ## Auto scaling group (ASG)
 - In ELB, if instances goes down due to some reason (app crashed), then new instances are not created, and if all instances go down, then APP is down.
 - in ASG, we define min, max EC2 instances, and AWS takes care that minimum EC2 instances are up, all the time, if instances goes down, ASG will spin up new instances for us, enabling auto scaling
