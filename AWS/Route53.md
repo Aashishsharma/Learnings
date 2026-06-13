@@ -27,6 +27,9 @@ The public DNS system knows to query AWS Route 53 because your **registrar** pub
 After that, all DNS queries for `example.com` are forwarded to Route 53's authoritative name servers (the 4 NS servers we listed above).
 - then these NS servers already know the IP for a domain name by looking at A and AAAA records
 
+**A Hosted Zone is a collection of DNS records for a domain in Route 53.**
+- These hosted zones holds the actual records, name servers just look into these records
+- one organization can have 20-30 sub domains, and AWS manages 1000 such orgs, so even if record data is small the list of records is still large, so hosted zones are used to store this info
 
 ## R53 Policies
 ![alt text](PNG/R532.PNG "Title") 
