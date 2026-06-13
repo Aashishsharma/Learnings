@@ -12,6 +12,8 @@
 **RDSReadReplica** - Main purpose - perf optimization for read operations
 ![alt text](PNG/RDSReadReplica.PNG "Title") 
 - Note - since this is async replication, we will have eventual consistency
+- One usecase is obvious - perf optimization
+- other usecase - our main app read / write to DB, there is another App which just shows reporting dashboards by reading DB, then that reporting dashboard can just connect to that read replica
 
 ## AWS Aurora vs AWS RDS
 - Auror is built by AWS, built as cloud optimize DB
