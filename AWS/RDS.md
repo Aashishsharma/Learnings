@@ -9,11 +9,22 @@
 **RDS Storage auto-scaling** - 
 ![alt text](PNG/RDSStorageScaling.PNG "Title") 
 
-**RDSReadReplica** - Main purpose - perf optimization for read operations
+### RDSReadReplica - Main purpose - perf optimization for read operations
 ![alt text](PNG/RDSReadReplica.PNG "Title") 
 - Note - since this is async replication, we will have eventual consistency
 - One usecase is obvious - perf optimization
 - other usecase - our main app read / write to DB, there is another App which just shows reporting dashboards by reading DB, then that reporting dashboard can just connect to that read replica
+
+### RDS Read Replica Costing
+![alt text](PNG/RDSReadReplica.PNG "Title") 
+
+### RDS Multi-AZ - for disaster recovery purpose
+![alt text](PNG/RDSAZ.PNG "Title") 
+- it does sync replication, so DB is always consistent
+- also, in our app, we don;t need to configure multiple DB URLs, only one, and standby DB will takeover if main DB fails
+
+### Creating RDS
+- 
 
 ## AWS Aurora vs AWS RDS
 - Auror is built by AWS, built as cloud optimize DB
