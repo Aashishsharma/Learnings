@@ -89,7 +89,21 @@ EC2-1 / EC2-2 / EC2-3
 ![alt text](PNG/ALB6.PNG "Title")
 - in with cross zone LB - ALB instance from 1 AZ will send req to EC2 intance from a different AZ, to balance the load
 - in without cross Zone - ALB will send req to EC2 instance which are in the same AZ
-- note - in the digrame we see 2 ALBs, but those are instance of ALB, kind of replica of ALB we created, so we create only 1 ALB, and we define in how many AZs this ALB needs to exists 
+- note - in the digrame we see 2 ALBs, but those are instance of ALB, kind of replica of ALB we created, so we create only 1 ALB, and we define in how many AZs this ALB needs to exists
+- croze zone AZ is enabled by default for ALB, but default disabled for NLB and Gateway LB
+
+**Configuring SSL cert in ALB** - 
+- SSL certs are provided by 3rd party Certification Authority like Symantec
+- SSL encrypts data in transit between client and ALB
+
+1. Request/import certificate in **ACM**.
+2. Open **EC2 Console → Load Balancers → Your ALB**.
+3. Go to **Listeners**.
+4. Create or edit the **HTTPS (443)** listener.
+5. Select the ACM certificate.
+6. Configure listener rules to forward traffic to target groups.
+
+![alt text](PNG/ALB7.PNG "Title")
 
 ## Network Loadbalancer
 - works at TCP / UDP layer
