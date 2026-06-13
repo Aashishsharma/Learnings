@@ -84,6 +84,13 @@ EC2-1 / EC2-2 / EC2-3
 - we need to handle all it's cookie attributes, ALB will just ensure that same cookie value goes to same EC2 instance
 ![alt text](PNG/ALB5.PNG "Title")
 
+- An ALB can route requests to targets in **multiple AZs**  but the **region should be same**
+
+![alt text](PNG/ALB6.PNG "Title")
+- in with cross zone LB - ALB instance from 1 AZ will send req to EC2 intance from a different AZ, to balance the load
+- in without cross Zone - ALB will send req to EC2 instance which are in the same AZ
+- note - in the digrame we see 2 ALBs, but those are instance of ALB, kind of replica of ALB we created, so we create only 1 ALB, and we define in how many AZs this ALB needs to exists 
+
 ## Network Loadbalancer
 - works at TCP / UDP layer
 - ultra fast, millions of req / sec
