@@ -172,6 +172,8 @@ const [rows] = await reader.execute(
 - **User profiles/shopping carts** requiring microsecond latency and durability.
 - Applications that need Redis performance **without losing data** on node failures.
 
+![alt text](PNG/RDS2.PNG "Title")  
+
 ## DynamoDB
 - NoSQL AWS DB
 - it is serverless DB, so you just directly create tables (NoSQL), no need for DB instance
