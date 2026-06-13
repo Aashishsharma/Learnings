@@ -111,6 +111,15 @@ EC2-1 / EC2-2 / EC2-3
 ## Network Loadbalancer
 - works at TCP / UDP layer
 - ultra fast, millions of req / sec
+- Customers need to whitelist your application's IP in their firewalls, so the IP must remain fixed.
+
+**Use NLB**
+- NLB provides **static IPs** (one per AZ).
+- You can attach **Elastic IPs** for permanent public IP addresses.
+- Customers can safely whitelist these IPs.  
+**Why Not ALB?**
+- ALB does **not** support static IPs or Elastic IPs.
+- Its underlying IP addresses can change, so firewall whitelisting is unreliable.
 
 ## Gateway load balancer
 - works at Network / IP layer
@@ -148,3 +157,5 @@ EC2-1 / EC2-2 / EC2-3
 - to avoid, use instance refresh
 ![alt text](PNG/IR.PNG "Title")
 - Min. Healthy percentage - 60% - that means any time 60% EC2 needs to be running up all the time while instance refresh is hapenning, so AGS will one by one update the EC2 instances
+
+**X-Forwarded-For** - if your app is behing ALB, use this header to get client IP in your app code, because normal header will have IP of load balancer
