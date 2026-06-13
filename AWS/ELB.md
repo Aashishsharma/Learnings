@@ -122,7 +122,7 @@ EC2-1 / EC2-2 / EC2-3
 - How are 3rd party firewalls invoked? 
 - using **route tables** - (will explore in Solutions architect)
 
-## Auto scaling group (ASG)
+## Auto scaling group (ASG) - free service
 - In ELB, if instances goes down due to some reason (app crashed), then new instances are not created, and if all instances go down, then APP is down.
 - in ASG, we define min, max EC2 instances, and AWS takes care that minimum EC2 instances are up, all the time, if instances goes down, ASG will spin up new instances for us, enabling auto scaling
 
@@ -141,3 +141,10 @@ EC2-1 / EC2-2 / EC2-3
 2.2 - Target tracking - I want avg ASG CPU utilization to be 50%, ASG, will decide then when to add / remove, based on this tracking
 2.3 - Scheduled - Every Mon, Tue, Wed - 10 AM, increase min capacity to 10 EC2 instances
 3. Predictive - AWS analysis trafic load, and scales EC2 instance based on future load prediction
+
+### Instance Refresh
+- Remember, that while creating ASG, we had to specify the templates to autolanch EC2 instances by ASG
+- now if 20-30 EC2s are already up, but if we want to change the template (e.g. change tier micro to x-large), then the already runing instances need to be modified individually
+- to avoid, use instance refresh
+![alt text](PNG/IR.PNG "Title")
+- Min. Healthy percentage - 60% - that means any time 60% EC2 needs to be running up all the time while instance refresh is hapenning, so AGS will one by one update the EC2 instances
