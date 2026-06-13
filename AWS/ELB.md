@@ -66,6 +66,24 @@ Target Group (API)
 EC2-1 / EC2-2 / EC2-3
 ```
 
+#### Sticky Sessions in ALB
+
+- Sticky sessions ensure that requests from the same client are routed to the **same (EC2 instance)** for a configurable duration.
+- ALB achieves this by using a **cookie**.
+
+**Cookie Types**
+
+| Cookie | Created By | Description |
+|--------|------------|-------------|
+| **AWSALB** | ALB | ALB-generated cookie that keeps the client bound to the same target. |
+| **Application Cookie** | Your application | ALB uses your application's cookie to maintain stickiness. |
+
+- in below config, AWS will create a cookie for you with name AWSALB
+![alt text](PNG/ALB4.PNG "Title")
+- in below config, you have to create cookie inside app with name - MYCUSTOMCOOKIEAPP
+- we need to handle all it's cookie attributes, ALB will just ensure that same cookie value goes to same EC2 instance
+![alt text](PNG/ALB5.PNG "Title")
+
 ## Network Loadbalancer
 - works at TCP / UDP layer
 - ultra fast, millions of req / sec
