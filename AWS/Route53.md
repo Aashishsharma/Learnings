@@ -103,17 +103,46 @@ User -> HTTP request to Mumbai ALB
 
 ### 2. weighted 
 - R53 will ensure, 70& traffic goes to sever 1, 20 to server 2, and 10 to server 3
-- now this is actual loadbalancing
-![alt text](PNG/R533.PNG "Title") 
+- now this is actual loadbalancing, it distributes traffic
+
+| Route 53 Weighted Routing | Load Balancer |
+|--------------------------|---------------|
+| DNS layer | Traffic layer |
+| Chooses **which endpoint/IP** to return | Chooses **which backend** gets the request |
+| Happens during DNS lookup | Happens for every request |
+| Subject to DNS caching | No DNS caching issue |
+| Example: 80% Mumbai ALB, 20% Virginia ALB | Example: Round Robin across EC2-1, EC2-2, EC2-3 |
+
+User
+  |
+Route 53 Weighted Routing
+  |
+  +--> 80% -> Mumbai ALB
+  |
+  +--> 20% -> Virginia ALB
+
+Mumbai ALB
+  |
+  +--> EC2-1
+  +--> EC2-2
+  +--> EC2-3
+
+| Service | Typical Use Cases |
+|--------|-------------------|
+| **Route 53 Weighted Routing** | • Blue/Green deployments<br>• Canary releases<br>• Gradually shifting traffic between regions or environments |
+| **Load Balancer** | • Distributing requests among servers in the same application/environment<br>• High availability and scaling |
+
+A **Canary Release** is a deployment strategy where you send a **small percentage of users** to the new version first, and gradually increase traffic if everything works fine.
 
 ### 3. latency based 
 - R53 will ensure, users are given IP of server which are closed to them
 ###4. Faliover routing policy 
 - R53 will give IP of other server, if it sees one of the server is down
 
-### Configuring Route53
-1. Register Domain (ashish.com) - need to pay around $12/yr
-2. Create A record in R53, map your server IP with subdomain - app1.ashish.com - EC2 instance IP
+![alt text](PNG/latency.PNG "Title")  
+- R53 does not know which target IP belongs to which region
+- so for a target IP, we specify policy as latency and then choose region the rgion, we know the IP belongs to 
+- then Route 53 uses the source of the DNS query (typically the user's DNS resolver), to determine which IP sits closer to the user
 
 # Cloudefront
 - managed CDS - i.e, CDN service is managed by AWS
