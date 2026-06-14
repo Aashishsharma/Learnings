@@ -46,6 +46,10 @@ After that, all DNS queries for `example.com` are forwarded to Route 53's author
 - then provide your contact info
 - then do the payment, and you have your domain name  
 
+#### Creating records
+- so now test.stephantheteacher.com will point to IP 11.22.33.44
+- ![alt text](PNG/DNS1.PNG "Title")
+
 ## R53 Policies
 ![alt text](PNG/R532.PNG "Title") 
 1. simple - give url, get IP
