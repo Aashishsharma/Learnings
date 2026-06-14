@@ -11,7 +11,7 @@
 |------------|---------|---------|-------------|
 | **A** | Maps a domain name to an **IPv4** address. | `api.example.com → 54.12.34.56` | IPv4 address |
 | **AAAA** | Maps a domain name to an **IPv6** address. | `api.example.com → 2406:da1c::1234` | IPv6 address |
-| **CNAME** | Makes one domain an alias of another domain, if you don't want users to see .elb.amazonaws.com, then CNAME is to be updated | `my-alb-123.ap-south-1.elb.amazonaws.com → api.example.com` | Another domain name |
+| **CNAME** | Makes one domain an alias of another domain, if you don't want users to see .elb.amazonaws.com, then CNAME is to be updated | `my-alb-123.ap-south-1.elb.amazonaws.com → api.example.com`, or `fb.com` -> `facebook.com` | Another domain name |
 | **NS** | These tell the internet: "If you want DNS records for example.com, ask these name servers." | `example.com → ns-123.awsdns-45.com` | Name servers |
 
 - Seems like AWS has 4 authorative name servers (NS), which will include all the above 4 records
@@ -41,10 +41,24 @@ After that, all DNS queries for `example.com` are forwarded to Route 53's author
 2. **Security groups** - if private IPs are not used then protected via security groups
 3. **Firewalls**
 
+**CNAME vs Alias** - 
+| Feature | CNAME | Alias (Route 53) |
+|--------|--------|------------------|
+| Standard DNS record | ✅ Yes | ❌ No (AWS-specific) |
+| Points to | Another domain name | AWS resource or another record |
+| Can be used at root domain (`example.com`) | ❌ No | ✅ Yes |
+| Extra DNS lookup required | ✅ Yes | ❌ No (Route 53 resolves it internally) |
+| Common Targets | `www.example.com -> example.com` | `example.com -> ALB / CloudFront / S3 website` |
+
+- ![alt text](PNG/Alias.PNG "Title")
+- notice - that if we had used CNAME, we can provide the target as another domain name only, but this is alias record (alias toggle is on), so target can be any AWS resource
+- why to use Alias? - if I purchased ashish.com domain, I can apply CNAME only on it's subdomain, but if I want a app running on ashish.com and not on any subdomain, then it can be done using alias only, (you can see in above screenshot the record name blog is empty, but it is required if record type is CNAME)
+
 #### Registering a domain
 - ![alt text](PNG/DNS.PNG "Title")
 - then provide your contact info
 - then do the payment, and you have your domain name  
+- AWS will create NS record by default for your domain, since AWS knows it's NS servers
 
 #### Creating records
 - so now test.stephantheteacher.com will point to IP 11.22.33.44
