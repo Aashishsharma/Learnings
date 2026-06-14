@@ -49,6 +49,8 @@ After that, all DNS queries for `example.com` are forwarded to Route 53's author
 #### Creating records
 - so now test.stephantheteacher.com will point to IP 11.22.33.44
 - ![alt text](PNG/DNS1.PNG "Title")
+- the TTL field tells the client browser to cache the DNS record (domain to IP mapping) for these many seconds
+- if TTL is 24hrs, and if we update the record type, lets say we update the A record with different IP, the clients will have stale DNS records for upto 24hrs, based on when they last queried the DNS server
 
 ## R53 Policies
 ![alt text](PNG/R532.PNG "Title") 
