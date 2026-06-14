@@ -54,6 +54,22 @@ After that, all DNS queries for `example.com` are forwarded to Route 53's author
 - notice - that if we had used CNAME, we can provide the target as another domain name only, but this is alias record (alias toggle is on), so target can be any AWS resource
 - why to use Alias? - if I purchased ashish.com domain, I can apply CNAME only on it's subdomain, but if I want a app running on ashish.com and not on any subdomain, then it can be done using alias only, (you can see in above screenshot the record name blog is empty, but it is required if record type is CNAME)
 
+If your application is behind an **ALB**, you typically **do not create a normal A record**.
+Instead, you create:
+```text
+www.example.com
+      |
+      | Alias A record
+      v
+my-alb-123.ap-south-1.elb.amazonaws.com
+      |
+      v
+ALB
+      |
+      v
+EC2 / ECS / Lambda
+```
+
 #### Registering a domain
 - ![alt text](PNG/DNS.PNG "Title")
 - then provide your contact info
@@ -66,10 +82,28 @@ After that, all DNS queries for `example.com` are forwarded to Route 53's author
 - the TTL field tells the client browser to cache the DNS record (domain to IP mapping) for these many seconds
 - if TTL is 24hrs, and if we update the record type, lets say we update the A record with different IP, the clients will have stale DNS records for upto 24hrs, based on when they last queried the DNS server
 
-## R53 Policies
+## R53 Routing Policies
+- This defines how R53 will respond to DNS queries
+- this routing is not same as ALB routing policies
+- ALB routing - routes traffic, basically client's requests
+- R53 routing policies - which IP to send to the user when looking for IP from Domain name
+
+User -> DNS query: www.example.com
+      -> Route 53 returns Mumbai ALB IP
+
+User -> HTTP request to Mumbai ALB
+      -> ALB routes /api/* to API target group
+
+### 1. Simple routing policy
+- Route 53 returns the **single configured record** for a domain.
+- If multiple records are configured, Route 53 returns them in a random order (round-robin style). 
+- e.g. - Every DNS query for www.example.com will always return IP - 54.12.34.56, again if multipe A records are added, then any random IP will be shared
+
 ![alt text](PNG/R532.PNG "Title") 
-1. simple - give url, get IP
-2. weighted - R53 will ensure, 70& traffic goes to sever 1, 20 to server 2, and 10 to server 3, kind of loadbalancing
+
+### 2. weighted 
+- R53 will ensure, 70& traffic goes to sever 1, 20 to server 2, and 10 to server 3
+- now this is actual loadbalancing
 ![alt text](PNG/R533.PNG "Title") 
 3. latency based - R53 will ensure, users are given IP of server which are closed to them
 4. Faliover routing policy - R53 will give IP of other server, if it sees one of the server is down
