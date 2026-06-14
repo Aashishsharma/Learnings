@@ -41,6 +41,11 @@ After that, all DNS queries for `example.com` are forwarded to Route 53's author
 2. **Security groups** - if private IPs are not used then protected via security groups
 3. **Firewalls**
 
+#### Registering a domain
+- ![alt text](PNG/DNS.PNG "Title")
+- then provide your contact info
+- then do the payment, and you have your domain name  
+
 ## R53 Policies
 ![alt text](PNG/R532.PNG "Title") 
 1. simple - give url, get IP
