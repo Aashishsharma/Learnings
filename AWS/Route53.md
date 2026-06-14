@@ -105,8 +105,11 @@ User -> HTTP request to Mumbai ALB
 - R53 will ensure, 70& traffic goes to sever 1, 20 to server 2, and 10 to server 3
 - now this is actual loadbalancing
 ![alt text](PNG/R533.PNG "Title") 
-3. latency based - R53 will ensure, users are given IP of server which are closed to them
-4. Faliover routing policy - R53 will give IP of other server, if it sees one of the server is down
+
+### 3. latency based 
+- R53 will ensure, users are given IP of server which are closed to them
+###4. Faliover routing policy 
+- R53 will give IP of other server, if it sees one of the server is down
 
 ### Configuring Route53
 1. Register Domain (ashish.com) - need to pay around $12/yr
