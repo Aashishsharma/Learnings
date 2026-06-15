@@ -156,7 +156,11 @@ A **Canary Release** is a deployment strategy where you send a **small percentag
 - 1. endpoint monitoring healthchecks (works for public endpoints)
 - AWS will use 15 healthchecks servers (from all regions) to hit your endpoint
 - These heltcheck servers come from all the regions, and they are also not part of VPC, so it is IMP for our ALBs to allow incoming traffic from AWS's healthservers, this IPs can be found in AWS docs
-- 2. Private hosted zones (used to helthcheck enpoints which are private, not exposed to public)
+- 2. Calculated healthchecks
+![alt text](PNG/healthcheck4.PNG "Title")  
+- combines the results of multiple Route 53 health checks using logical rules (e.g., AND/OR) to determine the overall health of the parent healtchecker (we can configure rules, e.g. if out of 100 heltcheckers if 80 healthcehckers are green, the parent heltchecker is green).
+- usecase - to monitor progress of mainteneance of website, while app is maintaing, those individual components and parent heatlcare will be unhealthy, app will be healthy when parent is healthy
+- 3. Private hosted zones (used to helthcheck enpoints which are private, not exposed to public)
 ![alt text](PNG/healthcheck2.PNG "Title")  
 
 #### Configuring healthchecks
