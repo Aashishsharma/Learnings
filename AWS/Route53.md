@@ -152,12 +152,17 @@ A **Canary Release** is a deployment strategy where you send a **small percentag
 - for this purpose, we use healthchecks
 - **One liner - healthchecks are used for automated DNS failover**
 
-#### Configuring Healthchecks
+#### Healthchecks types
 - 1. endpoint monitoring healthchecks (works for public endpoints)
 - AWS will use 15 healthchecks servers (from all regions) to hit your endpoint
 - These heltcheck servers come from all the regions, and they are also not part of VPC, so it is IMP for our ALBs to allow incoming traffic from AWS's healthservers, this IPs can be found in AWS docs
 - 2. Private hosted zones (used to helthcheck enpoints which are private, not exposed to public)
 ![alt text](PNG/healthcheck2.PNG "Title")  
+
+#### Configuring healthchecks
+- Endpoint readio button is selected, indicating it is enpoint type of heatlcheck
+- the IP added below is the IP of EC2 that we want to monitor
+![alt text](PNG/healthcheck3.PNG "Title")  
 
 # Cloudefront
 - managed CDS - i.e, CDN service is managed by AWS
