@@ -218,6 +218,12 @@ Geoproximity → "Users are routed to the nearest region, but I can adjust traff
 - The client OS/browser picks one of the returned IPs to connect to.
 - save cost using of load baancing, if use case is for smaller applications with few EC2 instance, cheaper that normal ALB
 
+### GoDaddy vs R53
+- buy domain in Godaddy
+- add A record to map IP with the created domain name
+- AWS gives NS records
+- add those in Godady's NS records, so go daddy can pass on request to r53
+
 # Cloudefront
 - managed CDS - i.e, CDN service is managed by AWS
 - cache static content on CDN, which are close to user's location
