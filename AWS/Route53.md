@@ -146,7 +146,19 @@ A **Canary Release** is a deployment strategy where you send a **small percentag
 
 #### R53 Healthchecks
 - if we have apps deployed on mutli-region
-- and if we use latency based 
+- and if we use latency based DNS routing
+![alt text](PNG/healthcheck.PNG "Title")  
+- then if 1 region is down (us-east 1), then our R53 will still redirect user's query to us-east-1, becuase if it is closer to a user, then R53 will route to the failed ALB only, since R53 does not know if server is up or down
+- for this purpose, we use healthchecks
+- **One liner - healthchecks are used for automated DNS failover**
+
+#### Configuring Healthchecks
+- 1. endpoint monitoring healthchecks (works for public endpoints)
+- AWS will use 15 healthchecks servers (from all regions) to hit your endpoint
+- These heltcheck servers come from all the regions, and they are also not part of VPC, so it is IMP for our ALBs to allow incoming traffic from AWS's healthservers, this IPs can be found in AWS docs
+- 2. Private hosted zones (used to helthcheck enpoints which are private, not exposed to public)
+![alt text](PNG/healthcheck2.PNG "Title")  
+
 # Cloudefront
 - managed CDS - i.e, CDN service is managed by AWS
 - cache static content on CDN, which are close to user's location
