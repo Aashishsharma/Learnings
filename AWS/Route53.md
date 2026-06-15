@@ -172,7 +172,18 @@ A **Canary Release** is a deployment strategy where you send a **small percentag
 - if one ALB is down then R53 will route requests to standup ALB (if we have multiple ALBs)
 
 ### 4. Routing policy - geolocation
-- 
+- Routes users based on their **geographic location** (country, continent, or US state).
+- Route 53 determines the user's location from the **source IP of the DNS query**.
+
+**Use Case** - Serve different websites based on country
+```text
+India users    -> india.example.com
+US users       -> us.example.com
+Others         -> global.example.com
+```
+
+- **Geolocation Routing** → Route users based on their **physical location** (country/continent/state).
+- **Latency-Based Routing** → Route users to the AWS Region with the **lowest network latency**
 
 # Cloudefront
 - managed CDS - i.e, CDN service is managed by AWS
