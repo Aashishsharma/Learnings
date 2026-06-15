@@ -222,7 +222,7 @@ Geoproximity → "Users are routed to the nearest region, but I can adjust traff
 - buy domain in Godaddy
 - add A record to map IP with the created domain name
 - AWS gives NS records
-- add those in Godady's NS records, so go daddy can pass on request to r53
+- add those in Godady's NS records, so go daddy can pass on request to r53 
 
 # Cloudefront
 - managed CDS - i.e, CDN service is managed by AWS
