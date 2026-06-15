@@ -206,6 +206,17 @@ Geolocation vs Geoproximity
 Geolocation → "Users from India always go to Mumbai."
 Geoproximity → "Users are routed to the nearest region, but I can adjust traffic using bias."
 
+### 6. IP based routing
+- R53 will route users based on user's IP
+- usecase - 
+
+### 5. Multi value routing policy
+- Route 53 returns **multiple healthy IP addresses** for the same DNS query.
+- If an endpoint becomes unhealthy, Route 53 stops returning its IP.
+- users query for DNS Query: app.example.com
+- R53 will return mutliple IP address
+- The client OS/browser picks one of the returned IPs to connect to.
+
 # Cloudefront
 - managed CDS - i.e, CDN service is managed by AWS
 - cache static content on CDN, which are close to user's location
