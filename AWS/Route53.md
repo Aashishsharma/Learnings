@@ -144,6 +144,9 @@ A **Canary Release** is a deployment strategy where you send a **small percentag
 - so for a target IP, we specify policy as latency and then choose region the rgion, we know the IP belongs to 
 - then Route 53 uses the source of the DNS query (typically the user's DNS resolver), to determine which IP sits closer to the user
 
+#### R53 Healthchecks
+- if we have apps deployed on mutli-region
+- and if we use latency based 
 # Cloudefront
 - managed CDS - i.e, CDN service is managed by AWS
 - cache static content on CDN, which are close to user's location
