@@ -19,7 +19,7 @@
 - if we wan't AWS services to connect over private connection, then we use VPC endpoints
 
 ![alt text](PNG/VPC6.PNG "Title") 
-- note in e.g. above EC2 is inside provate subnet, howevrer we could have used NAT, to give EC2 access to the internet and then eventally talk to s3 / dynamo db, but using IGW, but then this gives our EC2 access to all of the internet, so to enhance security, we can use VPC endpoints
+- note in e.g. above EC2 is inside provate subnet, howevrer we could have used NAT, to give EC2 access to the internet and then eventally talk to s3 / dynamo db, but using IGW, but then this gives our EC2 access to all of the internet, so to enhance security, we can use VPC endpoints 
 
 #### Connecting on-prem datacenter with cloud - 
 1. using site-to-site VPN
