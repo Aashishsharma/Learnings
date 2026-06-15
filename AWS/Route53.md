@@ -216,6 +216,7 @@ Geoproximity → "Users are routed to the nearest region, but I can adjust traff
 - users query for DNS Query: app.example.com
 - R53 will return mutliple IP address
 - The client OS/browser picks one of the returned IPs to connect to.
+- save cost using of load baancing, if use case is for smaller applications with few EC2 instance, cheaper that normal ALB
 
 # Cloudefront
 - managed CDS - i.e, CDN service is managed by AWS
