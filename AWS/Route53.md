@@ -168,6 +168,12 @@ A **Canary Release** is a deployment strategy where you send a **small percentag
 - the IP added below is the IP of EC2 that we want to monitor
 ![alt text](PNG/healthcheck3.PNG "Title")  
 
+### 3. Routing failover policy
+- if one ALB is down then R53 will route requests to standup ALB (if we have multiple ALBs)
+
+### 4. Routing policy - geolocation
+- 
+
 # Cloudefront
 - managed CDS - i.e, CDN service is managed by AWS
 - cache static content on CDN, which are close to user's location
