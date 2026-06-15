@@ -185,6 +185,27 @@ Others         -> global.example.com
 - **Geolocation Routing** → Route users based on their **physical location** (country/continent/state).
 - **Latency-Based Routing** → Route users to the AWS Region with the **lowest network latency**
 
+### 5. GeoProximity policy 
+- Routes users to resources based on their **geographic proximity** to AWS Regions or AWS Local Zones.
+- You can apply a **bias** to increase or decrease the traffic sent to a region.
+
+Suppose you have:
+
+```text
+Mumbai Region
+Singapore region
+```
+Normally:
+
+Users near India → Mumbai
+Users near SG → SG
+
+But if Mumbai is overloaded, you can apply a negative bias to Mumbai so that some nearby users are routed to SG instead. Even in this, first the users that are almost equidistance, or marginally closer to Mumbai will go to SG, based on the traffic
+
+Geolocation vs Geoproximity
+Geolocation → "Users from India always go to Mumbai."
+Geoproximity → "Users are routed to the nearest region, but I can adjust traffic using bias."
+
 # Cloudefront
 - managed CDS - i.e, CDN service is managed by AWS
 - cache static content on CDN, which are close to user's location
