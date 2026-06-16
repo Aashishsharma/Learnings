@@ -45,4 +45,56 @@ aws s3 ls --profile company  # from company AWS accounts
 
 ---
 
-### A
+### Using CLI with MFA is 
+
+- Scenario: Company Account Requires MFA
+Without MFA:
+
+```bash
+aws s3 ls --profile company
+```
+❌ Fails because the IAM user requires MFA.
+---
+#### Step 1: Get temporary credentials using STS
+
+```bash
+aws sts get-session-token \
+  --serial-number arn:aws:iam::123456789012:mfa/john \
+  --token-code 123456 \
+  --profile company
+```
+Output:
+```json
+{
+  "Credentials": {
+    "AccessKeyId": "ASIA...",
+    "SecretAccessKey": "...",
+    "SessionToken": "...",
+    "Expiration": "2026-06-16T12:00:00Z"
+  }
+}
+```
+- the serial number in the above command comes from below
+![alt text](PNG/MFACLI.PNG "Title") 
+- for an IAM we need to enable MFA, where we configure a device for MFA
+
+---
+
+### Step 2: Configure a temporary profile
+
+```bash
+aws configure set aws_access_key_id ASIA... --profile company-mfa
+aws configure set aws_secret_access_key ... --profile company-mfa
+aws configure set aws_session_token ... --profile company-mfa
+```
+---
+
+### Step 3: Use the MFA profile
+
+```bash
+aws s3 ls --profile company-mfa
+```
+The AWS CLI prompts for the MFA code automatically.
+
+> When MFA is enabled, the AWS CLI typically uses STS to obtain temporary credentials after MFA verification or automatically assumes a role configured with `mfa_serial` in the profile.
+
