@@ -98,3 +98,7 @@ The AWS CLI prompts for the MFA code automatically.
 
 > When MFA is enabled, the AWS CLI typically uses STS to obtain temporary credentials after MFA verification or automatically assumes a role configured with `mfa_serial` in the profile.
 
+## AWS limits
+![alt text](PNG/limits.PNG "Title") 
+
+**Exponential backoff** - it is a retry strategy where the delay between retries increases exponentially, typically doubling after each failure, to reduce load on the failing service.
