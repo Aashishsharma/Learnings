@@ -182,3 +182,8 @@ Cache: Disabled
 ---
 
 > A Cache Behavior is a set of rules in CloudFront that determines how requests matching a URL pattern are routed, cached, and processed.
+
+### Configuring cache policy
+![alt text](PNG/Cloudfront2.PNG "Title")   
+![alt text](PNG/Cloudfront3.PNG "Title") 
+![alt text](PNG/Cloudfront4.PNG "Title") 
