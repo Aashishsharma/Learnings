@@ -112,29 +112,73 @@ Cookie: userId=456
 ---
 
 ### TTL (Time To Live)
-
 Suppose:
-
 ```text
 Default TTL = 1 hour
 ```
-
 Flow:
-
 ```text
 10:00  User requests /logo.png
        -> CloudFront fetches from origin
-
 10:30  Another request
        -> Served from cache
-
 11:01  Another request
        -> TTL expired
        -> CloudFront fetches from origin again
 ```
-
 | TTL | Meaning |
 |-----|---------|
 | Min TTL | Minimum time CloudFront keeps an object |
 | Default TTL | Used when origin doesn't specify cache headers |
 | Max TTL | Maximum time CloudFront can cache an object |
+
+#### Cache invalidation
+- we ourself invalidate the cache if the data in the origin has been updated
+- cache canbe invalidated in cloudfront based on the filepath - /logo.png or based on path /images/*
+
+#### Cache behaviour
+A **Cache Behavior** defines **how CloudFront handles requests for a particular URL pattern**.
+It specifies:
+- Which **origin** to use
+- Which **cache policy** to apply
+- Allowed HTTP methods
+- Viewer protocol policy (HTTP/HTTPS)
+- Lambda@Edge / CloudFront Functions
+- Compression, etc.
+---
+### Example
+Suppose your application has:
+```text
+/images/*  -> S3 bucket
+/api/*     -> ALB
+/*         -> S3 static website
+```
+You create 3 cache behaviors:
+| Path Pattern | Origin | Cache Policy | Use Case |
+|-------------|--------|-------------|---------|
+| `/images/*` | S3 | Cache for 24 hrs | Static images |
+| `/api/*` | ALB | Disable caching | Dynamic APIs |
+| `/*` | S3 | Cache for 1 hr | Website assets |
+---
+**Flow**
+```text
+User requests:
+/images/logo.png
+        |
+Matches: /images/*
+        |
+Origin: S3
+        |
+Cache: 24 hrs
+
+/api/users
+        |
+Matches: /api/*
+        |
+Origin: ALB
+        |
+Cache: Disabled
+```
+---
+
+> A Cache Behavior is a set of rules in CloudFront that determines how requests matching a URL pattern are routed, cached, and processed.
