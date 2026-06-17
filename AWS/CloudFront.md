@@ -245,3 +245,33 @@ Private ALB (inside VPC)
 ![alt text](PNG/Cloudfront10.PNG "Title") 
 - refer the above created public key here in the CLoudFront 
 ![alt text](PNG/Cloudfront9.PNG "Title") 
+
+### CF Pricing
+- CF Edge locations are all over the world
+- CF Pricing varies based on Edge locations region
+- reduce number of edge locations to reduce pricing
+- 3 different price class
+1. Price class ALL - all regions covered - best performance
+2. Price class 200 - most regions covered, but excludes most expensive regions
+3. Price class 100 - only least expenisve regions
+
+### CF Origin groups
+- provide high availability by automatically failing over to a secondary origin when the primary origin becomes unavailable.
+![alt text](PNG/Cloudfront11.PNG "Title") 
+
+**CloudFront Field-Level Encryption** encrypts sensitive fields (e.g., credit card number or SSN) at the CloudFront edge so that only a specific backend service can decrypt them.
+
+**Example**
+```text
+User submits payment form
+        |
+CloudFront encrypts:
+cardNumber = 4111-xxxx-xxxx-1111
+        |
+ALB / App Servers (cannot decrypt)
+        |
+Payment Service (has private key)
+        |
+Decrypts and processes payment
+```
+This ensures sensitive data remains encrypted while passing through intermediate systems.
