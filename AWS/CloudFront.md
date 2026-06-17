@@ -68,7 +68,7 @@ GET /products?category=electronics
 
 | Cache Policy | Cache Key Used by CloudFront | Result | Why? |
 |-------------|------------------------------|--------|------|
-| Query Strings ❌ Ignore | `/products` | Both requests use the same cache entry (i.e if category=books is request first, then even when category=electornics is requested, books is returned, because query string is not part of our cache key, and the cache key is still /products) | Since `category` is ignored, both requests map to `/products`. If the first request cached the Books page, the second request also gets the Books page. |
+| Query Strings ❌ Ignore | `/products` | Both requests use the same cache entry | Since `category` is ignored, both requests map to `/products`. If the first request cached the Books page, the second request also gets the Books page. |
 | Query Strings ✅ Include | `/products?category=books`<br>`/products?category=electronics` | Separate cache entries for `books` and `electronics` | `category` becomes part of the cache key, so CloudFront stores and returns separate pages. |
 
 ---
