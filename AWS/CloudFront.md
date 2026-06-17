@@ -220,3 +220,28 @@ Private ALB (inside VPC)
 **What does "without public internet" mean?**
 > The origin (ALB/EC2) is **not exposed to the internet at all**; only CloudFront is allowed to reach it.
 ![alt text](PNG/Cloudfront6.PNG "Title")  
+
+
+### CF Geographic-restrictions
+- allow you to allow or block users from specific countries from accessing your content.
+- usecase - copyright laws  
+![alt text](PNG/Cloudfront7.PNG "Title")  
+
+### CF signed URL
+- **CloudFront Signed URL** provides time-limited access to private content, e.g. a company like Udemy can store course videos privately and generate a short-lived CloudFront Signed URL only after verifying that:  
+**working** - 
+![alt text](PNG/Cloudfront8.PNG "Title")   
+1. S3 object contains course video, only accessible via cloudfront (via OAC)
+2. User logs in to Udemy webapp, which calls CloudFront via SDK and generate signed URL
+3. Signed URL share back to user, which then reaches to CF, which redners the video in the browser
+
+**Technical implementation** - 
+1. in Cloudfornt, generate public/private key
+2. Private key is used by our app (EC2) to generate signed URLs
+3. Public key is used by CF to verify signed URLs
+
+- create a public key (goto rsa website and create public / private key)  
+- add publick key below
+![alt text](PNG/Cloudfront10.PNG "Title") 
+- refer the above created public key here in the CLoudFront 
+![alt text](PNG/Cloudfront9.PNG "Title") 
