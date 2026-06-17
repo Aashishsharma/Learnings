@@ -188,4 +188,35 @@ Cache: Disabled
 ![alt text](PNG/Cloudfront3.PNG "Title") 
 ![alt text](PNG/Cloudfront4.PNG "Title") 
 ![alt text](PNG/Cloudfront5.PNG "Title")  
-- Note - when you click on create invalidation, the rule is run immediately and cache is invalidated 
+- Note - when you click on create invalidation, the rule is run immediately and cache is invalidated
+
+### Cloudfront VPC origin
+- allows CloudFront to serve content from a private ALB or EC2 inside a VPC, so the origin is not directly accessible from the internet.
+
+##### Without CloudFront VPC Origin
+Normally, for CloudFront to fetch content from an origin, the origin must be **publicly reachable**.
+```text
+User
+  |
+CloudFront
+  |
+Public ALB / Public EC2
+```
+- The ALB/EC2 has a **public IP**.
+- Anyone on the internet can potentially reach it (subject to security groups).
+---
+##### With CloudFront VPC Origin
+```text
+User
+  |
+CloudFront
+  |
+Private ALB (inside VPC)
+```
+- The ALB has **no public IP**.
+- Users **cannot** access it directly.
+- Only CloudFront can connect to it through AWS-managed private networking.
+---
+**What does "without public internet" mean?**
+> The origin (ALB/EC2) is **not exposed to the internet at all**; only CloudFront is allowed to reach it.
+![alt text](PNG/Cloudfront6.PNG "Title")  
