@@ -275,3 +275,17 @@ Payment Service (has private key)
 Decrypts and processes payment
 ```
 This ensures sensitive data remains encrypted while passing through intermediate systems.
+
+
+**CloudFront Real-Time Logs** stream request logs to services like Kinesis within seconds, enabling near real-time monitoring and analytics.
+**Example**
+```text
+User requests /video.mp4
+        |
+CloudFront
+        |
+Real-Time Logs
+        |
+Kinesis Data Stream
+        |
+Dashboard / Alerting System
