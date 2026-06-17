@@ -187,3 +187,5 @@ Cache: Disabled
 ![alt text](PNG/Cloudfront2.PNG "Title")   
 ![alt text](PNG/Cloudfront3.PNG "Title") 
 ![alt text](PNG/Cloudfront4.PNG "Title") 
+![alt text](PNG/Cloudfront5.PNG "Title")  
+- Note - when you click on create invalidation, the rule is run immediately and cache is invalidated 
