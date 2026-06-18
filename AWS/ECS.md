@@ -257,6 +257,9 @@ Copilot automatically creates and manages:
 - then copilot will list all the AWS resource it is creating, and why it is creating
 ![alt text](PNG/ECS23.PNG "Title")  
 - once the command is complete, you can see the terminal, which will gove you link to your service
+- to cleanup everything run command ```copilot app delete```
 
 ## EKS - Elastic Kubernetes service
-- containers can be hosted on EC2 or farget
+- Kuberneties service
+- ECS is similar to Kuberneties
+- ECS - specific to AWS, K8 is cloud agnostic
