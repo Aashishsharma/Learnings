@@ -215,7 +215,16 @@ The shared volume acts as a **fast local scratch space**.
 ## Elastic Container Registry 
 ![alt text](PNG/ECR.PNG "Title")  
 - AWS ECR Public gallery - this is public docker registry by AWS, similar to dockerhub
-
+#### 1. First create ECR repo
+![alt text](PNG/ECR2.PNG "Title")  
+#### 2. Run commands
+- make sure docker is installed locally
+| Purpose | Command |
+|--------|---------|
+| Login to ECR | `aws ecr get-login-password \| docker login --username AWS --password-stdin <account>.dkr.ecr.<region>.amazonaws.com` |
+| Tag image for ECR | `docker tag orders:v1 <account>.dkr.ecr.ap-south-1.amazonaws.com/orders:v1` |
+| Push image to ECR | `docker push <account>.dkr.ecr.ap-south-1.amazonaws.com/orders:v1` |
+| Pull image from ECR | `docker pull <account>.dkr.ecr.ap-south-1.amazonaws.com/orders:v1` |
 
 ## EKS - Elastic Kubernetes service
 - containers can be hosted on EC2 or farget
