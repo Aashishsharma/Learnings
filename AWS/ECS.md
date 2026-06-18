@@ -3,6 +3,11 @@
 - for this we first need to provision EC2 instance
 - AWS will handle container lifecycle part
 
+## ECR - Elastic container registry (ECR)
+- AWS's private docker registry
+- this is where docker images are stored
+- AWS ECR Public gallery - this is public docker registry by AWS, similar to dockerhub
+
 **There are 2 launch types of ECS containers**
 
 ## 1. EC2 launch type
@@ -90,13 +95,113 @@ Flow
 - when CPU utilization goes up, it triggers Cloudwatch Alarm
 - the alarm will trigger scaling activity to ECS service, which will eventually add new task 3
 
-### IAM roles for ECS
-### ECS Data volumes
+### ECS rolling updates
 
-## ECR - Elastic container registry
-- AWS's private docker registry
-- this is where docker images are stored
-- AWS ECR Public gallery - this is public docker registry by AWS, similar to dockerhub
+**Rolling Update** deploys a new version of your application **gradually**, replacing old tasks with new ones while keeping the service available.
+
+### Example
+
+Current state:
+
+```text
+ECS Service: orders-api
+Desired Tasks: 4
+v1  v1  v1  v1
+
+now we have v2 version
+
+- **Minimum Healthy Percent = 50**
+  - ECS must keep at least **50% of desired tasks** running during deployment.
+  - Since desired tasks = 4, at least **2 healthy tasks** must always be available.
+
+- **Maximum Percent = 200**
+  - ECS can temporarily run up to **200% of desired tasks** during deployment.
+  - Since desired tasks = 4, ECS can run at most **8 tasks** simultaneously.
+
+Step 1: ECS starts 4 new tasks (v2)
+```text
+v1  v1  v1  v1
+v2  v2  v2  v2
+Total tasks = 8 (allowed because Maximum Percent = 200)
+Step 2: ECS waits for v2 tasks to become healthy.
+Step 3: ECS stops old v1 tasks.
+
+if we keep maximm % to 100 and min to 50%
+- then 2 v1 will be removed (cannot remove more because min 50%), 2 v2 will be added
+- again 2 v1 removed, 2 v2 added
+- also cannot first add v2 and then remove v1 because (max=100%)
+```
+
+### ECS architectures
+![alt text](PNG/ECS13.PNG "Title")  
+- why not use lambda?
+- if task will take more than 15-20 mins, then ECS tasks is preferred
+- for smaller time duration, use lambda
+- e.g. Video Processing - Video transcoding may take 10-30 minutes.
+
+![alt text](PNG/ECS14.PNG "Title")  
+- key note here - if SQS queue gets more messages, we can use ECS autoscaling to add more number of tasks
+- anywhere lambda can be used, ECS can also be used, use ECS when task to be performed on event trigger will take more time
+
+### ECS Task definition
+**ECS Task vs ECS Task definition vs docker images** -
+| ECS Task | ECS Task Definition | Docker Image |
+|---------|----------------------|-------------|
+| Running instance | Blueprint / Template | Application package |
+| Actually runs containers | Defines how to run one or more containers | Contains application code and dependencies |
+| Created from a Task Definition | Defined as JSON | Built using `Dockerfile` |
+
+![alt text](PNG/ECS15.PNG "Title")  
+- Note - we difine IAM role inside ECS Task definition, so if task needs to access s3, IAM role is defined here
+- then we also define env variables in task definition (hardcoded or get from SSM service)
+- if we just define the container port and not the host port, then host ports would be dynamic
+- ALB has a dynamic host port mapping feature, which allows it to connect to ECS tasks
+- for this to work, the EC2's security group must allow to connect to it from any port
+
+### ECS Data volumes
+- if we need to share data between multiple containers / task in the same service, we use ECB data volumns
+![alt text](PNG/ECS16.PNG "Title")  
+- usecase - Video Processing Pipeline
+```text
+ECS Task
+├── ffmpeg Container
+│      |
+│      | writes:
+│      | 720p.mp4
+│      | 1080p.mp4
+│      v
+│   Shared Volume
+│      ^
+│      |
+└── Upload Container
+       |
+       | uploads files
+       |
+      S3
+```
+**Why Volume is the best choice?**
+
+- ffmpeg generates **large intermediate files** (GBs).
+- Upload container needs to access them **immediately**.
+```text
+Input Video (S3)
+      |
+ffmpeg container
+      |
+Shared Volume (local disk)
+      |
+Upload container
+      |
+Output Videos (S3)
+```
+The shared volume acts as a **fast local scratch space**.
+---
+
+> ECS Data Volumes are best used for sharing large temporary files between containers in the same task, such as video transcoding pipelines where one container generates files and another uploads them to S3.
+
+### ECS Task placement
+- it allows ECS to determine where to place a new task, in which EC2 by looking at CPU / Memory utilization  
+![alt text](PNG/ECS17.PNG "Title")  
 
 ## EKS - Elastic Kubernetes service
 - containers can be hosted on EC2 or farget
