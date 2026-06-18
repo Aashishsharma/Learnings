@@ -59,6 +59,16 @@
 - when ready, sway prod1's domin with prod2, now prod2 is live
 - if anything fails swipe back
 
+#### EB CLI
+- apart from AWS CLI, we have AWS EBCLI, to manage ELB apps deployments
+- mostly this is used in CI/CD pipeline to deploy app to beanstalk
+- more on this in devops course
+
+### EB lifecycle policy
+- atmost beanstalk can store 1000 versions of you application
+- if old versions not removed, we won't be able to deploy newer versions
+- code for all app versions are stored in S3
+
 ### AWS Code commit
 - AWS's version of git
 - private, secure, and can be integrated with other services
