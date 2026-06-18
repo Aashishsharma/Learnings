@@ -246,7 +246,17 @@ Copilot automatically creates and manages:
 4. Load Balancer
 5. VPC
 6. Auto Scaling
-7. CloudWatch Logs
+7. CloudWatch Logs  
+(**basically everything we did in ECS, copilot will do that for us automatically**)
+
+#### Step 1 - install AWS CLI copilot, docker AWS CLI and run copilot init
+- on init command, it asks - app name, workload type (see workload type below, based on it copliot will decide architecture of the app)
+![alt text](PNG/ECS22.PNG "Title")  
+- then provide name of the service
+- then procide path to docker file, if you are running init command from project root which has dockerfile, it will be shown in the copilot terminal, select it
+- then copilot will list all the AWS resource it is creating, and why it is creating
+![alt text](PNG/ECS23.PNG "Title")  
+- once the command is complete, you can see the terminal, which will gove you link to your service
 
 ## EKS - Elastic Kubernetes service
 - containers can be hosted on EC2 or farget
