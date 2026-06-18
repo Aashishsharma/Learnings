@@ -6,8 +6,7 @@
 - if we don't use beanstalk then we need to provision servers, security, networking
 - create beanstalk - provide name, provide runtime env, upload your code, some other settings and you are good to go
 
-![alt text](PNG/ELB1.PNG "Title")  
-![alt text](PNG/ELB2.PNG "Title") 
+![alt text](PNG/ELB1.PNG "Title") 
 
 ### Creating ELB application
 ![alt text](PNG/ELB3.PNG "Title")  
@@ -21,6 +20,31 @@
 
 - click on create new environment, and with same codebase, create prod env and select all the option config for Elastic beanstalk 
 ![alt text](PNG/ELB8.PNG "Title")  
+
+### ELB-Based Deployment Modes
+
+| Deployment Mode | How it works | Downtime | Extra Capacity Needed | Rollback | When to Use |
+|----------------|-------------|----------|----------------------|----------|------------|
+| **All at Once** | Replace all instances/tasks with new version at once | High | No | Difficult | Dev/Test environments where downtime is acceptable |
+| **Rolling** | Replace a few instances/tasks at a time | Low | No | Moderate | Production apps where brief capacity reduction is acceptable |
+| **Rolling with Additional Batch** | Launch new batch first, then terminate old batch | None | Yes | Easy | Production apps requiring zero downtime |
+| **Immutable** | Launch an entirely new Auto Scaling Group, then switch traffic | None | High | Very Easy | Critical production workloads where safety is most important |
+| **Blue/Green** | Run old (Blue) and new (Green) environments simultaneously and switch ELB traffic | None | High | Instant | Major releases, schema changes, easy rollback requirements |
+| **Canary** | Route a small % of ELB traffic to new version, then gradually increase | None | Medium | Easy | New features or risky releases needing real-user validation |
+
+---
+
+### Quick Decision Guide
+
+| Requirement | Recommended Mode |
+|------------|-------------------|
+| Fastest deployment | All at Once |
+| Minimal extra cost | Rolling |
+| Zero downtime | Rolling with Additional Batch |
+| Safest deployment | Immutable |
+| Instant rollback | Blue/Green |
+| Test with small % of users first | Canary |
+
 
 ### AWS Code commit
 - AWS's version of git
