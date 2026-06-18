@@ -29,9 +29,10 @@
 | **Rolling** | Replace a few instances/tasks at a time | Low | No | Moderate | Production apps where brief capacity reduction is acceptable |
 | **Rolling with Additional Batch** | Launch new batch first, then terminate old batch | None | Yes | Easy | Production apps requiring zero downtime |
 | **Immutable** | Launch an entirely new Auto Scaling Group, then switch traffic | None | High | Very Easy | Critical production workloads where safety is most important |
+| **Traffic splitting / Canary** | Route a small % of ELB traffic to new version, then gradually increase | None | Medium | Easy | New features or risky releases needing real-user validation |
 | **Blue/Green** | Run old (Blue) and new (Green) environments simultaneously and switch ELB traffic | None | High | Instant | Major releases, schema changes, easy rollback requirements |
-| **Canary** | Route a small % of ELB traffic to new version, then gradually increase | None | Medium | Easy | New features or risky releases needing real-user validation |
 
+- **Note blue/green is not available as option in beanstalk (see below on how to configure)**
 ---
 
 ### Quick Decision Guide
@@ -45,6 +46,33 @@
 | Instant rollback | Blue/Green |
 | Test with small % of users first | Canary |
 
+- **configuring deployment mode in Elastic beanstalk**
+![alt text](PNG/ELB9.PNG "Title")  
+
+- **blue green deployment** - 
+Blue Environment (prod-v1)
+    |
+    | serving 100% traffic
+    |
+CNAME: myapp.elasticbeanstalk.com
+
+Green Environment (prod-v2)
+    |
+    | deployed and tested
+
+When ready, perform a CNAME swap:
+
+Before:
+
+prod-v1 -> myapp.elasticbeanstalk.com
+prod-v2 -> myapp-v2.elasticbeanstalk.com
+
+After swap:
+
+prod-v2 -> myapp.elasticbeanstalk.com
+prod-v1 -> myapp-v2.elasticbeanstalk.com
+
+Traffic instantly goes to the Green environment.
 
 ### AWS Code commit
 - AWS's version of git
