@@ -225,6 +225,11 @@ The shared volume acts as a **fast local scratch space**.
 | Tag image for ECR | `docker tag orders:v1 <account>.dkr.ecr.ap-south-1.amazonaws.com/orders:v1` |
 | Push image to ECR | `docker push <account>.dkr.ecr.ap-south-1.amazonaws.com/orders:v1` |
 | Pull image from ECR | `docker pull <account>.dkr.ecr.ap-south-1.amazonaws.com/orders:v1` |
+#### 4. Create tasks and services
+- once image is pushed, goto ECR, repos, imageid
+- copy image URL
+- then create task, by passing this image URL
+- continue with services and you are good to go
 
 ## EKS - Elastic Kubernetes service
 - containers can be hosted on EC2 or farget
