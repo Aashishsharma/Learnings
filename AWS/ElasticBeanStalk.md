@@ -17,7 +17,9 @@
 - Once the application is created, open the Domain, and your webapp is up and running
 ![alt text](PNG/ELB7.PNG "Title")  
 
+**There are additional settings which we have skipped in our demo app, such as creating / configuring ASG, EC2 instance types, storing logs to s3**
 
+- click on create new environment, and with same codebase, create prod env and select all the option config for Elastic beanstalk 
 ![alt text](PNG/ELB8.PNG "Title")  
 
 ### AWS Code commit
