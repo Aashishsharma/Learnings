@@ -50,29 +50,14 @@
 ![alt text](PNG/ELB9.PNG "Title")  
 
 - **blue green deployment** - 
-Blue Environment (prod-v1)
-    |
-    | serving 100% traffic
-    |
-CNAME: myapp.elasticbeanstalk.com
-
-Green Environment (prod-v2)
-    |
-    | deployed and tested
-
-When ready, perform a CNAME swap:
-
-Before:
-
-prod-v1 -> myapp.elasticbeanstalk.com
-prod-v2 -> myapp-v2.elasticbeanstalk.com
-
-After swap:
-
-prod-v2 -> myapp.elasticbeanstalk.com
-prod-v1 -> myapp-v2.elasticbeanstalk.com
-
-Traffic instantly goes to the Green environment.
+- click on swap environment - 
+![alt text](PNG/ELB11.PNG "Title")  
+- internally this will swap the DNS of prod with DNS of dev, mkaing blue green deploy possible
+![alt text](PNG/ELB10.PNG "Title")  
+- note for e.g. we have used dev and prod, ideally it would always be prod1 and prod2
+- so prod1 is live, you push everything to prod2, extensive testing is done
+- when ready, sway prod1's domin with prod2, now prod2 is live
+- if anything fails swipe back
 
 ### AWS Code commit
 - AWS's version of git
