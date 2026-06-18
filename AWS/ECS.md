@@ -260,6 +260,6 @@ Copilot automatically creates and manages:
 - to cleanup everything run command ```copilot app delete```
 
 ## EKS - Elastic Kubernetes service
-- Kuberneties service
+- EKS is AWS managed Kuberneties service that lets you run Kubernetes clusters without managing the Kubernetes control plane.
 - ECS is similar to Kuberneties
 - ECS - specific to AWS, K8 is cloud agnostic
