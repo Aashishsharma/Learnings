@@ -67,7 +67,25 @@
 ### EB lifecycle policy
 - atmost beanstalk can store 1000 versions of you application
 - if old versions not removed, we won't be able to deploy newer versions
-- code for all app versions are stored in S3
+- code for all app versions are stored in S3  
+![alt text](PNG/ELB12.PNG "Title")  
+
+### Elastic Beanstalk Extensions (`.ebextensions`)
+
+**`.ebextensions`** are configuration files that let you customize the AWS resources and EC2 instances created by Elastic Beanstalk.
+- we must create .ebextensions folder in root dir of the project, and every file inside this needs to end with .config extension
+- bascially most settings done from AWS console can be configure in these files
+- E.g. setting ENV vars from beanstalk  
+![alt text](PNG/ELB13.PNG "Title") 
+
+### EB and Cloudformation
+![alt text](PNG/ELB14.PNG "Title") 
+
+### EB cloning
+- clone prod app and create new app test
+- all config of prod gets created in tst, include DB config (but DB data is not preserved)
+
+### EB Migration
 
 ### AWS Code commit
 - AWS's version of git
