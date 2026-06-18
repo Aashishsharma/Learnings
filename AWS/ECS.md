@@ -231,5 +231,22 @@ The shared volume acts as a **fast local scratch space**.
 - then create task, by passing this image URL
 - continue with services and you are good to go
 
+## AWS copilot CLI
+- **AWS Copilot** is a CLI tool that simplifies deploying and managing containerized applications on ECS and Fargate by automatically provisioning the required AWS resources.
+
+**Example**
+```bash
+copilot init
+copilot deploy
+```
+Copilot automatically creates and manages:
+1. ECS Cluster
+2. ECS Service
+3. Task Definition
+4. Load Balancer
+5. VPC
+6. Auto Scaling
+7. CloudWatch Logs
+
 ## EKS - Elastic Kubernetes service
 - containers can be hosted on EC2 or farget
