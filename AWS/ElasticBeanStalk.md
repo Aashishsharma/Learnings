@@ -6,6 +6,20 @@
 - if we don't use beanstalk then we need to provision servers, security, networking
 - create beanstalk - provide name, provide runtime env, upload your code, some other settings and you are good to go
 
+![alt text](PNG/ELB1.PNG "Title")  
+![alt text](PNG/ELB2.PNG "Title") 
+
+### Creating ELB application
+![alt text](PNG/ELB3.PNG "Title")  
+![alt text](PNG/ELB4.PNG "Title")  
+![alt text](PNG/ELB5.PNG "Title")  
+![alt text](PNG/ELB6.PNG "Title")  
+- Once the application is created, open the Domain, and your webapp is up and running
+![alt text](PNG/ELB7.PNG "Title")  
+
+
+![alt text](PNG/ELB8.PNG "Title")  
+
 ### AWS Code commit
 - AWS's version of git
 - private, secure, and can be integrated with other services
