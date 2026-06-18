@@ -75,8 +75,22 @@ Flow
 | Health checks | OS patches |
 | Task placement | Scaling EC2 fleet |
 
+### ECS autoscaling
+- auto increase number of tasks
+- this is different from EC2 ASG
+- EC2 ASG scales EC2 instances, ECS autoscaling scales number of tasks (pods)
+
+| Method | How it works | Example |
+|-------|-------------|---------|
+| **Target Tracking** | Maintain a target metric value | Keep CPU around 60% |
+| **Step Scaling** | Scale by different amounts based on alarm thresholds | CPU > 70% → +2 tasks, CPU > 90% → +5 tasks |
+| **Scheduled Scaling** | Scale at predefined times | Scale to 10 tasks every day at 9 AM |
+
+![alt text](PNG/ECS12.PNG "Title") 
+- when CPU utilization goes up, it triggers Cloudwatch Alarm
+- the alarm will trigger scaling activity to ECS service, which will eventually add new task 3
+
 ### IAM roles for ECS
-### How ALB integrates with ECS
 ### ECS Data volumes
 
 ## ECR - Elastic container registry
