@@ -85,7 +85,13 @@
 - clone prod app and create new app test
 - all config of prod gets created in tst, include DB config (but DB data is not preserved)
 
-### EB Migration
+### EB Migration  
+![alt text](PNG/ELB15.PNG "Title")  
+- Note that above steps we performed is not cloning, we have manually caopied all steps and created new env
+
+**EB and RDS** - 
+- RDS can be provisioned with EB, but RDS will be deleted if we delete the env
+- to not loose data, we need to create separate RDS, and in our EB app, reference the RDS DB with conn string
 
 ### AWS Code commit
 - AWS's version of git
