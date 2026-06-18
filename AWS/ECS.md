@@ -6,6 +6,14 @@
 **There are 2 launch types of ECS containers**
 
 ## 1. EC2 launch type
+- see below (EC2 launch type working)
+## 2. Farget launch type
+
+- allows us to launch docker container on AWS
+- same as ECS, but it is serverless
+- so no need to provision EC2 instance
+
+### EC2 lanunch type working - 
 - In ECS EC2 launch type, you provision and manage EC2 instances, and ECS schedules containers as tasks on those instances using the ECS Agent running on each EC2. 
 **How it works**
 ```text
@@ -45,18 +53,18 @@ Flow
 ![alt text](PNG/ECS7.PNG "Title")  
 
 #### Step 3. Create Services
+- **ECS Service** ensures that a specified number of ECS Tasks are continuously running and automatically replaces failed tasks.
+- **ECS service is similar to deployment in K8**
+- while creating service, provide the link to the task we created earlier
 ![alt text](PNG/ECS8.PNG "Title")  
+- provide deployment config, e.g. if we provide desired capaciry as 4, then 4 container will be running (4 containers of the same task we created above)
 ![alt text](PNG/ECS9.PNG "Title")  
+- provide sec grp details, which makes containers accessible over http
 ![alt text](PNG/ECS10.PNG "Title")  
+- create and attach a new ALB, so that those 4 containers are load balanced
 ![alt text](PNG/ECS11.PNG "Title")  
-
-
-1. You launch EC2 instances (often via an Auto Scaling Group).
-2. Each EC2 runs the ECS Agent.
-3. The ECS Agent registers the EC2 with the ECS Cluster.
-4. You create an ECS Service/Task.
-5. ECS Scheduler chooses an EC2 with enough CPU/RAM.
-6. ECS Agent pulls the Docker image and starts the container
+- then we go to the ALB created above, open DNS of ALB, and then it will call those 4 containers round-robin
+- so basically, our docker image (referenced in Task (image url)) - will have our app running and exposing port 80
 
 **Responsibilities** - 
 
@@ -66,12 +74,6 @@ Flow
 | Service discovery | AMI updates |
 | Health checks | OS patches |
 | Task placement | Scaling EC2 fleet |
-
-## 2. Farget launch type
-
-- allows us to launch docker container on AWS
-- same as ECS, but it is serverless
-- so no need to provision EC2 instance
 
 ### IAM roles for ECS
 ### How ALB integrates with ECS
