@@ -3,11 +3,6 @@
 - for this we first need to provision EC2 instance
 - AWS will handle container lifecycle part
 
-## ECR - Elastic container registry (ECR)
-- AWS's private docker registry
-- this is where docker images are stored
-- AWS ECR Public gallery - this is public docker registry by AWS, similar to dockerhub
-
 **There are 2 launch types of ECS containers**
 
 ## 1. EC2 launch type
@@ -202,6 +197,25 @@ The shared volume acts as a **fast local scratch space**.
 ### ECS Task placement
 - it allows ECS to determine where to place a new task, in which EC2 by looking at CPU / Memory utilization  
 ![alt text](PNG/ECS17.PNG "Title")  
+
+#### ECS Task placement strategies
+1. Binpack
+![alt text](PNG/ECS18.PNG "Title")  
+2. Random - ECS randomly places container on any EC2 instance, no logic
+3. Spread - 
+![alt text](PNG/ECS19.PNG "Title")  
+
+- Note you can mix and create a strategy e.g. (Spread based on region, then spread based on instance ID)
+![alt text](PNG/ECS20.PNG "Title")  
+
+#### ECS task placement constraints
+- restrict *where* tasks can run, e.g., run tasks only on EC2 instances with a specific attribute, Availability Zone, or instance type.
+![alt text](PNG/ECS21.PNG "Title")  
+
+## Elastic Container Registry 
+![alt text](PNG/ECR.PNG "Title")  
+- AWS ECR Public gallery - this is public docker registry by AWS, similar to dockerhub
+
 
 ## EKS - Elastic Kubernetes service
 - containers can be hosted on EC2 or farget
