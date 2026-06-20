@@ -25,6 +25,7 @@ users:
     age: 30
 # Below is a function in YAML, defined elsewhere in the file, but used below
 ID: !Ref MyRef
+# Note !Ref is shorthand for Fn::Ref
 ```
 
 ```yml
@@ -140,6 +141,49 @@ Resources:
 # !ImportValue Shared-VPC-Id
 # ↓
 # vpc-0abc123xyz
+
+# Conditions
+Conditions:
+  IsMumbai: !Equals
+    - !Ref AWS::Region     # Automatic pseudo parameter
+    - ap-south-1
+
+Resources:
+  MumbaiOnlyBucket:
+    Type: AWS::S3::Bucket
+    Condition: IsMumbai    # Created only in Mumbai region
+
+# If stack is deployed in ap-south-1:
+#   IsMumbai = true
+#   -> Bucket is created
+#
+# If stack is deployed elsewhere:
+#   IsMumbai = false
+#   -> Bucket is NOT created
+
+# Function GetAtt - when a resource is created, a lot of attributes are attached to it
+# to refer those values in CF use GetAtt func
+# Use case:
+# You own the domain "example.com".
+# When an EC2 instance is created, automatically create a Route 53
+# DNS record "app.example.com" that points to the EC2's public IP.
+Resources:
+  MyEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-12345678
+      InstanceType: t3.micro
+  AppDNS:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: example.com.
+      Name: app.example.com.
+      Type: A
+      # Get the public IP of the EC2 instance
+      ResourceRecords:
+        - !GetAtt MyEC2.PublicIp
+      TTL: 300
+
 ```
 **the parameter we created above is now available in below cloud formation**
 ![alt text](PNG/CF2.PNG "Title") 
