@@ -235,3 +235,13 @@ module.exports = { HelloLambdaStack }
 |-------|-------------|------------|
 | Roll back all stack resources | If stack creation/update fails, CloudFormation deletes all newly created resources and restores the stack to the previous stable state. | Default option. Use when you want an all-or-nothing deployment. |
 | Preserve successfully provisioned resources | If stack creation/update fails, CloudFormation keeps resources that were created successfully and stops at the failed resource. You can inspect/fix the issue and retry the operation. | Use for debugging or when creating expensive/time-consuming resources that you don't want to recreate. |
+
+### CF service roles
+| Aspect | Explanation |
+|-------|-------------|
+| What is it? | An IAM role that CloudFormation assumes to create, update, and delete resources on your behalf. |
+| Why is it needed? | So CloudFormation can perform actions (e.g., create EC2, S3, RDS) even if the user launching the stack doesn't have those permissions directly. |
+| When is it specified? | While creating/updating a stack, under **Configure stack options → Permissions → IAM role**. |
+| Without a service role | CloudFormation uses the permissions of the user or role that initiated the stack operation. |
+| With a service role | CloudFormation always uses the service role's permissions, regardless of who initiated the operation. |
+| Security benefit | Centralizes permissions and enforces least privilege. Users can deploy stacks without broad AWS permissions. |
