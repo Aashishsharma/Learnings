@@ -3,6 +3,8 @@
 - ![alt text](PNG/CF3.PNG "Title")  
 - In CI/CD, install aws cli, and deploy your template from build pipeline
 - AWS composer allows us to view all the component stack created by cloud formation (it creates architectural diagram)
+- Cloud formation templates, once created can't be edited, they can only be replaces
+- deleting CF template will delete all the resources created by that template
 
 ```yml
 Parameters: # this will show a custom input field on AWS while uploading this template
