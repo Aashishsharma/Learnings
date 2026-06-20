@@ -6,6 +6,25 @@
 - Cloud formation templates, once created can't be edited, they can only be replaces
 - deleting CF template will delete all the resources created by that template
 
+**Reading YML**  
+```yml
+# Multiline (indicated by | symbol) string
+description: |
+  Line 1
+  Line 2
+  Line 3
+# Object
+address:
+  city: Pune
+  country: India
+# Array (array is indicated with - symbol) of objects
+users:
+  - name: Alice
+    age: 25
+  - name: Bob
+    age: 30
+```
+
 ```yml
 Parameters: # this will show a custom input field on AWS while uploading this template
   SecurityGroupDescription: # whateer we enter in the input field will be the name of security group desc
