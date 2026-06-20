@@ -245,3 +245,15 @@ module.exports = { HelloLambdaStack }
 | Without a service role | CloudFormation uses the permissions of the user or role that initiated the stack operation. |
 | With a service role | CloudFormation always uses the service role's permissions, regardless of who initiated the operation. |
 | Security benefit | Centralizes permissions and enforces least privilege. Users can deploy stacks without broad AWS permissions. |
+
+### CF Capabilities
+- When dealing with IAM roles, e.g. CF creating IAM role, and assigning policies, we as humans need to manually approve thie IAM role creations when running the CF template, because creating IAM is related to security, what if CF creates admin IAM role and delete everything? Need human approval if a CF template can create IAM role or not
+```yaml
+Resources:
+  MyRole:
+    Type: AWS::IAM::Role # we are creating a new IAM role, which needs to be approved as shown below
+    Properties:
+      AssumeRolePolicyDocument:
+        ...
+```
+![alt text](PNG/CF4.PNG "Title")  
