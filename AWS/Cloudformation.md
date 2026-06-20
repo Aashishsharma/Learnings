@@ -272,3 +272,7 @@ Resources:
 ![alt text](PNG/CF7.PNG "Title")  
 ![alt text](PNG/CF8.PNG "Title")  
 - **Usecase** - since CF cannot delete S3 bucket, if it is not empty, we create a custom resource - lambda fn, which CF will invoke (and in that lambda, we can write code to empty S3 bucket), then CF can delete it
+
+### CF stacksets
+- Lets you deploy and manage the same CloudFormation stack across multiple AWS accounts and Regions from a central place; for example, creating the same IAM role or logging bucket in every account of an organization.
+![alt text](PNG/CF9.PNG "Title")  
