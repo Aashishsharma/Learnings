@@ -1,5 +1,8 @@
 # Cloudformation (IaaS)
-- 
+- build infra on AWS via code
+- ![alt text](PNG/CF3.PNG "Title")  
+- In CI/CD, install aws cli, and deploy your template from build pipeline
+- AWS composer allows us to view all the component stack created by cloud formation (it creates architectural diagram)
 
 ```yml
 Parameters: # this will show a custom input field on AWS while uploading this template
@@ -8,11 +11,11 @@ Parameters: # this will show a custom input field on AWS while uploading this te
     Type: String
 
 Resources: # creating EC2 intance
-  MyInstance:
+  MyInstance: # this is the name of the instance which will be created
     Type: AWS::EC2::Instance 
     Properties:
       AvailabilityZone: us-east-1a
-      ImageId: ami-0453ec754f44f9a4a # Amazon machine instance id
+      ImageId: ami-0453ec754f44f9a4a # Amazon machine instance id, this is fixed and available on internet
       InstanceType: t3.micro # instance type
       SecurityGroups:
         - !Ref SSHSecurityGroup # this is referneced here, defined below
