@@ -29,11 +29,12 @@ users:
 Parameters: # this will show a custom input field on AWS while uploading this template
   SecurityGroupDescription: # whateer we enter in the input field will be the name of security group desc
     Description: Security Group Description 123eee
-    Type: String
+    Type: String # can be Number, Commadelimited list, List<Numbers>, AWS-Sepecifc param
+    # other propetries for paramters include - Min/Max Value, Defaul, AllowedValues, AllowedRegex
 
 Resources: # creating EC2 intance
   MyInstance: # this is the name of the instance which will be created
-    Type: AWS::EC2::Instance 
+    Type: AWS::EC2::Instance # syntax - serviceProvider::serviceName::data-type-name
     Properties:
       AvailabilityZone: us-east-1a
       ImageId: ami-0453ec754f44f9a4a # Amazon machine instance id, this is fixed and available on internet
