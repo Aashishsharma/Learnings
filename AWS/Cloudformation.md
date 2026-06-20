@@ -257,3 +257,18 @@ Resources:
         ...
 ```
 ![alt text](PNG/CF4.PNG "Title")  
+
+### CF Deletion policy
+1. Delete
+![alt text](PNG/CF5.PNG "Title")  
+2. Retain - will not delete resource even if CF template is deleted
+3. Snapshot - CF will first create a snapshot of the resource, before deleting it (e.g) take snapshot of RDS, before deleting it
+
+![alt text](PNG/CF6.PNG "Title")  
+
+- **Termination Protection**: Prevents a CloudFormation stack from being accidentally deleted; users must disable termination protection before deleting the stack.
+
+### CF Custom resources
+![alt text](PNG/CF7.PNG "Title")  
+![alt text](PNG/CF8.PNG "Title")  
+- **Usecase** - since CF cannot delete S3 bucket, if it is not empty, we create a custom resource - lambda fn, which CF will invoke (and in that lambda, we can write code to empty S3 bucket), then CF can delete it
