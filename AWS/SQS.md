@@ -94,13 +94,14 @@ E-commerece site requiring real time data analytics dashboards, the web app can 
 ### 3. Consumers
 
 ### 4. Configurations  
-![alt text](PNG/SQS2.PNG "Title")  
+![alt text](PNG/SQS4.PNG "Title")  
 
 ##### 1. Visibility timeout (default 30s)
-Once the message is consumed by one of the consumers, the message is hidden from the queue (basically a lock is applied, so no other consumer can't see this message). 
+- Once the message is consumed by one of the consumers, the message is hidden from the queue (basically a lock is applied, so no other consumer can't see this message). 
 Now once the consumer consumes the message, it need to notify the queue that message is successfully consumed, delete from the queue (then the message is permanentaly deleted)  
-If the consumer fails to consume the message and no response is sent back to queue to delete the message, then the queue waits for (**Visibility Timeout deuration**) and then message is again available for other consumers for processing.  
-What if consumer 1 processed the msg, but while acknowledging, it crashed? Obviosuly msg will be back in the queue, so consumers need to be idempotent, so if msg is consimed multiple times, it will have same output everytime (e.g. message actions should be update like cnt to 54 instead of incremet like count of user ABC by 1, that way even if msg is processed multiple times, cnt will be 54 only)
+- If the consumer fails to consume the message and no response is sent back to queue to delete the message, then the queue waits for (**Visibility Timeout deuration**) and then message is again available for other consumers for processing.  
+- What if consumer 1 processed the msg, but while acknowledging, it crashed? Obviosuly msg will be back in the queue, so consumers need to be idempotent, so if msg is consimed multiple times, it will have same output everytime (e.g. message actions should be update like cnt to 54 instead of incremet like count of user ABC by 1, that way even if msg is processed multiple times, cnt will be 54 only)  
+- Also, if default visibility timeout is 30s, and consumer needs more tha 30s to process the message, the consumer should be programmed to call **ChangeMessageVisibility** api call to extend the timeout
 
 ##### 2. Message retention period
 The amount of time the message can stay in the queue (1 min to 14 days), after which the message is automatically deleted from the queue
@@ -125,6 +126,9 @@ Then in DLQ, we can add alerting / monitoring to send email to dev team, which s
 - attach a cloudwatch metrics, when requests increase and messages in queue cross certain limit
 - set alarm when that threshold is reached, which will call ASG to increase EC2 instances (consumers in this case)  
 ![alt text](PNG/SQS3.PNG "Title")  
+
+### SQS queue access policy, similar to s3 bucket policy
+![alt text](PNG/SQS5.PNG "Title")  
 
 ## Nodejs code for producers and subscribers
 
