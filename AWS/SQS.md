@@ -112,6 +112,49 @@ The time for which the message needs to wait to enter the queue
 |---------|------------------------|
 | Order cancellation | If payment is not received within 15 minutes, process a cancellation message. |
 
+**Example: Order Auto-Cancel (Classic Delay Queue Use Case)**
+User places an order:
+```text
+t = 0
+Create Order O123
+↓
+Send delayed message
+{
+  orderId: "O123",
+  action: "CANCEL_ORDER"
+}
+Delay = 15 min
+```
+**Case 1: User pays within 15 minutes**
+```text
+t = 10 min
+Order status = PAID
+t = 15 min
+Delayed message becomes visible
+Consumer:
+if order.status == PAID:
+    do nothing
+```
+**Result:** Order is **not** cancelled.
+---
+**Case 2: User does not pay**
+```text
+t = 15 min
+Delayed message becomes visible
+Consumer:
+if order.status == PENDING:
+    cancel order
+```
+**Result:** Order is automatically cancelled.
+---
+### Why not use a Cron Job?
+You could, but a Delay Queue:
+- Scales to millions of scheduled actions
+- Distributes work across multiple consumers
+- Survives consumer failures
+- Doesn't require scanning the database periodically
+---
+
 ##### 4. Receive message wait time (LONG POOLING duration)
 The amount of time the consumer can hold on to the request before the message is arraived in the queue  
 In SQS, consumers constantly poll the queue to check of new messages, if no message is in the queue, consumer will send another request to check for message.  
