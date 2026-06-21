@@ -19,16 +19,20 @@ Used to decouple distributed applications
 
 Notice how we are using lambda for email services, if lambda fails, then the message is lost and email is not sent, not business critical  
 For fraud and analytics service, we purposefully use SQS, becasue is any of the coneumer of SQS fails, SQS gurantees that message is consumed by some other consumer  
-**(remember - SQS - qurantees message delivery atleast once)**
+**(remember - SQS - gurantees message delivery atleast once, based on standard or FIFO queue)**
 
 ## Core concepts
 
 1. Producers - publish a message to a topic
 2. Subscribers - can listen to one / more topics
-3. Topics - is a commincation channel to deliver a message to one / multiple subscribers
+3. Topics - is a commincation channel to deliver a message to one / multiple subscribers (this is a FIFO queue similar to SQS FIFO queue, so it will also preserve msg ordering, deduplication functionality)
 4. Messages - 
 
 ![alt text](PNG/SNS3.PNG "Title") 
+
+**Note SNS can publish messages to below items only** - 
+![alt text](PNG/SNS7.PNG "Title")   
+- but a lot of services can send msgs to SNS like - Cloudwatch, DynamoDB,S3, Lambda, RDS, Cloudformation
 
 #### Kafka vs SNS
 1. Both are pub/sub model
@@ -51,8 +55,10 @@ Suppose we have 2 subscribers to a topic and
  - sub2 cares only the messages with specific arrtibutes (type: www), (assume sub2 is lambda)
  - sub3 cares for only (type:inperson)
 
+**SNS message filtering** - 
 In trival world, to filter messages so that sb2 recieves only type:www we can have if condition in the sub2, since sub2 is lambda it is invoed and checks  for type, if it is inperson, then return, and lambda stops. This is unnecessary lambda invocation, and lambda invoations costs money, bu Instead - 
-When we set this Subscription filter that if a message which as attribute type:inperson will not be sent to sub2, and if sub2 is a lambda function, we are saving the lambda invocation cost for these types of messages
+When we set this Subscription filter that if a message which as attribute type:inperson will not be sent to sub2, and if sub2 is a lambda function, we are saving the lambda invocation cost for these types of messages  
+So this is basically a JSON policy which filters messages before sending those to subscribers
 
 #### 3. SNS DLQ (Dead letter queue)
 If one of the subscribers is down, then the message is kept in the topic until specified retries, after the retries limts are reached it is put into SNS DLQ, and this DLQ is an SNS queue ARN  
@@ -102,3 +108,10 @@ So to consume a message form a topic
 
 1. Subscribe an SQS Queue to the SNS Topic - we have done this while selecting a protocol when creating a subscription
 2. Use AWS SDK to poll messages from SQS which is subscribed to SNS topic
+
+**Fanout pattern and its usecases** - 
+![alt text](PNG/SNS8.PNG "Title")  
+- if we want to add another microservice to our app, we can just create another queue, and add it as subscriber to the SNS topic  
+![alt text](PNG/SNS9.PNG "Title")   
+- Limitations of S3, that we can create only one event when obj is added to a bucket like /images, what if we need to run 10 different tasks for these events? solution - use SNS, and add those 10 tasks as subscribers
+![alt text](PNG/SNS10.PNG "Title")  

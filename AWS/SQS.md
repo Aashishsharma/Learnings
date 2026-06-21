@@ -94,6 +94,11 @@ E-commerece site requiring real time data analytics dashboards, the web app can 
  - **SQS FIFO Message Grouping** - Messages with the **same `MessageGroupId`** are processed **strictly in order**, Messages with **different `MessageGroupId`s** can be processed **in parallel**.
  ![alt text](PNG/SQS7.PNG "Title")
   
+| Queue Type | Delivery Guarantee | Configurable? |
+|-----------|---------------------|---------------|
+| Standard Queue | At-least-once | ❌ No |
+| FIFO Queue | Exactly-once processing* + ordered delivery | ❌ No |
+
 ### 2. Producers 
 
 ### 3. Consumers
