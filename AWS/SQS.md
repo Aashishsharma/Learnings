@@ -177,6 +177,12 @@ Then in DLQ, we can add alerting / monitoring to send email to dev team, which s
 ### SQS queue access policy, similar to s3 bucket policy
 ![alt text](PNG/SQS5.PNG "Title")  
 
+**SQS long polling** - he consumer sends a ReceiveMessage request and keeps the connection open for up to 20 seconds, allowing SQS to return messages as soon as they arrive or an empty response if the wait time expires, thus reducing API calls
+
+![alt text](PNG/SQS6.PNG "Title")  
+- the library will just store the metadata to SQS along with the pointer to s3 with the actual file (maybe video)
+- when the consumer consumes, it reads the pointer key and than processes the file from s3
+- then how is this library different from if I write a custom code to store s3 file url as metatdata in SQS queue? - the library does exactly that, just that we don't need to write all the boilerplate code
 ## Nodejs code for producers and subscribers
 
 ### 1. Send message to Queue  
