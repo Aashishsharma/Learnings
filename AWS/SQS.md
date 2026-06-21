@@ -1,10 +1,42 @@
 # SQS (Async message based communication)
+- it is AWS managed **Distributrd Messaging queue** service
+- similar to Kafka and RabbitMQ
 
 #### SQS messaging vs API calls
 1. SQS is async based message system, API call is synchronous
 2. Decoupled architecture
 3. Backpressure Control - consmers can choose the rate of processing
 4. In APIs if one service fails, other service is affected, in SNS/SQS, the producer service is completely decoupled with consumers
+
+### Messageing queue architecure and Principal
+#### Principles
+1. Producer and Consumer are independent
+2. Messages are stored temporarily
+3. Receiving does NOT delete the message
+4. Consumer must delete the message explicitly by sending the acknowledgement to the queue
+
+| Guarantee | How it is achieved | What the consumer must do | Message structure | Use cases |
+|----------|--------------------|---------------------------|-------------------|-----------|
+| **At-most-once** | Producer sends once; broker does not retry or consumer ACKs before processing. If message is lost, it is not resent. | Consumer need not be idempotent because duplicates don't occur. | Any structure; message ID optional. | Analytical system where message lost is acceptable|
+| **At-least-once** | Broker retries until it receives an ACK/Delete from consumer. If consumer crashes after processing but before ACK, the same message is delivered again. | Consumer **must be idempotent**: processing the same message multiple times should have the same effect as processing it once. | Include a **unique message ID** or business key (`orderId`, `paymentId`, etc.) so consumer can detect duplicates. | |
+| **Exactly-once** | Broker uses transactions, deduplication, or atomic commit between message delivery and processing state. Duplicate deliveries are suppressed or deduplicated. | Consumer should still prefer idempotent operations, though duplicates are generally prevented by the system. | Include a unique message ID / deduplication ID. Broker may also require sequence numbers or transaction IDs. | Banking transactions |
+
+**Typical message structure for at-least-once**
+{
+  "messageId": "550e8400-e29b-41d4-a716-446655440000",
+  "orderId": "ORD-123",
+  "eventType": "OrderPlaced",
+  "payload": {
+    ...
+  }
+}
+```text
+if messageId already processed:
+    ignore message
+else:
+    process
+    mark messageId as processed
+```
 
 ### Usecases - 
 #### 1. Data processing (IoT devices)
@@ -35,9 +67,10 @@ E-commerece site requiring real time data analytics dashboards, the web app can 
 ![alt text](PNG/SQS2.PNG "Title")  
 
 ##### 1. Visibility timeout (default 30s)
-Once the message is consumed by one of the consumers, the message is hidden from the queue (basically a lock is applied, so no other consumer can see this message). 
+Once the message is consumed by one of the consumers, the message is hidden from the queue (basically a lock is applied, so no other consumer can't see this message). 
 Now once the consumer consumes the message, it need to notify the queue that message is successfully consumed, delete from the queue (then the message is permanentaly deleted)  
-If the consumer fails to consume the message and no response is sent back to queue to delete the message, then the queue waits for (**Visibility Timeout deuration**) and then message is again available for other consumers for processing
+If the consumer fails to consume the message and no response is sent back to queue to delete the message, then the queue waits for (**Visibility Timeout deuration**) and then message is again available for other consumers for processing.  
+What if consumer 1 processed the msg, but while acknowledging, it crashed? Obviosuly msg will be back in the queue, so consumers need to be idempotent, so if msg is consimed multiple times, it will have same output everytime (e.g. message actions should be update like cnt to 54 instead of incremet like count of user ABC by 1, that way even if msg is processed multiple times, cnt will be 54 only)
 
 ##### 2. Message retention period
 The amount of time the message can stay in the queue (1 min to 14 days), after which the message is automatically deleted from the queue
