@@ -8,11 +8,10 @@ Used to decouple distributed applications
 
 #### SNS vs SQS
 1. SNS is pub/sub, SQS is Messaging queue
-
-1. SNS is to publish messages to multiple consumers, SQS where one message can be consumed by one consumer  
-2. SQS can be one of the consumers of SNS
-3. In SNS, the messages in topics are pushed to subscribers where as in SQS, the consumers keep polling the queue to check the messages
-4. SQS = "Who will do this work?", SNS = "Everyone who cares, please know this happened."
+2. SNS is to publish messages to multiple consumers, SQS where one message can be consumed by one consumer  
+3. SQS can be one of the consumers of SNS
+4. In SNS, the messages in topics are pushed to subscribers where as in SQS, the consumers keep polling the queue to check the messages
+5. SQS = "Who will do this work?", SNS = "Everyone who cares, please know this happened."
 
 | Question | Use |
 |---------|-----|
