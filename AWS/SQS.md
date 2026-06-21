@@ -59,6 +59,15 @@ Consumer 1         Consumer 2
 
 Backpressure is achieved by slowing down producers—either explicitly through feedback signals from consumers or implicitly through mechanisms like rate limiting, blocking, bounded queues, pull-based consumption, or autoscaling consumers.
 
+**Messaging queues, pull / push model?** - 
+```text
+AWS SQS, Kafka:
+    Consumers continuously poll (Pull model)
+
+RabbitMQ, Webhooks:
+    Broker pushes messages to consumers (Push model)
+```
+
 ### Usecases - 
 #### 1. Data processing (IoT devices)
 IoT end devices can send messages to SQS and different consumers can consume those messages at their own pace
@@ -109,6 +118,13 @@ Howvere if no message is present in queue, long pooling will keep the connection
 It is a secondary queue, which stores failed messages for X number of times  
 When configuring DLQ, you will have to provied **Maximum retires setting**, e.g. (3), so if the message is failed to be processed 3 times by any or all of the consumers, then this message is sent to DLQ.  
 Then in DLQ, we can add alerting / monitoring to send email to dev team, which says message not being able to be processed 
+
+**Messages in SQS are retained by default for 4 days, max is 14 days**
+
+#### SQS with ASG
+- attach a cloudwatch metrics, when requests increase and messages in queue cross certain limit
+- set alarm when that threshold is reached, which will call ASG to increase EC2 instances (consumers in this case)  
+![alt text](PNG/SQS3.PNG "Title")  
 
 ## Nodejs code for producers and subscribers
 
