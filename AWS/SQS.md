@@ -5,8 +5,7 @@
 #### SQS messaging vs API calls
 1. SQS is async based message system, API call is synchronous
 2. Decoupled architecture
-3. Backpressure Control - consmers can choose the rate of processing
-4. In APIs if one service fails, other service is affected, in SNS/SQS, the producer service is completely decoupled with consumers
+3. In APIs if one service fails, other service is affected, in SNS/SQS, the producer service is completely decoupled with consumers
 
 ### Messageing queue architecure and Principal
 #### Principles
@@ -55,6 +54,10 @@ Producer A         Producer B
 Consumer 1         Consumer 2
 ```
 **Need to use proper partitioning key to put messages in different partitoned queues** - e.g. we can to partition by ```partition = hash(accountId) % numPartitions```, based on account id, so that the messages for same account goes to same partition queue, if it is random, and if user frst deposists 100Rs and then withdrws 50, it is acceptable scenario, but if those messages go in different partitioned queues, and if forst withdraw 50 is called, and if user has 0 balance, then app will show insuffuciant balance
+
+**Backpressure control** is a flow-control mechanism in distributed systems where a slower consumer signals or forces upstream producers to reduce their rate of sending data, preventing unbounded queue growth, resource exhaustion, and system overload.  
+
+Backpressure is achieved by slowing down producers—either explicitly through feedback signals from consumers or implicitly through mechanisms like rate limiting, blocking, bounded queues, pull-based consumption, or autoscaling consumers.
 
 ### Usecases - 
 #### 1. Data processing (IoT devices)
