@@ -106,8 +106,11 @@ Now once the consumer consumes the message, it need to notify the queue that mes
 ##### 2. Message retention period
 The amount of time the message can stay in the queue (1 min to 14 days), after which the message is automatically deleted from the queue
 
-##### 3. Delivery Delay
+##### 3. Delivery Delay / Delay queue (max upto 15 mins, default is 0 sec)
 The time for which the message needs to wait to enter the queue
+| Use case | Why use a Delay Queue? |
+|---------|------------------------|
+| Order cancellation | If payment is not received within 15 minutes, process a cancellation message. |
 
 ##### 4. Receive message wait time (LONG POOLING duration)
 The amount of time the consumer can hold on to the request before the message is arraived in the queue  
@@ -118,7 +121,8 @@ Howvere if no message is present in queue, long pooling will keep the connection
 ![alt text](PNG/SQS2.PNG "Title")  
 It is a secondary queue, which stores failed messages for X number of times  
 When configuring DLQ, you will have to provied **Maximum retires setting**, e.g. (3), so if the message is failed to be processed 3 times by any or all of the consumers, then this message is sent to DLQ.  
-Then in DLQ, we can add alerting / monitoring to send email to dev team, which says message not being able to be processed 
+Then in DLQ, we can add alerting / monitoring to send email to dev team, which says message not being able to be processed  
+- **DQL redrive** - puts the messages back from DLQ to normal SQS queue
 
 **Messages in SQS are retained by default for 4 days, max is 14 days**
 
