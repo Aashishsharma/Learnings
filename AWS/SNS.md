@@ -7,10 +7,30 @@ Used to decouple distributed applications
 2. A2P - application to person - application publishing a message to a topic and a person (email, phone, push notification) service consuming the message (e.g. sending promotional SMS text messages to end-users)
 
 #### SNS vs SQS
+1. SNS is pub/sub, SQS is Messaging queue
 
 1. SNS is to publish messages to multiple consumers, SQS where one message can be consumed by one consumer  
 2. SQS can be one of the consumers of SNS
 3. In SNS, the messages in topics are pushed to subscribers where as in SQS, the consumers keep polling the queue to check the messages
+4. SQS = "Who will do this work?", SNS = "Everyone who cares, please know this happened."
+
+| Question | Use |
+|---------|-----|
+| Should only one consumer process this message? | SQS |
+| Should many systems receive the same event? | SNS |
+
+| Question | Messaging Queue | Pub/Sub |
+|---------|-----------------|---------|
+| Who receives a message? | Exactly one consumer | All interested subscribers |
+| Main goal | Distribute work | Broadcast events |
+| Example | "Process this order" | "OrderPlaced event occurred" |
+
+| Service | Messaging Queue (Point-to-Point) | Pub/Sub | Push/Pull |
+|--------|-----------------------------------|---------|-----------|
+| SQS | ✅ Yes | ❌ No | Pull |
+| SNS | ❌ No | ✅ Yes | Push |
+| Kafka | ⚠️ Can behave like both, but primarily Pub/Sub | ✅ Yes | Pull |
+| RabbitMQ | ✅ Yes | ✅ Yes | Mostly Push |
 
 ![alt text](PNG/SNS1.PNG "Title") 
 
@@ -25,7 +45,7 @@ For fraud and analytics service, we purposefully use SQS, becasue is any of the 
 
 1. Producers - publish a message to a topic
 2. Subscribers - can listen to one / more topics
-3. Topics - is a commincation channel to deliver a message to one / multiple subscribers (this is a FIFO queue similar to SQS FIFO queue, so it will also preserve msg ordering, deduplication functionality)
+3. Topics - is a commincation channel to deliver a message to one / multiple subscribers (this can be a FIFO topic similar to SQS FIFO queue, so it will also preserve msg ordering, deduplication functionality, or standard topic)
 4. Messages - 
 
 ![alt text](PNG/SNS3.PNG "Title") 
