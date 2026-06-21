@@ -38,6 +38,24 @@ else:
     mark messageId as processed
 ```
 
+#### Partitioning queues
+- why needed? for scalibility
+
+Split a large queue into multiple smaller queues internally so that reads/writes can happen in parallel.
+Instead of:
+Queue
+M1 M2 M3 M4 M5 M6 M7 M8
+
+have
+```text
+Partition 1        Partition 2
+M1 M2 M3           M4 M5 M6
+Producer A         Producer B
+     ↓                  ↓
+Consumer 1         Consumer 2
+```
+**Need to use proper partitioning key to put messages in different partitoned queues** - e.g. we can to partition by ```partition = hash(accountId) % numPartitions```, based on account id, so that the messages for same account goes to same partition queue, if it is random, and if user frst deposists 100Rs and then withdrws 50, it is acceptable scenario, but if those messages go in different partitioned queues, and if forst withdraw 50 is called, and if user has 0 balance, then app will show insuffuciant balance
+
 ### Usecases - 
 #### 1. Data processing (IoT devices)
 IoT end devices can send messages to SQS and different consumers can consume those messages at their own pace
