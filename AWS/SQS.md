@@ -88,7 +88,12 @@ E-commerece site requiring real time data analytics dashboards, the web app can 
  - message delivered excatly once
  - low throughput
  - high cost
-
+ - depucliate msgs are removed at queue level
+ - queue can check for depilcate msgs based on 1. msg content (queue does SHA1 has same as git, to identify duplicate msg 2. producers sends deduplicateIds)
+ - deduplicate interval is of 5 mins
+ - **SQS FIFO Message Grouping** - Messages with the **same `MessageGroupId`** are processed **strictly in order**, Messages with **different `MessageGroupId`s** can be processed **in parallel**.
+ ![alt text](PNG/SQS7.PNG "Title")
+  
 ### 2. Producers 
 
 ### 3. Consumers
@@ -182,7 +187,9 @@ Then in DLQ, we can add alerting / monitoring to send email to dev team, which s
 ![alt text](PNG/SQS6.PNG "Title")  
 - the library will just store the metadata to SQS along with the pointer to s3 with the actual file (maybe video)
 - when the consumer consumes, it reads the pointer key and than processes the file from s3
-- then how is this library different from if I write a custom code to store s3 file url as metatdata in SQS queue? - the library does exactly that, just that we don't need to write all the boilerplate code
+- then how is this library different from if I write a custom code to store s3 file url as metatdata in SQS queue? - the library does exactly that, just that we don't need to write all the boilerplate code.
+
+
 ## Nodejs code for producers and subscribers
 
 ### 1. Send message to Queue  
