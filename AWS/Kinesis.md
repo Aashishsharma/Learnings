@@ -315,5 +315,13 @@ During this period:
 ## Kinesis producers and consumers
 - Producers are the one's who will send data to Kinesis stream / Firehose
 - consumers will get msgs from KDS and process it
-![alt text](PNG/Kinesis4.PNG "Title")  -
-note - lambda can also be a consumer of KDS
+![alt text](PNG/Kinesis4.PNG "Title")  
+note - lambda can also be a consumer of KDS  
+
+#### Using AWS CLI commands to produce and consume messages to KDS
+1. Produce msgs to KDS
+![alt text](PNG/Kinesis5.PNG "Title")  
+2. Consuming (describing the stream, getting metadata of KDS stream, not the actual records)
+![alt text](PNG/Kinesis6.PNG "Title")  
+2. Consuming data from KDS (first get the shard iterator, then get the shard records)
+![alt text](PNG/Kinesis7.PNG "Title")  
