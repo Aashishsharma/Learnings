@@ -293,7 +293,7 @@ During this period:
 |---|---|
 | Kinesis Data Streams (KDS) | Real-time streaming service for ingesting, storing, and replaying ordered streams of data. |
 | Kinesis Data Firehose | Fully managed service to deliver streaming data to destinations like S3, Redshift, OpenSearch, or Splunk. |
-| Kinesis Data Analytics | Service to process and analyze streaming data using SQL or Apache Flink. |
+| Kinesis Data Analytics | Service to process and analyze streaming data using SQL or Apache Flink. so it can do joins on multiple events at runtime, as and when events are received |
 | Kinesis Video Streams | Service to ingest, store, and process video streams from cameras and devices. |
 
 ![alt text](PNG/Kinesis2.PNG "Title")  
@@ -306,3 +306,12 @@ During this period:
 - Firehose will batch the records (based on duration (like batch all records of last 5 mins, or based on data (batch all records, where paylod is not >=5BM))), and call S3 API, only once per batch
 2. provide APIs where we can call APIs to transform the data before storing it to delivery destinations like S3
 - Firehose can be configure with only 1 delivery destination only (e.g. either s3 / redshift or something else, but not mutliple)
+- note it is not necessary for producers to send data to KDS, then can also send data directly to Firehose, but we need to know that KDS can have multiple consumers, but not Firehose, and reply of msgs is possible via KDS only
+
+- **Kinesis Data Analytics** - using Apache flink, it can 
+1. Perform joins at runtime as and when the events are received
+2. Time window analysis - e.g. every 5 mins, tell me my top 10 leader boards, this can be done in this Kinesis data analysis tool using Apache flink
+
+## Kinesis producers and consumers
+- Producers are the one's who will send data to Kinesis stream / Firehose
+![alt text](PNG/Kinesis4.PNG "Title")  
