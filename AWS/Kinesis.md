@@ -270,5 +270,5 @@ During this period:
 ---
 
 **Another example** - real time data processing /streaming, we do analytics of clicks on websites, web sote has 1000s of clickable buttons / links, and 1000s of clients are clicking and we want to peform analytics  
-![alt text](PNG/kinesis1.PNG "Title")  
+![alt text](PNG/Kinesis1.PNG "Title")  
 **here notice importance of replaying the messages** - if customer profile service goes down, or we pushed some bug where we did not analyse events properly, Kinesis alloow is to replay all the events for customer profile services for a given point in time
