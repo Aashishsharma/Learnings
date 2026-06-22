@@ -314,4 +314,6 @@ During this period:
 
 ## Kinesis producers and consumers
 - Producers are the one's who will send data to Kinesis stream / Firehose
-![alt text](PNG/Kinesis4.PNG "Title")  
+- consumers will get msgs from KDS and process it
+![alt text](PNG/Kinesis4.PNG "Title")  -
+note - lambda can also be a consumer of KDS
