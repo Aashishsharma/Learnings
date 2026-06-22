@@ -303,10 +303,10 @@ During this period:
 1. Batching
 ![alt text](PNG/Kinesis3.PNG "Title")  
 - for every click event below, it is not ideal to call the s3 / any other service to store the record.
-- Firehose will batch the records (based on duration (like batch all records of last 5 mins, or based on data (batch all records, where paylod is not >=5BM))), and call S3 API, only once per batch
+- Firehose will batch the records (based on duration (like batch all records of last 5 mins, or based on data (batch all records, where paylod is not >=5BM)), in AWS console when creating Firehose, these are config properties with names - Buffer size (paylod - 5MB) and Buffer interval respectively(5 mins)), and call S3 API, only once per batch
 2. provide APIs where we can call APIs to transform the data before storing it to delivery destinations like S3
-- Firehose can be configure with only 1 delivery destination only (e.g. either s3 / redshift or something else, but not mutliple)
-- note it is not necessary for producers to send data to KDS, then can also send data directly to Firehose, but we need to know that KDS can have multiple consumers, but not Firehose, and reply of msgs is possible via KDS only
+- Firehose can be configure with only 1 delivery destination only (e.g. either s3 / redshift or something else, but not mutliple), Note the delivery destination can also be a custom HTTP endpoint (our custom app)
+- note it is not necessary for producers to send data to KDS, then can also send data directly to Firehose, but we need to know that KDS can have multiple consumers, but not Firehose, and reply of msgs is possible in Firehose, only in KDS
 
 - **Kinesis Data Analytics** - using Apache flink, it can 
 1. Perform joins at runtime as and when the events are received
@@ -325,3 +325,5 @@ note - lambda can also be a consumer of KDS
 ![alt text](PNG/Kinesis6.PNG "Title")  
 2. Consuming data from KDS (first get the shard iterator, then get the shard records)
 ![alt text](PNG/Kinesis7.PNG "Title")  
+- the data key in the records array has the actual data, which is base64 encoded, you can decode it and get the actual data  
+- once all msgs are consumed, it will give us the NextShardIterator, so the consumer knows from which record to resume consuming again from KDS
