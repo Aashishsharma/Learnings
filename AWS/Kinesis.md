@@ -287,3 +287,22 @@ During this period:
 | **Ordering guarantee** | No | FIFO queues only | Within a shard | Queue dependent | Within a partition |
 | **Typical use cases** | OrderPlaced, UserRegistered notifications | Image processing, Email sending, Background jobs | Clickstreams, IoT, Logs, Real-time analytics | Enterprise messaging, RPC, Work queues | Event sourcing, Analytics, Logs, Streams |
 | **Unique ability** | Simple fan-out to many AWS services with almost zero setup | Fully managed queue with virtually unlimited scale and no server management | Replay historical events while allowing multiple consumers to progress independently | Supports many messaging patterns/protocols (AMQP, MQTT, STOMP, etc.) | Massive-scale event streaming with replay, ecosystem, and cross-platform portability |
+
+## Kinesis components
+| Component | One-liner |
+|---|---|
+| Kinesis Data Streams (KDS) | Real-time streaming service for ingesting, storing, and replaying ordered streams of data. |
+| Kinesis Data Firehose | Fully managed service to deliver streaming data to destinations like S3, Redshift, OpenSearch, or Splunk. |
+| Kinesis Data Analytics | Service to process and analyze streaming data using SQL or Apache Flink. |
+| Kinesis Video Streams | Service to ingest, store, and process video streams from cameras and devices. |
+
+![alt text](PNG/Kinesis2.PNG "Title")  
+
+- Note - KDS is not a queue, it is **distributed, durable, append-only event log**  
+- **Data Firehose** - server 2 purpose - (batching and data transformation)
+1. Batching
+![alt text](PNG/Kinesis3.PNG "Title")  
+- for every click event below, it is not ideal to call the s3 / any other service to store the record.
+- Firehose will batch the records (based on duration (like batch all records of last 5 mins, or based on data (batch all records, where paylod is not >=5BM))), and call S3 API, only once per batch
+2. provide APIs where we can call APIs to transform the data before storing it to delivery destinations like S3
+- Firehose can be configure with only 1 delivery destination only (e.g. either s3 / redshift or something else, but not mutliple)
