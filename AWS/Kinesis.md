@@ -271,4 +271,19 @@ During this period:
 
 **Another example** - real time data processing /streaming, we do analytics of clicks on websites, web sote has 1000s of clickable buttons / links, and 1000s of clients are clicking and we want to peform analytics  
 ![alt text](PNG/Kinesis1.PNG "Title")  
-**here notice importance of replaying the messages** - if customer profile service goes down, or we pushed some bug where we did not analyse events properly, Kinesis alloow is to replay all the events for customer profile services for a given point in time
+**here notice importance of replaying the messages** - if customer profile service goes down, or we pushed some bug where we did not analyse events properly, Kinesis alloow is to replay all the events for customer profile services for a given point in time  
+
+| Aspect | SNS | SQS | Kinesis Data Streams | RabbitMQ | Kafka |
+|---|---|---|---|---|---|
+| **Actual purpose it solves** | Broadcast an event to multiple subscribers | Distribute work among consumers | Real-time event streaming with replay | General-purpose message broker | Distributed event streaming platform |
+| **Pattern** | Pub/Sub | Distributed Queue | Primarily Pub/Sub (queue-like within consumer apps) | Can act as both | Primarily Pub/Sub (queue-like within consumer groups) |
+| **Push or Pull** | Push | Pull | Pull | Primarily Push | Pull |
+| **How delivery works** | SNS actively delivers to subscribers | Consumers poll the queue | Consumers poll the stream using checkpoints | Broker pushes messages over TCP connection | Consumers pull using offsets |
+| **Equivalent to** | Closest to RabbitMQ Fanout Exchange | Closest to RabbitMQ Queue | Kafka | SNS + SQS combined capabilities | Kinesis Data Streams |
+| **Message retention** | Temporary delivery | Up to 14 days | Up to 365 days | Usually consumed & removed after ACK | Configurable, often days/months |
+| **Replay old messages** | ❌ No | ❌ No | ✅ Yes | ⚠️ Limited | ✅ Yes |
+| **Multiple consumers get same message** | ✅ Yes | ❌ No | ✅ Yes | ✅ Yes (Pub/Sub mode) | ✅ Yes |
+| **Independent consumer progress** | ❌ No | ❌ No | ✅ Yes | ⚠️ Limited | ✅ Yes |
+| **Ordering guarantee** | No | FIFO queues only | Within a shard | Queue dependent | Within a partition |
+| **Typical use cases** | OrderPlaced, UserRegistered notifications | Image processing, Email sending, Background jobs | Clickstreams, IoT, Logs, Real-time analytics | Enterprise messaging, RPC, Work queues | Event sourcing, Analytics, Logs, Streams |
+| **Unique ability** | Simple fan-out to many AWS services with almost zero setup | Fully managed queue with virtually unlimited scale and no server management | Replay historical events while allowing multiple consumers to progress independently | Supports many messaging patterns/protocols (AMQP, MQTT, STOMP, etc.) | Massive-scale event streaming with replay, ecosystem, and cross-platform portability |
