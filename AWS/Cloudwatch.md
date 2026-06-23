@@ -110,7 +110,6 @@ console.log("Custom metric published");
 ### Common ways to send custom metrics
 1. **AWS SDK** → Call `PutMetricData`
 2. **AWS CLI**
-
    ```bash
    aws cloudwatch put-metric-data \
      --namespace MyApp \
@@ -120,6 +119,7 @@ console.log("Custom metric published");
 3. **CloudWatch Agent** → Collect OS/application metrics from EC2 or on-prem servers.
 4. **Embedded Metric Format (EMF)** → Write structured logs, and CloudWatch automatically extracts metrics from them.
 
+- In production app, custom metrics are created from Cloudwatch logs, you goto cloudwatch logs, create metric, give regex, and generate a metric (nore on this in the cloudwatch logs section)
 
 ## 2. Cloudwatch logs
 **CloudWatch Logs** is a service for **collecting, storing, searching, and analyzing logs** from AWS services, applications, and servers.
@@ -167,15 +167,66 @@ exports.handler = async () => {
 ```
 Lambda automatically sends these logs to CloudWatch Logs.
 #### EC2
-```text
-Application writes logs
-        ↓
-/var/log/myapp.log
-        ↓
-CloudWatch Agent
-        ↓
-CloudWatch Logs
+#### 1. Install CloudWatch Agent on EC2
+
+```bash
+sudo apt install amazon-cloudwatch-agent
 ```
+
+#### 2. Configure Agent
+```json
+// /opt/aws/amazon-cloudwatch-agent/etc/config.json
+{
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/log/myapp.log",
+            "log_group_name": "MyApp",
+            "log_stream_name": "{instance_id}"
+          }
+        ]
+      }
+    }
+  }
+}
+```
+---
+#### 3. Start Agent
+```bash
+sudo amazon-cloudwatch-agent-ctl \
+  -a fetch-config \
+  -m ec2 \
+  -c file:/opt/aws/amazon-cloudwatch-agent/etc/config.json \
+  -s
+```
+
+---
+```text
+Node.js app
+    ↓
+/var/log/myapp.log --> use winston to add logs to myapp.log file
+    ↓
+CloudWatch Agent
+    ↓
+CloudWatch Logs
+        └── Log Group: MyApp
+              └── Log Stream: i-1234567890
+
+```
+**whenever new entries are logged to the log file, cloudwatch will detect it and push to cloudwatch**
+
+Once the logs are created, we can create metrcis for those logs, see metrics section below - 
+![alt text](PNG/CW3.PNG "Title")  
+- these metrics once set, then we can set alarms on these metrics, such as count of error logs > 10 inside 1 hr
+![alt text](PNG/CW4.PNG "Title")  
+- this will now be added as a metric in Cloudwatch's metric section, and then we can create alarm on those metrics
+![alt text](PNG/CW5.PNG "Title")  
+
+### Cloudwatch subscriptions
+![alt text](PNG/CW2.PNG "Title")   
+
 ### Querying Logs with CloudWatch Logs Insights
 ```sql
 fields @timestamp, @message
