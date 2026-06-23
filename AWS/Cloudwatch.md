@@ -354,10 +354,26 @@ event.detail["orderId"]; // hope it exists!
 | Broken links | Navigates pages and validates links |
 
 ## CloudTrail
-- it logs every action (API call) of every user, and sends those logs to cloudwatch / s3
+- it logs every action (API call (see below what API call means)) of every user, and sends those logs to cloudwatch / s3
 - inside AWS root account, there can be 100 IAM users, and they can login via various ways, console, CLI, SDK, so every action done by any user, vai any login method will get logged
 - e.g. a user deleted something, so if we ant to know who deleted, what deleted and when deleted, cloudtrail will tell
 - it is enabled by default
+- In CloudTrail, API call means any operation performed against AWS services, whether from:
+1. AWS Console
+2. AWS CLI
+3. SDK (Node.js, Java, Python, etc.)
+4. CloudFormation
+5. Another AWS service
+
+so basically, **CloudTrail logs nearly all AWS control-plane API activity (who did what, when, and from where),**
+- so it can log
+```text
+Create EC2 Instance      ✓
+Terminate EC2 Instance   ✓
+Create IAM User          ✓
+Delete S3 Bucket         ✓
+Modify Security Group    ✓
+```
 
 ![alt text](PNG/CloudTrail.PNG "Title") 
 ![alt text](PNG/CT1.PNG "Title") 
