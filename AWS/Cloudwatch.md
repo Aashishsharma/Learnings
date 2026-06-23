@@ -249,6 +249,19 @@ This returns the latest 20 log entries containing `"ERROR"`.
 
 ## 3. Alarms
 - Automatically monitors metrics/logs and triggers notifications or actions when thresholds are breached.
+- cloudwatch alarms can trigger 2 things (EC2 stop / terminate/ reboot, EC2 autoscale, SNS)
+![alt text](PNG/CW8.PNG "Title") 
+
+### Creating an alarm on top of a metric
+E.g. - create alarm on CPU utilization  
+- click on create alarm
+- select metric on which you want to create alarm
+- configure alarm
+![alt text](PNG/CW9.PNG "Title")  
+- configure action
+![alt text](PNG/CW10.PNG "Title")  
+- for this demo we have choosen EC2 action
+![alt text](PNG/CW11.PNG "Title")  
 
 ## 4. Events via Eventbridge
 - when some action happens trigger action
