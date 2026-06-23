@@ -172,6 +172,8 @@ Lambda automatically sends these logs to CloudWatch Logs.
 ```bash
 sudo apt install amazon-cloudwatch-agent
 ```
+**Note - these cloudwatch agents can be added on onprem servers as well, so onprem logs can also be available on Cloudwatch**  
+**Note - all the cloudwatch logs are encrypted by default**
 
 #### 2. Configure Agent
 ```json
@@ -222,7 +224,12 @@ Once the logs are created, we can create metrcis for those logs, see metrics sec
 - these metrics once set, then we can set alarms on these metrics, such as count of error logs > 10 inside 1 hr
 ![alt text](PNG/CW4.PNG "Title")  
 - this will now be added as a metric in Cloudwatch's metric section, and then we can create alarm on those metrics
+- once the metric is created, click on create alarm
 ![alt text](PNG/CW5.PNG "Title")  
+- then define condition of when the alarm should be trigerred
+![alt text](PNG/CW6.PNG "Title")  
+- select action on what should be notified when alarm is trigerred (push mssg to SNS), and add email as SNS's subscriber, so we get email
+![alt text](PNG/CW7.PNG "Title")  
 
 ### Cloudwatch subscriptions
 ![alt text](PNG/CW2.PNG "Title")   
