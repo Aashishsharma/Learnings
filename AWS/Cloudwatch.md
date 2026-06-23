@@ -359,18 +359,19 @@ event.detail["orderId"]; // hope it exists!
 - e.g. a user deleted something, so if we ant to know who deleted, what deleted and when deleted, cloudtrail will tell
 - it is enabled by default
 
-You may see use-cases asking you to select one of CloudWatch vs CloudTrail vs Config. Just remember this thumb rule -
+![alt text](PNG/CloudTrail.PNG "Title")  
 
-Think resource performance monitoring, events, and alerts; think CloudWatch.
-
-Think account-specific activity and audit; think CloudTrail.
-
-Think resource-specific change history, audit, and compliance; think Config.
+| Event Type | What it captures | Example |
+|---|---|---|
+| **Management Events** | AWS account and resource configuration/API activities | `CreateUser`, `RunInstances`, `CreateBucket` |
+| **Data Events** | Resource-level operations on data within resources | `S3 GetObject`, `S3 PutObject`, `Lambda Invoke` |
+| **Insights Events** | Unusual API activity detected by CloudTrail | Sudden spike in `DeleteBucket` or `RunInstances` calls |
+| **Network Activity Events** | Network-related API activity for supported services | Access to services through VPC endpoints |
 
 ## 5. AWS X-Ray
 - you can do visual analysis of your app
 ## X-Ray
-
+- similar to open telemetry, but opentelemetry is opensource, XRay is AWS proprietery
 **AWS X-Ray** is a distributed tracing service that helps you **trace requests across applications and AWS services**, making it easier to identify latency bottlenecks and errors.
 
 Suppose a request goes through:
