@@ -1,11 +1,53 @@
 # Cloudwatch
-- 5 things
+- 4 things (Metrics, logs, Alarms and Events via Eventbridge)
 ## 1. Metrics
 - CPU, memory utilization, billing usage
 - we can create alarm, when values goes above / below threshold
-- in alarm, we need to configure action when alarm triggers
-- options for action are 1. SNS - send email, 2. EC2 action - need to check
-- billing alarm is only available in region - us-east-1
+
+#### CloudWatch Metrics - Important Attributes
+| Attribute | Meaning | Example |
+|---|---|---|
+| **Namespace** | Container/category for metrics | `AWS/EC2`, `AWS/Lambda`, `MyApp` |
+| **Metric Name** | Name of the metric being measured | `CPUUtilization`, `Invocations`, `RequestCount` |
+| **Dimensions** | Key-value pairs that uniquely identify the metric source | `InstanceId=i-123`, `FunctionName=my-fn` |
+| **Timestamp** | Time when the metric data point was recorded | `2026-06-23T11:00:00Z` |
+| **Value** | Actual measured value | `72.5` (CPU %) |
+| **Unit** | Unit of measurement | `Percent`, `Count`, `Bytes`, `Milliseconds` |
+| **Period** | Time interval over which data points are aggregated | `1 min`, `5 min` |
+| **Statistic** | Aggregation method applied to data points | `Average`, `Sum`, `Min`, `Max`, `SampleCount`, `p95` |
+
+**(we can have upto 30 dimenstions / metric)**
+
+### Example
+Metric:
+```text
+Namespace   : AWS/EC2
+Metric Name : CPUUtilization
+Dimensions  : InstanceId=i-123456789
+Timestamp   : 2026-06-23 11:00:00 UTC
+Value       : 72.5
+Unit        : Percent
+Period      : 5 minutes
+Statistic   : Average
+```
+This means:
+
+> **Average CPU utilization of EC2 instance `i-123456789` was 72.5% during the 5-minute period ending at 11:00 UTC.**
+
+#### Dimensions are especially important
+Without dimensions:
+```text
+AWS/EC2 : CPUUtilization
+```
+You don't know **which EC2 instance**.
+
+A metric is uniquely identified by:
+```text
+(Namespace, MetricName, Dimensions)
+```
+
+### Custom Metrics
+
 
 ## 2. Cloudwatch logs
 - to send logs from EC2 to cloud watch, Cloudwatch agaent needs to be installed onto EC2 instance
@@ -13,7 +55,7 @@
 ## 3. Alarms
 - Automatically monitors metrics/logs and triggers notifications or actions when thresholds are breached.
 
-## 4. Eventbridge
+## 4. Events via Eventbridge
 - when some action happens trigger action
 - example and EC2 instance starts, trigger lambda  
 
@@ -25,8 +67,6 @@
 | Triggered by | Metric or log condition (e.g., CPU > 80%) | Events (e.g., S3 object uploaded, EC2 launched) |
 | Nature | Threshold-based monitoring | Event-driven architecture |
 | Input | CloudWatch Metrics, Logs | AWS service events, custom events, SaaS events |
-| Output | SNS, Auto Scaling, Lambda, EventBridge | Lambda, SQS, SNS, Step Functions, ECS, API targets |
-
 
 # CloudTrail
 - it logs every action of every user, and sends those logs to cloudwatch / s3
