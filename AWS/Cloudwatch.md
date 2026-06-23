@@ -46,9 +46,10 @@ A metric is uniquely identified by:
 (Namespace, MetricName, Dimensions)
 ```
 
-### Custom Metrics
+### Custom Metrics 
 
 **Custom metrics** are metrics that **you publish yourself** to CloudWatch for monitoring application-specific or business-specific data that AWS does not collect automatically.
+- Note that metrics are different from logs, metric is total / avg some number that is displayed in cloudwacth metrics dashboard, there are not logs
 
 #### Examples
 
@@ -121,7 +122,72 @@ console.log("Custom metric published");
 
 
 ## 2. Cloudwatch logs
-- to send logs from EC2 to cloud watch, Cloudwatch agaent needs to be installed onto EC2 instance
+**CloudWatch Logs** is a service for **collecting, storing, searching, and analyzing logs** from AWS services, applications, and servers.
+### Examples
+| Source | Who writes the logs? | Example Log |
+|---|---|---|
+| Lambda | Your code (`console.log`) | Function execution logs |
+| EC2 | Your app / OS | Application logs, Nginx logs |
+| ECS | Container/app | stdout/stderr |
+| API Gateway | AWS | Access logs |
+| VPC | AWS | Flow logs |
+| Custom App | Your code | User login, order processing logs |
+
+### Log Hierarchy
+```text
+Log Group
+    └── Log Stream
+            └── Log Events
+```
+Example:
+```text
+Log Group   : /aws/lambda/process-order
+Log Stream  : 2026/06/23/[$LATEST]abc123
+Log Event   : "Order 123 created successfully"
+```
+### Important Concepts
+
+| Term | Meaning |
+|---|---|
+| **Log Group** | Collection of log streams for an application or service |
+| **Log Stream** | Sequence of log events from a specific source (e.g., Lambda instance, ECS task) |
+| **Log Event** | Individual log entry containing message + timestamp |
+| **Retention Period** | How long logs are kept before deletion |
+| **Subscription Filter** | Continuously forwards logs to Lambda, Kinesis, Firehose, etc. |
+| **Insights** | SQL-like querying capability for analyzing logs |
+
+### Typical Logging Flow
+
+#### Lambda
+```javascript
+exports.handler = async () => {
+  console.log("User login successful");
+  console.error("Payment failed");
+};
+```
+Lambda automatically sends these logs to CloudWatch Logs.
+#### EC2
+```text
+Application writes logs
+        ↓
+/var/log/myapp.log
+        ↓
+CloudWatch Agent
+        ↓
+CloudWatch Logs
+```
+### Querying Logs with CloudWatch Logs Insights
+```sql
+fields @timestamp, @message
+| filter @message like /ERROR/
+| sort @timestamp desc
+| limit 20
+```
+This returns the latest 20 log entries containing `"ERROR"`.  
+
+![alt text](PNG/CW1.PNG "Title") 
+
+> **CloudWatch Logs is a centralized log management service that collects, stores, searches, and analyzes logs from AWS services, applications, and servers.**
 
 ## 3. Alarms
 - Automatically monitors metrics/logs and triggers notifications or actions when thresholds are breached.
