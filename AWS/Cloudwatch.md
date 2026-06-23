@@ -302,6 +302,44 @@ SNS
 Subscribers
 ```
 
+#### Schema registry
+> **Schema Registry automatically captures event structures (schemas) and enables producers and consumers to share a typed contract for events.**
+Suppose your Order service publishes:
+
+```json
+{
+  "source": "myapp.orders",
+  "detail-type": "OrderCreated",
+  "detail": {
+    "orderId": 123,
+    "amount": 1000
+  }
+}
+```
+
+EventBridge **Schema Registry** automatically discovers and stores:
+
+```text
+OrderCreated
+├── orderId : integer
+└── amount  : integer
+```
+Your consumer can then generate typed code:
+```typescript
+event.detail.orderId; // number
+event.detail.amount;  // number
+```
+instead of:
+```typescript
+event.detail["orderId"]; // hope it exists!
+```
+
+### Event bridge configuration
+1. select trigerring and target event
+![alt text](PNG/EB1.PNG "Title") 
+2. Below are a few 3rd party partner event sources, which can insert data to event bridge
+![alt text](PNG/EB2.PNG "Title")  
+3. targets can be custom HTTP events is will to invoke our custom API when event is trigerred
 
 #### CloudWatch Synthetics
 
@@ -315,7 +353,7 @@ Subscribers
 | Checkout flow | Adds item to cart and places order |
 | Broken links | Navigates pages and validates links |
 
-# CloudTrail
+## CloudTrail
 - it logs every action of every user, and sends those logs to cloudwatch / s3
 - inside AWS root account, there can be 100 IAM users, and they can login via various ways, console, CLI, SDK, so every action done by any user, vai any login method will get logged
 - e.g. a user deleted something, so if we ant to know who deleted, what deleted and when deleted, cloudtrail will tell
@@ -331,7 +369,196 @@ Think resource-specific change history, audit, and compliance; think Config.
 
 ## 5. AWS X-Ray
 - you can do visual analysis of your app
-- kind of dashboard of cloudwatch
+## X-Ray
+
+**AWS X-Ray** is a distributed tracing service that helps you **trace requests across applications and AWS services**, making it easier to identify latency bottlenecks and errors.
+
+Suppose a request goes through:
+```text
+Client
+  ↓
+API Gateway
+  ↓
+EC2 (Node.js)
+  ↓
+Lambda
+  ↓
+DynamoDB
+```
+X-Ray shows:
+- Total request latency
+- Time spent in each service
+- Errors and exceptions
+- Service dependency graph
+---
+
+#### How it works
+
+```text
+Incoming request
+        ↓
+X-Ray SDK creates a Trace
+        ↓
+Each service creates Segments/Subsegments
+        ↓
+X-Ray Daemon / Agent
+        ↓
+AWS X-Ray service
+        ↓
+Trace visualization in console
+```
+Example trace:
+```text
+Trace abc123
+├── API Gateway (20 ms)
+├── EC2 Node.js (50 ms)
+│     └── Call DynamoDB (30 ms)
+└── Lambda (80 ms)
+```
+You can immediately see where the time was spent.
+---
+
+#### Install SDK
+
+```bash
+npm install aws-xray-sdk
+```
+#### Express app
+
+```javascript
+const express = require("express");
+const AWSXRay = require("aws-xray-sdk");
+
+const app = express();
+
+// Automatically create segments for incoming requests
+app.use(AWSXRay.express.openSegment("MyApp"));
+
+app.get("/", (req, res) => {
+  res.send("Hello");
+});
+
+app.use(AWSXRay.express.closeSegment());
+
+app.listen(3000);
+```
+
+#### Run X-Ray daemon on EC2
+
+```bash
+sudo yum install -y xray
+sudo service xray start
+```
+The flow becomes:
+```text
+Client
+    ↓
+Node.js app (X-Ray SDK)
+    ↓
+X-Ray Daemon on EC2
+    ↓
+AWS X-Ray
+    ↓
+Trace visible in console
+```
+
+#### Example: Tracing a business error with X-Ray
+
+A user tries to place an order.
+
+```text
+Trace ID: 1-abc123
+
+Client
+  │
+  │ POST /orders
+  ▼
+API Gateway ─────────────────────── ✓
+  │
+  ▼
+EC2 Node.js Order Service ───────── ✓
+  │
+  │ PutItem
+  ▼
+DynamoDB ────────────────────────── ✓
+  │
+  │ Charge Credit Card
+  ▼
+Payment Service (Lambda) ────────── ✗ ERROR
+       ErrorType    : ValidationException
+       ErrorMessage : Card expired
+
+──────────────────────────────────────────
+Request Status : FAILED (400)
+Error Source   : Payment Service
+Reason         : Customer's card has expired
+Trace ID       : 1-abc123
+──────────────────────────────────────────
+```
+
+#### Without X-Ray
+
+You would:
+
+1. Check API Gateway logs
+2. Check EC2 logs
+3. Check DynamoDB logs
+4. Check Lambda logs
+5. Correlate timestamps manually
+
+#### With X-Ray
+Open trace `1-abc123` and immediately see:
+```text
+Error occurred in:
+Payment Service (Lambda)
+Error:
+ValidationException: Card expired
+Request path:
+Client
+ → API Gateway
+ → EC2 Order Service
+ → DynamoDB
+ → Payment Service ✗
+```
+#### Key point
+X-Ray is **not just for latency**.
+It helps answer:
+- **Which request failed?**
+- **Where exactly did it fail?**
+- **What exception/error was thrown?**
+- **What was the path taken by that request across services?**
+
+| Concept | What it is | Example |
+|---|---|---|
+| **Trace** | Complete journey of a single request across all services | `Client → API Gateway → EC2 → Lambda → DynamoDB` |
+| **Trace ID** | Unique identifier for a trace | `1-68590f8a-5d94b4d9a7c6f1c2e3d4e5f6` |
+| **Segment** | Work done by a service as part of a trace | EC2 handling `/orders` request |
+| **Subsegment** | Smaller operation within a segment | EC2 calling DynamoDB |
+| **Annotation** | Indexed key-value metadata used for filtering/searching traces | `customerId=123`, `environment=prod` |
+| **Metadata** | Additional non-indexed information attached to traces | Full request body, SQL query |
+| **Sampling** | Controls what percentage of requests are traced | Trace 1 out of every 100 requests (mainly to save cost) |
+| **Daemon / Agent** | Local process that collects trace data and sends it to X-Ray | X-Ray daemon running on EC2 |
+| **Service Map** | Visual graph showing services and their dependencies | `API Gateway → EC2 → Lambda → DynamoDB` |
+
+**Sampling** - 
+Tracing every request is expensive, so X-Ray uses **sampling** to trace only a subset of requests.
+Sampling has **2 parameters**:
+
+| Parameter | Meaning | Example |
+|---|---|---|
+| **Reservoir** | Minimum number of requests to trace per second | `1` → Trace at least 1 request/sec |
+| **Rate** | Percentage of additional requests to trace after reservoir is exhausted | `5%` → Trace 5 out of every 100 remaining requests |
+
+### Hierarchy
+
+```text
+Trace
+├── Segment (API Gateway)
+├── Segment (EC2)
+│      ├── Subsegment (DynamoDB call)
+│      └── Subsegment (Lambda call)
+└── Segment (Lambda)
+```
 
 ## 6. Codeguru - decommissioned
 - does automated PR review
