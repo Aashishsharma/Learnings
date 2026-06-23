@@ -48,6 +48,77 @@ A metric is uniquely identified by:
 
 ### Custom Metrics
 
+**Custom metrics** are metrics that **you publish yourself** to CloudWatch for monitoring application-specific or business-specific data that AWS does not collect automatically.
+
+#### Examples
+
+| Use case | Metric Name | Value |
+|---|---|---|
+| Active users | `ActiveUsers` | `1250` |
+| Orders placed | `OrdersCreated` | `350` |
+| Queue size in app | `PendingJobs` | `87` |
+| Memory usage on-prem server | `MemoryUsage` | `78%` |
+
+#### Metric Example
+```text
+Namespace   : MyECommerce
+Metric Name : OrdersCreated
+Dimensions  : Environment=Prod
+Value       : 350
+Unit        : Count
+Timestamp   : 2026-06-23T11:00:00Z
+```
+#### How to publish
+Your application or script calls the CloudWatch API:
+```text
+PutMetricData(
+  Namespace = "MyApp",
+  MetricName = "OrdersCreated",
+  Value = 350,
+  Unit = Count
+)
+```
+#### Minimal Node.js Example (AWS SDK v3)
+```javascript
+import {
+  CloudWatchClient,
+  PutMetricDataCommand,
+} from "@aws-sdk/client-cloudwatch";
+
+const client = new CloudWatchClient({ region: "ap-south-1" });
+await client.send(
+  new PutMetricDataCommand({
+    Namespace: "MyApp",
+    MetricData: [
+      {
+        MetricName: "OrdersCreated",
+        Value: 350,
+        Unit: "Count",
+        Dimensions: [
+          {
+            Name: "Environment",
+            Value: "Prod",
+          },
+        ],
+      },
+    ],
+  })
+);
+console.log("Custom metric published");
+```
+### Common ways to send custom metrics
+1. **AWS SDK** → Call `PutMetricData`
+2. **AWS CLI**
+
+   ```bash
+   aws cloudwatch put-metric-data \
+     --namespace MyApp \
+     --metric-name OrdersCreated \
+     --value 350
+   ```
+3. **CloudWatch Agent** → Collect OS/application metrics from EC2 or on-prem servers.
+4. **Embedded Metric Format (EMF)** → Write structured logs, and CloudWatch automatically extracts metrics from them.
+
 
 ## 2. Cloudwatch logs
 - to send logs from EC2 to cloud watch, Cloudwatch agaent needs to be installed onto EC2 instance
