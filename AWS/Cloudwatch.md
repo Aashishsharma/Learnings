@@ -275,6 +275,33 @@ E.g. - create alarm on CPU utilization
 | Nature | Threshold-based monitoring | Event-driven architecture |
 | Input | CloudWatch Metrics, Logs | AWS service events, custom events, SaaS events |
 
+#### SNS vs Event bridge
+EventBridge can receive events directly from AWS services and route them based on event content, whereas SNS cannot.
+
+Example:
+```text
+EC2 instance terminated
+        ↓
+EventBridge receives event automatically
+        ↓
+Rule: if instanceType == "m5.large"
+        ↓
+Trigger Lambda
+
+With SNS:
+EC2 instance terminated
+        ↓
+❌ EC2 cannot publish directly to SNS automatically
+You would need:
+EC2 event
+    ↓
+EventBridge
+    ↓
+SNS
+    ↓
+Subscribers
+```
+
 
 #### CloudWatch Synthetics
 
