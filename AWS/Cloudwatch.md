@@ -265,8 +265,7 @@ E.g. - create alarm on CPU utilization
 
 ## 4. Events via Eventbridge
 - when some action happens trigger action
-- example and EC2 instance starts, trigger lambda  
-
+- EventBridge is a serverless event bus that routes events from AWS services, SaaS applications, and custom applications to targets based on configurable rules.
 ![alt text](PNG/Eventbridge.PNG "Title") 
 
 | Aspect | CloudWatch Alarm | EventBridge |
@@ -275,6 +274,19 @@ E.g. - create alarm on CPU utilization
 | Triggered by | Metric or log condition (e.g., CPU > 80%) | Events (e.g., S3 object uploaded, EC2 launched) |
 | Nature | Threshold-based monitoring | Event-driven architecture |
 | Input | CloudWatch Metrics, Logs | AWS service events, custom events, SaaS events |
+
+
+#### CloudWatch Synthetics
+
+**CloudWatch Synthetics** lets you create **canaries** that periodically run scripts to monitor the availability and performance of websites, APIs, and user workflows.
+
+| Use case | What the canary does |
+|---|---|
+| Website uptime | Opens homepage and verifies HTTP 200 |
+| API monitoring | Calls `/orders` API and checks response |
+| Login flow | Enters username/password and verifies login success |
+| Checkout flow | Adds item to cart and places order |
+| Broken links | Navigates pages and validates links |
 
 # CloudTrail
 - it logs every action of every user, and sends those logs to cloudwatch / s3
