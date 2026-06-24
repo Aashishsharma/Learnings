@@ -270,7 +270,6 @@ exports.handler = async (event) => {
 | Execution Context | Reusable runtime environment for Lambda invocations | Variables and initialized resources outside the handler can be reused across warm invocations |
 | Ephemeral Storage (`/tmp`) | Temporary local storage available during execution | 512 MB – 10 GB; data persists only for the lifetime of the execution environment |
 | Environment Variables | Key-value pairs available to the function | Used for configuration without code changes |
-| Concurrency | Number of Lambda executions that can run simultaneously | Can be reserved or limited |
 
 ![alt text](PNG/l16.PNG "Title")  
 **Execution context** -  
@@ -302,4 +301,39 @@ Invocation 3 (Warm)
 ...
       ↓
 AWS may destroy it at any time
+```
+
+### Lambda layers
+2 things  
+1. Allows us to run lambda on custom runtime not supported by lambda (C++ / Rust)
+2. Externalize dependencies - allow common dependencies and shared code to be packaged once and reused by multiple Lambda functions, reducing deployment size and simplifying maintenance.
+| Topic | Lambda Layers |
+|----------|----------|
+| Purpose | Share common code, libraries, and dependencies across multiple Lambda functions |
+| Why Use? | Avoid packaging the same dependencies with every Lambda function |
+| Contains | External libraries, SDKs, custom code, certificates, binaries |
+| Attached To | One or more Lambda functions |
+| Versioning | Layers are versioned and immutable |
+| Reuse | Multiple Lambda functions can use the same layer |
+| Max Layers Per Function | 5 |
+| Typical Examples | `lodash`, `pandas`, database drivers, shared utility code |
+
+**Without Layers**
+
+```md
+Lambda A = Code + Dependencies
+Lambda B = Code + Dependencies
+Lambda C = Code + Dependencies
+```
+
+**With Layers**
+
+```md
+Shared Layer (Dependencies)
+         ↑
+         │
+   ┌─────┼─────┐
+   │     │     │
+Lambda A B     C
+   (Code Only)
 ```
