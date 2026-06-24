@@ -204,7 +204,7 @@ exports.handler = async (event) => {
 
 **Adding env vars to lambda** - Goto lambda --> configurations --> env variables --> add --> then use in your code ```process.env.YOUR_ENV_VAR_NAME```
 
-![alt text](PNG/l5.PNG "Title")  
+![alt text](PNG/l15.PNG "Title")  
 
 ### Cloudfront Functions vs Lambda@edge
 | Feature | CloudFront Functions | Lambda@Edge |
@@ -254,10 +254,52 @@ exports.handler = async (event) => {
 | Private Subnet Recommendation | Place Lambda in private subnets |
 | Security | Controlled using Security Groups and NACLs |
 
-### Internet Access Scenarios
+#### Internet Access Scenarios
 
 | Lambda Location | Internet Access |
 |----------|----------|
 | Not attached to VPC | ✅ Direct internet access |
 | Attached to Public Subnet | ❌ No direct internet access |
 | Attached to Private Subnet + NAT Gateway | ✅ Internet access via NAT |
+
+### Lambda configurations
+| Configuration | Description | Key Points |
+|----------|----------|----------|
+| Memory (RAM) | Memory allocated to the Lambda function | 128 MB – 10,240 MB; increasing memory also increases CPU allocation |
+| Timeout | Maximum execution duration before Lambda terminates the function | 1 second – 900 seconds (15 minutes) |
+| Execution Context | Reusable runtime environment for Lambda invocations | Variables and initialized resources outside the handler can be reused across warm invocations |
+| Ephemeral Storage (`/tmp`) | Temporary local storage available during execution | 512 MB – 10 GB; data persists only for the lifetime of the execution environment |
+| Environment Variables | Key-value pairs available to the function | Used for configuration without code changes |
+| Concurrency | Number of Lambda executions that can run simultaneously | Can be reserved or limited |
+
+![alt text](PNG/l16.PNG "Title")  
+**Execution context** -  
+```text
+Cold Start:
+Create DB Connection
+Load Libraries
+Initialize Variables
+
+Warm Invocation:
+Reuse Existing DB Connection
+Reuse Loaded Libraries
+Reuse Initialized Variables
+```
+
+**How long is execution context active after lambda has finished it's execution?** - No guranteed time, (can be seconds / minutes/ sometimes hours)  
+
+```text
+Execution Context Lifecycle
+
+Invocation 1 (Cold Start)
+      ↓
+Execution Context Created
+      ↓
+Invocation 2 (Warm)
+      ↓
+Invocation 3 (Warm)
+      ↓
+...
+      ↓
+AWS may destroy it at any time
+```
