@@ -94,7 +94,8 @@ exports.handler = async (event) => {
 ![alt text](PNG/l2.PNG "Title")  
 - then choose the lambda function which will be invoked by ALB
 ![alt text](PNG/l3.PNG "Title") 
-
-
+- by doing this ALB trigger is automatically added for the lambda function we added above in the target group
 ![alt text](PNG/l4.PNG "Title")
+
+
 ![alt text](PNG/l5.PNG "Title")
