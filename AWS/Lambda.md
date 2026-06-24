@@ -5,7 +5,8 @@
 - lambda pricing is very cheap, hence popular
 - popular usecase - serverless cron jobs (schedule AWS Eventbridge every 24 hr, which will trigger lambda), why lambda? you pay only for 10 mins (assuming job duration is 10 mins only), if we use EC2 and schedule corn job manually, we have to pay for full 24hrs, even if the job is not running, but EC2 is still up (lambda is only not recommended when batch job duration is > 15 mins or so)
 
-### Lambda Synchronous Invocation
+## 3 ways to invoke lambda
+### 1. Lambda Synchronous Invocation
 
 - Caller waits for Lambda to finish execution and receive the response.
 - Used when an immediate result is required.
@@ -24,10 +25,35 @@ Examples:
 | CLI / SDK | invokes lambda synchronously |
 | Custom Application / SDK | Using Lambda Invoke API with `InvocationType=RequestResponse` |
 
-### Lambda Asynchronous Invocation
+### 2. Lambda Asynchronous Invocation
 - Caller does NOT wait for Lambda execution to complete.
 ![alt text](PNG/l5.PNG "Title")  
 - for async invocation where lambda fails for X amount of time, we can have DLQ which will send msgs to SNS / SQS
+- note that this DLQ is set on Lambda and not on SNS
+
+### 3. Lambda Event source mapping invocation
+- Some services (KDS, SQS, Dynamo DB streams) don't push events directly to Lambda.
+- Instead, Lambda must continuously poll them for new messages/records.
+- A Lambda Event Source Mapping is a configuration that tells Lambda to poll an event source and invoke the function when new records arrive.
+- here also we can have failed messages and set a DLQ, but this time DLQ needs to be set in SQS, because with eventsource mapping, lambda is invoked synchronously, and DQL on lambda can be set only when lambda is invoked async
+
+**How it works** -  
+![alt text](PNG/l9.PNG "Title")  
+1. You create an Event Source Mapping between a source (SQS/Kinesis/DynamoDB Stream) and a Lambda function.
+2. AWS creates and manages pollers internally.
+3. These pollers continuously poll the source:
+   - SQS → ReceiveMessage API
+   - Kinesis → GetRecords API
+   - DynamoDB Streams → GetRecords API
+4. Pollers collect records into batches based on:
+   - Batch size
+   - Batch window
+   - Available records
+5. Poller invokes Lambda synchronously with the batch.
+6. Lambda processes the records and returns success/failure.
+7. Based on the result:
+   - Success → records are checkpointed/removed
+   - Failure → records are retried according to source-specific rules
 
 ### 1. ALB with Lambda
 
@@ -114,6 +140,4 @@ exports.handler = async (event) => {
 - select destination as lambda, and from the dropdown select your lambda function which needs to be trigerred
 ![alt text](PNG/l8.PNG "Title")  
 
-
-![alt text](PNG/l9.PNG "Title")
 ![alt text](PNG/l10.PNG "Title")
