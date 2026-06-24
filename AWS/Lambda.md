@@ -28,8 +28,9 @@ Examples:
 ### 2. Lambda Asynchronous Invocation
 - Caller does NOT wait for Lambda execution to complete.
 ![alt text](PNG/l5.PNG "Title")  
-- for async invocation where lambda fails for X amount of time, we can have DLQ which will send msgs to SNS / SQS
+- for async invocation where lambda fails for X amount of time, we can have DLQ which will send msgs to SNS
 - note that this DLQ is set on Lambda and not on SNS
+- note we cannot connect lambda directly to SQS, because unlike SNS, SQS doesnot push messages to consumers (consumers need to poll), and lambda cannot be run on its own, some service needs to trigger it, and SQS does not trigger. Solution - Eventsource mapping (see below)
 
 ### 3. Lambda Event source mapping invocation
 - Some services (KDS, SQS, Dynamo DB streams) don't push events directly to Lambda.
@@ -54,6 +55,35 @@ Examples:
 7. Based on the result:
    - Success → records are checkpointed/removed
    - Failure → records are retried according to source-specific rules
+
+- so goto lambda function, add trigger, select SQS  
+![alt text](PNG/l10.PNG "Title")  
+- **Note** - even though we have selected SQS as trigger, behind the scenes AWS will create event source mapper for this to work
+
+### Lambda Destinations
+Lambda Destinations allow you to send the result of an **asynchronous Lambda invocation** to another AWS service after execution completes.
+
+**Why?** - 
+Instead of writing custom code to handle success/failure outcomes, Lambda can automatically route them.
+
+**Why not use DQL then?**  
+| Lambda Destinations | Dead Letter Queue (DLQ) |
+|----------|----------|
+| Can send both success and failure outcomes | we can send only failed events |
+| Can send execution result metadata (request ID, response, error details) | Stores only the original event |
+| Supports SNS, SQS, EventBridge, Lambda as targets | Supports only SQS or SNS |
+| Useful for chaining workflows | Useful for retaining failed events |
+| Can trigger downstream processing on success | Cannot handle successful executions |
+
+### When to Use
+
+| Scenario | Use |
+|----------|----------|
+| Capture failed events for later reprocessing | DLQ |
+| Trigger another workflow after successful execution | Destination |
+| Need detailed execution result/error information | Destination |
+| Event-driven orchestration | Destination |
+
 
 ### 1. ALB with Lambda
 
@@ -126,7 +156,9 @@ exports.handler = async (event) => {
 - then choose the lambda function which will be invoked by ALB
 ![alt text](PNG/l3.PNG "Title") 
 - by doing this ALB trigger is automatically added for the lambda function we added above in the target group
-![alt text](PNG/l4.PNG "Title")
+![alt text](PNG/l4.PNG "Title")  
+
+![alt text](PNG/l11.PNG "Title")  
 
 ### 2. Lambda with Eventbridge
 - we cannot schedule lambda invocations (like run every 1 hr), but we have schedular in Eventbridge
@@ -140,4 +172,3 @@ exports.handler = async (event) => {
 - select destination as lambda, and from the dropdown select your lambda function which needs to be trigerred
 ![alt text](PNG/l8.PNG "Title")  
 
-![alt text](PNG/l10.PNG "Title")
