@@ -5,7 +5,7 @@
 - lambda pricing is very cheap, hence popular
 - popular usecase - serverless cron jobs (schedule AWS Eventbridge every 24 hr, which will trigger lambda), why lambda? you pay only for 10 mins (assuming job duration is 10 mins only), if we use EC2 and schedule corn job manually, we have to pay for full 24hrs, even if the job is not running, but EC2 is still up (lambda is only not recommended when batch job duration is > 15 mins or so)
 
-### Lambda Synchronous Execution
+### Lambda Synchronous Invocation
 
 - Caller waits for Lambda to finish execution and receive the response.
 - Used when an immediate result is required.
@@ -23,6 +23,11 @@ Examples:
 | AWS AppSync | GraphQL resolver waits for Lambda response |
 | CLI / SDK | invokes lambda synchronously |
 | Custom Application / SDK | Using Lambda Invoke API with `InvocationType=RequestResponse` |
+
+### Lambda Asynchronous Invocation
+- Caller does NOT wait for Lambda execution to complete.
+![alt text](PNG/l5.PNG "Title")  
+- for async invocation where lambda fails for X amount of time, we can have DLQ which will send msgs to SNS / SQS
 
 ### 1. ALB with Lambda
 
@@ -96,6 +101,3 @@ exports.handler = async (event) => {
 ![alt text](PNG/l3.PNG "Title") 
 - by doing this ALB trigger is automatically added for the lambda function we added above in the target group
 ![alt text](PNG/l4.PNG "Title")
-
-
-![alt text](PNG/l5.PNG "Title")
