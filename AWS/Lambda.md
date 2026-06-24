@@ -201,3 +201,44 @@ exports.handler = async (event) => {
 ![alt text](PNG/l3.PNG "Title")  
 - Lambda resource policy - allow a particualt bucket to invoke this lambda
 ![alt text](PNG/l4.PNG "Title")  
+
+**Adding env vars to lambda** - Goto lambda --> configurations --> env variables --> add --> then use in your code ```process.env.YOUR_ENV_VAR_NAME```
+
+![alt text](PNG/l5.PNG "Title")  
+
+### Cloudfront Functions vs Lambda@edge
+| Feature | CloudFront Functions | Lambda@Edge |
+|----------|----------|----------|
+| Purpose | Lightweight request/response manipulation | Advanced request/response processing |
+| Execution Location | CloudFront Edge Locations | CloudFront Edge Locations |
+| Runtime | JavaScript only | Node.js / Python |
+| Max Execution Time | < 1 ms (sub-millisecond) | Up to several seconds |
+| Memory | Very small (~2 MB) | Up to 10 GB |
+| Network Access | No | Yes |
+| AWS Service Access | No | Yes |
+| External API Calls | No | Yes |
+| Request Body Access | No | Yes |
+| Response Body Modification | No | Yes |
+| Cost | Lower | Higher |
+| Performance | Fastest | Slower than CloudFront Functions |
+| Best For | Simple header, URL, cookie manipulation | Authentication, API calls, dynamic content generation |
+
+**Common Use Cases**
+
+| Use Case | CloudFront Functions | Lambda@Edge |
+|----------|----------|----------|
+| URL rewrites | ✅ | ✅ |
+| Redirects | ✅ | ✅ |
+| Header manipulation | ✅ | ✅ |
+| Cookie-based routing | ✅ | ✅ |
+| JWT validation | ❌ | ✅ |
+| Call external API | ❌ | ✅ |
+| Generate dynamic response | ❌ | ✅ |
+| Access DynamoDB/S3 | ❌ | ✅ |
+| Modify request body | ❌ | ✅ |
+| Modify response body | ❌ | ✅ |
+**Rule**
+| If You Need... | Use |
+|----------|----------|
+| Simple, ultra-fast edge logic | CloudFront Functions |
+| AWS access, network calls, complex processing | Lambda@Edge |
