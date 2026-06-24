@@ -242,3 +242,22 @@ exports.handler = async (event) => {
 |----------|----------|
 | Simple, ultra-fast edge logic | CloudFront Functions |
 | AWS access, network calls, complex processing | Lambda@Edge |
+
+### Lambda and VPC
+| Topic | Key Point |
+|----------|----------|
+| Default Behavior | Lambda runs outside your VPC in an AWS-managed VPC |
+| Internet Access (Default) | Available by default |
+| Why Connect to VPC? | To access private resources such as RDS, ElastiCache, internal services |
+| How to Connect? | Configure Lambda with VPC, subnets, and security groups |
+| ENI | Lambda creates Elastic Network Interfaces (ENIs) in selected subnets |
+| Private Subnet Recommendation | Place Lambda in private subnets |
+| Security | Controlled using Security Groups and NACLs |
+
+### Internet Access Scenarios
+
+| Lambda Location | Internet Access |
+|----------|----------|
+| Not attached to VPC | ✅ Direct internet access |
+| Attached to Public Subnet | ❌ No direct internet access |
+| Attached to Private Subnet + NAT Gateway | ✅ Internet access via NAT |
