@@ -101,3 +101,19 @@ exports.handler = async (event) => {
 ![alt text](PNG/l3.PNG "Title") 
 - by doing this ALB trigger is automatically added for the lambda function we added above in the target group
 ![alt text](PNG/l4.PNG "Title")
+
+### 2. Lambda with Eventbridge
+- we cannot schedule lambda invocations (like run every 1 hr), but we have schedular in Eventbridge
+- so goto event bridge, click on EB schedule, select target as lambda, then name of our lambda function
+- schedule frequency based on cron job, or hourly, daily and so on
+
+### 3. Lambda with S3
+![alt text](PNG/l6.PNG "Title")  
+- goto bucket, click on create event notification, select event types
+![alt text](PNG/l7.PNG "Title")  
+- select destination as lambda, and from the dropdown select your lambda function which needs to be trigerred
+![alt text](PNG/l8.PNG "Title")  
+
+
+![alt text](PNG/l9.PNG "Title")
+![alt text](PNG/l10.PNG "Title")
