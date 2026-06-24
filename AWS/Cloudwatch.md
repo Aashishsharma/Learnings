@@ -277,6 +277,7 @@ E.g. - create alarm on CPU utilization
 
 #### SNS vs Event bridge
 EventBridge can receive events directly from AWS services and route them based on event content, whereas SNS cannot.
+- also scheduling is not possible in SNS
 
 Example:
 ```text
