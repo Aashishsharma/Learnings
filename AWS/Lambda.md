@@ -84,6 +84,9 @@ Instead of writing custom code to handle success/failure outcomes, Lambda can au
 | Need detailed execution result/error information | Destination |
 | Event-driven orchestration | Destination |
 
+![alt text](PNG/l12.PNG "Title")  
+- after this if lambda errors out, a new message will be pushed to the SQS queue mentioned above
+- similarly on success, we can push message to another SQS / SNS, and from there we can have as many subscribers as we want to continue or workflow
 
 ### 1. ALB with Lambda
 
@@ -172,3 +175,29 @@ exports.handler = async (event) => {
 - select destination as lambda, and from the dropdown select your lambda function which needs to be trigerred
 ![alt text](PNG/l8.PNG "Title")  
 
+### Lambda Execution role vs Resource policy
+- **Execution Role  = What Lambda CAN DO**
+- **Resource Policy = Who CAN CALL Lambda** 
+| Aspect | Lambda Execution Role | Lambda Resource Policy |
+|----------|----------|----------|
+| Purpose | Defines what the Lambda function can access | Defines who can invoke or access the Lambda function |
+| Attached To | Lambda function (IAM Role) | Lambda function (Resource-based Policy) |
+| Direction | Lambda → Other AWS Services | Other AWS Services/Accounts → Lambda |
+| Controls | Outbound permissions | Inbound permissions |
+| Example | Lambda reads from S3 and writes to DynamoDB | Allow S3 bucket to invoke Lambda |
+| Similar To | IAM role assumed by Lambda | S3 bucket policy |
+
+### Example
+
+| Scenario | Execution Role | Resource Policy |
+|----------|----------|----------|
+| Lambda reads files from S3 | `s3:GetObject` permission on role | Not required |
+| Lambda writes to DynamoDB | `dynamodb:PutItem` permission on role | Not required |
+| S3 invokes Lambda on object upload | Not required | Allow `s3.amazonaws.com` to invoke Lambda |
+| EventBridge invokes Lambda | Not required | Allow `events.amazonaws.com` to invoke Lambda |
+| Another AWS account invokes Lambda | Not required | Allow that account in Lambda resource policy |
+
+- Execution role - allow lambda to poll messags from SQS via event source mapping
+![alt text](PNG/l3.PNG "Title")  
+- Lambda resource policy - allow a particualt bucket to invoke this lambda
+![alt text](PNG/l4.PNG "Title")  
