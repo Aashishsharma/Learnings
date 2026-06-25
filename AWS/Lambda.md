@@ -416,3 +416,13 @@ Create/Update Lambda
 
 - STEP 1 - **create docker file with lambda base image** -  
 ![alt text](PNG/l20.PNG "Title")   
+- STEP 2 - build image ```docker build -t orders-api .```
+- STEP 3 - push img to ECR ```docker push <account>.dkr.ecr.<region>.amazonaws.com/orders-api:latest```
+- STEP - create lambda from img -  
+```bash
+aws lambda create-function \
+  --function-name orders-api \
+  --package-type Image \
+  --code ImageUri=<ecr-image-uri> \
+  --role <role-arn>
+```
