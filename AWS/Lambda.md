@@ -426,3 +426,27 @@ aws lambda create-function \
   --code ImageUri=<ecr-image-uri> \
   --role <role-arn>
 ```
+
+### Lambda versions and Aliases
+| Concept | Lambda Version | Lambda Alias |
+|----------|----------|----------|
+| What is it? | Immutable snapshot of a Lambda function | Named pointer to a specific version |
+| Mutability | Immutable | Mutable |
+| Contains | Code + configuration at publish time | Reference to a version |
+| Can be changed? | No | Yes |
+| Numbering | 1, 2, 3, ... | dev, test, prod, live, blue, green |
+| Purpose | Preserve a deployable snapshot | Provide stable endpoint/reference |
+| Invocation | Function:1 | Function:prod |
+| Traffic Shifting | No | Yes |
+| Rollback | Invoke older version | Point alias to older version |
+| Common Usage | Release artifact | Environment abstraction |
+
+#### Creating versions
+- goto lambda, under actions click on create version
+- version 1 of lambda will be created and not it's code cannot be changed
+![alt text](PNG/l21.PNG "Title")   
+- similarly, once new feature are added create v2,v3
+
+#### Creating Aliases
+- goto lambda, under actions click on create alias
+- ![alt text](PNG/l22.PNG "Title")   
