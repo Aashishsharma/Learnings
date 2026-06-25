@@ -457,6 +457,8 @@ aws lambda create-function \
 - so basically, when prod alias of lambda is invoked, it will call v1 and v2 version of lambda alternatively
 - how to call v1/v2/dev/prod version of lambda? each version / alias has a unique ARN, so use this ARN while selecting lambda (e.g. select prod alias of lambda version in SNS)
 
+**Every time you release a Lambda function version, it gets a new number and you have to manually update all the AWS resources linked to your function (e.g., event triggers). What should you do? ---> Use Aliases ARN, and we can change only Alises to point to newer versions, other services remain intact**
+
 ### Lambda and function URLs
 - A Lambda Function URL gives your Lambda its own HTTPS endpoint.
 - no ALB, no API Gateway needed
