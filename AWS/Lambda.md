@@ -456,3 +456,33 @@ aws lambda create-function \
 - ![alt text](PNG/l23.PNG "Title")   
 - so basically, when prod alias of lambda is invoked, it will call v1 and v2 version of lambda alternatively
 - how to call v1/v2/dev/prod version of lambda? each version / alias has a unique ARN, so use this ARN while selecting lambda (e.g. select prod alias of lambda version in SNS)
+
+### Lambda and function URLs
+- A Lambda Function URL gives your Lambda its own HTTPS endpoint.
+- no ALB, no API Gateway needed
+- ![alt text](PNG/l24.PNG "Title")  
+
+| Feature | Lambda URL | API Gateway | ALB |
+|----------|----------|----------|----------|
+| HTTPS Endpoint | Yes | Yes | Yes |
+| Setup Complexity | Very Low | Medium | Medium |
+| Request Validation | No | Yes | No |
+| Rate Limiting | No | Yes | No |
+| API Keys | No | Yes | No |
+| WebSocket APIs | No | Yes | No |
+| Load Balancing EC2/ECS | No | No | Yes |
+| Cost | Lowest | Higher | Higher |
+
+**Usecase** - GitHub webhook invokes a Lambda whenever code is pushed to a repository.
+
+The Function URL is just an HTTPS endpoint. You pass the body exactly like you would to any REST API.
+
+Using curl  
+```bash
+curl -X POST \
+  https://abcde.lambda-url.ap-south-1.on.aws \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Ashish","age":35}'
+```
+
+![alt text](PNG/l25.PNG "Title")  
