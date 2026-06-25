@@ -392,3 +392,27 @@ Immediately executes handler
 
 - typically on prod apps, in CI/CD, entire lambda along with it's node_modules, is zipped and uploaded to the lambda function
 
+- see below, entire node modules is ziped
+- in our CI/CD, we run below command to create / update lambda function
+![alt text](PNG/l18.PNG "Title")   
+
+### Lmabda with CloudFormation
+![alt text](PNG/l19.PNG "Title")   
+
+### Lambda Container Images
+- Instead of deploying a ZIP file, you package your Lambda as a Docker container image and store it in Amazon Elastic Container Registry (ECR)  
+
+```text
+Dockerfile
+    ↓
+docker build
+    ↓
+Image
+    ↓
+Push to ECR
+    ↓
+Create/Update Lambda
+```
+
+- STEP 1 - **create docker file with lambda base image** -  
+![alt text](PNG/l20.PNG "Title")   
