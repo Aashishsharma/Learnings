@@ -450,3 +450,9 @@ aws lambda create-function \
 #### Creating Aliases
 - goto lambda, under actions click on create alias
 - ![alt text](PNG/l22.PNG "Title")   
+- similraly we can create test alias, which can point to v2 version of our lambda 
+
+- changing Alias to point to different version, along with configurable weighted routing  
+- ![alt text](PNG/l23.PNG "Title")   
+- so basically, when prod alias of lambda is invoked, it will call v1 and v2 version of lambda alternatively
+- how to call v1/v2/dev/prod version of lambda? each version / alias has a unique ARN, so use this ARN while selecting lambda (e.g. select prod alias of lambda version in SNS)
