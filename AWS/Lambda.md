@@ -337,3 +337,58 @@ Shared Layer (Dependencies)
 Lambda A B     C
    (Code Only)
 ```
+
+- goto lambda, add layers
+- upload zip file with all the necessary external dep
+- on local, npm i axios, zip that node_mudules folder, upload it to lambda layers
+- then we can use axios lib for all lambda functions that are connected to this layer
+
+### Concurrency
+![alt text](PNG/l17.PNG "Title")  
+| Concept | Meaning | Key Points |
+|----------|----------|------------|
+| **Concurrency** | Number of Lambda executions running at the same time | Each invocation consumes 1 concurrency while it is executing |
+| **Account Concurrency Limit** | Maximum concurrent executions allowed in an AWS account per region | Default is typically 1,000 (can be increased via support request) |
+| **Reserved Concurrency** | Concurrency exclusively allocated to a specific Lambda function | Guarantees capacity and also acts as a maximum limit for that function |
+| **Provisioned Concurrency** | Pre-initialized Lambda execution environments | Reduces cold starts for latency-sensitive applications |
+| **Throttling** | Lambda cannot execute because concurrency limit is reached | Invocation is rejected/throttled until capacity becomes available |
+| **Scaling Behavior** | Lambda creates additional execution environments as request volume increases | One execution environment handles one request at a time |
+
+##### Example
+
+| Requests | Execution Time | Required Concurrency |
+|-----------|---------------|----------------------|
+| 100 req/sec | 1 sec | 100 |
+| 500 req/sec | 2 sec | 1,000 |
+| 2,000 req/sec | 500 ms | 1,000 |
+
+```text
+Provisioned Concurrency = 10
+
+AWS keeps 10 Lambda environments:
+✓ Runtime loaded
+✓ Code loaded
+✓ Layers loaded
+✓ Initialization code executed
+
+Request arrives
+    ↓
+Immediately executes handler
+```
+
+### External dependencies
+
+> Lambda Layers are a mechanism for sharing common code and libraries across multiple Lambda functions, while external dependencies are bundled directly within a function's deployment package.
+
+| Aspect | Lambda Layers | External Dependencies (inside deployment package) |
+|----------|----------|----------|
+| Purpose | Share common libraries/code across multiple Lambda functions | Package dependencies directly with a specific Lambda function |
+| Storage | Separate Layer resource managed by AWS | only the current lambda function can use this lib |
+| Deployment | Update layer independently of function code | Must redeploy function to update dependencies |
+| Max Layers | Up to 5 per function | N/A |
+| Typical Contents | SDKs, utilities, common libraries, like  dynatrace extenions, org wide common libs | App-specific libraries |
+| Update Impact | Layer update can benefit multiple functions | Each function updated separately |
+| Best For | Common dependencies used by many Lambdas | Dependencies used by only one/few Lambdas |
+
+- typically on prod apps, in CI/CD, entire lambda along with it's node_modules, is zipped and uploaded to the lambda function
+
