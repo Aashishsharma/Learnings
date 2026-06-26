@@ -329,3 +329,23 @@ SELECT * FROM Orders WHERE CustomerId = 'C101';
 ### DynamoDB TTL
 ![alt text](PNG/DDB20.PNG "Title")  
 ![alt text](PNG/DDB21.PNG "Title")  
+
+### DynamoDB CLI commands
+| Option | Purpose | Example |
+|--------|---------|---------|
+| `--table-name` | Specifies the table to query. | `--table-name Orders` |
+| `--index-name` | Queries a secondary index (LSI/GSI) instead of the main table. | `--index-name StatusIndex` |
+| `--key-condition-expression` | Specifies the Partition Key (and optional Sort Key) condition. | `"CustomerId = :c"` |
+| `--filter-expression` | Filters results **after** the Query operation. | `"Status = :s"` |
+| `--projection-expression` | Returns only selected attributes. | `"OrderId, Amount"` |
+| `--expression-attribute-values` | Defines placeholder values used in expressions. | `'{":c":{"S":"C101"}}'` |
+| `--expression-attribute-names` | Defines placeholders for attribute names (e.g., reserved keywords). | `'{"#S":"Status"}'` |
+| `--limit` | Limits the number of items returned. | `--limit 10` |
+| `--scan-index-forward` | Controls Sort Key order (`true` = ascending, `false` = descending). | `--scan-index-forward false` |
+| `--exclusive-start-key` | Continues querying from the last evaluated key (pagination). | `--exclusive-start-key file://key.json` |
+
+### DynamoDB Transactions
+- ensures ACID properties are applied to DynamoDB, wither all statements execute or none of them execute
+- 1 ttransaction = 2 WCPs
+![alt text](PNG/DDB22.PNG "Title")  
+- in example 2 why it is 8/4KB - 5 is rounded to closest multiple of 4 (upper limit) - so 8, and 4KB of of data per second
