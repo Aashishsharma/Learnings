@@ -263,3 +263,11 @@ Status
 |------------|-------------------|---------------------|
 | **LSI (Local Secondary Index)** | **5** | ❌ No (must be created when the table is created) |
 | **GSI (Global Secondary Index)** | **20 (default quota)** | ✅ Yes |
+
+**In our query we need to specify which Index to be used** - 
+```bash
+aws dynamodb query \
+  --table-name Orders \
+  --index-name StatusIndex \ 
+  --key-condition-expression "Status = :s"
+```
