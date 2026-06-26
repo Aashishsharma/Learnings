@@ -274,3 +274,17 @@ aws dynamodb query \
 
 - see below, we can wuery either on table, or **directly on the index**
 ![alt text](PNG/DDB14.PNG "Title")  
+
+### PartiQL
+**SQL-compatible query language for DynamoDB** that lets you read and modify data using familiar SQL-like statements instead of DynamoDB's native API.  
+```SQL
+-- instead of doing
+-- aws dynamodb query ...
+-- we can do
+SELECT * FROM Orders WHERE CustomerId = 'C101';
+```
+
+### Optimistic locking
+- is a concurrency control mechanism that prevents one user from overwriting another user's changes by updating an item only if its version (or another condition) hasn't changed since it was last read.
+- we have to create and manage the version attribute yourself
+![alt text](PNG/DDB15.PNG "Title")  
