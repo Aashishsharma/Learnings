@@ -288,3 +288,44 @@ SELECT * FROM Orders WHERE CustomerId = 'C101';
 - is a concurrency control mechanism that prevents one user from overwriting another user's changes by updating an item only if its version (or another condition) hasn't changed since it was last read.
 - we have to create and manage the version attribute yourself
 ![alt text](PNG/DDB15.PNG "Title")  
+
+### DynamoDB Accelerator (DAX)
+| Feature | Description |
+|---------|-------------|
+| **In-Memory Cache** | Fully managed, in-memory cache for DynamoDB that stores frequently accessed items. |
+| **Microsecond Read Latency** | Reduces read latency from milliseconds to microseconds for read-heavy workloads. |
+| **Highly Available** | Supports multi-node clusters with automatic replication and failover. |
+
+**DAX vs Elastic Cache** - 
+| Feature | DAX (DynamoDB Accelerator) | ElastiCache |
+|---------|-----------------------------|-------------|
+| **Purpose** | Dedicated cache for DynamoDB. | General-purpose distributed cache for any application. |
+| **Supported Databases** | Only DynamoDB. | Works with DynamoDB, RDS, Aurora, APIs, and other data sources. |
+| **API Integration** | Uses the DynamoDB API with minimal code changes. | Applications must explicitly read/write the cache using Redis or Memcached APIs. |
+| **Cache Management** | Automatically manages cache population, updates, and eviction. | Application is responsible for cache population and invalidation (cache-aside, write-through, etc.). |    
+
+**Default TTL in DAX is 5 mins**
+
+#### Creating DAX
+![alt text](PNG/DDB16.PNG "Title")  
+- then select subnet, IAM roles
+- then once created, we will get DAX Cluster endpoint, to which our app can connect
+
+### DynamoDB Streams
+- DynamoDB Streams automatically capture every item-level change in a DynamoDB table and make those changes available for event-driven processing for up to 24 hours.
+
+| Aspect | DynamoDB Streams |
+|---------|------------------|
+| **What is it?** | A time-ordered stream that captures item-level changes (insert, update, delete) in a DynamoDB table. |
+| **How it Works** | Every change to the table is automatically written to the stream in the order it occurs. |
+| **Retention** | Stream records are retained for **24 hours**. |
+| **Consumers** | AWS Lambda or KDS to store data upto 1 yr and let consumers consume ot. |
+| **Common Use Cases** | Event-driven processing, new user added to the table, trigger lambda to send welcome email |
+![alt text](PNG/DDB17.PNG "Title")  
+
+![alt text](PNG/DDB18.PNG "Title")  
+![alt text](PNG/DDB19.PNG "Title")  
+
+### DynamoDB TTL
+![alt text](PNG/DDB20.PNG "Title")  
+![alt text](PNG/DDB21.PNG "Title")  
