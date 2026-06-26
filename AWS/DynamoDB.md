@@ -271,3 +271,6 @@ aws dynamodb query \
   --index-name StatusIndex \ 
   --key-condition-expression "Status = :s"
 ```
+
+- see below, we can wuery either on table, or **directly on the index**
+![alt text](PNG/DDB14.PNG "Title")  
