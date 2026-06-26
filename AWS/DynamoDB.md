@@ -349,3 +349,127 @@ SELECT * FROM Orders WHERE CustomerId = 'C101';
 - 1 ttransaction = 2 WCPs
 ![alt text](PNG/DDB22.PNG "Title")  
 - in example 2 why it is 8/4KB - 5 is rounded to closest multiple of 4 (upper limit) - so 8, and 4KB of of data per second
+
+### DynamoDB with S3
+- store meetadat with object's se url in the table
+- actual large file will be stored in S3
+![alt text](PNG/DDB23.PNG "Title")  
+
+### Node.js integration with DynamoDB and DAX
+
+#### 1. Install
+
+```bash
+npm install @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb
+```
+
+---
+
+#### 2. DynamoDB CRUD
+
+```javascript
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import {
+  DynamoDBDocumentClient,
+  PutCommand,
+  GetCommand,
+  UpdateCommand,
+  DeleteCommand
+} from "@aws-sdk/lib-dynamodb";
+
+const client = new DynamoDBClient({
+  region: "ap-south-1"
+});
+
+const db = DynamoDBDocumentClient.from(client);
+
+// CREATE
+await db.send(new PutCommand({
+  TableName: "Users",
+  Item: {
+    UserId: "U101",
+    Name: "Ashish"
+  }
+}));
+
+// READ
+const user = await db.send(new GetCommand({
+  TableName: "Users",
+  Key: {
+    UserId: "U101"
+  }
+}));
+
+// UPDATE
+await db.send(new UpdateCommand({
+  TableName: "Users",
+  Key: {
+    UserId: "U101"
+  },
+  UpdateExpression: "SET #n = :name",
+  ExpressionAttributeNames: {
+    "#n": "Name"
+  },
+  ExpressionAttributeValues: {
+    ":name": "Rahul"
+  }
+}));
+
+// DELETE
+await db.send(new DeleteCommand({
+  TableName: "Users",
+  Key: {
+    UserId: "U101"
+  }
+}));
+```
+
+---
+
+#### Using DAX
+
+#### Install
+
+```bash
+npm install amazon-dax-client
+```
+
+---
+
+#### Create DAX Client
+
+```javascript
+import AmazonDaxClient from "amazon-dax-client";
+import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+
+const dax = new AmazonDaxClient({
+  endpoints: [
+    "my-dax-cluster.xxxxxx.clustercfg.dax.ap-south-1.amazonaws.com:8111"
+  ],
+  region: "ap-south-1"
+});
+
+const db = DynamoDBDocumentClient.from(dax);
+```
+
+---
+
+#### CRUD Operations
+No changes are required.
+```javascript
+await db.send(new GetCommand({
+  TableName: "Users",
+  Key: {
+    UserId: "U101"
+  }
+}));
+
+await db.send(new PutCommand({
+  TableName: "Users",
+  Item: {
+    UserId: "U101",
+    Name: "Ashish"
+  }
+}));
+```
+---
