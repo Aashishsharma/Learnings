@@ -82,45 +82,179 @@ Get Order O1002 of Customer C101
 - **we also have >,<,>=, AND, OR, IN, NOT**
 
 ### Indexing
-- 2 ways to query data - 
-| Operation | Can query non-key attribute? | Efficient? |
-| --------- | ---------------------------- | ---------- |
-| **Query** - will use indexing | ❌ No                         | ✅ Yes      |
-| **Scan** - will read every row  | ✅ Yes                        | ❌ No       |
+# DynamoDB Secondary Indexes (LSI vs GSI)
 
-| Feature | LSI (Local Secondary Index) | GSI (Global Secondary Index) |
-|---------|------------------------------|------------------------------|
-| **Purpose** | Query the same Partition Key using a different Sort Key. | Query using a completely different Partition Key (and optional Sort Key). |
-| **Partition Key** | **Same** as the table's Partition Key. | **Different** from the table's Partition Key. |
-| **Sort Key** | Must be different from the table's Sort Key. | Optional and can be different. |
-| **Created** | Only when the table is created. | Can be created anytime, even after the table exists. |
-| **Example** | Table: `CustomerId + OrderId` → LSI: `CustomerId + OrderDate` | Table: `CustomerId + OrderId` → GSI: `Status + OrderDate` |
+## Step 1: Original Table
+
+Suppose the table is:
 
 ```text
-Orders
 PK = CustomerId
 SK = OrderId
 ```
 
-| CustomerId | OrderId | OrderDate  | Status  |
-| ---------- | ------- | ---------- | ------- |
-| C101       | O1      | 2026-01-01 | SHIPPED |
-| C101       | O2      | 2026-01-15 | PENDING |
-| C102       | O3      | 2026-01-20 | SHIPPED |
+| CustomerId | OrderId | OrderDate | Status |
+|------------|----------|-----------|---------|
+| C101 | O1 | Jan 10 | SHIPPED |
+| C101 | O2 | Jan 20 | PENDING |
+| C102 | O3 | Jan 15 | SHIPPED |
+
+Internally, DynamoDB organizes the data like this:
 
 ```text
-LSI
-PK = CustomerId      (same)
+Customer C101
+    O1
+    O2
+
+Customer C102
+    O3
+```
+
+Since the data is organized by **CustomerId**, you can efficiently query:
+
+```text
+CustomerId = C101
+```
+
+or
+
+```text
+CustomerId = C101
+OrderId = O2
+```
+
+---
+
+#### Local Secondary Index (LSI)
+
+Suppose you now want to ask:
+
+> Show all orders of Customer C101 sorted by OrderDate.
+
+Problem:
+
+The table is sorted by **OrderId**, not **OrderDate**.
+
+Create an LSI:
+
+```text
+PK = CustomerId      (same as table)
 SK = OrderDate       (different)
 ```
-- Show Customer C101's orders sorted by OrderDate.
+
+AWS builds another index:
 
 ```text
-GSI
+Customer C101
+    Jan10 → O1
+    Jan20 → O2
+
+Customer C102
+    Jan15 → O3
+```
+
+Notice:
+
+- Still grouped by **CustomerId**
+- Only the ordering inside each customer changes.
+
+Hence the name **Local Secondary Index**.
+
+---
+
+#### Global Secondary Index (GSI)
+
+Now suppose you want:
+
+> Show all SHIPPED orders.
+
+The original table cannot answer this efficiently because it is organized by CustomerId.
+
+Create a GSI:
+
+```text
 PK = Status
 SK = OrderDate
 ```
-- Show all SHIPPED orders, regardless of customer.
+
+AWS builds another index:
+
+```text
+SHIPPED
+    Jan10 → O1
+    Jan15 → O3
+
+PENDING
+    Jan20 → O2
+```
+
+Now DynamoDB can directly query:
+
+```text
+Status = SHIPPED
+```
+
+without scanning the table.
+
+---
+
+#### Visual Comparison
+
+Original Table
+
+```text
+Customer
+├── C101
+│     O1
+│     O2
+└── C102
+      O3
+```
+
+LSI
+
+```text
+Customer
+├── C101
+│     Jan10
+│     Jan20
+└── C102
+      Jan15
+```
+
+- Same customers
+- Different ordering
+
+---
+
+GSI
+
+```text
+Status
+├── SHIPPED
+│      O1
+│      O3
+└── PENDING
+       O2
+```
+
+- Completely new grouping
+- Organized by Status instead of Customer
+
+---
+
+#### Summary
+
+| Feature | LSI | GSI |
+|---------|-----|-----|
+| Partition Key | Same as table | Different from table |
+| Sort Key | Different | Optional, can be different |
+| Purpose | Alternate sorting within the same partition | Query by a completely different attribute |
+| Example | Customer → Orders by OrderDate | Status → Orders |
+
+#### One-liner
+- **LSI:** Same Partition Key, different Sort Key.
+- **GSI:** Different Partition Key (and optional Sort Key), creating a completely new way to query the data.
 
 ![alt text](PNG/DDB12.PNG "Title")  
 ![alt text](PNG/DDB13.PNG "Title")  
