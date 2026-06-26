@@ -259,3 +259,7 @@ Status
 ![alt text](PNG/DDB12.PNG "Title")  
 ![alt text](PNG/DDB13.PNG "Title")  
 
+| Index Type | Maximum per Table | Can be Added Later? |
+|------------|-------------------|---------------------|
+| **LSI (Local Secondary Index)** | **5** | ❌ No (must be created when the table is created) |
+| **GSI (Global Secondary Index)** | **20 (default quota)** | ✅ Yes |
