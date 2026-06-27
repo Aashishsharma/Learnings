@@ -29,11 +29,6 @@
 - choose where the artifcat needs to be deployed
 ![alt text](PNG/CICD10.PNG "Title")  
 
-![alt text](PNG/CICD11.PNG "Title")  
-![alt text](PNG/CICD12.PNG "Title")  
-![alt text](PNG/CICD13.PNG "Title")  
-
-
 ## 3. Codebuild
 | Step | What You Do | Example |
 |------|-------------|---------|
@@ -87,3 +82,31 @@ artifacts:
 | **7. Execute Lifecycle Hooks** | Runs hooks such as `BeforeInstall`, `AfterInstall`, `ApplicationStart`, and `ValidateService`. |
 | **8. Deploy Application** | Copies files to the target location and starts the application. |
 | **9. Verify & Rollback** | Performs health checks and automatically rolls back if deployment fails. |
+
+![alt text](PNG/CICD11.PNG "Title")  
+- now we need to specify deployment group (where the app will be deployed? in ouy case EC2)
+- but there is a pre-requisit, we need to install codedeploy agent on EC2s
+- so ssh into EC2, and run below commands
+![alt text](PNG/CICD12.PNG "Title")  
+![alt text](PNG/CICD13.PNG "Title")  
+![alt text](PNG/CICD14.PNG "Title")  
+
+**appspec.yml**
+```yml
+version: 0.0
+os: linux
+files: # copy file from source and store to destination
+  - source: /
+    destination: /var/www/html
+hooks:
+  ApplicationStart:
+    - location: scripts/start.sh # see below
+```
+
+**start.sh** - 
+```bash
+#!/bin/bash
+npm run start
+```
+![alt text](PNG/CICD15.PNG "Title")  
+![alt text](PNG/CICD16.PNG "Title")  
