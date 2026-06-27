@@ -2,7 +2,7 @@
 1. VCS - CodeCommit
 2. Build server - CodeBuild (similar to Bamboo / Jenkins)
 3. Deploy apps - CodeDeploy (similar to Bamboo / Jenkins)
-4. Code Pipeline
+4. Code Pipeline - CI/CD orchestrator
 
 ## 1. CodeCommit
 
@@ -71,6 +71,7 @@ artifacts:
 - hence codepipeline is orchestrator, where as codebuild's job is just to build the project and store the artifacts
 
 ## 4. Code deploy
+- can deploy app to EC2, Beanstalk, lambda
 | Step | What Happens |
 |------|--------------|
 | **1. Prepare Deployment Artifact** | Package the application along with an **`appspec.yml`** file (and deployment scripts, if any). |
@@ -108,5 +109,19 @@ hooks:
 #!/bin/bash
 npm run start
 ```
+
+- then as usual,**once you create codedeploy, goto code pipeline, add task (task name --> deploy), then select the codedeploy project that we created above**
+
+### 5. Code artifcat
+- CodeArtifact stores software packages (dependencies).
+- Whereas S3 stores build artifacts (ZIPs, binaries).
+| Aspect | Description |
+|--------|-------------|
+| **What is it?** | Fully managed artifact repository for storing and sharing software packages. |
+| **Purpose** | Securely host private packages and proxy public package repositories. |
+| **Stores** | npm, Maven, PyPI, NuGet, RubyGems, Cargo, Swift packages, etc. |
+| **Used By** | Developers, CodeBuild, CI/CD pipelines. |
+| **Authentication** | IAM + temporary authorization tokens. |
+
 ![alt text](PNG/CICD15.PNG "Title")  
 ![alt text](PNG/CICD16.PNG "Title")  
