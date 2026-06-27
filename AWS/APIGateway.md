@@ -123,5 +123,16 @@ SQS SendMessage API
 SQS Queue
 ```
 - The example below shows a response mapping template that modifies the backend response before it is sent to the client. It adds a new key-value pair and renames the existing example key to renamed-key, while keeping the original value unchanged.  
-
+- these mappers can be created before req is passed to BE AWS service, or before AWS BE service sends response to the client
 ![alt text](PNG/API10.PNG "Title")  
+
+### API Gateway caching
+| Aspect | Description |
+|--------|-------------|
+| **Purpose** | Cache successful API responses to reduce backend calls and improve latency. |
+| **Cache Location** | Managed cache within API Gateway (enabled per stage). |
+| **Cache Key** | Based on request path, query parameters, headers, etc. (configurable). |
+| **TTL (Time To Live) - default 5 mins** | How long a response remains in the cache before expiring. |
+| **Enable/Disable** | Configured at the **stage** level; can be overridden per method. |
+| **Supported APIs** | REST APIs only (not supported for HTTP APIs). |
+| **Cache Invalidation** | Automatically after TTL expires, or manually flush the stage cache. |
