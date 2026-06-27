@@ -136,3 +136,16 @@ SQS Queue
 | **Enable/Disable** | Configured at the **stage** level; can be overridden per method. |
 | **Supported APIs** | REST APIs only (not supported for HTTP APIs). |
 | **Cache Invalidation** | Automatically after TTL expires, or manually flush the stage cache. |
+
+### API gateway API Keys
+| Concept | Description |
+|--------|-------------|
+| **API Key** | Unique key issued to each client to identify who is calling the API. |
+| **Purpose** | Identify clients and enforce usage limits; **not** used for authentication or authorization. |
+| **Usage Plan** | Associates one or more API keys with specific stages/methods and defines quotas and throttling. |
+| **Quota** | Maximum number of API requests allowed over a period (e.g., 100,000/month). |
+| **Throttling** | Limits request rate (e.g., 100 requests/sec with burst 200). |
+| **Billing** | API Gateway **does not charge your customers**. You can use API keys to track each client's usage and build your own billing system. |
+| **Usage Tracking** | API Gateway records usage per API key, which can be used for reporting and invoicing. |
+| **Typical Use Case** | SaaS providers offering Free, Pro, and Enterprise API plans. |
+- API keys are passed by clients using x-api-key header
