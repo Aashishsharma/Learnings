@@ -4,6 +4,8 @@
 3. Deploy apps - CodeDeploy (similar to Bamboo / Jenkins)
 4. Code Pipeline
 
+## 1. CodeCommit
+
 - goto codecommit and click on create repo
 - next steps are similar to noraml github repo, clone and start using
 ![alt text](PNG/CICD3.PNG "Title")  
@@ -11,3 +13,64 @@
 - once cloned, then we run can run all git commands
 ![alt text](PNG/CICD1.PNG "Title")   
 ![alt text](PNG/CICD2.PNG "Title")  
+
+## 2. Code Pipeline
+- it is CI/CD orchestrator
+![alt text](PNG/CICD4.PNG "Title")  
+- Note all the artificats that are getting pushed to and from is done by code pipeline
+- on code push to codecommit, both code build and code deploy are trigerred by code pipeline
+
+![alt text](PNG/CICD5.PNG "Title")  
+![alt text](PNG/CICD6.PNG "Title")  
+![alt text](PNG/CICD7.PNG "Title")  
+![alt text](PNG/CICD8.PNG "Title")  
+- choose when the pipeline should get trigerred
+![alt text](PNG/CICD9.PNG "Title")  
+- choose where the artifcat needs to be deployed
+![alt text](PNG/CICD10.PNG "Title")  
+
+![alt text](PNG/CICD11.PNG "Title")  
+![alt text](PNG/CICD12.PNG "Title")  
+![alt text](PNG/CICD13.PNG "Title")  
+
+
+## 3. Codebuild
+| Step | What You Do | Example |
+|------|-------------|---------|
+| **1. Create Project** | Create a CodeBuild project and choose the source repository | CodeCommit, GitHub |
+| **2. Choose Environment** | Select the build image, OS, runtime, and compute size | Amazon Linux + Node.js 22 |
+| **3. Add `buildspec.yml`** | Define the build commands | Install → Test → Build → Package |
+| **4. Configure IAM Role** | Grant permissions to read source and write artifacts/logs | S3, CloudWatch Logs, ECR |
+| **5. Configure Artifacts** | Specify where build outputs should be stored | S3 or CodePipeline |
+| **6. Start Build** | Trigger manually, via CodePipeline, EventBridge, or Git webhook | Code push triggers build |
+| **7. View Results** | Monitor logs and download artifacts | CloudWatch Logs, S3 |
+
+#### Sample buildspec.yml
+```yml
+version: 0.2
+phases:
+  install:
+    commands:
+      - echo "Installing dependencies..."
+      - npm ci
+  pre_build:
+    commands:
+      - echo "Running pre-build steps..."
+      - npm run lint
+  build:
+    commands:
+      - echo "Building application..."
+      - npm test
+      - npm run build
+  post_build:
+    commands:
+      - echo "Post-build tasks..."
+      - echo "Build completed successfully"
+artifacts:
+  files:
+    - '**/*'
+  name: build-artifact
+  discard-paths: no
+```
+- **once you create codebuild, goto code pipeline, add task (task name --> build), then select the codebuild project that we created above**
+- hence codepipeline is orchestrator, where as codebuild's job is just to build the project and store the artifacts
