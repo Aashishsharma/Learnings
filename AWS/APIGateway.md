@@ -56,3 +56,11 @@
 
 - see below, how to version your API
 ![alt text](PNG/API6.PNG "Title")  
+![alt text](PNG/API7.PNG "Title")  
+- In lambda, we create 3 versions of lambda (v1, v2, v3), and create there Aliases (dev,tst,prod), **remember that we can change aliases to point to any version**
+- then in API gateway, we add a stage variable, and whatever that variable is, API gateway will trigger that Alias of that lambda
+![alt text](PNG/API8.PNG "Title")  
+- add the stage Variable in Lambda ARN for above setting to work
+![alt text](PNG/API9.PNG "Title")  
+
+![alt text](PNG/API10.PNG "Title")  
