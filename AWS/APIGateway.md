@@ -36,4 +36,7 @@
 | **CORS** | Control which browser origins can call the API | Allow only `https://app.example.com` |
 
 ### ConfiguringAPI Gateway
+1. Create Rest API
 - ![alt text](PNG/API1.PNG "Title")  
+2. Create Method (GET/PUT/POST/ basically any HTTP method)
+- ![alt text](PNG/API2.PNG "Title")  
