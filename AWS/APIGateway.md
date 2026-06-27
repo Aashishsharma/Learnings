@@ -122,5 +122,6 @@ SQS SendMessage API
    ▼
 SQS Queue
 ```
+- The example below shows a response mapping template that modifies the backend response before it is sent to the client. It adds a new key-value pair and renames the existing example key to renamed-key, while keeping the original value unchanged.  
 
 ![alt text](PNG/API10.PNG "Title")  
