@@ -151,4 +151,4 @@ SQS Queue
 
 - API keys are passed by clients using x-api-key header
 
-**Default - API gateway throttling limit is 10K requests/sec, this is at the accoutn level and not at the API level**
+- **Default - API gateway throttling limit is 10K requests/sec, this is at the accoutn level and not at the API level**
