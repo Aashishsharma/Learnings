@@ -151,4 +151,8 @@ SQS Queue
 
 - API keys are passed by clients using x-api-key header
 
-- **Default - API gateway throttling limit is 10K requests/sec, this is at the accoutn level and not at the API level**
+- **Default - API gateway throttling limit is 10K requests/sec, this is at the accoutnt level and not at the API level**
+
+- API Gateway also allows client to open a Websocket connection as well
+
+- API Gateway architecture - we have 10-20 different microservices, we create 1 more API gateway which will forward these request to those microservices, while, the client is only exposed / aware of that one API gateway
