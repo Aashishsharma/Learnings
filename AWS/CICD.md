@@ -74,3 +74,16 @@ artifacts:
 ```
 - **once you create codebuild, goto code pipeline, add task (task name --> build), then select the codebuild project that we created above**
 - hence codepipeline is orchestrator, where as codebuild's job is just to build the project and store the artifacts
+
+## 4. Code deploy
+| Step | What Happens |
+|------|--------------|
+| **1. Prepare Deployment Artifact** | Package the application along with an **`appspec.yml`** file (and deployment scripts, if any). |
+| **2. Upload Artifact** | Store the artifact in S3 or pass it from CodePipeline. |
+| **3. Trigger Deployment** | CodeDeploy is triggered manually or by CodePipeline. |
+| **4. Select Deployment Group** | CodeDeploy identifies the target EC2 instances, Auto Scaling group, ECS service, or Lambda function. |
+| **5. Download Artifact** | The CodeDeploy agent (adding this agent EC2 / onprem server is a prerequisit) (EC2/on-premises) or AWS service (ECS/Lambda) downloads the artifact. |
+| **6. Read `appspec.yml`** | CodeDeploy reads `appspec.yml` to determine where files should be copied and which lifecycle hooks to execute. |
+| **7. Execute Lifecycle Hooks** | Runs hooks such as `BeforeInstall`, `AfterInstall`, `ApplicationStart`, and `ValidateService`. |
+| **8. Deploy Application** | Copies files to the target location and starts the application. |
+| **9. Verify & Rollback** | Performs health checks and automatically rolls back if deployment fails. |
