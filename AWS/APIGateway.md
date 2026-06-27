@@ -63,4 +63,64 @@
 - add the stage Variable in Lambda ARN for above setting to work
 ![alt text](PNG/API9.PNG "Title")  
 
+### API Gateway mappings
+| Mapping Type | Purpose | Example |
+|--------------|---------|---------|
+| **Request Parameter Mapping** | Rename, add, remove, or modify request headers, query parameters, and path parameters before sending to backend | Rename `X-User-Id` → `userId` header |
+| **Request Body Mapping (Mapping Template)** | Transform the request payload into the format expected by the backend | Convert client JSON into DynamoDB `PutItem` request |
+| **Response Parameter Mapping** | Modify response headers before returning to the client | Add `Cache-Control` or `X-Request-Id` header |
+| **Response Body Mapping (Mapping Template)** | Transform the backend response into the format expected by the client | Convert XML response to JSON |
+| **Velocity Template Language (VTL)** | Template language used for request/response body transformations (mainly REST APIs) | Extract fields, create JSON, add static values |
+
+### API Gateway → SQS Request Mapping Example
+
+> The process of transforming or modifying a client request before sending it to the backend (AWS service), or transforming the backend response before returning it to the client. 
+
+#### 1. Client sends request
+
+```http
+POST /orders
+Content-Type: application/json
+{
+  "orderId": 101
+}
+```
+---
+#### 2. API Gateway Request Mapping Template (VTL)
+```vtl
+Action=SendMessage&MessageBody=$util.urlEncode($input.body)
+```
+This transforms the client's JSON request into the format expected by the SQS `SendMessage` API.
+---
+#### 3. API Gateway sends to SQS
+```http
+POST https://sqs.us-east-1.amazonaws.com/123456789012/orders-queue
+Action=SendMessage&
+MessageBody=%7B%22orderId%22%3A101%7D
+```
+---
+#### 4. Message stored in SQS
+```json
+{
+  "orderId": 101
+}
+```
+---
+#### Flow
+
+```text
+Client
+   │
+   │ POST /orders
+   ▼
+API Gateway
+   │
+   │ Request Mapping (VTL)
+   ▼
+SQS SendMessage API
+   │
+   ▼
+SQS Queue
+```
+
 ![alt text](PNG/API10.PNG "Title")  
