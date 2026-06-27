@@ -148,4 +148,7 @@ SQS Queue
 | **Billing** | API Gateway **does not charge your customers**. You can use API keys to track each client's usage and build your own billing system. |
 | **Usage Tracking** | API Gateway records usage per API key, which can be used for reporting and invoicing. |
 | **Typical Use Case** | SaaS providers offering Free, Pro, and Enterprise API plans. |
+
 - API keys are passed by clients using x-api-key header
+
+**Default - API gateway throttling limit is 10K requests/sec, this is at the accoutn level and not at the API level**
