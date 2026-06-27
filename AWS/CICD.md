@@ -124,4 +124,62 @@ npm run start
 | **Authentication** | IAM + temporary authorization tokens. |
 
 ![alt text](PNG/CICD15.PNG "Title")  
+- instead of pypi-store, we will select NPM
 ![alt text](PNG/CICD16.PNG "Title")  
+
+> **AWS CodeArtifact is a fully managed artifact repository that securely stores, publishes, and shares software packages (dependencies) such as npm, Maven, PyPI, NuGet, etc.**
+
+#### Push and Pull npm Packages
+
+| Step | Push Package | Pull Package |
+|------|--------------|--------------|
+| **1. Authenticate** | `aws codeartifact login` | Same |
+| **2. Configure npm** | Login updates `.npmrc` | Same |
+| **3. Publish/Install** | `npm publish` | `npm install my-package` |
+| **4. Result** | Package stored in CodeArtifact | Package downloaded from CodeArtifact |
+
+---
+
+#### Authenticate npm
+```bash
+aws codeartifact login \
+  --tool npm \
+  --domain my-company \
+  --repository frontend
+```
+This command:
+- Gets a temporary authentication token.
+- Updates `.npmrc`.
+- Configures npm to use CodeArtifact as its registry.
+---
+#### Publish Package
+
+```bash
+npm publish
+```
+---
+#### Install Package
+
+```bash
+npm install my-private-package
+```
+---
+
+```text
+CodeCommit
+      │
+      ▼
+CodePipeline
+      │
+      ▼
+CodeBuild
+      │
+      ├── npm install  ◄──────── CodeArtifact
+      │
+      ├── Build Application
+      │
+      └── npm publish (optional) ─► CodeArtifact
+      │
+      ▼
+Deployment
+```
