@@ -47,4 +47,12 @@
 5. Now we need to deploy the API, after deploying the API, we will get INVOKE_URL, which external clients use
 - ![alt text](PNG/API5.PNG "Title")  
 
-- ![alt text](PNG/API3.PNG "Title")  
+### API versioning
+| Concept | Purpose | Example |
+|---------|---------|---------|
+| **Deployment** | Immutable snapshot of the API configuration at a point in time | Deploy API v1 after adding `/users` endpoint |
+| **Stage** | Named environment that points to a deployment | `dev`, `test`, `staging`, `prod` |
+| **Stage Variables** | Environment-specific key-value pairs used by the API | Different Lambda alias or backend URL for `dev` and `prod` |
+
+- see below, how to version your API
+![alt text](PNG/API6.PNG "Title")  
