@@ -233,4 +233,6 @@ Protected API
 - so instead of giving IAM creds to 100s of users, use identity pool
 - ![alt text](PNG/Cognito11.PNG "Title")  
 - **usecase** - Allow 100s of users to upload photos/videos directly from a web or mobile app to **Amazon S3**
-- why not create a webapp, where app will allow users to upload file, and app will push it to s3
+- why not create a webapp, where app will allow users to upload file, and app will push it to s3?
+- **The question is whether the upload goes through your backend or directly to S3.**
+- identity pools bypass the file being passed to our BE and then to s3
