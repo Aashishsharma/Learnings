@@ -13,10 +13,6 @@
 ## IOT
 ![alt text](PNG/IOT.PNG "Title") 
 
-## AppSync
-- fully managed service that makes it easy to build GraphQL APIs
-- connects to data sources such as Amazon DynamoDB, AWS Lambda, and databases, while handling API scaling, caching, offline synchronization, and real-time updates.
-
 ## AWS Amplify
 ![alt text](PNG/Amplify.PNG "Title") 
 - Amplify vs Beanstalk

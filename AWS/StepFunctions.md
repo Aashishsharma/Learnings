@@ -180,5 +180,8 @@ AWS Step Functions orchestrates all these steps and keeps track of the workflow 
 ![alt text](PNG/Step6.PNG "Title")  
 ![alt text](PNG/Step7.PNG "Title")  
 ![alt text](PNG/Step8.PNG "Title")  
+
+### Step functiontask token
 ![alt text](PNG/Step9.PNG "Title")  
+
 ![alt text](PNG/Step10.PNG "Title")  
