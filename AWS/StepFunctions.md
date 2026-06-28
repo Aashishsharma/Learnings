@@ -33,5 +33,13 @@ AWS Step Functions orchestrates all these steps and keeps track of the workflow 
 | **Parallel** | Execute multiple branches simultaneously | Process payment, inventory, and notification in parallel |
 | **Map** | Repeat the same workflow for each item in a collection | Process each order item independently |
 
-- ![alt text](PNG/Step2.PNG "Title")  
+![alt text](PNG/Step2.PNG "Title")  
 - see that the type here is task, it can be any from the above table, like choice, parallel
+
+#### Creating Step functions
+- this is drag and drop
+- click create step function, select task
+![alt text](PNG/Step3.PNG "Title")  
+- then select flow
+![alt text](PNG/Step4.PNG "Title")  
+- once done, it will give us json for the step function, which we can then execute
