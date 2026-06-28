@@ -173,3 +173,12 @@ AWS Step Functions orchestrates all these steps and keeps track of the workflow 
   }
 }
 ```
+
+### Error handling in step functions
+- erros should be handled inside step function workflows, rather than handling error in individual tasks
+![alt text](PNG/Step5.PNG "Title")  
+![alt text](PNG/Step6.PNG "Title")  
+![alt text](PNG/Step7.PNG "Title")  
+![alt text](PNG/Step8.PNG "Title")  
+![alt text](PNG/Step9.PNG "Title")  
+![alt text](PNG/Step10.PNG "Title")  
