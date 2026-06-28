@@ -32,3 +32,6 @@ AWS Step Functions orchestrates all these steps and keeps track of the workflow 
 | **Fail** | End the workflow with an error | Payment validation failed |
 | **Parallel** | Execute multiple branches simultaneously | Process payment, inventory, and notification in parallel |
 | **Map** | Repeat the same workflow for each item in a collection | Process each order item independently |
+
+- ![alt text](PNG/Step2.PNG "Title")  
+- see that the type here is task, it can be any from the above table, like choice, parallel
