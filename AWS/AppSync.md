@@ -1,5 +1,7 @@
 # AppSync
-- fully managed service that makes it easy to build GraphQL APIs
+- fully managed GraphQL server that connects GraphQL APIs to data sources like DynamoDB, Lambda, Aurora, and HTTP APIs.
+- so no need to create backed apollo / express graphql server
+- just use appsync
 ![alt text](PNG/AppSync.PNG "Title")  
 - in above e.g. resolver in DynamoDB (resolver - the soruce from which GQL will fetch the data)  
 - other resolvers include - Aurora, OpenSearch. Lambda (lambda can then basically bring sta from anywhere (API, RDS))
