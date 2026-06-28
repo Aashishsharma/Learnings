@@ -6,6 +6,83 @@
 - **SAM is higher level abstraction over cloud formation**
 - then why not use cloudformation only?
 
+#### Flow
+
+```
+Source Code
+     │
+     ▼
+sam build
+     │
+     ▼
+Creates build artifacts (.aws-sam/build)
+     │
+     ▼
+sam deploy
+     │
+     ├── 1. Zips Lambda code
+     ├── 2. Uploads ZIP to S3
+     ├── 3. Transforms SAM template → CloudFormation template
+     ├── 4. Automatically calls CloudFormation CreateStack/UpdateStack API
+     ▼
+CloudFormation
+     │
+     ▼
+Creates/updates all AWS resources
+     │
+     ▼
+Lambda downloads code from S3
+```
+
+---
+#### Do we manually import the CloudFormation template?
+
+**No.**
+
+`sam deploy` does this automatically.
+
+You **do not**:
+
+- Open the CloudFormation console
+- Upload the template manually
+- Click "Create Stack"
+
+SAM CLI handles all of that.
+---
+
+#### What is stored in S3?
+
+Only deployment artifacts, for example:
+
+```
+my-deployment-bucket/
+
+├── abc123.zip        <-- Lambda code
+├── xyz789.zip        <-- Layer
+└── ...
+```
+---
+
+### deployment flow
+
+```
+sam deploy
+    │
+    ▼
+Uploads ZIP to S3
+    │
+    ▼
+Transforms SAM → CloudFormation
+    │
+    ▼
+CloudFormation CreateStack
+    │
+    ▼
+Resources are created
+```
+---
+
+
 ### AWS SAM vs CloudFormation
 
 | CloudFormation | AWS SAM |
@@ -67,19 +144,6 @@ SAM automatically generates the required CloudFormation resources for:
 - Log Group (when applicable)
 - Other supporting resources
 ---
-#### Deployment Flow
-```
-SAM Template
-      │
-      ▼
-SAM CLI transforms template
-      │
-      ▼
-CloudFormation Template
-      │
-      ▼
-CloudFormation creates AWS resources
-```
 ---
 #### When to use which?
 | Use Case | Recommendation |
