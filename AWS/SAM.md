@@ -91,7 +91,7 @@ Resources are created
 | More verbose | Much shorter templates |
 | You manually configure Lambda, IAM roles, API Gateway, permissions, etc. | Automatically generates these resources where possible |
 | Supports all AWS resources | Optimized for serverless (`AWS::Serverless::*`) + supports standard CloudFormation resources |
-| No built-in local testing | Built-in local testing with SAM CLI |
+| No built-in local testing | Built-in local testing with SAM CLI (```sam local invoke```) - Runs a Lambda function locally inside a Docker container that closely mimics the AWS Lambda runtime, |
 | Uses CloudFormation directly | Converts SAM template into CloudFormation before deployment |
 
 ---
@@ -217,5 +217,18 @@ Runs CloudFormation UpdateStack
       ▼
 Creates/updates resources
 ```
-
 ---
+
+- **run ```sam init```** - for quick start  
+![alt text](PNG/SAM2.PNG "Title")  
+![alt text](PNG/SAM3.PNG "Title")  
+- these policies will behind the scenes create IAM roles, so we don't have to write CLoudFormation for IAM roles, SAM made it easy for us
+
+### SAM local capabilities
+- we can run SAM locally (invoking lamda, API gateway)
+- internall SAM will run a docker container to mimic AWS services like Lambda / API Gateway
+- prerequsit - install Docker SAM CLI
+![alt text](PNG/SAM4.PNG "Title")  
+![alt text](PNG/SAM5.PNG "Title")  
+
+
