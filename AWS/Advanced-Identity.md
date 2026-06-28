@@ -3,10 +3,6 @@
 ### AWS STS (Security Token Service)
 - provides temporary, limited-privilege security credentials for accessing AWS resources instead of using long-term access keys
 
-### AWS Incognito
-- AWS managed authentication and user management service that helps you sign up, sign in, and control access for web and mobile applications.
-![alt text](PNG/Cognito.PNG "Title") 
-
 ### Directory Services
 ![alt text](PNG/AWS-SD.PNG "Title") 
 
