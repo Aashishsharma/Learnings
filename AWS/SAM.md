@@ -152,3 +152,70 @@ SAM automatically generates the required CloudFormation resources for:
 | Complete AWS infrastructure (VPC, EC2, ECS, RDS, etc.) | ✅ CloudFormation |
 | Mostly serverless with a few non-serverless resources | ✅ AWS SAM (can include CloudFormation resources) |
 ---
+
+## SAM Accelerate (sam sync)
+
+> **SAM Accelerate (`sam sync`) speeds up development by synchronizing only changed resources to AWS. It updates Lambda code directly for code changes and uses CloudFormation only when infrastructure changes are detected.**
+
+| Feature | Description |
+|---------|-------------|
+| Purpose | Rapidly sync local changes to AWS without a full deployment |
+| Command | `sam sync` |
+| Introduced As | AWS SAM Accelerate |
+| Uses CloudFormation? | ✅ Yes, but only when infrastructure changes are detected |
+| Best For | Fast development and testing in the cloud |
+| Full Stack Deployment? | ❌ No, only changed resources are updated |
+| Speed | Much faster than `sam deploy` for code changes |
+| Infrastructure Changes | Falls back to CloudFormation update ||
+
+---
+
+### Development Workflow
+
+```text
+Edit Lambda Code
+       │
+       ▼
+sam sync --watch
+       │
+       ▼
+Detect file changes
+       │
+       ▼
+Upload only changed Lambda code
+       │
+       ▼
+Update Lambda in AWS
+       │
+       ▼
+Test immediately
+```
+
+---
+
+### If Infrastructure Changes
+
+Example:
+
+```yaml
+Resources:
+  MyTable:
+    Type: AWS::DynamoDB::Table
+```
+
+You add another table.
+
+```text
+sam sync
+      │
+      ▼
+Detect infrastructure change
+      │
+      ▼
+Runs CloudFormation UpdateStack
+      │
+      ▼
+Creates/updates resources
+```
+
+---
