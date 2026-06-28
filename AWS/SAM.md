@@ -231,4 +231,6 @@ Creates/updates resources
 ![alt text](PNG/SAM4.PNG "Title")  
 ![alt text](PNG/SAM5.PNG "Title")  
 
+### SAM multiple envs
+![alt text](PNG/SAM6.PNG "Title")  
 
