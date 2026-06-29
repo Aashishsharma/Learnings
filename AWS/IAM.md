@@ -48,8 +48,28 @@ Here's a sample IAM policy in JSON format, with comments explaining each field:
 - if BOTH ALLOW and DENY is there, then DENY will take precedence
 
 ![alt text](PNG/IAM1.PNG "Title")  
-- e.g. if IAM role from EC2 to access s3 is removed, EC2 instance can still access s3 if access is given via bucket policy (ARN of EC2 instance is added in the bucket policy)  
+- e.g. if IAM role from EC2 to access s3 is removed, EC2 instance can still access s3 if access is given via bucket policy (ARN of EC2 instance is added in the bucket policy, or ARN of role (which is attched to EC2) is added in the bucket policy)  
 - similarly if IAM gives access to EC2 to ready s3 obj, but bucket policy is configured to deny read access, then even if EC2 has correct IAM, but still cannot access s3, because DNEY takes precedence
+
+#### Dynamic policies in IAM
+![alt text](PNG/IAM2.PNG "Title")  
+![alt text](PNG/IAM3.PNG "Title")  
+![alt text](PNG/IAM4.PNG "Title")  
+![alt text](PNG/IAM5.PNG "Title")  
+
+#### Different types of IAM policies
+| Feature | AWS Managed Policy | Customer Managed Policy | Inline Policy |
+|---------|---------------------|--------------------------|---------------|
+| Created By | AWS | Customer | Customer |
+| Editable | ❌ No | ✅ Yes | ✅ Yes |
+| Reusable | ✅ Yes | ✅ Yes | ❌ No (1:1 with principal) |
+| Attached To | Multiple Users/Roles/Groups | Multiple Users/Roles/Groups | Single User/Role/Group only |
+| Automatically Updated | ✅ Yes (by AWS) | ❌ No | ❌ No |
+| Best For | Common AWS permissions | Organization-specific permissions | One-off, unique permissions |
+| Versioning Supported | ❌ No | ✅ Yes (up to 5 versions) | ❌ No |
+| Deletion | Can be detached; AWS manages the policy | Can be detached/deleted independently | Deleted automatically when the principal is deleted |
+| Typical Example | `AmazonS3ReadOnlyAccess` | `CompanyBillingReadOnly` | Temporary permissions for a specific user |
+
 
 ### IAM Access advisor
 - now it's name is changed to last access
