@@ -46,10 +46,34 @@ Allow an IAM role to encrypt and decrypt data using the KMS key.
 
 ## How KMS works
 ![alt text](PNG/KMS1.PNG "Title")  
-1. We call KMS encrypt API (via CLI / SDK) by passing the Customer Managed Key (CMK) (First we need to create CMK or any other Key in KMS, and assign Key policy to ut) and data that needs to be encrypted <= 4KB
+1. We call KMS encrypt API (via CLI / SDK) by passing the Customer Managed Key (CMK) (First we need to create CMK or any other Key in KMS, and assign Key policy to it) and data that needs to be encrypted <= 4KB
 2. The KMS service will check if the user / role has access to use the Key 
 3. If yes, then KMS will do encryption, and will share us the encrypted data
 4. To decrypt, we call KMS decrypt API (via CLI / SDK), and pass the encrypted data
 5. KMS will take the encrypted data, it will figure out on it's own which CMK was used to encrypt the data
 6. It will check if the user / IAM role has access to decrupt the data
 7. If yes, it will share the decrypted data
+
+- **Notice - how using KMS, we can encrypt and decrypt data only upto 4KB, but not more, but why? because encrypt / decrypt is CPU intensive, and if we call KMS, to encrypt MB or GBs of file, it will be very costly, and main purpose of KMS service is to manage KEYS**  
+- **But, then how to encrypt / decrypt data sizes in MBs / GBs** - ANS = **Envelope Encryption using GenerateDataKey API**  
+
+**STEP 1 - encrypting data using Envelope encryption**  
+![alt text](PNG/KMS2.PNG "Title")  
+- this time we call GenerateDataKey API, instead of encrypt API, passing CMK
+- this time we don't pass the data that needs to be encrypted
+- again IAM check happens
+- GenerateDataKey API will return 2 things (1. plaintext data key (DEK), encrypted data key(DEK))
+- now we use the plaintext DEK (plaintext DEK is a temporary key, which neither the client or KMS will store after encryption), to encrypt the data on the client side
+- now we have plaintext DEK, and data is also with us (client), now we can encrypt data whose size is in MBs/GBs, because encryption is hapenning client side, so client's CPU is used to encrypt the data
+- now we have the final file, which has encrypted data and the encrypted DEK
+
+**STEP 2 - decrypting data using Envelope encryption**
+![alt text](PNG/KMS3.PNG "Title")  
+- now we call DecryptAPI, note this is same as normal Decrypt API, and we are passing just the encrypted DEK (which is < 4KB), so we are good 
+- again IAM check happens
+- we get the decrypted DEK, which is nothing but the plain text DEK
+- use this plain text DEK to decrypt the file on the client side
+
+![alt text](PNG/KMS4.PNG "Title")  
+![alt text](PNG/KMS5.PNG "Title")  
+![alt text](PNG/KMS6.PNG "Title")  
