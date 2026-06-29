@@ -54,8 +54,7 @@ Here's a sample IAM policy in JSON format, with comments explaining each field:
 #### Dynamic policies in IAM
 ![alt text](PNG/IAM2.PNG "Title")  
 ![alt text](PNG/IAM3.PNG "Title")  
-![alt text](PNG/IAM4.PNG "Title")  
-![alt text](PNG/IAM5.PNG "Title")  
+
 
 #### Different types of IAM policies
 | Feature | AWS Managed Policy | Customer Managed Policy | Inline Policy |
@@ -70,6 +69,50 @@ Here's a sample IAM policy in JSON format, with comments explaining each field:
 | Deletion | Can be detached; AWS manages the policy | Can be detached/deleted independently | Deleted automatically when the principal is deleted |
 | Typical Example | `AmazonS3ReadOnlyAccess` | `CompanyBillingReadOnly` | Temporary permissions for a specific user |
 
+| Policy Type | Use When |
+|-------------|----------|
+| AWS Managed | Standard AWS permissions are sufficient. |
+| Customer Managed | Multiple users/roles need the same custom permissions. |
+| Inline | Permissions are unique to a single user, role, or group and should not be reused. |
+
+- AWS managed policy
+![alt text](PNG/IAM4.PNG "Title")  
+- Customer managed policy
+![alt text](PNG/IAM5.PNG "Title")  
+- inline policy, is created under specific user, and can only be attched that that user
+
+**iam:PassRole** - 
+- for any AWS serivce to talk to any other service we need to attach a specific IAM role to that service
+- however, doing this action also requires access, it's not just that anyone can attch any policy to any AWS service
+- this access is granted by iam:PassRole
+- see below, with below polciy attched to my user, then I can only attach s3 policies to EC2 instances, I cannot attach any other policy like lambda / dynamoDB to EC2 instances
+![alt text](PNG/IAM6.PNG "Title")  
+
+**Trusted relationships** - Specifies **who is allowed to assume this role**.
+
+Example:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Principal": {
+      "Service": "ec2.amazonaws.com"
+    },
+    "Action": "sts:AssumeRole"
+  }]
+}
+```
+
+Meaning:
+
+> **Only EC2 is allowed to assume this role.**
+
+- trust relationship is the reason, why only sepcific policies can be attched to specific services
+
+- **Trust Relationship** → *"Who is allowed to assume this IAM role?"*
+- **`iam:PassRole`** → *"Who is allowed to assign this IAM role to an AWS service?"*
 
 ### IAM Access advisor
 - now it's name is changed to last access
