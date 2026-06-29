@@ -12,10 +12,6 @@
 ### Firewall manager
 ![alt text](PNG/Firewall.PNG "Title") 
 
-### Encryption
-- done using KMS - Key management service
-- AWS will manage encryption keys for use, and then we can use this service to encrypt data at rest r in transit
-
 ### ACM
 ![alt text](PNG/ACM.PNG "Title") 
 
