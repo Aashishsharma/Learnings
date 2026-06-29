@@ -155,3 +155,8 @@ S3 stores Bucket Key securely
    └── ...
 ```
 - the option to enable s3 bucket to use s3 bucket key is available when creating s3 bucket
+
+### Cloud HSM
+- **AWS CloudHSM** is a **dedicated hardware security module (HSM)** that gives **you full control over creating and managing your encryption keys**.
+- Unlike AWS KMS, **you own and manage the HSM**, making it suitable for applications with strict security or compliance requirements.  
+![alt text](PNG/KMS7.PNG "Title")  
