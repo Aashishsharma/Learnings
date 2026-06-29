@@ -180,3 +180,17 @@ AWS STS is a service that provides temporary, short-lived security credentials (
 | `AssumeRoleWithSAML` | Authenticate using a SAML assertion | SAML assertion from an Identity Provider | Enterprise SSO (ADFS, Okta, Azure AD, etc.) | Temporary credentials |
 | `GetFederationToken` | Temporary credentials for federated users | IAM User credentials | Legacy federation scenarios with custom identity brokers | Temporary credentials |
 
+### AWS Managed Active Directory
+**Types**  
+| Directory Type | Managed By | Connects To | Best Use Case | Supports Trust | Internet Required |
+|----------------|------------|-------------|---------------|----------------|-------------------|
+| **AWS Managed Microsoft AD** | AWS | Native Microsoft Active Directory | Enterprise workloads on AWS (EC2, FSx, WorkSpaces, RDS SQL Server) | ✅ Yes | ❌ No |
+| **AD Connector** | Your on-premises AD | Existing on-premises Active Directory | Use existing AD without storing directory data in AWS | N/A (Proxy only) | Connectivity to on-prem (VPN/Direct Connect) |
+| **Simple AD** | AWS | Samba-based directory | Small applications, development, testing | ❌ No | ❌ No |
+
+
+| Requirement | Recommended Option |
+|------------|--------------------|
+| Need a fully managed Microsoft Active Directory in AWS | **AWS Managed Microsoft AD** |
+| Already have an on-premises Active Directory and don't want to duplicate it | **AD Connector** |
+| Need a low-cost directory for development or testing | **Simple AD** |
