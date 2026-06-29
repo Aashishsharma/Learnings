@@ -75,5 +75,12 @@ Allow an IAM role to encrypt and decrypt data using the KMS key.
 - use this plain text DEK to decrypt the file on the client side
 
 ![alt text](PNG/KMS4.PNG "Title")  
+
+#### E.g. Usecase - encrypt DB_PASSWORD env variable of Lambda using KMS
+- we can store DB password in lambda env vars, but it is not secure, anyone having access to lambda config can see the DB password
+- so create a KMS key and when adding env var to kmabda click on encrypt and provide the ARN of KMS key we created
 ![alt text](PNG/KMS5.PNG "Title")  
+- once you click on encrypt the value of that env var (SuperSecret), will show the encrypted value and not the plain text value
+
+- to decrypt the value in lambda code, call the KMS's decrupt API call by passing the encrypted text
 ![alt text](PNG/KMS6.PNG "Title")  
