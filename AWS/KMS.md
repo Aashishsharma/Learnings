@@ -84,3 +84,74 @@ Allow an IAM role to encrypt and decrypt data using the KMS key.
 
 - to decrypt the value in lambda code, call the KMS's decrupt API call by passing the encrypted text
 ![alt text](PNG/KMS6.PNG "Title")  
+
+### S3 bucket key
+
+> **1-liner:** An **S3 Bucket Key** reduces the cost of **SSE-KMS** encryption by minimizing the number of calls made from S3 to AWS KMS.
+
+Without Bucket Keys:
+
+Every object upload/download may require S3 to call KMS.
+
+```text
+Upload Object
+      │
+      ▼
+S3
+      │
+      ▼
+KMS Encrypt Data Key
+
+Upload Object
+      │
+      ▼
+S3
+      │
+      ▼
+KMS Encrypt Data Key
+
+...every object...
+```
+
+This results in:
+
+- More KMS API calls
+- Higher KMS cost
+- Slightly higher latency
+
+
+Instead of contacting KMS for every object, S3 derives object encryption keys using the bucket key.
+
+Result:
+
+- Much fewer KMS API calls
+- Lower cost
+- Same security model
+
+---
+
+#### Working Flow
+
+```text
+Client
+   │
+Upload Object
+   │
+   ▼
+S3
+   │
+   │ First object only
+   ▼
+AWS KMS
+   │
+Generate Bucket Key
+   │
+   ▼
+S3 stores Bucket Key securely
+   │
+   ├── Encrypt Object 1
+   ├── Encrypt Object 2
+   ├── Encrypt Object 3
+   └── ...
+```
+- the option to enable s3 bucket to use s3 bucket key is available when creating s3 bucket
