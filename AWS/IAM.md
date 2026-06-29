@@ -52,3 +52,57 @@ Here's a sample IAM policy in JSON format, with comments explaining each field:
 - login to console, you will see option for cloudshell, then it will open terminal in the browser, and that terminal is already autenticated to AWS via the IAM role, that you are logged in with
 - this service is not available for all the regions
 
+### STS - (Security Token Service)
+AWS STS is a service that provides temporary, short-lived security credentials (Access Key, Secret Key, Session Token) to users, applications, or AWS services instead of using long-term IAM credentials.
+
+                    +----------------------+
+                    | User / Application   |
+                    | (IAM User / SSO /    |
+                    |  EC2 / Lambda etc.)  |
+                    +----------+-----------+
+                               |
+                               | 1. Request temporary credentials
+                               |    (AssumeRole / GetSessionToken /
+                               |     AssumeRoleWithWebIdentity ...)
+                               v
+                    +----------------------+
+                    |      AWS STS         |
+                    +----------+-----------+
+                               |
+                               | 2. Verifies identity
+                               |    & IAM permissions
+                               |
+                               v
+                    +----------------------+
+                    | Generates Temporary  |
+                    | Credentials          |
+                    |----------------------|
+                    | Access Key           |
+                    | Secret Access Key    |
+                    | Session Token        |
+                    | Expiration Time      |
+                    +----------+-----------+
+                               |
+                               | 3. Returns credentials
+                               v
+                    +----------------------+
+                    | User / Application   |
+                    +----------+-----------+
+                               |
+                               | 4. Uses temporary credentials
+                               v
+                    +----------------------+
+                    | AWS Services         |
+                    | S3, DynamoDB,        |
+                    | Lambda, EC2, etc.    |
+                    +----------------------+
+
+          Credentials automatically expire.
+
+| STS API | Primary Purpose | Authentication Input | Common Use Case | Returns |
+|----------|-----------------|----------------------|-----------------|----------|
+| `AssumeRole` | Assume an IAM Role | AWS credentials (IAM User/Role) | Cross-account access, EC2, Lambda, ECS | Temporary credentials |
+| `GetSessionToken` | Temporary credentials for an IAM User | IAM User credentials (optionally MFA) | MFA-enabled CLI/API access | Temporary credentials |
+| `AssumeRoleWithWebIdentity` | Authenticate using an OIDC/JWT token | Web Identity token (Google, GitHub, Kubernetes, Cognito, etc.) | Mobile apps, EKS IRSA, GitHub Actions | Temporary credentials |
+| `AssumeRoleWithSAML` | Authenticate using a SAML assertion | SAML assertion from an Identity Provider | Enterprise SSO (ADFS, Okta, Azure AD, etc.) | Temporary credentials |
+| `GetFederationToken` | Temporary credentials for federated users | IAM User credentials | Legacy federation scenarios with custom identity brokers | Temporary credentials |
