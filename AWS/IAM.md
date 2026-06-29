@@ -41,6 +41,16 @@ Here's a sample IAM policy in JSON format, with comments explaining each field:
 }
 ```
 
+**IAM policy priority**  -
+- by default no user / IAM role has access to any service - DEFAULT_DENY
+- if explicitly DENY is mentioned, then no access
+- if ALLOW is present, then only access is granted to that service
+- if BOTH ALLOW and DENY is there, then DENY will take precedence
+
+![alt text](PNG/IAM1.PNG "Title")  
+- e.g. if IAM role from EC2 to access s3 is removed, EC2 instance can still access s3 if access is given via bucket policy (ARN of EC2 instance is added in the bucket policy)  
+- similarly if IAM gives access to EC2 to ready s3 obj, but bucket policy is configured to deny read access, then even if EC2 has correct IAM, but still cannot access s3, because DNEY takes precedence
+
 ### IAM Access advisor
 - now it's name is changed to last access
 - works at user level, you goto a particular IAM user, and select access advisor
@@ -106,3 +116,4 @@ AWS STS is a service that provides temporary, short-lived security credentials (
 | `AssumeRoleWithWebIdentity` | Authenticate using an OIDC/JWT token | Web Identity token (Google, GitHub, Kubernetes, Cognito, etc.) | Mobile apps, EKS IRSA, GitHub Actions | Temporary credentials |
 | `AssumeRoleWithSAML` | Authenticate using a SAML assertion | SAML assertion from an Identity Provider | Enterprise SSO (ADFS, Okta, Azure AD, etc.) | Temporary credentials |
 | `GetFederationToken` | Temporary credentials for federated users | IAM User credentials | Legacy federation scenarios with custom identity brokers | Temporary credentials |
+
