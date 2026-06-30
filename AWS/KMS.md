@@ -389,6 +389,8 @@ const { SecretString } = await client.send(
 console.log(JSON.parse(SecretString));
 ```
 
+![alt text](PNG/KMS10.PNG "Title")  
+
 ### Parameter Store vs Secrets Manager
 
 | Feature | Parameter Store | Secrets Manager |
