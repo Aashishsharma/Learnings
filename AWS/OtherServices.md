@@ -80,7 +80,7 @@
 
 ## Migrating projects to cloud
 1. AWS Application Discovery service - understand what all needs to be migrated, and there counterpart AWS service
-![alt text](PNG/DS.PNG "Title") 
+![alt text](PNG/DS.PNG "Title")  
 2. AWS Application Migration Service - Do the actual migration 
 ![alt text](PNG/DS2.PNG "Title")
 3. AWS Migration Evaluator 
@@ -127,3 +127,76 @@
 |-------------|----------|
 | Designed for targeted customer engagement and marketing campaigns. | Designed for simple notifications and pub/sub messaging. |
 | Supports user segmentation, campaigns, and engagement analytics. | Focuses on message delivery; no customer segmentation or campaign management. |
+
+## SES - Simple Email Service
+- we can send emails to customer using SMTP or AWS SDK
+- we can receieve emails using SNS, S3, Lmabda
+- is integrated with IAM to restrict access to sending email
+
+### AppConfig
+
+> **1-liner:** AWS AppConfig is a **fully managed service for safely deploying and managing application configuration and feature flags without redeploying your application.**
+
+No application redeployment required.
+
+### Typical Use Cases
+
+- Feature flags
+- Enable/disable features
+- Change API endpoints
+- Tune application parameters
+- Rate limits
+- Logging levels
+- Kill switches (disable a feature instantly)
+
+---
+
+### Working Flow
+
+```text
+Developer
+      │
+      ▼
+Create Configuration
+      │
+      ▼
+AWS AppConfig
+      │
+Validate Configuration
+      │
+Deploy Configuration
+      │
+      ▼
+Application
+      │
+Fetch Latest Configuration
+      │
+      ▼
+Uses New Settings
+```
+
+
+### AppConfig Components
+
+| Component | Purpose |
+|----------|---------|
+| Application | Logical application |
+| Environment | Dev, Test, Prod |
+| Configuration Profile | Defines where configuration comes from (hosted, SSM, S3, etc.) |
+| Hosted Configuration | Configuration stored directly in AppConfig |
+| Deployment Strategy | Controls rollout speed |
+| Validator | Ensures configuration is valid |
+
+---
+
+### AppConfig vs Parameter Store vs Secrets Manager
+
+| Feature | AppConfig | Parameter Store | Secrets Manager |
+|---------|-----------|-----------------|-----------------|
+| Application configuration | ✅ | ✅ | ❌ |
+| Feature flags | ✅ | ❌ | ❌ |
+| Secrets | ❌ | ✅ | ✅ |
+| Automatic secret rotation | ❌ | ❌ | ✅ |
+| Safe gradual deployment | ✅ | ❌ | ❌ |
+| Automatic rollback | ✅ | ❌ | ❌ |
+| Runtime configuration updates | ✅ | Limited | ❌ |
