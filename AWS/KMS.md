@@ -156,8 +156,6 @@ S3 stores Bucket Key securely
 ```
 - the option to enable s3 bucket to use s3 bucket key is available when creating s3 bucket
 
-**We can use our custom KMS key to encrypt cloudlog watch as well at the log group level, this change needs to be done from AWS CLI, we cannot attcach CMS Key to Cloudwatch log group from AWS console**  
-
 ## Cloud HSM
 - **AWS CloudHSM** is a **dedicated hardware security module (HSM)** that gives **you full control over creating and managing your encryption keys**.
 - Unlike AWS KMS, **you own and manage the HSM**, making it suitable for applications with strict security or compliance requirements.  
@@ -408,5 +406,49 @@ console.log(JSON.parse(SecretString));
 ![alt text](PNG/KMS11.PNG "Title")  
 ![alt text](PNG/KMS12.PNG "Title")  
 
+### KMS key integrations
+1. Integration with CLoud formation (we saw above)
+2. Integration with Cloudwatch
+ **We can use our custom KMS key to encrypt cloudlog watch as well at the log group level, this change needs to be done from AWS CLI, we cannot attcach CMS Key to Cloudwatch log group from AWS console**  
+3. integration with codebuild
+![alt text](PNG/KMS13.PNG "Title")  
+4. use KMS anytime you want to encrypt any file or data
 
+## AWS Nitro Enclaves
+![alt text](PNG/KMS14.PNG "Title")  
 
+> **AWS Nitro Enclaves** are isolated, highly secure execution environments inside an EC2 instance that process sensitive data (like encryption keys or secrets) without network, storage, or administrator access.
+
+```text
+                Client
+                   │
+                   ▼
+          EC2 Parent Instance
+                   │
+        +----------+----------+
+        |                     |
+        | Send sensitive data |
+        ▼                     |
+   +--------------------+      |
+   |  Nitro Enclave     |      |
+   |--------------------|      |
+   | No Network         |      |
+   | No Storage         |      |
+   | No SSH             |      |
+   | Isolated CPU/RAM   |      |
+   +---------+----------+
+             │
+             │ Attestation (we have to sign, to ensure we authorize the app is safe to be run in enclave)
+             ▼
+          AWS KMS
+             │
+      Decrypt Secret
+             │
+             ▼
+        Nitro Enclave
+             │
+      Process Sensitive Data
+             │
+             ▼
+      Return Result Only
+```
