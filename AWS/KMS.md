@@ -156,6 +156,8 @@ S3 stores Bucket Key securely
 ```
 - the option to enable s3 bucket to use s3 bucket key is available when creating s3 bucket
 
+**We can use our custom KMS key to encrypt cloudlog watch as well at the log group level, this change needs to be done from AWS CLI, we cannot attcach CMS Key to Cloudwatch log group from AWS console**  
+
 ## Cloud HSM
 - **AWS CloudHSM** is a **dedicated hardware security module (HSM)** that gives **you full control over creating and managing your encryption keys**.
 - Unlike AWS KMS, **you own and manage the HSM**, making it suitable for applications with strict security or compliance requirements.  
@@ -401,6 +403,10 @@ console.log(JSON.parse(SecretString));
 | Automatic secret rotation | ❌ | ✅ |
 | Versioning | ✅ | ✅ |
 | Cost | Free (Standard tier) / Low cost (Advanced) | Slightly high cost than the SSM parameter store |
+
+## SSM and Secrets manager integration with cloud formation
+![alt text](PNG/KMS11.PNG "Title")  
+![alt text](PNG/KMS12.PNG "Title")  
 
 
 
