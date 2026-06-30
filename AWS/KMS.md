@@ -156,12 +156,12 @@ S3 stores Bucket Key securely
 ```
 - the option to enable s3 bucket to use s3 bucket key is available when creating s3 bucket
 
-### Cloud HSM
+## Cloud HSM
 - **AWS CloudHSM** is a **dedicated hardware security module (HSM)** that gives **you full control over creating and managing your encryption keys**.
 - Unlike AWS KMS, **you own and manage the HSM**, making it suitable for applications with strict security or compliance requirements.  
 ![alt text](PNG/KMS7.PNG "Title")  
 
-### AWS Systems Manager (SSM) Parameter Store
+## AWS Systems Manager (SSM) Parameter Store
 
 > **SSM Parameter Store is a fully managed service for securely storing configuration values and secrets, with optional KMS encryption and IAM-based access control.**
 
@@ -201,14 +201,49 @@ S3 stores Bucket Key securely
 
 ### Example Parameter Hierarchy
 
+A **parameter hierarchy** organizes parameters into **folder-like paths** using `/`.
+
+Example:
+
+```text
+/prod/db/password
+/prod/db/username
+/prod/api/url
+
+/dev/db/password
+/dev/db/username
+/dev/api/url
+```
+
+It is similar to organizing files into directories.
+
+---
+
+#### Why is it needed?
+
+Without hierarchy:
+
+```text
+db-password
+db-username
+api-url
+jwt-secret
+prod-db-password
+dev-db-password
+test-db-password
+```
+
+As the number of parameters grows, they become difficult to manage.
+
+With hierarchy:
+
 ```text
 /prod
     /db
         username
         password
     /api
-        endpoint
-        api-key
+        url
 
 /dev
     /db
@@ -216,7 +251,7 @@ S3 stores Bucket Key securely
         password
 ```
 
----
+Everything is neatly organized.
 
 ### Typical Flow
 
@@ -274,7 +309,85 @@ const { Parameter } = await ssm.send(
 console.log(Parameter.Value);
 ```
 
+![alt text](PNG/KMS8.PNG "Title")  
+![alt text](PNG/KMS9.PNG "Title")  
+
 ---
+
+## AWS Secrets Manager
+
+> **1-liner:** AWS Secrets Manager is a **fully managed service for securely storing, retrieving, and automatically rotating secrets**.
+- **this does same job as SSM**, then why to use?
+- this is newer service
+- and we can set automatic key rotation policy
+- very well integrated with RDS
+
+---
+
+# What can it store?
+- same as parameter SSM
+
+#### Features
+- mostly same as SSM parameters, only key rotation is new here
+#### How Secret Rotation Works
+
+```text
+Application
+      │
+      ▼
+Secrets Manager
+      │
+      │ (Secret nearing rotation date)
+      ▼
+Lambda Rotation Function
+      │
+      │ Change password in database
+      ▼
+Database
+      │
+      ▼
+Update Secret in Secrets Manager
+```
+
+Applications continue reading the latest version of the secret.
+
+---
+
+
+#### Typical Flow
+- same as SSM
+
+#### Example Secret
+
+```json
+{
+  "username": "admin",
+  "password": "MySecurePassword123"
+}
+```
+
+---
+
+#### Minimal Node.js
+
+```javascript
+import {
+  SecretsManagerClient,
+  GetSecretValueCommand
+} from "@aws-sdk/client-secrets-manager";
+
+const client = new SecretsManagerClient({
+  region: "us-east-1"
+});
+
+const { SecretString } = await client.send(
+  new GetSecretValueCommand({
+    SecretId: "prod/db"
+  })
+);
+
+console.log(JSON.parse(SecretString));
+```
 
 ### Parameter Store vs Secrets Manager
 
@@ -287,4 +400,5 @@ console.log(Parameter.Value);
 | Versioning | ✅ | ✅ |
 | Cost | Free (Standard tier) / Low cost (Advanced) | Paid |
 
----
+
+
