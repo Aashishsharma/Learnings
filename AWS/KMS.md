@@ -397,10 +397,10 @@ console.log(JSON.parse(SecretString));
 |---------|-----------------|-----------------|
 | Store configuration | ✅ | ✅ |
 | Store secrets | ✅ | ✅ |
-| KMS encryption | ✅ | ✅ |
+| KMS encryption | ✅ | ✅ (mandatory) |
 | Automatic secret rotation | ❌ | ✅ |
 | Versioning | ✅ | ✅ |
-| Cost | Free (Standard tier) / Low cost (Advanced) | Paid |
+| Cost | Free (Standard tier) / Low cost (Advanced) | Slightly high cost than the SSM parameter store |
 
 
 
