@@ -160,3 +160,131 @@ S3 stores Bucket Key securely
 - **AWS CloudHSM** is a **dedicated hardware security module (HSM)** that gives **you full control over creating and managing your encryption keys**.
 - Unlike AWS KMS, **you own and manage the HSM**, making it suitable for applications with strict security or compliance requirements.  
 ![alt text](PNG/KMS7.PNG "Title")  
+
+### AWS Systems Manager (SSM) Parameter Store
+
+> **SSM Parameter Store is a fully managed service for securely storing configuration values and secrets, with optional KMS encryption and IAM-based access control.**
+
+#### What can it store?
+
+- Database passwords
+- API keys
+- JWT secrets
+- Connection strings
+- Environment variables
+- Feature flags
+- Application configuration
+
+
+#### Types of Parameters
+
+| Type | Description | Encryption |
+|------|-------------|------------|
+| `String` | Plain text value | ❌ No |
+| `StringList` | Comma-separated list of strings | ❌ No |
+| `SecureString` | Sensitive values encrypted using AWS KMS | ✅ Yes |
+
+---
+
+### Features
+
+| Feature | Description |
+|---------|-------------|
+| Secure storage | Stores configuration and secrets centrally |
+| KMS integration | Encrypts `SecureString` parameters |
+| Versioning | Every update creates a new version |
+| IAM integration | Control access using IAM policies |
+| Hierarchical paths | Organize parameters like folders (`/prod/db/password`) |
+| No servers | Fully managed service |
+
+---
+
+### Example Parameter Hierarchy
+
+```text
+/prod
+    /db
+        username
+        password
+    /api
+        endpoint
+        api-key
+
+/dev
+    /db
+        username
+        password
+```
+
+---
+
+### Typical Flow
+
+```text
+Application
+      │
+      ▼
+SSM Parameter Store
+      │
+      │ (Decrypt using KMS if SecureString)
+      ▼
+Returns Parameter Value
+```
+
+---
+
+### Example CLI
+
+Store:
+
+```bash
+aws ssm put-parameter \
+  --name "/prod/db/password" \
+  --value "MyPassword123" \
+  --type SecureString
+```
+
+Retrieve:
+
+```bash
+aws ssm get-parameter \
+  --name "/prod/db/password" \
+  --with-decryption
+```
+
+---
+
+### Minimal Node.js
+
+```javascript
+import {
+  SSMClient,
+  GetParameterCommand
+} from "@aws-sdk/client-ssm";
+
+const ssm = new SSMClient({ region: "us-east-1" });
+
+const { Parameter } = await ssm.send(
+  new GetParameterCommand({
+    Name: "/prod/db/password",
+    WithDecryption: true
+  })
+);
+
+console.log(Parameter.Value);
+```
+
+---
+
+### Parameter Store vs Secrets Manager
+
+| Feature | Parameter Store | Secrets Manager |
+|---------|-----------------|-----------------|
+| Store configuration | ✅ | ✅ |
+| Store secrets | ✅ | ✅ |
+| KMS encryption | ✅ | ✅ |
+| Automatic secret rotation | ❌ | ✅ |
+| Versioning | ✅ | ✅ |
+| Cost | Free (Standard tier) / Low cost (Advanced) | Paid |
+
+---
