@@ -26,6 +26,28 @@ S3 bucket policy allows access only from that CloudFront distribution.
 Direct access is denied:
 https://my-bucket.s3.amazonaws.com/logo.png ❌ Access Denied
 
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowCloudFrontServicePrincipal",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "cloudfront.amazonaws.com"
+      },
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::<BUCKET_NAME>/*",
+      "Condition": {
+        "StringEquals": {
+          "AWS:SourceArn": "arn:aws:cloudfront::<ACCOUNT_ID>:distribution/<DISTRIBUTION_ID>"
+        }
+      }
+    }
+  ]
+}
+```
+
 **Summary of OAC** - make files from s3 accessible without making them public
 
 ### Configuring cloudfront
