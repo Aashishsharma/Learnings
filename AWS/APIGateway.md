@@ -1,5 +1,6 @@
 # API Gateway
-- allows us to create serverless APIs
+- allows us to create serverless APIs  
+
 | # | Core Purpose | Why it Exists (1-liner) | Example |
 |---|--------------|-------------------------|---------|
 | 1 | **Single entry point for APIs** | Exposes one endpoint instead of clients calling multiple backend services directly. | Mobile app → API Gateway → Lambda, ECS, EC2 |
