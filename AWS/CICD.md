@@ -71,7 +71,7 @@ artifacts:
 - hence codepipeline is orchestrator, where as codebuild's job is just to build the project and store the artifacts
 
 ## 4. Code deploy
-- can deploy app to EC2, Beanstalk, lambda
+- can deploy app to EC2, Beanstalk, lambda  
 | Step | What Happens |
 |------|--------------|
 | **1. Prepare Deployment Artifact** | Package the application along with an **`appspec.yml`** file (and deployment scripts, if any). |
@@ -114,7 +114,8 @@ npm run start
 
 ### 5. Code artifcat
 - CodeArtifact stores software packages (dependencies).
-- Whereas S3 stores build artifacts (ZIPs, binaries).
+- Whereas S3 stores build artifacts (ZIPs, binaries).  
+
 | Aspect | Description |
 |--------|-------------|
 | **What is it?** | Fully managed artifact repository for storing and sharing software packages. |
