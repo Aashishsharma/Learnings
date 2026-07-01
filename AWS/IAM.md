@@ -128,49 +128,118 @@ Meaning:
 ### STS - (Security Token Service)
 AWS STS is a service that provides temporary, short-lived security credentials (Access Key, Secret Key, Session Token) to users, applications, or AWS services instead of using long-term IAM credentials.
 
-                    +----------------------+
-                    | User / Application   |
-                    | (IAM User / SSO /    |
-                    |  EC2 / Lambda etc.)  |
-                    +----------+-----------+
-                               |
-                               | 1. Request temporary credentials
-                               |    (AssumeRole / GetSessionToken /
-                               |     AssumeRoleWithWebIdentity ...)
-                               v
-                    +----------------------+
-                    |      AWS STS         |
-                    +----------+-----------+
-                               |
-                               | 2. Verifies identity
-                               |    & IAM permissions
-                               |
-                               v
-                    +----------------------+
-                    | Generates Temporary  |
-                    | Credentials          |
-                    |----------------------|
-                    | Access Key           |
-                    | Secret Access Key    |
-                    | Session Token        |
-                    | Expiration Time      |
-                    +----------+-----------+
-                               |
-                               | 3. Returns credentials
-                               v
-                    +----------------------+
-                    | User / Application   |
-                    +----------+-----------+
-                               |
-                               | 4. Uses temporary credentials
-                               v
-                    +----------------------+
-                    | AWS Services         |
-                    | S3, DynamoDB,        |
-                    | Lambda, EC2, etc.    |
-                    +----------------------+
+- **e.g. IAM role X from account A wants to access service Y from account B** 
 
-          Credentials automatically expire.
+AWS STS checks the **Trust Policy** of the target IAM Role before issuing temporary credentials.
+
+#### Two Configurations Required
+
+| Account | Configuration | Purpose |
+|---------|---------------|---------|
+| **Account A (Caller)** | IAM Policy | Allows the caller to invoke `sts:AssumeRole` |
+| **Account B (Target)** | Role Trust Policy | Specifies who is allowed to assume the role |
+
+> **Both must allow the request.**
+
+---
+
+#### 1. Account B (Target) - Trust Policy
+
+Suppose:
+
+- **Account A:** `111111111111`
+- **Account B:** `222222222222`
+
+Role in Account B:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::111111111111:root"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+```
+
+Meaning:
+
+> "I trust identities from Account A to assume this role."
+
+---
+
+#### 2. Account A (Caller) - IAM Policy
+
+Attach this policy to the IAM User or IAM Role:
+
+```json
+{
+  "Effect": "Allow",
+  "Action": "sts:AssumeRole",
+  "Resource": "arn:aws:iam::222222222222:role/MyRole"
+}
+```
+
+Meaning:
+
+> "You are allowed to call `sts:AssumeRole` on this role."
+
+#### Complete Flow
+
+```text
+                Account A
+        +----------------------+
+        | IAM User / IAM Role  |
+        +----------------------+
+                  |
+                  | IAM Policy
+                  | Allow sts:AssumeRole
+                  |
+                  v
+        +----------------------+
+        |      AWS STS         |
+        +----------------------+
+                  |
+                  | Checks Trust Policy
+                  |
+                  v
+                Account B
+        +----------------------+
+        |      IAM Role        |
+        +----------------------+
+        | Trusts Account A     |
+        +----------------------+
+                  |
+                  v
+     Temporary Credentials Returned
+```
+
+#### Calling STS
+
+```bash
+aws sts assume-role \
+    --role-arn arn:aws:iam::222222222222:role/MyRole \
+    --role-session-name demo
+```
+
+Response:
+
+```json
+{
+  "Credentials": {
+    "AccessKeyId": "...",
+    "SecretAccessKey": "...",
+    "SessionToken": "..."
+  }
+}
+```
+
+> **Cross-account AssumeRole succeeds only when BOTH the IAM Policy and the Trust Policy allow it.**
 
 | STS API | Primary Purpose | Authentication Input | Common Use Case | Returns |
 |----------|-----------------|----------------------|-----------------|----------|
