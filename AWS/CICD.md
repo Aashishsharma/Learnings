@@ -71,7 +71,8 @@ artifacts:
 - hence codepipeline is orchestrator, where as codebuild's job is just to build the project and store the artifacts
 
 ## 4. Code deploy
-- can deploy app to EC2, Beanstalk, lambda  
+- can deploy app to EC2, Beanstalk, lambda   
+
 | Step | What Happens |
 |------|--------------|
 | **1. Prepare Deployment Artifact** | Package the application along with an **`appspec.yml`** file (and deployment scripts, if any). |
