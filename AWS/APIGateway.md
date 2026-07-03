@@ -37,16 +37,21 @@
 | **CORS** | Control which browser origins can call the API | Allow only `https://app.example.com` |
 
 ### ConfiguringAPI Gateway
-1. Create Rest API
-- ![alt text](PNG/API1.PNG "Title")  
+1. Create Rest API  
+
+![alt text](PNG/API1.PNG "Title")  
 2. Create Method (GET/PUT/POST/ basically any HTTP method), and select the Lambda function which needs to be invoked
-- ![alt text](PNG/API2.PNG "Title")  
+
+![alt text](PNG/API2.PNG "Title")  
 3. Root / GET method is created
-- ![alt text](PNG/API3.PNG "Title")  
+
+![alt text](PNG/API3.PNG "Title")  
 4. We can create reources as many as we want under the API Gateway (created /houses resource and has a GET method on that resource)
-- ![alt text](PNG/API4.PNG "Title")  
+
+![alt text](PNG/API4.PNG "Title")  
 5. Now we need to deploy the API, after deploying the API, we will get INVOKE_URL, which external clients use
-- ![alt text](PNG/API5.PNG "Title")  
+
+![alt text](PNG/API5.PNG "Title")  
 
 ### API versioning
 | Concept | Purpose | Example |

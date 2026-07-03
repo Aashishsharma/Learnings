@@ -1,6 +1,7 @@
 # Cloudformation (IaaS)
 - build infra on AWS via code
-- ![alt text](PNG/CF3.PNG "Title")  
+
+![alt text](PNG/CF3.PNG "Title")
 - In CI/CD, install aws cli, and deploy your template from build pipeline
 - AWS composer allows us to view all the component stack created by cloud formation (it creates architectural diagram)
 - Cloud formation templates, once created can't be edited, they can only be replaces

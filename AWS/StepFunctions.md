@@ -19,7 +19,7 @@ AWS Step Functions orchestrates all these steps and keeps track of the workflow 
 ### Task state
 > **A Task state performs a unit of work by invoking an external service, such as AWS Lambda, ECS, Batch, SNS, SQS, or another AWS SDK API.**
 
-- ![alt text](PNG/Step1.PNG "Title")  
+![alt text](PNG/Step1.PNG "Title")  
 
 - **different state types** - 
 | State Type | Purpose | Example Use Case |

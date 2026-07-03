@@ -124,7 +124,8 @@ EC2-1 / EC2-2 / EC2-3
 ## Gateway load balancer
 - works at Network / IP layer
 - This LB first routes packets to Firewall instances, to analyze Network packets, and if firewalls allow the request, then it is forwarded further
-- ![alt text](PNG/GLB.PNG "Title")
+
+![alt text](PNG/GLB.PNG "Title")
 - why can't we use ALB, instead of using GLB?
 - ALB can only access HTTP packets (cookies, headers), but can't access IP packets
 - 3rd Party firewalls need access to IP packets

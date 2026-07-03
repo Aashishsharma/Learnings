@@ -24,12 +24,6 @@ Used to decouple distributed applications
 | Main goal | Distribute work | Broadcast events |
 | Example | "Process this order" | "OrderPlaced event occurred" |
 
-| Service | Messaging Queue (Point-to-Point) | Pub/Sub | Push/Pull |
-|--------|-----------------------------------|---------|-----------|
-| SQS | ✅ Yes | ❌ No | Pull |
-| SNS | ❌ No | ✅ Yes | Push |
-| Kafka | ⚠️ Can behave like both, but primarily Pub/Sub | ✅ Yes | Pull |
-| RabbitMQ | ✅ Yes | ✅ Yes | Mostly Push |
 
 ![alt text](PNG/SNS1.PNG "Title") 
 
@@ -53,11 +47,6 @@ For fraud and analytics service, we purposefully use SQS, becasue is any of the 
 ![alt text](PNG/SNS7.PNG "Title")   
 - but a lot of services can send msgs to SNS like - Cloudwatch, DynamoDB,S3, Lambda, RDS, Cloudformation
 
-#### Kafka vs SNS
-1. Both are pub/sub model
-2. Use Kafka for real time streaming options (can handle trillions of events / day )
-3. Use SNS for basic pub/sub model, like credit card transactions (see below)
-
 ### SNS AWS
 #### 1. Creating a topic
 1. Specify name
@@ -65,7 +54,7 @@ For fraud and analytics service, we purposefully use SQS, becasue is any of the 
 
 #### 2. Create Subscription
 1. Specify topic ARN
-2. Specify protocol - who the subscriber is?
+2. Specify protocol - who the subscriber is?  
 ![alt text](PNG/SNS4.PNG "Title")   
 3. Specify subscription filter policy **(Used to reduce AWS cost)**  
 ![alt text](PNG/SNS5.PNG "Title")   

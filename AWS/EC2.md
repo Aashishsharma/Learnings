@@ -137,14 +137,17 @@ Thus you have created exact same volume in a new region
 - create EFS volume
 - speficy security groups, VPC
 - while creating EC2, specify EFS volume
-- ![alt text](PNG/EFS.PNG "Title")
+
+![alt text](PNG/EFS.PNG "Title")
 **note** - the checbox above - auto moutn shared FS by attaching user data scripts - make saure that the EFS will be attached to this EC2, and AWS will handle the userdata script which will run on instance boot (1st time)
 - this way our EC2 now has access to this file system **/mnt/efs/fs1**
 - **accessing this fs in multiple EC2 instance**
 - **Instance A** - create a new file hello-world.txt and writes content (we connected to EC2 via AWS instance connect)
-- ![alt text](PNG/EFS1.PNG "Title")
+
+![alt text](PNG/EFS1.PNG "Title")
 - **Instance B** - can directly read the file contents, becuase this is now a shared FS 
-- ![alt text](PNG/EFS2.PNG "Title")
+
+![alt text](PNG/EFS2.PNG "Title")
 
 # AMI - Amazon Machine Image
 - similar to docker images, you can launch new EC2 instances from this AMIs

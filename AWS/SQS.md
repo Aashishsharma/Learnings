@@ -14,6 +14,8 @@
 3. Receiving does NOT delete the message
 4. Consumer must delete the message explicitly by sending the acknowledgement to the queue
 
+**In SQS, consumers will poll messages, and consumer needs to send ACQ to SQS to delete the message, whereas in SNS, it is SNS's job to send message to each subscriber, and once SNS sends messages to all of them, msg is removed from the topic**
+
 | Guarantee | How it is achieved | What the consumer must do | Message structure | Use cases |
 |----------|--------------------|---------------------------|-------------------|-----------|
 | **At-most-once** | Producer sends once; broker does not retry or consumer ACKs before processing. If message is lost, it is not resent. | Consumer need not be idempotent because duplicates don't occur. | Any structure; message ID optional. | Analytical system where message lost is acceptable|

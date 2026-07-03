@@ -1,7 +1,10 @@
 # Cognito
 - AWS managed authentication and user management service that helps you sign up, sign in, and control access for web and mobile applications.
+
 ![alt text](PNG/Cognito1.PNG "Title") 
+
 ![alt text](PNG/Cognito.PNG "Title")  
+
 ![alt text](PNG/Cognito3.PNG "Title") 
 
 ## Cognito User Pools (CUP)
@@ -231,7 +234,8 @@ Protected API
 ## Cognito Identity pools
 - A service that provides temporary AWS credentials to authenticated or guest users, allowing them to securely access AWS services like S3, DynamoDB, and API Gateway.
 - so instead of giving IAM creds to 100s of users, use identity pool
-- ![alt text](PNG/Cognito11.PNG "Title")  
+
+![alt text](PNG/Cognito11.PNG "Title")  
 - **usecase** - Allow 100s of users to upload photos/videos directly from a web or mobile app to **Amazon S3**
 - why not create a webapp, where app will allow users to upload file, and app will push it to s3?
 - **The question is whether the upload goes through your backend or directly to S3.**

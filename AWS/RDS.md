@@ -147,7 +147,8 @@ const [rows] = await reader.execute(
 
 #### Creating Elastic cache
 - note in below Valkey is Redis only
-- ![alt text](PNG/Ecache.PNG "Title")  
+
+![alt text](PNG/Ecache.PNG "Title")  
 - rest steps are more or less similar ro RDS creation
 - it will give us Redis's primary and read replica endpoints, which we can use in app code to connect
 
