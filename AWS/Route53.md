@@ -97,7 +97,6 @@ User -> DNS query: www.example.com
 User -> HTTP request to Mumbai ALB
       -> ALB routes /api/* to API target group
 
-      ## Route 53 Routing Policies
 
 Routing policies determine **which IP address (or endpoint)** Route 53 returns in the DNS response.
 
@@ -128,7 +127,7 @@ Depending on the routing policy:
 
 **Yes.**
 
-The routing policy is evaluated **only when a DNS lookup reaches Route 53**.
+The routing policy is evaluated **only when a DNS lookup reaches Route 53** untill the DNS cache expires (TTL we set above)
 
 ```text
 Browser
