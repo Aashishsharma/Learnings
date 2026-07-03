@@ -27,6 +27,7 @@ Examples:
 
 ### 2. Lambda Asynchronous Invocation
 - Caller does NOT wait for Lambda execution to complete.
+- behind the scenes, S3, SNS, Cloudwach events push the messages to internal labda queue, which then invokes lambda
 ![alt text](PNG/l5.PNG "Title")  
 - for async invocation where lambda fails for X amount of time, we can have DLQ which will send msgs to SNS
 - note that this DLQ is set on Lambda and not on SNS
@@ -36,7 +37,7 @@ Examples:
 - Some services (KDS, SQS, Dynamo DB streams) don't push events directly to Lambda.
 - Instead, Lambda must continuously poll them for new messages/records.
 - A Lambda Event Source Mapping is a configuration that tells Lambda to poll an event source and invoke the function when new records arrive.
-- here also we can have failed messages and set a DLQ, but this time DLQ needs to be set in SQS, because with eventsource mapping, lambda is invoked synchronously, and DQL on lambda can be set only when lambda is invoked async
+- here also we can have failed messages and set a DLQ, but this time DLQ needs to be set in SQS, because with eventsource mapping, lambda is invoked synchronously, and DLQ on lambda can be set only when lambda is invoked async
 
 **How it works** -  
 ![alt text](PNG/l9.PNG "Title")  
