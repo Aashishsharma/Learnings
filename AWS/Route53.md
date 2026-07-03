@@ -238,28 +238,6 @@ The selected **ALB** then decides **which healthy EC2 instance** should serve th
 - R53 will ensure, 70& traffic goes to sever 1, 20 to server 2, and 10 to server 3
 - now this is actual loadbalancing, it distributes traffic
 
-| Route 53 Weighted Routing | Load Balancer |
-|--------------------------|---------------|
-| DNS layer | Traffic layer |
-| Chooses **which endpoint/IP** to return | Chooses **which backend** gets the request |
-| Happens during DNS lookup | Happens for every request |
-| Subject to DNS caching | No DNS caching issue |
-| Example: 80% Mumbai ALB, 20% Virginia ALB | Example: Round Robin across EC2-1, EC2-2, EC2-3 |
-
-User
-  |
-Route 53 Weighted Routing
-  |
-  +--> 80% -> Mumbai ALB
-  |
-  +--> 20% -> Virginia ALB
-
-Mumbai ALB
-  |
-  +--> EC2-1
-  +--> EC2-2
-  +--> EC2-3
-
 | Service | Typical Use Cases |
 |--------|-------------------|
 | **Route 53 Weighted Routing** | • Blue/Green deployments<br>• Canary releases<br>• Gradually shifting traffic between regions or environments |
