@@ -85,7 +85,7 @@ EC2 / ECS / Lambda
 - the TTL field tells the client browser to cache the DNS record (domain to IP mapping) for these many seconds
 - if TTL is 24hrs, and if we update the record type, lets say we update the A record with different IP, the clients will have stale DNS records for upto 24hrs, based on when they last queried the DNS server
 
-## R53 Routing Policies
+### R53 Routing Policies
 - This defines how R53 will respond to DNS queries
 - this routing is not same as ALB routing policies
 - ALB routing - routes traffic, basically client's requests
@@ -96,6 +96,139 @@ User -> DNS query: www.example.com
 
 User -> HTTP request to Mumbai ALB
       -> ALB routes /api/* to API target group
+
+      ## Route 53 Routing Policies
+
+Routing policies determine **which IP address (or endpoint)** Route 53 returns in the DNS response.
+
+#### Example
+
+```text
+app.example.com
+
+A Records:
+- 3.10.10.10 (Mumbai)
+- 18.20.20.20 (Singapore)
+```
+
+Depending on the routing policy:
+
+| Routing Policy | What Route 53 Returns |
+|----------------|-----------------------|
+| **Simple** | One or more configured IPs |
+| **Weighted** | IPs according to the configured weights |
+| **Latency** | The endpoint with the lowest latency |
+| **Geolocation / Geoproximity** | The endpoint for the user's region |
+| **Failover** | The primary endpoint unless health checks fail |
+
+---
+
+
+#### Does Routing Happen Only Once?
+
+**Yes.**
+
+The routing policy is evaluated **only when a DNS lookup reaches Route 53**.
+
+```text
+Browser
+    │
+    │ DNS Query
+    ▼
+Route 53
+    │
+    │ Applies Routing Policy
+    ▼
+Returns IP Address
+    │
+    ▼
+DNS Cache (TTL)
+    │
+    ├── Subsequent requests use the cached IP
+    └── No Route 53 lookup until TTL expires
+```
+
+---
+
+#### Key Points
+
+- ✅ Route 53 routing policies are applied **only during DNS resolution**.
+- ✅ After that, the returned IP is **cached** for the record's **TTL**.
+- ✅ While cached, requests go to the **same IP**.
+- ✅ Once the TTL expires and a fresh DNS lookup occurs, Route 53 may return a **different IP** according to the routing policy.
+
+### Route 53 → ALBs → EC2
+
+```text
+                        User
+                          │
+                          │ DNS Query
+                          ▼
+                    Route 53
+              (Routing Policy Applied)
+                          │
+        ┌─────────────────┴─────────────────┐
+        │                                   │
+        │                                   │
+ ALB - Mumbai (A Record 1)          ALB - Singapore (A Record 2)
+   alb-mumbai...amazonaws.com         alb-sg...amazonaws.com
+        ▲                                   ▲
+        │                                   │
+        └────── Route 53 returns ONE based on
+                the routing policy ──────────┘
+                          │
+                          ▼
+                Client connects to
+                the selected ALB only
+                          │
+                          ▼
+               Selected ALB Load Balances
+                          │
+                ┌─────────┴─────────┐
+                ▼                   ▼
+          EC2 Instance 1      EC2 Instance 2
+```
+
+#### Why Multiple A Records Pointing to Different ALBs?
+
+The most common use case is **multi-region deployments**.
+
+Suppose you have:
+
+| Region | ALB | Backend |
+|--------|-----|---------|
+| Mumbai (`ap-south-1`) | ALB-1 | EC2 instances in Mumbai |
+| Singapore (`ap-southeast-1`) | ALB-2 | EC2 instances in Singapore |
+
+Both ALBs are configured as **A (Alias)** records for:
+
+```
+app.example.com
+```
+
+Route 53 chooses **which ALB** to return.
+
+---
+
+#### Examples
+
+| Routing Policy | Which ALB is Returned? |
+|----------------|------------------------|
+| **Latency** | Nearest ALB (e.g., Mumbai users → Mumbai ALB, Singapore users → Singapore ALB) |
+| **Weighted** | 80% Mumbai ALB, 20% Singapore ALB (for canary or gradual rollout) |
+| **Failover** | Primary ALB unless it becomes unhealthy, then secondary ALB |
+| **Geolocation** | ALB based on user's country/continent |
+| **Geoproximity** | ALB closest to the user's geographic location |
+
+---
+
+Route 53 decides **which ALB (or region)** the user should reach.
+
+The selected **ALB** then decides **which healthy EC2 instance** should serve the request.
+
+**Route 53 performs global routing.**
+
+**ALB performs local load balancing within a region.**
 
 ### 1. Simple routing policy
 - Route 53 returns the **single configured record** for a domain.
