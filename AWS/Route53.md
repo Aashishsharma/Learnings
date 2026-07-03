@@ -50,7 +50,8 @@ After that, all DNS queries for `example.com` are forwarded to Route 53's author
 | Extra DNS lookup required | ✅ Yes | ❌ No (Route 53 resolves it internally) |
 | Common Targets | `www.example.com -> example.com` | `example.com -> ALB / CloudFront / S3 website` |
 
-- ![alt text](PNG/Alias.PNG "Title")
+
+![alt text](PNG/Alias.PNG "Title")
 - notice - that if we had used CNAME, we can provide the target as another domain name only, but this is alias record (alias toggle is on), so target can be any AWS resource
 - why to use Alias? - if I purchased ashish.com domain, I can apply CNAME only on it's subdomain, but if I want a app running on ashish.com and not on any subdomain, then it can be done using alias only, (you can see in above screenshot the record name blog is empty, but it is required if record type is CNAME)
 
@@ -71,7 +72,8 @@ EC2 / ECS / Lambda
 ```
 
 #### Registering a domain
-- ![alt text](PNG/DNS.PNG "Title")
+
+![alt text](PNG/DNS.PNG "Title")
 - then provide your contact info
 - then do the payment, and you have your domain name  
 - AWS will create NS record by default for your domain, since AWS knows it's NS servers
