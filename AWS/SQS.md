@@ -2,6 +2,8 @@
 - it is AWS managed **Distributrd Messaging queue** service
 - similar to Kafka and RabbitMQ
 
+#### SNS SQS (Kinesis aka Kafka) - SNS send mgs to multiple subscribers and msg removed, SQS - Consumers will have to POLL msgs (unlike SNS which sends msgs), in SQS msg is consumed by only one consumer (use this to distribute workloads among mutliple consumers), Kinesis (Kafka) - store / process real-time events (which are appendonly), unlike SQS (where only 1 consumer can conume msgs), in Kinesis multiple consumers can consume message (consumers will have to poll), and unlike SNS where message once delivered to all gets deleted, in Kinesis, msgs stored upto 1 yr, plus, consumers can consume messages at their own pace, and can REPLAY msgs, where as in SNS, all subscribers recieve msgs at the same time
+
 #### SQS messaging vs API calls
 1. SQS is async based message system, API call is synchronous
 2. Decoupled architecture
