@@ -177,7 +177,8 @@ exports.handler = async (event) => {
 
 ### Lambda Execution role vs Resource policy
 - **Execution Role  = What Lambda CAN DO**
-- **Resource Policy = Who CAN CALL Lambda** 
+- **Resource Policy = Who CAN CALL Lambda**  
+
 | Aspect | Lambda Execution Role | Lambda Resource Policy |
 |----------|----------|----------|
 | Purpose | Defines what the Lambda function can access | Defines who can invoke or access the Lambda function |
@@ -307,6 +308,7 @@ AWS may destroy it at any time
 2 things  
 1. Allows us to run lambda on custom runtime not supported by lambda (C++ / Rust)
 2. Externalize dependencies - allow common dependencies and shared code to be packaged once and reused by multiple Lambda functions, reducing deployment size and simplifying maintenance.  
+
 | Topic | Lambda Layers |
 |----------|----------|
 | Purpose | Share common code, libraries, and dependencies across multiple Lambda functions |
