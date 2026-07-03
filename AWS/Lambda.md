@@ -306,7 +306,7 @@ AWS may destroy it at any time
 ### Lambda layers
 2 things  
 1. Allows us to run lambda on custom runtime not supported by lambda (C++ / Rust)
-2. Externalize dependencies - allow common dependencies and shared code to be packaged once and reused by multiple Lambda functions, reducing deployment size and simplifying maintenance.
+2. Externalize dependencies - allow common dependencies and shared code to be packaged once and reused by multiple Lambda functions, reducing deployment size and simplifying maintenance.  
 | Topic | Lambda Layers |
 |----------|----------|
 | Purpose | Share common code, libraries, and dependencies across multiple Lambda functions |
