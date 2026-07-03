@@ -146,9 +146,9 @@ const [rows] = await reader.execute(
 - use case - performance, store user's session, so all EC2 instances can access user sessions, and we don't need sticky sessions any more
 
 #### Creating Elastic cache
-- note in below Valkey is Redis only
+- note in below Val-key is Redis only
 
-![alt text](PNG/Ecache.PNG "Title")  
+![alt text](PNG/ECache.PNG "Title")  
 - rest steps are more or less similar ro RDS creation
 - it will give us Redis's primary and read replica endpoints, which we can use in app code to connect
 
