@@ -1,7 +1,9 @@
 # Security
 - To protect app from DDoS attack - use 
 ### AWS shield
-![alt text](PNG/Security1.PNG "Title")
+- provided protection from DDoS, Layer4/L5 attacks for free and is enabled by default
+- AWS Shield advanced - 24/7 premium DDoS protection
+- for best security attach shield to R53, Cloudfront, and ELB, all three
 
 ### AWS WAF
 ![alt text](PNG/Security2.PNG "Title") 
