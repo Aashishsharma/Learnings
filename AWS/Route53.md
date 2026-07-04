@@ -247,8 +247,6 @@ A **Canary Release** is a deployment strategy where you send a **small percentag
 
 ### 3. latency based 
 - R53 will ensure, users are given IP of server which are closed to them
-###4. Faliover routing policy 
-- R53 will give IP of other server, if it sees one of the server is down
 
 ![alt text](PNG/latency.PNG "Title")  
 - R53 does not know which target IP belongs to which region
@@ -265,15 +263,17 @@ A **Canary Release** is a deployment strategy where you send a **small percentag
 - **One liner - healthchecks are used for automated DNS failover**
 
 #### Healthchecks types
-- 1. endpoint monitoring healthchecks (works for public endpoints)
+1. endpoint monitoring healthchecks (works for public endpoints)
 - AWS will use 15 healthchecks servers (from all regions) to hit your endpoint
-- These heltcheck servers come from all the regions, and they are also not part of VPC, so it is IMP for our ALBs to allow incoming traffic from AWS's healthservers, this IPs can be found in AWS docs
-- 2. Calculated healthchecks  
+- These heltcheck servers come from all the regions, and they are also not part of VPC, so it is IMP for our ALBs to allow incoming traffic from AWS's healthservers, this IPs can be found in AWS docs  
+
+2. Calculated healthchecks  
 
 ![alt text](PNG/healthcheck4.PNG "Title")  
 - combines the results of multiple Route 53 health checks using logical rules (e.g., AND/OR) to determine the overall health of the parent healtchecker (we can configure rules, e.g. if out of 100 heltcheckers if 80 healthcehckers are green, the parent heltchecker is green).
-- usecase - to monitor progress of mainteneance of website, while app is maintaing, those individual components and parent heatlcare will be unhealthy, app will be healthy when parent is healthy
-- 3. Private hosted zones (used to helthcheck enpoints which are private, not exposed to public)  
+- usecase - to monitor progress of mainteneance of website, while app is maintaing, those individual components and parent heatlcare will be unhealthy, app will be healthy when parent is healthy  
+
+3. Private hosted zones (used to helthcheck enpoints which are private, not exposed to public)  
 
 ![alt text](PNG/Healthcheck2.PNG "Title")  
 
@@ -296,8 +296,10 @@ US users       -> us.example.com
 Others         -> global.example.com
 ```
 
-- **Geolocation Routing** → Route users based on their **physical location** (country/continent/state).
-- **Latency-Based Routing** → Route users to the AWS Region with the **lowest network latency**
+| Routing Policy | Chooses Endpoint Based On | Example |
+|----------------|---------------------------|---------|
+| **Latency-Based** | **Lowest network latency** (fastest response) | A user in Delhi may be routed to **Mumbai** instead of Singapore because it responds faster. |
+| **Geolocation** | **User's geographic location** (country/continent/state) | Users from **India → Mumbai**, users from **Japan → Tokyo**, regardless of latency. |
 
 ### 5. GeoProximity policy 
 - Routes users to resources based on their **geographic proximity** to AWS Regions or AWS Local Zones.
