@@ -212,4 +212,103 @@ Release Inventory      Cancel Order
 - Highly decoupled and scalable.
 - Harder to trace and debug because business logic is distributed across services.
 
-![alt text](PNG/micro-pattern.PNG "Title") 
+![alt text](PNG/micro-pattern.PNG "Title")  
+
+## 3. Strangler pattern
+
+### Problem it sloves
+Replaces a monolithic application by routing functionality to new services until the monolith can be completely retired.
+
+```
+                BEFORE
+
+        +----------------------+
+        |      Client          |
+        +----------+-----------+
+                   |
+                   v
+        +----------------------+
+        |      Monolith        |
+        | Orders              |
+        | Payments            |
+        | Inventory           |
+        | Users               |
+        +----------------------+
+
+             AFTER 
+------------------------------------------------------------
+
+        STEP 1 - Introduce a Proxy/API Gateway
+
+        +----------------------+
+        |      Client          |
+        +----------+-----------+
+                   |
+                   v
+          +------------------+
+          | API Gateway (Facade) |
+          +--------+---------+
+                   |
+         -----------------------
+         |                     |
+         v                     v
++----------------+     +------------------+
+| Monolith       |     | Order Service    |
+| (Remaining)    |     | (New)            |
++----------------+     +------------------+
+
+------------------------------------------------------------
+
+        STEP 2 - Migrate More Features
+
+          +------------------+
+          | API Gateway      |
+          +--------+---------+
+                   |
+    ------------------------------------
+    |          |          |            |
+    v          v          v            v
++----------+ +----------+ +-----------+ +--------------+
+| Monolith | | Orders   | | Payments  | | Inventory    |
+| (Users)  | | Service  | | Service   | | Service      |
++----------+ +----------+ +-----------+ +--------------+
+
+------------------------------------------------------------
+
+        FINAL
+
+          +------------------+
+          | API Gateway      |
+          +--------+---------+
+                   |
+    -----------------------------------------
+    |           |            |              |
+    v           v            v              v
++---------+ +----------+ +-----------+ +-----------+
+| Users   | | Orders   | | Payments  | | Inventory |
+| Service | | Service  | | Service   | | Service   |
++---------+ +----------+ +-----------+ +-----------+
+
+           Monolith Removed ✅
+```
+
+#### Flow
+
+1. We will build a Facade (API Gateway / proxy) which will act as frontlayer for client requests
+2. Initially, all requests are routed to the **Monolith**.
+3. One feature (e.g., Orders) is rewritten as a microservice.
+4. Gateway routes **Order** requests to the new service while all other requests still go to the monolith.
+5. Repeat for Payments, Inventory, Users, etc.
+6. Once every feature is migrated, the monolith is retired.
+
+#### API gateway config
+
+/orders/*  -------------> Order Service  
+/users/*   -------------> Monolith  
+/payments/* ------------> Monolith  
+
+#### Drawbacks
+
+- Temporary coexistence of monolith and microservices.
+- Gateway routing becomes more complex.
+- Data synchronization between old and new systems may be required.
