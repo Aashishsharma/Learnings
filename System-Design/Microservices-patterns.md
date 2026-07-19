@@ -75,4 +75,74 @@ breaker.fire(x, y)
 
 #### 2. Saga pattern
 - consists of sequence of local transactions, each updating a single service
-- if any of the local transact fails, a compensating transaction is trigerred for all the other services
+- if any of the local transact fails, a compensating transaction (to undo the changes) is trigerred for all the other services  
+
+##### 2 ways to implement saga pattern
+1. Saga Pattern - Orchestration  
+A central **Saga Orchestrator** controls the entire workflow.  
+
+```
+                     +----------------------+
+                     |       Client         |
+                     +----------+-----------+
+                                |
+                                | Create Order
+                                v
+                  +-------------------------------+
+                  |       Saga Orchestrator       |
+                  +---------------+---------------+
+                                  |
+                 1. Create Order  |
+                                  v
+                       +------------------+
+                       | Order Service    |
+                       +--------+---------+
+                                |
+                         Success Event
+                                |
+                                v
+                  +-------------------------------+
+                  |       Saga Orchestrator       |
+                  +---------------+---------------+
+                                  |
+                 2. Reserve Inventory
+                                  |
+                                  v
+                     +----------------------+
+                     | Inventory Service    |
+                     +----------+-----------+
+                                |
+                         Success Event
+                                |
+                                v
+                  +-------------------------------+
+                  |       Saga Orchestrator       |
+                  +---------------+---------------+
+                                  |
+                 3. Charge Payment
+                                  |
+                                  v
+                      +---------------------+
+                      | Payment Service     |
+                      +----------+----------+
+                                 |
+                           Payment Failed ❌
+                                 |
+                                 v
+                  +-------------------------------+
+                  |       Saga Orchestrator       |
+                  +---------------+---------------+
+                                  |
+                Execute Compensation
+                                  |
+                 +----------------+----------------+
+                 |                                 |
+                 v                                 v
+        Cancel Order                  Release Inventory
+```
+
+##### Flow
+
+1. If any step fails, the orchestrator triggers compensating transactions in reverse order.
+2. The orchestrator maintains the state of the entire saga.
+
