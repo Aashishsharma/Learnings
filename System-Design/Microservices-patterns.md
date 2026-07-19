@@ -312,3 +312,18 @@ Replaces a monolithic application by routing functionality to new services until
 - Temporary coexistence of monolith and microservices.
 - Gateway routing becomes more complex.
 - Data synchronization between old and new systems may be required.
+
+## 4. Service Discovery
+
+### Problem it solves
+- solves the problem of **dynamically locating healthy service instances without hardcoding their IP addresses or hostnames.**
+
+### Key configs
+1. A new service instance starts (Pod, Container, EC2, etc.).
+2. The instance automatically registers itself with the **Service Registry**.
+3. The Service Registry continuously monitors the instance's health (heartbeats/health checks).
+4. The **Load Balancer** (or Service Mesh) queries the Service Registry for healthy instances.
+5. Incoming requests are routed only to healthy service instances.
+6. If an instance becomes unhealthy or stops, it is automatically removed from the registry, and the Load Balancer stops routing traffic to it.  
+
+**Note that now with ALBs and Kubernetes, we don't need service discovery** - Service discovery was used before ALBs and K8s came into existance
