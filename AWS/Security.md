@@ -14,6 +14,9 @@
 ### Firewall manager
 ![alt text](PNG/Firewall.PNG "Title") 
 
+### Penetration testing
+- we can this testing perform without AWS's approval 
+
 ### ACM
 ![alt text](PNG/ACM.PNG "Title") 
 ![alt text](PNG/ACM1.PNG "Title") 

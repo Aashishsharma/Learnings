@@ -44,14 +44,26 @@
 
 ### AWS Price calculator
 - goto calculator.aws
-- then ernter all resources you are going to use
+- then enter all resources you are going to use
 - select duration, compute / storage resources
 - then it will calculate your estimated price for a given year / month
 
+### Exam
+- tags - to group resources togeter to a specific bill (get bill by department)
+- cost and usage report - most granular cost report in excel to see where your money went
+- cost explorer - visual tool to understand cost, also can forecast your upcoming bill upto 12 months based on your previous bills
+
 ### Billing alarm in cloudwatch
+- only available in us-east-1
 - when cost goes above threshould, billing alarm can send email notification
 - billing alarm can only send notification when the cost actually goes above threshould
-- use **AWS budget** - if you want alarms if **forecasted bill** goes above threshold
+- use **AWS budget** - if you want alarms if **forecasted bill** or even the **actual bill** goes above threshold
+- 4 types of budgets - Usage, Cost, Reservation and Saving plan  
+
+- **Cost Budget** – Monitor your AWS spending.
+- **Usage Budget** – Monitor service usage (e.g., EC2 hours, GB).
+- **Reservation Budget** – Track Reserved Instance utilization and coverage.
+- **Savings Plans Budget** – Track Savings Plans utilization and coverage.
 
 ### AWS cost anamoly detection
 - managed service which uses ML to detect unusual spends
@@ -64,4 +76,6 @@
 - high level AWS account management assessment
 - analyse your AWS acc, and provide recommendation on 
 - 1. cost optimization
-- 2. Performance, 3. Security, 4. Fault tolerance
+- 2. Performance, 
+- 3. Security, 
+- 4. Fault tolerance
