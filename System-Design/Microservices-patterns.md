@@ -78,7 +78,7 @@ breaker.fire(x, y)
 - if any of the local transact fails, a compensating transaction (to undo the changes) is trigerred for all the other services  
 
 ##### 2 ways to implement saga pattern
-1. Saga Pattern - Orchestration  
+##### 1. Saga Pattern - Orchestration  
 A central **Saga Orchestrator** controls the entire workflow.  
 
 ```
@@ -145,4 +145,70 @@ A central **Saga Orchestrator** controls the entire workflow.
 
 1. If any step fails, the orchestrator triggers compensating transactions in reverse order.
 2. The orchestrator maintains the state of the entire saga.
+
+##### 2. **Saga Pattern - Choreography**
+
+There is **no central coordinator**.
+
+Each service publishes events, and other services react to those events.
+
+```
+             +----------------+
+             |     Client     |
+             +-------+--------+
+                     |
+             Create Order
+                     |
+                     v
+          +---------------------+
+          | Order Service       |
+          +----------+----------+
+                     |
+        OrderCreated Event
+                     |
+                     v
+               Message Broker
+                     |
+      ----------------------------------
+      |                                |
+      v                                v
++------------------+          +------------------+
+| Inventory Service|          | Notification Svc |
++--------+---------+          +------------------+
+         |
+ Inventory Reserved
+         |
+         v
+    Message Broker
+         |
+         v
++------------------+
+| Payment Service  |
++--------+---------+
+         |
+ Payment Failed ❌
+         |
+ PaymentFailed Event
+         |
+         v
+    Message Broker
+         |
+  ------------------------
+  |                      |
+  v                      v
++----------------+   +----------------+
+| Inventory Svc  |   | Order Service  |
++-------+--------+   +-------+--------+
+        |                    |
+Release Inventory      Cancel Order
+```
+
+##### Flow
+1. If payment fails, it publishes **PaymentFailed**.
+2. Order and Inventory services consume the failure event and execute compensating transactions.
+
+### Characteristics
+- No central coordinator.
+- Highly decoupled and scalable.
+- Harder to trace and debug because business logic is distributed across services.
 
