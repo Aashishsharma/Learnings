@@ -44,7 +44,7 @@ breaker.fire(x, y)
   .catch(console.error);
 ```
 
-## 2. Saga pattern
+## 2. Distributed transactions
 #### Problem it solves
 - pattern that iguides mplementing ACID properties for distributed systems  
 
@@ -74,3 +74,5 @@ breaker.fire(x, y)
 - the services should always wait for co-ordinations decision, if co-ordinator dies, services should not rollback on their own, only if co-ordinations says rollback / commit only then do
 
 #### 2. Saga pattern
+- consists of sequence of local transactions, each updating a single service
+- if any of the local transact fails, a compensating transaction is trigerred for all the other services
