@@ -212,3 +212,4 @@ Release Inventory      Cancel Order
 - Highly decoupled and scalable.
 - Harder to trace and debug because business logic is distributed across services.
 
+![alt text](PNG/micro-pattern.PNG "Title") 
