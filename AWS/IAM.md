@@ -26,41 +26,61 @@ Four sections in IAM
 
 ## Sample IAM Policy Structure
 
-Here's a sample IAM policy in JSON format, with comments explaining each field:
+there are 2 types of IAM policies  
+1. IAM policy - Attach to an IAM User/Role/Group → defines what this identity can access
 
 ```json
 {
-  "Version": "2012-10-17", // Policy language version. Almost always "2012-10-17".
-  "Id": "S3ReadPolicy", // (Optional) Unique identifier for the entire policy.
+  "Version": "2012-10-17", // IAM policy language version.
+  "Id": "S3ReadPolicy", // (Optional) Policy identifier.
   "Statement": [
     {
-      "Sid": "AllowReadFromBucket", // (Optional) Unique name for this statement.
-      "Effect": "Allow", // "Allow" or "Deny". Explicit Deny always wins.
-      "Principal": {
-        "AWS": "arn:aws:iam::123456789012:role/MyAppRole"
-      },
-      // WHO gets these permissions.
-      // Used ONLY in Resource-based policies (S3 Bucket Policy, SQS, SNS, etc.)
-      // NOT used in Identity-based IAM policies (attached to Users/Roles/Groups).
+      "Sid": "AllowReadFromBucket", // (Optional) Statement identifier.
+      "Effect": "Allow", // Allow or Deny.
+      // Principal: ❌ NOT allowed in IAM Identity Policies because the policy is already attached to a User/Role/Group.
       "Action": [
-        "s3:GetObject",
-        "s3:ListBucket"
-      ],
-      // WHAT actions are allowed/denied.
-      // Can be a single string or an array.
-      // Wildcards allowed: "s3:*", "*"
+        "s3:ListBucket",
+        "s3:GetObject"
+      ], // Actions this User/Role/Group can perform.
       "Resource": [
         "arn:aws:s3:::mybucket",
         "arn:aws:s3:::mybucket/*"
-      ],
-      // WHICH resources the actions apply to.
-      // "*" means all resources.
-      // Object access requires bucket/*
+      ], // Resources these actions apply to.
       "Condition": {
         "IpAddress": {
           "aws:SourceIp": "203.0.113.0/24"
         }
-      }
+      } // Permission applies only if request comes from this IP range.
+    }
+  ]
+}
+```
+
+2. Resource policy - Use when: The resource itself decides who can access it.  
+```json
+{
+  "Version": "2012-10-17", // IAM policy language version.
+  "Id": "S3ReadPolicy", // (Optional) Policy identifier.
+  "Statement": [
+    {
+      "Sid": "AllowReadFromBucket", // (Optional) Statement identifier.
+      "Effect": "Allow", // Allow or Deny.
+      "Principal": {
+        "AWS": "arn:aws:iam::123456789012:role/MyAppRole"
+      }, // Who is allowed to access this resource. Used ONLY in Resource-Based Policies.
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetObject"
+      ], // Actions Principal can perform.
+      "Resource": [
+        "arn:aws:s3:::mybucket",
+        "arn:aws:s3:::mybucket/*"
+      ], // This resource on which the actions are allowed.
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": "203.0.113.0/24"
+        }
+      } // Permission applies only if request comes from this IP range.
     }
   ]
 }
