@@ -77,13 +77,11 @@ Security Groups act as virtual firewalls for your EC2 instances, controlling inb
 
 
 ### 1. EBS - Elastic Block Store
-- EBS provides persistent block storage volumes that can be attached to EC2 instances, offering durable and high-performance storage for data that requires frequent updates.
-- It supports features like snapshots for backups, encryption, and different volume types (e.g., SSD for general purpose or IOPS-optimized) to match various performance and cost needs.
-- by default for every new EC2 instance that we create, EBS of 8 GB is attached
+- EBS provides persistent block storage volumes
+- these are network only and not physically attached to EC2
+- attched to only one EC2 at a time (default size 8GB)
+- locked at AZ level, (can be attched to EC2 from different AZ, by taking snapshot)
 
-After creating EC2 instance, go to storage section, and click on create volume
-
-**EBS cannot be used across Availiability zones**, for e.g. if you create a volume in us-east-1 AZ, then you cannot attach this volume to EC2 which is in us-east-2. To do that, you need to create a snapshot of that region and then use theat snapshot in new Volume created in the sepcified region.
 
 1. Under volumes - click on action -> create snapshot
 2. Under snapshot - click on copy snapshot to other region - slect region

@@ -327,3 +327,8 @@ Replaces a monolithic application by routing functionality to new services until
 6. If an instance becomes unhealthy or stops, it is automatically removed from the registry, and the Load Balancer stops routing traffic to it.  
 
 **Note that now with ALBs and Kubernetes, we don't need service discovery** - Service discovery was used before ALBs and K8s came into existance
+
+**ToDO**  
+1. service discovery vs load balancer
+2. Istio AWS EKS demo
+3. Leran K8 on AWS

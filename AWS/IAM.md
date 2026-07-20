@@ -30,12 +30,37 @@ Here's a sample IAM policy in JSON format, with comments explaining each field:
 
 ```json
 {
-  "Version": "2012-10-17",  // The version of the policy language. Use "2012-10-17" for most cases.
-  "Statement": [  // An array of one or more policy statements.
+  "Version": "2012-10-17", // Policy language version. Almost always "2012-10-17".
+  "Id": "S3ReadPolicy", // (Optional) Unique identifier for the entire policy.
+  "Statement": [
     {
-      "Effect": "Allow",  // Specifies whether the statement allows or denies access. Values: "Allow" or "Deny".
-      "Action": "s3:GetObject",  // The AWS service actions that are allowed or denied. Can be a string or array of strings.
-      "Resource": "arn:aws:s3:::mybucket/*"  // The AWS resources to which the actions apply. Can be a string or array of ARNs.
+      "Sid": "AllowReadFromBucket", // (Optional) Unique name for this statement.
+      "Effect": "Allow", // "Allow" or "Deny". Explicit Deny always wins.
+      "Principal": {
+        "AWS": "arn:aws:iam::123456789012:role/MyAppRole"
+      },
+      // WHO gets these permissions.
+      // Used ONLY in Resource-based policies (S3 Bucket Policy, SQS, SNS, etc.)
+      // NOT used in Identity-based IAM policies (attached to Users/Roles/Groups).
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket"
+      ],
+      // WHAT actions are allowed/denied.
+      // Can be a single string or an array.
+      // Wildcards allowed: "s3:*", "*"
+      "Resource": [
+        "arn:aws:s3:::mybucket",
+        "arn:aws:s3:::mybucket/*"
+      ],
+      // WHICH resources the actions apply to.
+      // "*" means all resources.
+      // Object access requires bucket/*
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": "203.0.113.0/24"
+        }
+      }
     }
   ]
 }
