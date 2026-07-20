@@ -17,7 +17,7 @@
 - other usecase - our main app read / write to DB, there is another App which just shows reporting dashboards by reading DB, then that reporting dashboard can just connect to that read replica
 
 ### RDS Read Replica Costing
-![alt text](PNG/RDSReadReplica.PNG "Title") 
+![alt text](PNG/RDSRRCost.PNG "Title") 
 
 ### RDS Multi-AZ - for disaster recovery purpose
 ![alt text](PNG/RDSAZ.PNG "Title") 
