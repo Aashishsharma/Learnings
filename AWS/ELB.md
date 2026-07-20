@@ -23,9 +23,12 @@
 - ALB can route request to multiple target groups, so we can create 1 TG for EC2s, 1 TG for lambdas
 
 #### Routing rules
-- based on query params
-![alt text](PNG/ALB2.PNG "Title") 
-- similarly routing can be done based below options
+- based on query params  
+
+![alt text](PNG/ALB2.PNG "Title")  
+
+- similarly routing can be done based below options  
+
 ![alt text](PNG/ALB3.PNG "Title") 
 
 ## How to stop access of target Ec2 instances which are hidden behind ELB
@@ -78,10 +81,13 @@ EC2-1 / EC2-2 / EC2-3
 | **AWSALB** | ALB | ALB-generated cookie that keeps the client bound to the same target. |
 | **Application Cookie** | Your application | ALB uses your application's cookie to maintain stickiness. |
 
-- in below config, AWS will create a cookie for you with name AWSALB
-![alt text](PNG/ALB4.PNG "Title")
+- in below config, AWS will create a cookie for you with name AWSALB  
+
+![alt text](PNG/ALB4.PNG "Title")  
+
 - in below config, you have to create cookie inside app with name - MYCUSTOMCOOKIEAPP
-- we need to handle all it's cookie attributes, ALB will just ensure that same cookie value goes to same EC2 instance
+- we need to handle all it's cookie attributes, ALB will just ensure that same cookie value goes to same EC2 instance  
+
 ![alt text](PNG/ALB5.PNG "Title")
 
 - An ALB can route requests to targets in **multiple AZs**  but the **region should be same**

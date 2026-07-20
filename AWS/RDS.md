@@ -6,7 +6,8 @@
 - but we cannot SSH into AWS RDS
 - AWS RDS supports MySQL, SQL Server, Postgres and others  
 
-**RDS Storage auto-scaling** - 
+**RDS Storage auto-scaling** -  
+
 ![alt text](PNG/RDSStorageScaling.PNG "Title") 
 
 ### RDSReadReplica - Main purpose - perf optimization for read operations
