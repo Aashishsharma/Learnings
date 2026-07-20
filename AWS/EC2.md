@@ -62,7 +62,8 @@ Security Groups act as virtual firewalls for your EC2 instances, controlling inb
 2. ```ssh -i .\ec2-login.pem ec2-user@13.232.74.85``` - the .pem file is option is available wjen creating ec2 instance
 
 ## EC2 instance connect
-- doing SSH into EC2, but this time, in the browser, simiar to cloudshell for cli
+- doing SSH into EC2, but this time, in the browser
+- cloudshell is for AWS CLI, EC2 instance connect is for sshing to EC2
 - only works with Amazon Linux AMI
 
 - below I am in EC2 instance connect, so I am into EC2 server
@@ -139,8 +140,9 @@ Thus you have created exact same volume in a new region
 - speficy security groups, VPC
 - while creating EC2, specify EFS volume
 
-![alt text](PNG/EFS.PNG "Title")
-**note** - the checbox above - auto moutn shared FS by attaching user data scripts - make saure that the EFS will be attached to this EC2, and AWS will handle the userdata script which will run on instance boot (1st time)
+![alt text](PNG/EFS.PNG "Title")  
+
+**note** - the checbox above - auto mount shared FS by attaching user data scripts - make saure that the EFS will be attached to this EC2, and AWS will handle the userdata script which will run on instance boot (1st time)
 - this way our EC2 now has access to this file system **/mnt/efs/fs1**
 - **accessing this fs in multiple EC2 instance**
 - **Instance A** - create a new file hello-world.txt and writes content (we connected to EC2 via AWS instance connect)
