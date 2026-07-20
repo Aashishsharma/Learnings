@@ -30,17 +30,19 @@ EC2 instance types are categorized into families based on their use cases, with 
 Security Groups act as virtual firewalls for your EC2 instances, controlling inbound and outbound traffic at the instance level. They are stateful, meaning that return traffic for allowed inbound connections is automatically permitted.
 
 - **Key Features**:
+  - stateful - return traffic for allowed inbound connections is automatically permitted
   - Rules specify allowed protocols (TCP, UDP, ICMP), ports, and sources (IP addresses, CIDR blocks, or other security groups) for inbound traffic, and destinations for outbound.
   - Default behavior: Deny all inbound traffic, allow all outbound traffic, only allow rules can be specified
-  - Can be attached to multiple instances and are VPC-specific.
   - Changes take effect immediately.
   - sec grp is region / VPC specific
   - if you get timeout issue on your site - it is securoty grp is blocking the req
   - if you get connection refused - app error
 
 - **Inbound Rules**: Define what traffic can reach your instances (e.g., allow SSH on port 22 from your IP).
-- **Outbound Rules**: Define what traffic your instances can send (e.g., allow HTTP on port 80 to anywhere (so that your ec2 instance can access outside internet)).
-**Defning rules** - 
+- **Outbound Rules**: Define what traffic your instances can send (e.g., allow HTTP on port 80 to anywhere (so that your ec2 instance can access outside internet)).  
+
+**Defning rules** -  
+
 ![alt text](PNG/Sec-grp.PNG "Title")
 - we can define rules using security groups
 - create sec grp, attach multiple sec grp to EC2, then all the other EC2s which are attached to those sec grp can communicate directly, insttead of specific IPs of all EC2, which btw can be dynamic 
@@ -66,8 +68,9 @@ Security Groups act as virtual firewalls for your EC2 instances, controlling inb
 - below I am in EC2 instance connect, so I am into EC2 server
 - now if this EC2 server needs to call IAM service it cannot do, because we need to attach IAM role which can access IAM service
 - note- as shwon in below image, we can call aws configure and provide our IAM user's accessid and secret key, but then anyone, using this EC2, can maybe see our user's secrtet key, hence we should use IAM role
-- this is the reason why IAM role's exists, other wise any developer might see any other develper's IAM secret if those are configured in any of the AWS's services, hence IAM roles are used for AWS services and not IAM users
-![alt text](PNG/EC2-Iam.PNG "Title") 
+- this is the reason why IAM role's exists, other wise any developer might see any other develper's IAM secret if those are configured in any of the AWS's services, hence IAM roles are used for AWS services and not IAM users  
+
+![alt text](PNG/EC2-IAM.PNG "Title") 
 
 ## Storage on EC2
 3 types
