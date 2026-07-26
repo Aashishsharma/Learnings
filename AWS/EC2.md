@@ -25,6 +25,19 @@ EC2 instance types are categorized into families based on their use cases, with 
 | **Storage Optimized** | i, d | High storage capacity and high I/O performance. | NoSQL databases, data warehousing, Elasticsearch. |
 | **Accelerated Computing** | p, g, f | Hardware accelerators such as GPUs and FPGAs. | Machine learning, graphics rendering, video processing, HPC. |
 
+<details open>
+<summary><b>EC2 Spot Instances </b></summary>
+
+- Define a **maximum Spot price**.
+- You get the instance as long as the **current Spot price ≤ your max price**.
+- If the current Spot price becomes **> your max price**, AWS sends a **2-minute interruption notice**.
+- During those 2 minutes, you can:
+  - Save your work.
+  - Stop/Hibernate (if supported) or terminate the instance.
+  - Gracefully shut down your application.
+
+</details>
+
 ## Security Groups in EC2
 
 Security Groups act as virtual firewalls for your EC2 instances, controlling inbound and outbound traffic at the instance level. They are stateful, meaning that return traffic for allowed inbound connections is automatically permitted.
