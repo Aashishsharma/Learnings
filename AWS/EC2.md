@@ -26,10 +26,61 @@ EC2 instance types are categorized into families based on their use cases, with 
 | **Accelerated Computing** | p, g, f | Hardware accelerators such as GPUs and FPGAs. | Machine learning, graphics rendering, video processing, HPC. |
 
 > [!NOTE]
-> ### EC2 Spot Instances - (Certified Architect)
+> ### EC2 Spot Instances
 > - Define a **maximum Spot price**.
 > - You get the instance as long as the **current Spot price ≤ your max price**.
 > - If the current Spot price becomes **> your max price**, AWS sends a **2-minute interruption notice**.
+> - In this 2 mins, save workload, or data which will be lost
+> ![alt text](PNG/EC21.PNG "Title")  
+> #### 1. Create a Spot Request
+> Instead of directly launching an EC2 instance, you first create a **Spot Request**.
+>
+> **The request includes:**
+> - Maximum Spot Price
+> - Desired number of instances
+> - Launch specification (AMI, Instance Type, Security Groups, etc.)
+> - Request Type (**One-time** or **Persistent**)
+> - Valid From / Valid Until (optional)
+>
+> ---
+>
+> #### 2. AWS Evaluates the Request
+> AWS checks:
+> - Is Spot capacity available?
+> - Is the current Spot price ≤ your maximum Spot price?
+>
+> **If Yes**
+> - AWS launches the Spot instance(s).
+>
+> **If No**
+> - The request remains **Pending** or eventually **Fails**.
+>
+> ---
+>
+> #### 3. Spot Instances Start Running
+> - EC2 Spot instances are launched from the Spot Request.
+> - **Spot Request** and **Spot Instance** are separate AWS resources.
+>
+> ---
+>
+> #### 4. If the Spot Instance is Interrupted
+>
+> **One-Time Request**
+> - Instance is interrupted due to price/capacity.
+> - Instance is Terminated / Stopped / Hibernated (based on interruption behavior).
+> - Spot Request is automatically closed.
+> - AWS **does not** launch another instance.
+>
+> **Persistent Request**
+> - Spot Request remains active.
+> - AWS continuously monitors Spot capacity.
+> - When capacity becomes available, AWS automatically launches a replacement Spot instance.
+> - Continues until you manually cancel the Spot Request.
+>
+> ---
+>
+> ---
+> **Important:** A **Persistent Spot Request** is **not** an Auto Scaling Group. It only ensures the requested number of Spot instances are maintained by relaunching interrupted instances whenever Spot capacity becomes available.
 
 ## Security Groups in EC2
 
