@@ -78,9 +78,49 @@ EC2 instance types are categorized into families based on their use cases, with 
 > - Continues until you manually cancel the Spot Request.
 >
 > ---
+> **Important:** Cancelling spot req, will not terminate EC2 instance, also terminating EC2 without cancelling spot req, then AWS will auto-create new EC2 instances, based on spot req configuration
+> **Important:** A **Persistent Spot Request** is **not** an Auto Scaling Group. It only ensures the requested number of Spot instances are maintained by relaunching interrupted instances whenever Spot capacity becomes available.
+
+> [!NOTE]
+> ### EC2 Spot Fleet - to save cost
+>
+> - You specify the **Target Capacity**, and AWS automatically launches the required instances across multiple instance types and Availability Zones.
+> - In simple terms, you tell AWS:
+>   - **How much capacity** you need (e.g., 10 instances or 40 vCPUs).
+>   - The **maximum price** you're willing to pay for Spot instances.
+>   - The **allowed instance pools** (instance types, Availability Zones, subnets, etc.).
+>
+> - Spot Fleet automatically chooses the best available Spot pools from your allowed list and launches EC2 instances until the **target capacity** is reached.
+>
+> - If a Spot instance is interrupted, Spot Fleet automatically launches a replacement from another eligible pool to **maintain the target capacity**, as long as suitable capacity is available within your constraints.
 >
 > ---
-> **Important:** A **Persistent Spot Request** is **not** an Auto Scaling Group. It only ensures the requested number of Spot instances are maintained by relaunching interrupted instances whenever Spot capacity becomes available.
+>
+> #### Important Configuration
+>
+> **Target Capacity**
+> - Total capacity (instances or vCPUs) that AWS should maintain.
+>
+> **Instance Pools**
+> - Specify multiple instance types (e.g., t3.medium, m6i.large, c6a.large).
+> - we can also specify list of AZs in the pool, but region will alwasy be same
+> - AWS chooses the best available pool.
+>
+> **Spot + On-Demand Capacity**
+> - Can launch only Spot instances or a combination of Spot and On-Demand instances.
+>
+> **Allocation Strategy**
+> - **Lowest Price** → pick lowest-cost EC2 from Spot pools, e.g. t3.medium from AZ us-east-1a currently has lowest price as compared to us-east-1b.
+> - **Diversified** -> distribute (pick EC2) across pool, like if 2 EC2s are needed then pick from 3 diff AZ, and pick 1 t2.micro, 1 from xl based on capacity needed
+> - **Capacity Optimized** → Instead of choosing the **cheapest** Spot pool, AWS chooses the Spot pools with the **most available capacity**.
+> - **Price Capacity Optimized** → frst prioritize EC2 with max capapcity, then from thsoe, select the EC2 with lowset price. Best balance of price and interruption risk (**AWS recommended**).
+>
+> **Maintain Target Capacity**
+> - If a Spot instance is interrupted, Spot Fleet automatically launches a replacement instance to maintain the desired capacity.
+>
+> **IAM Fleet Role**
+> - IAM role used by Spot Fleet to launch, terminate, and manage EC2 instances on your behalf.
+>
 
 ## Security Groups in EC2
 
