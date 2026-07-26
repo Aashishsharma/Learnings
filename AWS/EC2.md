@@ -75,7 +75,7 @@ EC2 instance types are categorized into families based on their use cases, with 
 > - Spot Request remains active.
 > - AWS continuously monitors Spot capacity.
 > - When capacity becomes available, AWS automatically launches a replacement Spot instance.
-> - Continues until you manually cancel the Spot Request.
+> - Continues until you manually cancel the Spot Request / or the spot req's validaity expires
 >
 > ---
 > **Important:** Cancelling spot req, will not terminate EC2 instance, also terminating EC2 without cancelling spot req, then AWS will auto-create new EC2 instances, based on spot req configuration
