@@ -87,7 +87,7 @@ EC2
 
 > [!NOTE]
 > ### We can attach multiple ENIs to a single EC2 instance, but why do we need Multiple ENIs?
->
+> Think of it as 2 NIC cards are attched to same EC2
 > A single EC2 instance may need to communicate with **multiple networks** that require different IPs, Security Groups, or routing rules. Multiple ENIs allow each network connection to have its own independent network identity.
 >
 > ---
