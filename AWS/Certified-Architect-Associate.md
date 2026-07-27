@@ -49,4 +49,38 @@ A single physical server (of AWS - aka -host) can run many EC2 instances using a
 ![alt text](PNG/EC24.PNG "Title")  
 ![alt text](PNG/EC25.PNG "Title")  
 
-Once the stratgey is created, then while launching an EC2 instance, under advance settings, select the placement group name (the one we created above)  
+Once the stratgey is created, then while launching an EC2 instance, under advance settings, select the placement group name (the one we created above)
+
+## ENI - Elastic Network Interface
+
+> - Key point - Every EC2 instance has a **primary ENI** that contains its network configuration (private IP, public/Elastic IP association, Security Groups, MAC address, etc.).
+> - AWS exposes ENI as a separate resource so the **network identity can be managed independently of the EC2 compute**, enabling failover, multiple network interfaces, and advanced networking.
+
+- An **Elastic Network Interface (ENI)** is a **virtual network card (NIC)** that can be attached to an EC2 instance.
+- It enables network connectivity and can be **detached from one EC2 instance and attached to another** within the **same Availability Zone**.
+- Useful for **high availability** and **failover** because the network identity moves with the ENI.
+
+**So EC2 without ENI** - 
+EC2
+├── CPU
+├── Memory
+├── Disk
+├── Private IP
+├── Public IP
+└── Security Groups 
+
+**With ENI** - 
+             ENI
+      ┌─────────────────────┐
+      │ Private IP          │
+      │ Elastic IP          │
+      │ MAC Address         │
+      │ Security Groups     │
+      └─────────┬───────────┘
+                │
+                ▼
+            EC2 Instance
+
+> [!NOTE]
+> ENI is bound to a specific AZ
+> **Most applications do not require manually managing ENIs.** AWS automatically creates and attaches a primary ENI to every EC2 instance. ENIs become useful when the **network identity** (private IPs, MAC address, Security Groups, secondary IPs, etc.) must be managed independently of the EC2 instance, such as in **advanced networking**, **multiple network interfaces**, or **specialized failover scenarios**.
