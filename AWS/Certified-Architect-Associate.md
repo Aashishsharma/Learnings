@@ -84,3 +84,76 @@ EC2
 > [!NOTE]
 > ENI is bound to a specific AZ
 > **Most applications do not require manually managing ENIs.** AWS automatically creates and attaches a primary ENI to every EC2 instance. ENIs become useful when the **network identity** (private IPs, MAC address, Security Groups, secondary IPs, etc.) must be managed independently of the EC2 instance, such as in **advanced networking**, **multiple network interfaces**, or **specialized failover scenarios**.
+
+> [!NOTE]
+> ### We can attach multiple ENIs to a single EC2 instance, but why do we need Multiple ENIs?
+>
+> A single EC2 instance may need to communicate with **multiple networks** that require different IPs, Security Groups, or routing rules. Multiple ENIs allow each network connection to have its own independent network identity.
+>
+> ---
+>
+> #### 1. Connect to Multiple Subnets (Most Common)
+>
+> ```text
+>                 EC2
+>                  │
+>      ┌───────────┴───────────┐
+>      ▼                       ▼
+>   ENI-1                   ENI-2
+> Public Subnet          Private Subnet
+> Web Traffic            Database Traffic
+> ```
+>
+> - ENI-1 handles Internet traffic.
+> - ENI-2 communicates with databases or internal services.
+>
+> ---
+>
+> #### 2. Different Security Groups
+>
+> Each ENI can have different Security Groups.
+>
+> ```text
+> ENI-1 → Allow HTTP/HTTPS
+> ENI-2 → Allow MySQL only
+> ```
+>
+> This isolates traffic without needing another EC2 instance.
+>
+> ---
+>
+> #### 3. Network Appliances
+>
+> Firewalls, routers, VPNs, and NAT instances often need multiple interfaces.
+>
+> ```text
+> Internet
+>     │
+>   ENI-1
+>     │
+> Firewall EC2
+>     │
+>   ENI-2
+>     │
+> Private VPC
+> ```
+>
+> One ENI receives traffic, while another forwards it.
+>
+> ---
+>
+> #### 4. Independent Network Identity
+>
+> Each ENI has its own:
+> - Private IP(s)
+> - Elastic IP association
+> - MAC Address
+> - Security Groups
+>
+> These can be managed independently.
+>
+> ---
+>
+> #### Exam Tip
+>
+> Multiple ENIs are mainly used for **advanced networking**. Typical web applications behind an ALB usually need only the **default primary ENI** created automatically by AWS.
