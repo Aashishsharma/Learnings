@@ -40,3 +40,10 @@ A single physical server (of AWS - aka -host) can run many EC2 instances using a
 - latency will increase so not so good for performance  
 
 ![alt text](PNG/EC23.PNG "Title")  
+
+#### 3. Partiton
+- Divides EC2 instances into **partitions**, where each partition is placed on **separate racks (physical hardware)**.
+- **Instances within the same partition may share racks**, but **different partitions never share racks**.
+- Provides a balance between **high performance** and **fault tolerance**.  
+
+![alt text](PNG/EC24.PNG "Title")  
