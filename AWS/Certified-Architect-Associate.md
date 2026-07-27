@@ -107,16 +107,34 @@ EC2
 > - ENI-1 handles Internet traffic.
 > - ENI-2 communicates with databases or internal services.
 >
-> ---
->
-> #### 2. Different Security Groups
->
-> Each ENI can have different Security Groups.
+> ### Multiple ENIs Example - Separate Web & Database Traffic
 >
 > ```text
-> ENI-1 → Allow HTTP/HTTPS
-> ENI-2 → Allow MySQL only
+>                        Internet
+>                            │
+>                     Internet Gateway
+>                            │
+>                     Public Subnet
+>                            │
+>                         ENI-1
+>                   (10.0.1.10, Public)
+>                            │
+>                      EC2 (Application)
+>                            │
+>                         ENI-2
+>                  (10.0.2.10, Private)
+>                            │
+>                     Private Subnet
+>                            │
+>                           RDS
 > ```
 >
-> This isolates traffic without needing another EC2 instance.
->
+> 1. Client sends an HTTP request from the Internet.
+> 2. The request reaches the Internet Gateway.
+> 3. The Internet Gateway forwards it to **ENI-1** in the Public Subnet.
+> 4. The EC2 application receives the request.
+> 5. The application needs data from the database.
+> 6. It sends the database query through **ENI-2** in the Private Subnet.
+> 7. RDS returns the data through ENI-2.
+> 8. The application prepares the response.
+> 9. The response is sent back to the client through **ENI-1**.
