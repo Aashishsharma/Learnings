@@ -47,3 +47,6 @@ A single physical server (of AWS - aka -host) can run many EC2 instances using a
 - Provides a balance between **high performance** and **fault tolerance**.  
 
 ![alt text](PNG/EC24.PNG "Title")  
+![alt text](PNG/EC25.PNG "Title")  
+
+Once the stratgey is created, then while launching an EC2 instance, under advance settings, select the placement group name (the one we created above)  
