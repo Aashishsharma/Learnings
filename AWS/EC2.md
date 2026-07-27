@@ -205,6 +205,13 @@ Thus you have created exact same volume in a new region
 
 **How to attach EBS to EC2** - out of scope for certified DEV
 
+> [!NOTE]
+> #### EBS encryption
+> EBS encryption if enabled while creating will have below details
+> ![alt text](PNG/EBS2.PNG "Title")  
+> Steps to Encrypting an unencrypted volume
+> Create snapshot of EBS, encrypt that snapshot (by copying it), the create volume of that snapshot, then this new volume would be encrypted on
+
 ### 2. Elastic instance store 
 - this will vanish once EC2 instance is terminated.
 - So EC2 instance store for caching the data, and EBS for storing permanent data
