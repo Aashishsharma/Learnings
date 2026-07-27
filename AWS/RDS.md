@@ -65,21 +65,38 @@
 - **Aurora endpoints** - writer.cluster-xyz.amazonaws.com, reader.cluster-xyz.amazonaws.com
 - **RDS endpoints** - primary.xyz.amazonaws.com, replica1.xyz.amazonaws.com, replica2.xyz.amazonaws.com
 
-#### Aurora replica autoscaling
+> [!NOTE]
+> #### Aurora replica autoscaling
 > We can setup Aurora replica sutoscaling, such that if there are too many read requests, then new instances of Aurora read replicas will be added, and the Aurora reader endpoints will auto include these new instances
 > E.g. If ecisting Aurora read replica's CPU utilization goes above 70%, we can configure autoscaling policy to increase read replicas
 
 ![alt text](PNG/Aurora2.PNG "Title")  
 
-#### Aurora custom endpoints
+> [!NOTE]
+> #### Aurora custom endpoints
 > ![alt text](PNG/Aurora3.PNG "Title")  
 > Suppose we have different types of Aurora instances like (db.r3.large and db.r5.xlarge), and we know we have few instances that are more powerful
 > And we have a usecase to run some analytical queries, then we can create a new (custom endpoint), which we can use in our app to call analytical queries, and those queries will be run on those powerful Auror read replica instances
 
-#### Aurora serverless
+> [!NOTE]
+> #### Aurora serverless
 > ![alt text](PNG/Aurora4.PNG "Title")  
 > Here we don't need to setup autoscaling policy based on any parameter like we did in aurora replica autoscaling
 > We just connect to the **porxy fleet**, and AWS will auto add / remove Aurora instances based on workload
+
+> [!NOTE]
+> #### Global Aurora
+> ![alt text](PNG/Aurora5.PNG "Title")  
+
+> [!NOTE]
+> #### Aurora ML
+> ![alt text](PNG/Aurora6.PNG "Title")  
+
+> [!NOTE]
+> #### Babelfish
+> ![alt text](PNG/Aurora7.PNG "Title")  
+> Today you are using MSSQL, now you want to migrate to Postgress, MSSQL uses T-SQL and Postgress uses pgSQL, so now we need to change client code, and use different drivers
+> But instead is that we use Babelfish, and there will be little to no code change required on client side
 
 ### RDS MySQL
 
