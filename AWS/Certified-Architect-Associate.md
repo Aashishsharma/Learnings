@@ -141,3 +141,8 @@ EC2
 > 7. RDS returns the data through ENI-2.
 > 8. The application prepares the response.
 > 9. The response is sent back to the client through **ENI-1**.
+
+## EC2 Hibernate
+- if you start and stop EC2, it is slow  
+
+![alt text](PNG/EC26.PNG "Title")  
