@@ -76,6 +76,11 @@
 > Suppose we have different types of Aurora instances like (db.r3.large and db.r5.xlarge), and we know we have few instances that are more powerful
 > And we have a usecase to run some analytical queries, then we can create a new (custom endpoint), which we can use in our app to call analytical queries, and those queries will be run on those powerful Auror read replica instances
 
+#### Aurora serverless
+> ![alt text](PNG/Aurora4.PNG "Title")  
+> Here we don't need to setup autoscaling policy based on any parameter like we did in aurora replica autoscaling
+> We just connect to the **porxy fleet**, and AWS will auto add / remove Aurora instances based on workload
+
 ### RDS MySQL
 
 ```js
