@@ -58,7 +58,7 @@ Once the stratgey is created, then while launching an EC2 instance, under advanc
 
 - An **Elastic Network Interface (ENI)** is a **virtual network card (NIC)** that can be attached to an EC2 instance.
 - It enables network connectivity and can be **detached from one EC2 instance and attached to another** within the **same Availability Zone**.
-- Useful for **high availability** and **failover** because the network identity moves with the ENI.
+- Useful for **high availability** and **failover** because the network identity moves with the ENI, if one EC2 instance is gone, create another and attcch this ENI, so that other parts of application are not affected
 
 **So EC2 without ENI** - 
 EC2
@@ -80,6 +80,9 @@ EC2
                 │
                 ▼
             EC2 Instance
+
+- think of it as detachable netowrk interface.
+- similar to how AWS does not provide fixed storage inside EC2, AWS provides EBS (so sotrgae is decoupled with EC2), similarly we can decouple network with EC2 by creating ENIs 
 
 > [!NOTE]
 > ENI is bound to a specific AZ
