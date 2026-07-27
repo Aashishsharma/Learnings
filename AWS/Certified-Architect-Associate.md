@@ -146,3 +146,4 @@ EC2
 - if you start and stop EC2, it is slow  
 
 ![alt text](PNG/EC26.PNG "Title")  
+- Requirements - Root EBS must be encrypted, and must have storage > your EC2 instance's RAM
