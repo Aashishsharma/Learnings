@@ -39,19 +39,37 @@
 - after DB is created, we go to that DB and from the option, select read replica, this way we can create read-replicas
 - again from the options, we can create a snapshot of our DB
 
+
+> [!NOTE]
+> #### RDS Custom for Oracle and MSSQL
+> using this we can access the underlying OS and DB
+> Why needed? - Enable native features, access the underlying EC2 instance using SSH
+> What kind of native features are there?
+> - Install SQL Server native drivers or third-party agents.
+> - Use SQL Server features requiring OS-level access. (e.g. Run PowerShell scripts or Windows Scheduled Tasks on the database server)
+> Things to keep in mind - de-active automation mode, so that AWS does not do patching while we are sshing, and also take snapshot, becuase when we ssh, we can break something
+
+
 ## AWS Aurora vs AWS RDS
 - Auror is built by AWS, built as cloud optimize DB
 - 5x time faster then MySQL and 3x fater that postgres, if we used MySQL or Postgres, since they are not cloud optimized
 - but 20% costlier than RDS 
 
-![alt text](PNG/Aurora.PNG "Title") 
-- key adv is Aurira procides 2 DB endpoints reader and writer
+![alt text](PNG/Aurora.PNG "Title")  
+
+- key adv is Aurora procides 2 DB endpoints reader and writer
 - using writer endpoint, we can do CRUD DB operations, using Reader, only Read
 - the key diff is the endpoint does not change, and Aurora will handle load balancing for us on which instance of read-replica to call, when a read request is made
 - in RDS, our app code needs to decide which read replica instance to use to make a read request
 - so loadbalcing for read replica's in RDS nead to be handled in app code
 - **Aurora endpoints** - writer.cluster-xyz.amazonaws.com, reader.cluster-xyz.amazonaws.com
 - **RDS endpoints** - primary.xyz.amazonaws.com, replica1.xyz.amazonaws.com, replica2.xyz.amazonaws.com
+
+#### Aurora replica autoscaling
+> We can setup Aurora replica sutoscaling, such that if there are too many read requests, then new instances of Aurora read replicas will be added, and the Aurora reader endpoints will auto include these new instances
+> E.g. If ecisting Aurora read replica's CPU utilization goes above 70%, we can configure autoscaling policy to increase read replicas
+
+![alt text](PNG/Aurora2.PNG "Title")  
 
 ### RDS MySQL
 
