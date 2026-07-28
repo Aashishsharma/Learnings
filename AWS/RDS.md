@@ -98,7 +98,7 @@
 > Today you are using MSSQL, now you want to migrate to Postgress, MSSQL uses T-SQL and Postgress uses pgSQL, so now we need to change client code, and use different drivers
 > But instead is that we use Babelfish, and there will be little to no code change required on client side
 
-# RDS Backups
+# RDS and Aurora Backups
 
 > [!NOTE]
 > #### Automated Backups
@@ -106,21 +106,90 @@
 > - **Transaction logs** are backed up every **5 minutes**. (- **Transaction logs** record every change made to the database (INSERT, UPDATE, DELETE), allowing RDS to replay those changes during recovery.)
 > - Supports **Point-in-Time Recovery (PITR)** to restore to almost any time within the retention period.
 > - Backup retention can be **1–35 days** (**0** disables automated backups).
+> - In case of Aurora, these automated backups cannot br disabled, where as in RDS, these can be disabled
 
----
-
-> [!NOTE]
 > #### Manual DB Snapshots
 > - Created **manually** whenever you want.
 > - Captures the database exactly as it is at that moment.
 > - Kept **until you delete it** (no automatic expiration).
 
----
-
 > [!NOTE]
 > #### Cost Tip
 > - A **stopped RDS** still incurs **storage charges**.
 > - For long-term shutdown, **take a snapshot, delete the DB, and restore it later** to save costs.
+
+> [!NOTE]
+> #### RDS & Aurora Restore Options
+>
+> **Restore from Backup/Snapshot**
+> - Restoring an **RDS backup** or **snapshot** always creates a **new database** (it doesn't overwrite the existing one).
+>
+> **Restore MySQL RDS from S3**
+> - Take a backup of your **on-premises MySQL** database.
+> - Upload the backup file to **Amazon S3**.
+> - Restore it into a **new MySQL RDS instance**.
+>
+> **Restore MySQL Aurora from S3**
+> - Take a backup using **Percona XtraBackup**.
+> - Upload the backup file to **Amazon S3**.
+> - Restore it into a **new Aurora MySQL cluster**.
+
+> [!NOTE]
+> #### Aurora Database Cloning
+>
+> - Creates a **new Aurora DB cluster** from an existing cluster.
+> - **Much faster** than snapshot & restore because data isn't copied initially.
+> - Uses the **Copy-on-Write (CoW)** protocol.
+>   - Initially, **both clusters share the same storage pages** (no data is copied).
+>   - When either cluster **modifies a page**, Aurora first **copies only that page**, then writes the change.
+>   - Unchanged pages continue to be shared between both clusters.
+> - Very **fast** and **cost-effective** since only changed data consumes extra storage.
+> - Ideal for creating a **staging/testing** database from production without affecting production.
+>
+> [!NOTE]
+> #### Copy-on-Write (CoW)
+>
+> **Page** = A small block of database data (Aurora copies data **page-by-page**, not the entire database).
+>
+> ```text
+> Time T0 (Clone Created)
+>
+> Production = A B C
+> Clone      = A B C
+>
+> Both databases share the same storage pages.
+> No data is copied yet.
+> ```
+>
+> ```text
+> Production updates B → B'
+>
+> Before updating:
+> 1. Copy page B
+> 2. Update the copied page
+>
+> Production = A B' C
+> Clone      = A B C
+> ```
+>
+> ```text
+> Clone updates C → C'
+>
+> Before updating:
+> 1. Copy page C
+> 2. Update the copied page
+>
+> Production = A B' C
+> Clone      = A B C'
+> ```
+>
+> **Key Points**
+> - The **clone is NOT kept in sync** with the production database.
+> - **Either database** (Production or Clone) updating a shared page will:
+>   1. Copy the page.
+>   2. Apply the update to the copied page.
+> - **Only modified pages are copied (in the cluster (prod / staging which requested this update))**; unchanged pages continue to be shared.
+> - This makes cloning **very fast** and **storage-efficient**.
 
 ### RDS MySQL
 
