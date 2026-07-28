@@ -159,6 +159,46 @@ Elastic Network Interface (ENI)
 ![alt text](PNG/EC26.PNG "Title")  
 - Requirements - Root EBS must be encrypted, and must have storage > your EC2 instance's RAM
 
+### Instantiating Applications Quickly
+
+#### EC2 Instances
+- **Golden AMI** – Launch EC2 instances with the OS, application, and dependencies already installed.
+- **Bootstrap (User Data)** – Run startup scripts to install or configure software when the instance launches.
+- **Hybrid (Golden AMI + User Data)** – Keep common software in the AMI and use User Data only for environment-specific settings (e.g., database endpoint, API keys).
+
+#### RDS Databases
+- **Restore from Snapshot** – Creates a new database with the schema and data already available.
+- **Why?** Restoring a snapshot is much faster than creating a new database and importing all the data.
+
+#### EBS Volumes
+- **Restore from Snapshot** – Creates a volume with the file system and existing data already present.
+- **Why?** Restoring a snapshot is much faster than creating an empty volume and copying all the files.
+
+---
+
+#### Golden AMI vs Custom AMI
+- **Custom AMI** – Created for a specific application or use case.
+- **Golden AMI** – A standardized base Custom AMI used to consistently launch many EC2 instances across the organization.
+
+```text
+Golden AMI
+├── Amazon Linux
+├── Security Patches
+├── CloudWatch Agent
+├── SSM Agent
+└── Docker
+
+            │
+     Used as the base for
+            ▼
+
+Team A Custom AMI          Team B Custom AMI
+├── Java App               ├── Node.js App
+└── Tomcat                 └── Nginx
+```
+
+> **Remember:** Every **Golden AMI is a Custom AMI**, but **not every Custom AMI is a Golden AMI**.
+
 > [!NOTE]
 > #### Key Architecture Points
 > - Enable **Multi-AZ** for the **ALB** to provide **High Availability (HA)**, and deploy **one ALB per Region** for **Multi-Region Disaster Recovery (DR)**.
