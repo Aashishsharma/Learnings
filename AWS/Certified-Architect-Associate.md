@@ -185,3 +185,11 @@ Elastic Network Interface (ENI)
 >       ▼           ▼                ▼           ▼
 >   EC2 (AZ-A)  EC2 (AZ-B)      EC2 (AZ-A)  EC2 (AZ-B)
 > ```
+
+> - #### Comparison for diff sesssion management
+> - Use ELB sticky session for simple or legacy apps
+> - Better to manage sticky sessions via cookies (like shopping cart IDs)
+> - Even using cookies can sometimes be risky, so best solution - Store just sessionID in cookies, and all the user session data in Elasticcache, where key = sessionId
+
+> - ![alt text](PNG/Arch1.PNG "Title")  
+> - Note - enable multi-AZ wherever possible (ALB, RDS, ASG and Elastic cache)
