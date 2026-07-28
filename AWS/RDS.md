@@ -98,6 +98,30 @@
 > Today you are using MSSQL, now you want to migrate to Postgress, MSSQL uses T-SQL and Postgress uses pgSQL, so now we need to change client code, and use different drivers
 > But instead is that we use Babelfish, and there will be little to no code change required on client side
 
+# RDS Backups
+
+> [!NOTE]
+> #### Automated Backups
+> - AWS automatically takes a **daily full backup** during the backup window.
+> - **Transaction logs** are backed up every **5 minutes**. (- **Transaction logs** record every change made to the database (INSERT, UPDATE, DELETE), allowing RDS to replay those changes during recovery.)
+> - Supports **Point-in-Time Recovery (PITR)** to restore to almost any time within the retention period.
+> - Backup retention can be **1–35 days** (**0** disables automated backups).
+
+---
+
+> [!NOTE]
+> #### Manual DB Snapshots
+> - Created **manually** whenever you want.
+> - Captures the database exactly as it is at that moment.
+> - Kept **until you delete it** (no automatic expiration).
+
+---
+
+> [!NOTE]
+> #### Cost Tip
+> - A **stopped RDS** still incurs **storage charges**.
+> - For long-term shutdown, **take a snapshot, delete the DB, and restore it later** to save costs.
+
 ### RDS MySQL
 
 ```js

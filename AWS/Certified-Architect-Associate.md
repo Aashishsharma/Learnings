@@ -60,37 +60,48 @@ Once the stratgey is created, then while launching an EC2 instance, under advanc
 - It enables network connectivity and can be **detached from one EC2 instance and attached to another** within the **same Availability Zone**.
 - Useful for **high availability** and **failover** because the network identity moves with the ENI, if one EC2 instance is gone, create another and attcch this ENI, so that other parts of application are not affected
 
-**So EC2 without ENI** - 
-EC2
-├── CPU
-├── Memory
-├── Disk
-├── Private IP
-├── Public IP
-└── Security Groups 
+#### Without ENI (Network interface is part of the EC2)
 
-**With ENI** - 
-             ENI
-      ┌─────────────────────┐
-      │ Private IP          │
-      │ Elastic IP          │
-      │ MAC Address         │
-      │ Security Groups     │
-      └─────────┬───────────┘
-                │
-                ▼
-            EC2 Instance
+```text
+EC2 Instance
+├── CPU
+├── Memory (RAM)
+├── Storage (EBS)
+├── Private IP
+├── Public IP / Elastic IP
+└── Security Groups
+```
+
+---
+
+#### With ENI (Network identity is separated from the EC2)
+
+```text
+Elastic Network Interface (ENI)
+┌──────────────────────────────┐
+│ Private IP                   │
+│ Public / Elastic IP          │
+│ MAC Address                  │
+│ Security Groups              │
+└──────────────┬───────────────┘
+               │ Attached to
+               ▼
+        EC2 Instance
+        ├── CPU
+        ├── Memory (RAM)
+        └── Storage (EBS)
+```
 
 - think of it as detachable netowrk interface.
 - similar to how AWS does not provide fixed storage inside EC2, AWS provides EBS (so sotrgae is decoupled with EC2), similarly we can decouple network with EC2 by creating ENIs 
 
 > [!NOTE]
-> ENI is bound to a specific AZ
+> ENI is bound to a specific AZ  
 > **Most applications do not require manually managing ENIs.** AWS automatically creates and attaches a primary ENI to every EC2 instance. ENIs become useful when the **network identity** (private IPs, MAC address, Security Groups, secondary IPs, etc.) must be managed independently of the EC2 instance, such as in **advanced networking**, **multiple network interfaces**, or **specialized failover scenarios**.
 
 > [!NOTE]
 > ### We can attach multiple ENIs to a single EC2 instance, but why do we need Multiple ENIs?
-> Think of it as 2 NIC cards are attched to same EC2
+> Think of it as 2 NIC cards are attched to same EC2  
 > A single EC2 instance may need to communicate with **multiple networks** that require different IPs, Security Groups, or routing rules. Multiple ENIs allow each network connection to have its own independent network identity.
 >
 > ---
