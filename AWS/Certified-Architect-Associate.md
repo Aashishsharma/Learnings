@@ -225,7 +225,6 @@ Team A Custom AMI          Team B Custom AMI
 >       ▼           ▼                ▼           ▼
 >   EC2 (AZ-A)  EC2 (AZ-B)      EC2 (AZ-A)  EC2 (AZ-B)
 > ```
-> - Instead of creating all resources manually, for typical 3-tier web app, we will use Beanstalk, and it will auto create ALB, ASG for us. Beanstlak has 2 deployment modes (Single instance for dev, High availability with ALB - for prod)
 
 > - #### Comparison for diff sesssion management
 > - Use ELB sticky session for simple or legacy apps
@@ -234,3 +233,14 @@ Team A Custom AMI          Team B Custom AMI
 
 > - ![alt text](PNG/Arch1.PNG "Title")  
 > - Note - enable multi-AZ wherever possible (ALB, RDS, ASG and Elastic cache)
+
+> - Instead of creating all resources manually, for typical 3-tier web app, we will use Beanstalk, and it will auto create ALB, ASG for us. Beanstlak has 2 deployment modes (Single instance for dev, High availability with ALB - for prod)
+> - use CF to see what services Beanstalk is creating for us behind the scenes
+
+> [!NOTE]
+> #### Architecture Adhoc Points  
+> - we can make s3 retrival faster via - 
+> - 1. Multipart upload
+> - 2. Use transfer acceleration
+> - 3. Use parallel byte gets (larg obj split, and we don multiple gets for part of obj, parallely, and then combine)
+> - 4. S3 Express One Zone - this is another storage class, here objs are not stored in normal buckets, but are stored in directory bucket, highest performance, slightly low availability (Use case - Media processing, AI/ML apps)
