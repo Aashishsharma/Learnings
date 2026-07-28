@@ -160,9 +160,6 @@ Elastic Network Interface (ENI)
 - Requirements - Root EBS must be encrypted, and must have storage > your EC2 instance's RAM
 
 > [!NOTE]
-> [!NOTE]
-> #### Key Architecture Points
-> [!NOTE]
 > #### Key Architecture Points
 > - Enable **Multi-AZ** for the **ALB** to provide **High Availability (HA)**, and deploy **one ALB per Region** for **Multi-Region Disaster Recovery (DR)**.
 > - An **ASG can launch EC2 instances across multiple AZs**, but **cannot span multiple Regions**.
@@ -172,7 +169,7 @@ Elastic Network Interface (ENI)
 > - An **ALB can route traffic to EC2 instances across multiple AZs**, but **only within the same Region**.
 > - Configure **Route 53** to point your domain to the **ALBs**, routing users to the appropriate Region based on the configured routing policy.
 >
-> **Typical Multi-Region Web Application**
+> **Typical Multi-Region Web Application (Stateless i.e, without DB)**
 > ```text
 >             (Route 53) - Create **Alias** records pointing to each **Regional ALB** with routing algo
 >       (Latency / Failover / Geolocation Routing)
