@@ -225,6 +225,7 @@ Team A Custom AMI          Team B Custom AMI
 >       ▼           ▼                ▼           ▼
 >   EC2 (AZ-A)  EC2 (AZ-B)      EC2 (AZ-A)  EC2 (AZ-B)
 > ```
+> - Instead of creating all resources manually, for typical 3-tier web app, we will use Beanstalk, and it will auto create ALB, ASG for us. Beanstlak has 2 deployment modes (Single instance for dev, High availability with ALB - for prod)
 
 > - #### Comparison for diff sesssion management
 > - Use ELB sticky session for simple or legacy apps
