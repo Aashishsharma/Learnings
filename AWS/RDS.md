@@ -298,26 +298,10 @@ const [rows] = await reader.execute(
 - rest steps are more or less similar ro RDS creation
 - it will give us Redis's primary and read replica endpoints, which we can use in app code to connect
 
-#### Caching strategies
-| Pattern | Flow | Key Idea |
-|--------|------|----------|
-| **Lazy Loading (Cache Aside)** | Read → Cache Miss → DB → Cache | Cache populated on **read miss**. |
-| **Write Through** | Write → Cache → DB *(or DB → Cache in some implementations)* | Cache updated at **write time**, so future reads hit the cache. |
-
-#### Cache Eviction policies
-1. Delete from cache on DB delete
-2. LRU
-3. TTL
-
 #### AWS MemoryDB for Redis
 
 - A **Redis-compatible, durable in-memory database** managed by AWS.
 - Stores data in memory for low latency while also persisting it across multiple AZs for durability.
-
-**Use Cases** -
-- **Real-time leaderboards** in gaming.
-- **User profiles/shopping carts** requiring microsecond latency and durability.
-- Applications that need Redis performance **without losing data** on node failures.
 
 > [!NOTE]
 > #### Redis vs Memcached
@@ -328,5 +312,41 @@ const [rows] = await reader.execute(
 > | **Data Types** | Strings, Lists, Sets, Hashes, Sorted Sets, etc. | Simple **Key-Value** pairs only |
 > | **Performance** | Very fast | **Slightly faster  than Redis** for simple key-value caching |
 > | **Use Case** | Caching + Sessions + Pub/Sub + Leaderboards | High-speed, simple key-value caching |
+
+> [!NOTE]
+> #### ElastiCache Security
+>
+> - **IAM Authentication (Redis only)**
+>   - IAM users/roles can authenticate to Redis using **temporary IAM credentials** instead of a static password.
+>   - AWS verifies the IAM identity before allowing the client to connect.
+>
+> - **IAM Policies**
+>   - Used only for **AWS API-level operations** (create, modify, delete clusters).
+>   - **Not** used to authorize Redis/Memcached read or write commands.
+>
+> - **Redis AUTH**
+>   - Configure a **password/token** when creating the Redis cluster.
+>   - Clients must provide this password before executing Redis commands.
+>   - Adds an extra layer of security in addition to **Security Groups**.
+>   - Supports **SSL/TLS encryption** for data in transit.
+>
+> - **Memcached Authentication**
+>   - Supports **SASL-based authentication**.
+>   - Clients authenticate using a **username and password** before accessing the cache.
+
+#### Caching strategies
+| Pattern | Flow | Key Idea |
+|--------|------|----------|
+| **Lazy Loading (Cache Aside)** | Read (from cache) → if Cache Miss → read DB → update Cache | Cache populated on **read miss**. |
+| **Write Through** | Write → Cache → DB *(or DB → Cache in some implementations)* | Cache updated at **write time**, so future reads hit the cache. |
+
+#### Cache Eviction policies
+1. Delete from cache on DB delete
+2. LRU
+3. TTL
+
+#### Elastic cache - Redis usecase
+- **Real-time leaderboards** in gaming.  
+- Redis has data strucutre - **Redis sorted sets**, which gurantees uniqueness and element oredring
 
 ![alt text](PNG/RDS2.PNG "Title")  
