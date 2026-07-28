@@ -275,10 +275,17 @@ const [rows] = await reader.execute(
 - more over if Lambdas connect to DB, then there can be 10 lambda's so more DB conns, plus every time labda does cold start, it will have to establish new DB conn
 - so instead use RDS proxy, which will maintain DB pool for us
 ![alt text](PNG/RDSProxy.PNG "Title") 
-- RDS proxy is not publicly available
 - to connect to RDS proxy from code, provide RDS proxy conn, string
 - so as long as EC2 instacnes are withing same VPC, it will work
 - but same code from local comp will not work, we might have to use VPN then
+
+> [!NOTE]
+> - RDS proxy is not publicly available, only inside VPC
+> #### How RDS Proxy Reduces Failover Time
+> - Applications connect to the **RDS Proxy**, not directly to the database.
+> - During a failover, only the **Proxy reconnects** to the new primary DB.
+> - The application **doesn't need to recreate database connections**, reducing connection interruptions.
+> - The proxy **reuses (pools) database connections**, avoiding the overhead of creating thousands of new connections after failover.
 
 ## Elastic cache
 - AWS managed Redis / memcache
