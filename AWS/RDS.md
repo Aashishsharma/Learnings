@@ -319,4 +319,14 @@ const [rows] = await reader.execute(
 - **User profiles/shopping carts** requiring microsecond latency and durability.
 - Applications that need Redis performance **without losing data** on node failures.
 
+> [!NOTE]
+> #### Redis vs Memcached
+>
+> | Feature | Redis | Memcached |
+> |---------|-------|-----------|
+> | **Data Persistence** | ✅ Supports persistence (can save data to disk) | ❌ In-memory only (data lost on restart) |
+> | **Data Types** | Strings, Lists, Sets, Hashes, Sorted Sets, etc. | Simple **Key-Value** pairs only |
+> | **Performance** | Very fast | **Slightly faster  than Redis** for simple key-value caching |
+> | **Use Case** | Caching + Sessions + Pub/Sub + Leaderboards | High-speed, simple key-value caching |
+
 ![alt text](PNG/RDS2.PNG "Title")  
