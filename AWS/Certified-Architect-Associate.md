@@ -15,7 +15,7 @@
 #### 3. Elastic IPs (chargeable)
 - when you start / stop EC2, the next time you start, the public IP of that EC2 will be different
 - use Elastic IP to get **fixed public IP** for your EC2
-- you can only have 4 elastic IPs per account
+- you can only have 5 elastic IPs per account
 - try avoid using elastic IPs, instead use public IP and register a DNS name to it or use ALB domain name
 - ALB also does not have fixed IP, but ALB DNS name will be same - ```my-alb-123456.us-east-1.elb.amazonaws.com```, and in R53 point the Alias record to this DNS name
 
@@ -158,3 +158,33 @@ Elastic Network Interface (ENI)
 
 ![alt text](PNG/EC26.PNG "Title")  
 - Requirements - Root EBS must be encrypted, and must have storage > your EC2 instance's RAM
+
+> [!NOTE]
+> [!NOTE]
+> #### Key Architecture Points
+> [!NOTE]
+> #### Key Architecture Points
+> - Enable **Multi-AZ** for the **ALB** to provide **High Availability (HA)**, and deploy **one ALB per Region** for **Multi-Region Disaster Recovery (DR)**.
+> - An **ASG can launch EC2 instances across multiple AZs**, but **cannot span multiple Regions**.
+> - The **ALB is connected to the ASG through a Target Group**.
+>   - Configure the **ASG** to register its EC2 instances with a **Target Group**.
+>   - Configure the **ALB** to forward requests to the **same Target Group**.
+> - An **ALB can route traffic to EC2 instances across multiple AZs**, but **only within the same Region**.
+> - Configure **Route 53** to point your domain to the **ALBs**, routing users to the appropriate Region based on the configured routing policy.
+>
+> **Typical Multi-Region Web Application**
+> ```text
+>             (Route 53) - Create **Alias** records pointing to each **Regional ALB** with routing algo
+>       (Latency / Failover / Geolocation Routing)
+>                            │
+>             ┌──────────────┴──────────────┐
+>             ▼                             ▼
+>         Region A                     Region B
+>            ALB                          ALB
+>        (Multi-AZ)                  (Multi-AZ)
+>             │                            │
+>            ASG                          ASG
+>       ┌─────┴─────┐                ┌─────┴─────┐
+>       ▼           ▼                ▼           ▼
+>   EC2 (AZ-A)  EC2 (AZ-B)      EC2 (AZ-A)  EC2 (AZ-B)
+> ```

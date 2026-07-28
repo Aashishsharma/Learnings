@@ -287,6 +287,12 @@ const [rows] = await reader.execute(
 > - The application **doesn't need to recreate database connections**, reducing connection interruptions.
 > - The proxy **reuses (pools) database connections**, avoiding the overhead of creating thousands of new connections after failover.
 
+> [!NOTE]
+> #### RDS Key points
+> - Replication type - Read replica - it is async, Multi-AZ is always sync
+> - If read replca used in RDS, client need to add this new conn string, for multi-AZ no code change needed
+> - RDS can be authenticated using IAM creds, so no need to create multiple user accounts for DB
+
 ## Elastic cache
 - AWS managed Redis / memcache
 - use case - performance, store user's session, so all EC2 instances can access user sessions, and we don't need sticky sessions any more
