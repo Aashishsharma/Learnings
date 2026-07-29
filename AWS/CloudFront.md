@@ -1,7 +1,15 @@
 # CloudFront
 - CDN
 
-![alt text](PNG/Cloudfront1.PNG "Title") 
+![alt text](PNG/Cloudfront1.PNG "Title")  
+
+> [!NOTE]
+> #### CloudFront Origin Types
+>
+> | Origin Type | Examples |
+> |-------------|----------|
+> | **S3 Origin** | S3 Bucket (static website, images, videos, downloads) |
+> | **Custom Origin (HTTP/HTTPS)** | ALB, EC2, API Gateway, Elastic Beanstalk, On-premises servers, Any public web server |
 
 ### CloudFront Origin Access Control (OAC)
 
@@ -159,6 +167,7 @@ Flow:
 #### Cache invalidation
 - we ourself invalidate the cache if the data in the origin has been updated
 - cache canbe invalidated in cloudfront based on the filepath - /logo.png or based on path /images/*
+- or we set TTL, after which cloudfront will fetch from the configured origin
 
 #### Cache behaviour
 A **Cache Behavior** defines **how CloudFront handles requests for a particular URL pattern**.

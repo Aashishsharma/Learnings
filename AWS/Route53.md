@@ -356,10 +356,39 @@ Geoproximity → "Users are routed to the nearest region, but I can adjust traff
 - then cloudfront will give url - random-string.cloudefront.net, we can access this 
 - note, we can keep s3 object private and make them accessible via cloudfront
 
-### AWS Global accelerator
-- we know internet across countries is connected via cables under the ocean
-- AWS global accelerator, provides dedicated AWS cables inside ocean, making it a provate network, and fast, because it is a dedicated network
-- hence it is fast and secured
+> [!NOTE]
+> #### AWS Global Accelerator
+>
+> - The Internet connects countries using **public networks**, including terrestrial fiber and undersea cables.
+> - **AWS Global Accelerator** uses the **AWS Global Network (private backbone)** instead of relying solely on the public Internet.
+> - This private network provides **lower latency, more consistent performance, and higher reliability**.
+>
+> #### How Global Accelerator Works
+> - There are **2 types of IP addresses**:
+>   - **Unicast IP** – One IP address is associated with one server.
+>   - **Anycast IP** – The **same IP address is advertised by multiple AWS Edge Locations**.
+>     - **Advertise (Networking Term)** – A router tells other routers, **"I know how to reach this IP address. Send traffic for it to me."**
+> - A client sends a request to the **Anycast IP**.
+> - **Internet routing (BGP)** automatically directs the request to the **nearest AWS Edge Location** advertising that IP.
+> - From the Edge Location onward, the request travels over the **AWS Global Network (private backbone)** to the application's Region.
+> - **Only the path from the client to the nearest Edge Location uses the public Internet**; the remaining path stays on AWS's private network.
+>
+> **Flow**
+> ```text
+> Client
+>    │
+>    │ Public Internet
+>    ▼
+> Nearest AWS Edge Location
+>    │
+>    │ AWS Global Network (Private Backbone)
+>    ▼
+> Application Region (ALB / EC2 / NLB / EIP)
+> ```
+>
+> **Remember**
+> - **CloudFront** → Caches content at Edge Locations.
+> - **Global Accelerator** → Does **not cache**; it simply finds the fastest path to your application.
 
 ### AWS outpost
 - All AWS infra on prem
