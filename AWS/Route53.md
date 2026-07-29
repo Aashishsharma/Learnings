@@ -373,18 +373,6 @@ Geoproximity → "Users are routed to the nearest region, but I can adjust traff
 > - From the Edge Location onward, the request travels over the **AWS Global Network (private backbone)** to the application's Region.
 > - **Only the path from the client to the nearest Edge Location uses the public Internet**; the remaining path stays on AWS's private network.
 >
-> **Flow**
-> ```text
-> Client
->    │
->    │ Public Internet
->    ▼
-> Nearest AWS Edge Location
->    │
->    │ AWS Global Network (Private Backbone)
->    ▼
-> Application Region (ALB / EC2 / NLB / EIP)
-> ```
 >
 > **Remember**
 > - **CloudFront** → Caches content at Edge Locations.
