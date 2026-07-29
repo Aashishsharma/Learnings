@@ -378,6 +378,14 @@ Geoproximity → "Users are routed to the nearest region, but I can adjust traff
 > - **CloudFront** → Caches content at Edge Locations.
 > - **Global Accelerator** → Does **not cache**; it simply finds the fastest path to your application.
 
+> - **Configuring AWS Global Accelerator**
+> - 1. Create a **Global Accelerator** and configure its basic settings.
+> - 2. Add one or more **Regions** where your application is deployed.
+> - 3. In each Region, configure one or more **Endpoints** (e.g., ALB, NLB, EC2 with Elastic IP).
+> - 4. Global Accelerator assigns **two static Anycast IPs**.
+> - 5. When a client sends a request, Internet routing (BGP) sends it to the **nearest AWS Edge Location** advertising the Anycast IP.
+> - 6. From the Edge Location, AWS forwards the request over its **private global network** to the **optimal healthy endpoint** (ALB/EC2) in the configured Region. 
+
 ### AWS outpost
 - All AWS infra on prem
 - infra will have prebuilt AWS services
