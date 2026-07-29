@@ -241,6 +241,6 @@ Team A Custom AMI          Team B Custom AMI
 > #### Architecture Adhoc Points  
 > - we can make s3 retrival faster via - 
 > - 1. Multipart upload
-> - 2. Use transfer acceleration
-> - 3. Use parallel byte gets (larg obj split, and we don multiple gets for part of obj, parallely, and then combine)
+> - 2. Use transfer acceleration (here instead of file directly sent to bucket, file is sent to AWS Edge location, and then from there over a fast private network, it is transferred to the bucket)
+> - 3. Use parallel **S3 byte range fetches** (larg obj split, and we don multiple gets for part of obj, parallely, and then combine)
 > - 4. S3 Express One Zone - this is another storage class, here objs are not stored in normal buckets, but are stored in directory bucket, highest performance, slightly low availability (Use case - Media processing, AI/ML apps)
