@@ -228,6 +228,8 @@ Then in DLQ, we can add alerting / monitoring to send email to dev team, which s
 - when the consumer consumes, it reads the pointer key and than processes the file from s3
 - then how is this library different from if I write a custom code to store s3 file url as metatdata in SQS queue? - the library does exactly that, just that we don't need to write all the boilerplate code.
 
+> [!NOTE]
+> ![alt text](PNG/AMQ.PNG "Title")  
 
 ## Nodejs code for producers and subscribers
 
