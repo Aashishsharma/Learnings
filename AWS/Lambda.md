@@ -218,12 +218,14 @@ exports.handler = async (event) => {
 > | **Cannot Do** | Network calls, AWS service calls, Body access | Practically no such limitations |
 > | **Performance / Cost** | ⚡ Fastest & Cheapest | 🐢 Slower & Costlier |
 > | **Typical Use Cases** | URL rewrite, Redirect, Header/Cookie manipulation | Authentication (JWT), Call APIs, Generate dynamic responses, Access DynamoDB/S3 |
-> | **Configuration** | Attach a CloudFront Function to a Viewer Request/Response event | Attach a Lambda function to a CloudFront event (Viewer/Origin Request/Response) |
-> | **How it Works** | Request reaches Edge → Function executes → Continue to cache/origin | Request reaches Edge → Lambda executes → Can call AWS/services → Continue to cache/origin |
+> | **Real-life Example** | **YouTube/Netflix** redirects users from `/latest` → `/v2/latest`, adds security headers, or redirects mobile users to `/m`. | **Amazon/Banking websites** validate JWT/session tokens before reaching the origin, fetch user-specific data, or generate personalized responses. |
+> | **Configuration** | Attach a CloudFront Function to a Viewer Request/Response event. | Attach a Lambda function to a CloudFront event (Viewer/Origin Request/Response). |
+> | **How it Works** | Request reaches Edge → Function executes → Continue to cache/origin. | Request reaches Edge → Lambda executes → Can call AWS/services → Continue to cache/origin. |
 >
-> - CloudFront Functions → Tiny JavaScript running at the edge.
-> - Lambda@Edge → Full Lambda running at the edge.
-> - Normal Lambda → Full Lambda running in an AWS Region.  
+> **Remember**
+> - **CloudFront Functions** → Tiny JavaScript running at the edge.
+> - **Lambda@Edge** → Full Lambda running at the edge.
+> - **Normal Lambda** → Full Lambda running in an AWS Region.
 
 ### Lambda and VPC
 | Topic | Key Point |
