@@ -352,12 +352,54 @@ Lambda A B     C
 |----------|----------|------------|
 | **Concurrency** | Number of Lambda executions running at the same time | Each invocation consumes 1 concurrency while it is executing |
 | **Account Concurrency Limit** | Maximum concurrent executions allowed in an AWS account per region | Default is typically 1,000 (can be increased via support request) |
-| **Reserved Concurrency** | Concurrency exclusively allocated to a specific Lambda function | Guarantees capacity and also acts as a maximum limit for that function |
+| **Reserved Concurrency** | Concurrency exclusively allocated to a specific Lambda function | It guarantees that given lambda can always use up to X concurrent executions, even if other Lambda functions are consuming the rest |
 | **Provisioned Concurrency** | Pre-initialized Lambda execution environments | Reduces cold starts for latency-sensitive applications |
 | **Throttling** | Lambda cannot execute because concurrency limit is reached | Invocation is rejected/throttled until capacity becomes available |
 | **Scaling Behavior** | Lambda creates additional execution environments as request volume increases | One execution environment handles one request at a time |
 
-##### Example
+> [!NOTE]
+> #### Reserved Concurrency Scenarios
+>
+> **Assume Account Concurrency Limit = 1000**
+>
+> **Scenario 1: Lambda A has Reserved Concurrency = 200, but is idle**
+> ```text
+> Lambda A      Reserved = 200 (Not Running)
+> Other Lambdas            = Can use only 800
+> ```
+> - The **200 concurrency is reserved exclusively** for Lambda A.
+> - **Other Lambda functions cannot use those 200 slots**, even if Lambda A is idle.
+>
+> ---
+>
+> **Scenario 2: Only Lambda A is invoked**
+> ```text
+> Account Limit = 1000
+> Reserved for Lambda A = 200
+>
+> Incoming Requests = 500
+> ```
+> ```text
+> 200 executions  ✅
+> 300 throttled   ❌
+> ```
+> - Lambda A **cannot exceed its reserved concurrency (200)**.
+> - The remaining **800 account concurrency stays unused**, even if no other Lambda functions are running.
+>
+> ---
+>
+> **Scenario 3: Other Lambdas are busy**
+> ```text
+> Other Lambdas = Using 800
+> Lambda A = Needs 100
+> ```
+> - Lambda A **still gets its 100 executions**, because **200 slots are reserved** for it.
+> - Other functions **cannot consume Lambda A's reserved capacity**.
+>
+> ---
+>
+
+##### Provicioned Concurrency Example
 
 | Requests | Execution Time | Required Concurrency |
 |-----------|---------------|----------------------|
@@ -378,6 +420,14 @@ Request arrives
     ↓
 Immediately executes handler
 ```
+
+> [!NOTE]
+> #### Provisioned concurrency helps with Cold Start and not reserved concurrency
+>
+> - ❌ **Reserved Concurrency does NOT reduce cold starts.**
+> - It **only reserves execution capacity**.
+> - To reduce cold starts, use **Provisioned Concurrency**, which keeps Lambda execution environments **pre-initialized (warm)**.
+
 
 ### External dependencies
 
