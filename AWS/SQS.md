@@ -171,9 +171,9 @@ You could, but a Delay Queue:
 ---
 
 ##### 4. Receive message wait time (LONG POOLING duration)
-The amount of time the consumer can hold on to the request before the message is arraived in the queue  
-In SQS, consumers constantly poll the queue to check of new messages, if no message is in the queue, consumer will send another request to check for message.  
-Howvere if no message is present in queue, long pooling will keep the connection open for a specified time, before closing the connection.
+- The amount of time the consumer can hold on to the request before the message is arraived in the queue   
+- Duration can be from 1 sec to 20 secs
+- Can be configured at a queue or at API level (using param - **WaitTimeSeconds**) 
 
 ##### 5. Dead Letter Queue (DLQ)
 ![alt text](PNG/SQS2.PNG "Title")  
