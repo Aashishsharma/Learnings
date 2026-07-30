@@ -347,7 +347,7 @@ Lambda A B     C
 - then we can use axios lib for all lambda functions that are connected to this layer
 
 ### Concurrency
-![alt text](PNG/l17.PNG "Title")  
+
 | Concept | Meaning | Key Points |
 |----------|----------|------------|
 | **Concurrency** | Number of Lambda executions running at the same time | Each invocation consumes 1 concurrency while it is executing |
@@ -360,7 +360,7 @@ Lambda A B     C
 > [!NOTE]
 > #### Reserved Concurrency Scenarios
 >
-> **Assume Account Concurrency Limit = 1000**
+> **Account Concurrency Limit = 1000 (this is default, to go beyond 1K contact AWS)**
 >
 > **Scenario 1: Lambda A has Reserved Concurrency = 200, but is idle**
 > ```text
@@ -385,7 +385,7 @@ Lambda A B     C
 > ```
 > - Lambda A **cannot exceed its reserved concurrency (200)**.
 > - The remaining **800 account concurrency stays unused**, even if no other Lambda functions are running.
->
+> - This is IMP, theat Lambda A cannot go beyond 200, any requests more than 200 will be throttled
 > ---
 >
 > **Scenario 3: Other Lambdas are busy**
@@ -427,6 +427,11 @@ Immediately executes handler
 > - ❌ **Reserved Concurrency does NOT reduce cold starts.**
 > - It **only reserves execution capacity**.
 > - To reduce cold starts, use **Provisioned Concurrency**, which keeps Lambda execution environments **pre-initialized (warm)**.
+
+- so if a function invocation goes beyond the limit we set in Reserved concurrency, the function will throttle  
+
+![alt text](PNG/l17.PNG "Title")  
+
 
 
 ### External dependencies
