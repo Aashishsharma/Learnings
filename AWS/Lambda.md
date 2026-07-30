@@ -176,6 +176,12 @@ exports.handler = async (event) => {
 - select destination as lambda, and from the dropdown select your lambda function which needs to be trigerred
 ![alt text](PNG/l8.PNG "Title")  
 
+> [NOTE]
+> - ### 4. Lambda with RDS and Aurora
+> - 2 ways lambda can be invoked via RDS
+> - 1. Using RDS Events (AT DB Level)- When we set this, RDS will trigger lambda on (DB creation, Snapshot taken, DB param change, security grps change)
+> - 2. Invoking lambda on DB data (when new rows are added / updated / deleted to table) - Usecase - Product price changed → Invalidate cache. ❌ **Not ideal** - User registers → Send welcome email. For registration - let app publich event to SNS / SQS, and let other systems handle it
+
 ### Lambda Execution role vs Resource policy
 - **Execution Role  = What Lambda CAN DO**
 - **Resource Policy = Who CAN CALL Lambda**  
