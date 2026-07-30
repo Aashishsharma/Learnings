@@ -320,6 +320,9 @@ During this period:
 ![alt text](PNG/Kinesis4.PNG "Title")  
 note - lambda can also be a consumer of KDS  
 
+> [!NOTE]
+> ![alt text](PNG/Kinesis8.PNG "Title")  
+
 #### Using AWS CLI commands to produce and consume messages to KDS
 1. Produce msgs to KDS
 ![alt text](PNG/Kinesis5.PNG "Title")  
