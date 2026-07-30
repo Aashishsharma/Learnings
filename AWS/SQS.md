@@ -189,6 +189,35 @@ Then in DLQ, we can add alerting / monitoring to send email to dev team, which s
 - set alarm when that threshold is reached, which will call ASG to increase EC2 instances (consumers in this case)  
 ![alt text](PNG/SQS3.PNG "Title")  
 
+> [!NOTE]
+> #### Using SQS as buffer queue?
+>
+> Imagine the database can process only **100 writes/second**, but suddenly **5,000 requests** arrive.
+>
+> **Without SQS**
+> ```text
+> 5000 writes
+>      │
+>      ▼
+>   Database
+>      ❌ Overloaded
+> ```
+>
+> **With SQS**
+> ```text
+> 5000 messages
+>       │
+>       ▼
+>    SQS Queue
+>       │
+> 100 writes/sec
+>       ▼
+>    Database
+> ```
+>
+> - The **SQS queue temporarily holds (buffers)** the extra messages.
+> - Workers gradually process the messages at a rate the **database can handle**, preventing overload.
+
 ### SQS queue access policy, similar to s3 bucket policy
 ![alt text](PNG/SQS5.PNG "Title")  
 
