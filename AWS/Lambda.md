@@ -208,42 +208,22 @@ exports.handler = async (event) => {
 
 ![alt text](PNG/l15.PNG "Title")  
 
-### Cloudfront Functions vs Lambda@edge
-| Feature | CloudFront Functions | Lambda@Edge |
-|----------|----------|----------|
-| Purpose | Lightweight request/response manipulation | Advanced request/response processing |
-| Execution Location | CloudFront Edge Locations | CloudFront Edge Locations |
-| Runtime | JavaScript only | Node.js / Python |
-| Max Execution Time | < 1 ms (sub-millisecond) | Up to several seconds |
-| Memory | Very small (~2 MB) | Up to 10 GB |
-| Network Access | No | Yes |
-| AWS Service Access | No | Yes |
-| External API Calls | No | Yes |
-| Request Body Access | No | Yes |
-| Response Body Modification | No | Yes |
-| Cost | Lower | Higher |
-| Performance | Fastest | Slower than CloudFront Functions |
-| Best For | Simple header, URL, cookie manipulation | Authentication, API calls, dynamic content generation |
-
-**Common Use Cases**
-
-| Use Case | CloudFront Functions | Lambda@Edge |
-|----------|----------|----------|
-| URL rewrites | ✅ | ✅ |
-| Redirects | ✅ | ✅ |
-| Header manipulation | ✅ | ✅ |
-| Cookie-based routing | ✅ | ✅ |
-| JWT validation | ❌ | ✅ |
-| Call external API | ❌ | ✅ |
-| Generate dynamic response | ❌ | ✅ |
-| Access DynamoDB/S3 | ❌ | ✅ |
-| Modify request body | ❌ | ✅ |
-| Modify response body | ❌ | ✅ |
-**Rule**
-| If You Need... | Use |
-|----------|----------|
-| Simple, ultra-fast edge logic | CloudFront Functions |
-| AWS access, network calls, complex processing | Lambda@Edge |
+> [!NOTE]
+> #### CloudFront Functions vs Lambda@Edge
+>
+> | Feature | CloudFront Functions | Lambda@Edge |
+> |--------|----------------------|-------------|
+> | **Purpose** | Simple request/response modifications | Complex request/response processing |
+> | **Can Access** | Headers, URL, Cookies | Everything + Request/Response Body + AWS Services + External APIs |
+> | **Cannot Do** | Network calls, AWS service calls, Body access | Practically no such limitations |
+> | **Performance / Cost** | ⚡ Fastest & Cheapest | 🐢 Slower & Costlier |
+> | **Typical Use Cases** | URL rewrite, Redirect, Header/Cookie manipulation | Authentication (JWT), Call APIs, Generate dynamic responses, Access DynamoDB/S3 |
+> | **Configuration** | Attach a CloudFront Function to a Viewer Request/Response event | Attach a Lambda function to a CloudFront event (Viewer/Origin Request/Response) |
+> | **How it Works** | Request reaches Edge → Function executes → Continue to cache/origin | Request reaches Edge → Lambda executes → Can call AWS/services → Continue to cache/origin |
+>
+> - CloudFront Functions → Tiny JavaScript running at the edge.
+> - Lambda@Edge → Full Lambda running at the edge.
+> - Normal Lambda → Full Lambda running in an AWS Region.  
 
 ### Lambda and VPC
 | Topic | Key Point |
