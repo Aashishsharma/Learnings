@@ -164,6 +164,59 @@ Flow:
 | Default TTL | Used when origin doesn't specify cache headers |
 | Max TTL | Maximum time CloudFront can cache an object |
 
+> [!NOTE]
+> #### CloudFront for Static vs Dynamic Content
+>
+> - **CloudFront is NOT only for static content**; it accelerates **both static and dynamic content**.
+> - **Static content** → CloudFront **caches** the content at Edge Locations.
+> - **Dynamic content** → Usually **not cached**, but CloudFront still:
+>   - Terminates the client connection at the **nearest Edge Location**.
+>   - Uses the **AWS Global Network (private backbone)** to reach the origin.
+>   - Executes **CloudFront Functions** or **Lambda@Edge** (if configured) before forwarding the request.
+>```
+
+
+> [!NOTE]
+> #### Why use CloudFront for Dynamic Content instead of calling the API directly?
+>
+> | Direct API Call | CloudFront + API |
+> |-----------------|------------------|
+> | Client connects directly to the API Region. | Client connects to the nearest CloudFront Edge Location. |
+> | Entire request travels over the public Internet. | Only the client → Edge path uses the public Internet; Edge → Origin uses the AWS private network. |
+> | No edge processing. | Can run CloudFront Functions / Lambda@Edge before reaching the origin. |
+> | No DDoS protection at the edge. | Integrated with AWS Shield Standard and AWS WAF. |
+> | Higher latency for users far from the Region. | Lower and more consistent latency for global users. |
+>
+> **Without CloudFront**
+> ```text
+> User (India)
+>      │
+>      │ Public Internet (~200 ms)
+>      ▼
+> API (Virginia)
+> ```
+>
+> **With CloudFront**
+> ```text
+> User (India)
+>      │
+>      │ Public Internet (~20 ms)
+>      ▼
+> CloudFront Edge (Mumbai)
+>      │
+>      │ AWS Private Global Network
+>      ▼
+> API (Virginia)
+> ```
+>
+> **Use CloudFront for dynamic content when:**
+> - Your users are distributed globally.
+> - You want lower and more consistent latency.
+> - You need WAF, DDoS protection, or edge authentication.
+> - You want URL rewrites, redirects, or header manipulation at the edge.
+>
+> **If your users are in the same Region as the API**, calling the API directly is often perfectly fine.
+
 #### Cache invalidation
 - we ourself invalidate the cache if the data in the origin has been updated
 - cache canbe invalidated in cloudfront based on the filepath - /logo.png or based on path /images/*

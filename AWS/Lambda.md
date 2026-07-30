@@ -227,6 +227,16 @@ exports.handler = async (event) => {
 > - **Lambda@Edge** → Full Lambda running at the edge.
 > - **Normal Lambda** → Full Lambda running in an AWS Region.
 
+
+> [!NOTE]
+> - ### General question - where should we do JWT token validation?
+> - Lambda@Edge or API Gateway or inside app code
+> - preference is usually:
+> - ✅ API Gateway Authorizer (managed, scalable, request rejected before backend)
+> - ✅ Lambda@Edge (when using CloudFront and you want authentication at the edge)
+> - ✅ Application code (works, but the request has already reached your backend, consuming compute resources)
+
+
 ### Lambda and VPC
 | Topic | Key Point |
 |----------|----------|
