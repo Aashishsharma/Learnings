@@ -429,10 +429,62 @@ Immediately executes handler
 > - To reduce cold starts, use **Provisioned Concurrency**, which keeps Lambda execution environments **pre-initialized (warm)**.
 
 - so if a function invocation goes beyond the limit we set in Reserved concurrency, the function will throttle  
+![alt text](PNG/l17.PNG "Title")   
+- issue if we don't set the reserved concurrency limit - 
+- if one app is heavily used by users, all lambda will be invoked by that app
+- any other app (in below image - API gateway), will be throttled without even a single req, becuase our 1K account limit is exhaused by the first app  
 
-![alt text](PNG/l17.PNG "Title")  
+![alt text](PNG/l26.PNG "Title") 
 
+> [!NOTE] 
+> - #### Lambda snapstart
+> - works only with Java Python and .NET
+> - it stores the snapshot of lambda runtime + code + initialization to execute lamda faster 
+> - then what is diff between using provisioned concurrency vs snapstart to improve cold start issue?
 
+> [!NOTE]
+> #### Lambda Cold Starts
+>
+> **Normal Lambda**
+> ```text
+> Request
+>    │
+>    ▼
+> Start Runtime → Load Code → Initialize → Execute → Shutdown (eventually)
+> ```
+>
+> **Provisioned Concurrency**
+> ```text
+> Deploy
+>    │
+>    ▼
+> Start Runtime → Load Code → Initialize → 🔥 Wait for Requests
+>
+> Request
+>    │
+>    ▼
+> Execute Immediately
+> ```
+>
+> **SnapStart**
+> ```text
+> Deploy
+>    │
+>    ▼
+> Start Runtime → Load Code → Initialize → 📸 Create Snapshot
+>
+>                    (No warm Lambda is kept running)
+>
+> Request
+>    │
+>    ▼
+> Restore Snapshot → Execute
+> ```
+>
+> **Remember**
+> - **Normal Lambda** → Initializes on every cold start.
+> - **Provisioned Concurrency** → Keeps Lambda **warm and waiting** for requests. (high cost)
+> - **SnapStart** → Keeps a **snapshot** and restores it when a request arrives., (low cost)
 
 ### External dependencies
 
