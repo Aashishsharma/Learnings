@@ -245,3 +245,12 @@ Team A Custom AMI          Team B Custom AMI
 > - 3. Use parallel **S3 byte range fetches** (larg obj split, and we don multiple gets for part of obj, parallely, and then combine)
 > - 4. S3 Express One Zone - this is another storage class, here objs are not stored in normal buckets, but are stored in directory bucket, highest performance, slightly low availability (Use case - Media processing, AI/ML apps)
 > - 5. DynamoDB is very very fast, low cost, NoSQL with transaction support, and no need to patch / snapshot data since it is always available and serverless. Each table can have infinite rows
+
+> [!NOTE] 
+> - ### Soultion Architectures
+> - ![alt text](PNG/Arch2.PNG "Title")  
+> - ![alt text](PNG/Arch3.PNG "Title")  
+> - ![alt text](PNG/Arch4.PNG "Title")  
+> - ![alt text](PNG/Arch5.PNG "Title")  
+> - ![alt text](PNG/Arch6.PNG "Title")  
+
