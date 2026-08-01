@@ -254,3 +254,10 @@ Team A Custom AMI          Team B Custom AMI
 > - ![alt text](PNG/Arch5.PNG "Title")  
 > - ![alt text](PNG/Arch6.PNG "Title")  
 
+
+> [!NOTE]
+> - ## Summaries
+> - Amazon Aurora supports only two database engines (MySQL and Postgress)
+> - ![alt text](PNG/Arch7.PNG "Title")  
+
+
