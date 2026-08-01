@@ -319,9 +319,52 @@ SELECT * FROM Orders WHERE CustomerId = 'C101';
 | **What is it?** | A time-ordered stream that captures item-level changes (insert, update, delete) in a DynamoDB table. |
 | **How it Works** | Every change to the table is automatically written to the stream in the order it occurs. |
 | **Retention** | Stream records are retained for **24 hours**. |
-| **Consumers** | AWS Lambda or KDS to store data upto 1 yr and let consumers consume ot. |
-| **Common Use Cases** | Event-driven processing, new user added to the table, trigger lambda to send welcome email |
-![alt text](PNG/DDB17.PNG "Title")  
+| **Consumers** | AWS Lambda or KDS to store data upto 1 yr and let consumers consume it. |
+| **Common Use Cases** | Event-driven processing|  
+
+> [!NOTE]
+> #### DynamoDB Streams
+>
+> - **DynamoDB Streams** captures every **INSERT, UPDATE, and DELETE** made to a DynamoDB table.
+> - The changes are stored in a **Stream** (ordered sequence of change records).
+> - **Lambda automatically polls the Stream** and processes each change.
+> - The application **does not invoke Lambda directly**; it only writes to DynamoDB.
+>
+> **Workflow**
+> ```text
+> Application
+>      │
+>      ▼
+> DynamoDB Table
+>      │
+> INSERT / UPDATE / DELETE
+>      ▼
+> DynamoDB Stream
+>      │
+> (Lambda polls the Stream)
+>      ▼
+> Lambda
+>      │
+>      ├── Send Email
+>      ├── Update OpenSearch
+>      ├── Invalidate Cache
+>      ├── Write to S3
+>      └── Notify SNS/EventBridge
+> ```
+>
+> **Lambda Trigger Setup**
+>
+> - Enable **DynamoDB Streams** on the table.
+> - Create a **Lambda function**.
+> - Configure the **DynamoDB Stream as the Lambda trigger (Event Source Mapping)**.
+> - AWS automatically **polls the Stream** and invokes Lambda whenever new records are added.
+>
+> **Remember**
+> - **Application writes → DynamoDB**
+> - **DynamoDB writes changes → Stream**
+> - **Lambda polls the Stream → Processes changes (lambda is invoked synchronously)**
+> - **No application code is needed to invoke Lambda**
+>````
 
 ![alt text](PNG/DDB18.PNG "Title")  
 ![alt text](PNG/DDB19.PNG "Title")  
@@ -346,7 +389,8 @@ SELECT * FROM Orders WHERE CustomerId = 'C101';
 
 ### DynamoDB Transactions
 - ensures ACID properties are applied to DynamoDB, wither all statements execute or none of them execute
-- 1 ttransaction = 2 WCPs
+- 1 ttransaction = 2 WCPs  
+
 ![alt text](PNG/DDB22.PNG "Title")  
 - in example 2 why it is 8/4KB - 5 is rounded to closest multiple of 4 (upper limit) - so 8, and 4KB of of data per second
 
