@@ -412,6 +412,10 @@ SELECT * FROM Orders WHERE CustomerId = 'C101';
 > | **Export DynamoDB to S3** | Analytics, Backup, Data Lake | DynamoDB → Export Table → S3 (No impact on table performance) |
 >
 
+> [!NOTE]
+> - ### DocumentDB
+> - It is AWS implementation of MongoDB
+
 ### Node.js integration with DynamoDB and DAX
 
 #### 1. Install
