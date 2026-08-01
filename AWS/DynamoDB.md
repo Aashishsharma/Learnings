@@ -416,6 +416,10 @@ SELECT * FROM Orders WHERE CustomerId = 'C101';
 > - ### DocumentDB
 > - It is AWS implementation of MongoDB
 
+> [!NOTE]
+> - ### Amazon Keyspaces
+> - It is AWS implementation of Apache cassendra
+
 ### Node.js integration with DynamoDB and DAX
 
 #### 1. Install
