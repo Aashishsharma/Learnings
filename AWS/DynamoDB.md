@@ -369,6 +369,10 @@ SELECT * FROM Orders WHERE CustomerId = 'C101';
 ![alt text](PNG/DDB18.PNG "Title")  
 ![alt text](PNG/DDB19.PNG "Title")  
 
+> [NOTE]
+> - ### DynamoDB global tables
+> - ![alt text](PNG/DDB17.PNG "Title")   
+
 ### DynamoDB TTL
 ![alt text](PNG/DDB20.PNG "Title")  
 ![alt text](PNG/DDB21.PNG "Title")  
@@ -398,6 +402,15 @@ SELECT * FROM Orders WHERE CustomerId = 'C101';
 - store meetadat with object's se url in the table
 - actual large file will be stored in S3
 ![alt text](PNG/DDB23.PNG "Title")  
+
+> [!NOTE]
+> #### DynamoDB ↔ S3 Integration
+>
+> | Integration | Use Case | Workflow |
+> |------------|----------|----------|
+> | **Store large files in S3, metadata in DynamoDB** ⭐ Most Common | Images, videos, PDFs, documents | Upload file → Store in **S3** → Save **S3 Object Key/URL + metadata** in **DynamoDB** |
+> | **Export DynamoDB to S3** | Analytics, Backup, Data Lake | DynamoDB → Export Table → S3 (No impact on table performance) |
+>
 
 ### Node.js integration with DynamoDB and DAX
 
