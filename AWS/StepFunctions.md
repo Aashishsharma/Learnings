@@ -21,18 +21,18 @@ AWS Step Functions orchestrates all these steps and keeps track of the workflow 
 
 ![alt text](PNG/Step1.PNG "Title")  
 
-- **different state types** - 
-| State Type | Purpose | Example Use Case |
-|------------|---------|------------------|
-| **Task** | Perform a unit of work by invoking Lambda, ECS, Batch, SNS, SQS, or any AWS SDK API | Process an order using a Lambda function |
-| **Pass** | Pass input to the next state without doing any work | Add static data or test a workflow |
-| **Choice** | Branch workflow based on conditions | If payment succeeds → ship order; else → cancel order |
-| **Wait** | Pause execution for a duration or until a specific time | Wait 5 minutes before retrying |
-| **Succeed** | Successfully end the workflow | Order processing completed |
-| **Fail** | End the workflow with an error | Payment validation failed |
-| **Parallel** | Execute multiple branches simultaneously | Process payment, inventory, and notification in parallel |
-| **Map** | Repeat the same workflow for each item in a collection | Process each order item independently |
-
+> **Different State Types**
+>
+> | State Type | Purpose | Example Use Case |
+> |------------|---------|------------------|
+> | **Task** | Perform work by invoking Lambda, ECS, Batch, SNS, SQS, or any AWS SDK API. | Process an order using a Lambda function. |
+> | **Pass** | Pass input to the next state without performing any work. | Add static data or test a workflow. |
+> | **Choice** | Branch the workflow based on conditions. | If payment succeeds → Ship order; otherwise → Cancel order. |
+> | **Wait** | Pause execution for a duration or until a specific time. | Wait 5 minutes before retrying. |
+> | **Succeed** | Successfully end the workflow. | Order processing completed. |
+> | **Fail** | End the workflow with an error. | Payment validation failed. |
+> | **Parallel** | Execute multiple branches simultaneously. | Process payment, inventory, and notifications in parallel. |
+> | **Map** | Repeat the same workflow for each item in a collection. | Process each order item independently. |
 ![alt text](PNG/Step2.PNG "Title")  
 - see that the type here is task, it can be any from the above table, like choice, parallel
 
