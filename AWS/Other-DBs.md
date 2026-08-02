@@ -81,3 +81,21 @@ Amazon S3 (CSV, JSON, Parquet, ORC, Avro, etc.)
 ![alt text](PNG/Glue1.PNG "Title")  
 ![alt text](PNG/Glue2.PNG "Title")  
 
+## 6. AWS Lake Formation
+
+- **Data Lake** – A centralized repository (typically on Amazon S3) that stores structured, semi-structured, and unstructured data for analytics.
+- **AWS lake is a fully Managed data lake**
+- **Data Ingestion & Preparation** – Collects, cleans, transforms, and loads data from multiple sources into the data lake.
+- **Automates Data Management** – Automates data collection, cataloging, cleansing, movement, and de-duplication (using AWS Glue and ML Transforms).
+- **Supports All Data Types** – Combines structured, semi-structured, and unstructured data in a single data lake.
+- **Built-in Data Sources** – Provides ready-made connectors (blueprints) to ingest data from S3, RDS, relational databases, and NoSQL databases.
+- **Fine-Grained Access Control** – Controls access at the database, table, column, row, and cell level using centralized permissions.
+- **Built on AWS Glue** – Uses the AWS Glue Data Catalog and Glue crawlers to discover, catalog, and manage metadata.  
+
+
+#### Working
+1. Data is ingested from multiple sources (Amazon RDS, Aurora, S3, on-premises databases, logs, streaming data, etc.) into the data lake.
+2. The data lake stores raw and processed data, typically in **Amazon S3**.
+3. **AWS Glue Crawlers** scan the data and create metadata in the **AWS Glue Data Catalog**.
+4. **AWS Lake Formation** centrally manages permissions (database, table, column, and row-level access) for the data lake.
+5. Analytics services such as **Amazon Athena**, **Amazon EMR**, **Amazon Redshift Spectrum**, and **AWS Glue ETL** use the Glue Data Catalog to discover the data and query or process it directly from S3.
