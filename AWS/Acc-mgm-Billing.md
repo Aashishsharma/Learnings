@@ -52,6 +52,16 @@ AWS Organization
 #### AWS Org SCP Hierarchy
 ![alt text](PNG/Org.PNG "Title")  
 
+#### Org Tag Policies?
+
+- **Tag Policies** define **standardized tag keys and allowed values** across AWS accounts in an AWS Organization.
+- They help maintain **consistent tagging** for cost allocation, automation, and governance.
+
+**Why needed?** -  
+## Benefits (Real-World Examples)
+
+- **Consistent Cost Allocation** – Ensures every EC2, RDS, and S3 resource has tags like `Environment=Production` or `CostCenter=Finance`, enabling accurate AWS Cost Explorer and billing reports.
+
 ## AWS contorl tower
 - Instead of we manually create AWS org, and adding AWS acc, we can use this service
 - benefit - this has inbuild guardrails (as per best practices), and AWS detectives to handle issues
