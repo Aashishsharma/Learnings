@@ -96,9 +96,203 @@ there are 2 types of IAM policies
 - e.g. if IAM role from EC2 to access s3 is removed, EC2 instance can still access s3 if access is given via bucket policy (ARN of EC2 instance is added in the bucket policy, or ARN of role (which is attched to EC2) is added in the bucket policy)  
 - similarly if IAM gives access to EC2 to ready s3 obj, but bucket policy is configured to deny read access, then even if EC2 has correct IAM, but still cannot access s3, because DNEY takes precedence
 
+#### IAM policy conditions
+![alt text](PNG/IAM7.PNG "Title")  
+![alt text](PNG/IAM8.PNG "Title")    
+![alt text](PNG/IAM9.PNG "Title")    
+
 #### Dynamic policies in IAM
 ![alt text](PNG/IAM2.PNG "Title")  
-![alt text](PNG/IAM3.PNG "Title")  
+![alt text](PNG/IAM3.PNG "Title")   
+
+> [!NOTE]
+> ## AWS Cross-Account Access
+>
+> AWS supports two common ways to allow one AWS account to access resources in another account:
+>
+> 1. **IAM Assume Role (STS)** → Access multiple resources in another account.
+> 2. **Resource-Based Policy** → Access a specific resource.
+>
+> ---
+>
+> ### 1. IAM Assume Role (Recommended)
+>
+> **Example**
+>
+> - **Account A** → EC2 instance running an application.
+> - **Account B** → Owns an S3 bucket and DynamoDB table.
+> - The EC2 instance in **Account A** needs to access both resources.
+>
+> **Configuration**
+>
+> **Step 1 (Account B)** – Create an IAM Role (**CrossAccountAccessRole**).
+>
+> **Step 2 (Account B)** – Attach the following **Trust Policy**:
+>
+> ```json
+> {
+>   "Version": "2012-10-17",
+>   "Statement": [
+>     {
+>       "Effect": "Allow",
+>       "Principal": {
+>         "AWS": "arn:aws:iam::<AccountA-ID>:root"
+>       },
+>       "Action": "sts:AssumeRole"
+>     }
+>   ]
+> }
+> ```
+>
+> **Step 3 (Account B)** – Attach the following **Permission Policy**:
+>
+> ```json
+> {
+>   "Version": "2012-10-17",
+>   "Statement": [
+>     {
+>       "Effect": "Allow",
+>       "Action": "s3:GetObject",
+>       "Resource": "arn:aws:s3:::reports-bucket/*"
+>     },
+>     {
+>       "Effect": "Allow",
+>       "Action": [
+>         "dynamodb:GetItem",
+>         "dynamodb:Query"
+>       ],
+>       "Resource": "arn:aws:dynamodb:us-east-1:<AccountB-ID>:table/Orders"
+>     }
+>   ]
+> }
+> ```
+>
+> **Step 4 (Account A)** – Allow the EC2 role to assume the role:
+>
+> ```json
+> {
+>   "Version": "2012-10-17",
+>   "Statement": [
+>     {
+>       "Effect": "Allow",
+>       "Action": "sts:AssumeRole",
+>       "Resource": "arn:aws:iam::<AccountB-ID>:role/CrossAccountAccessRole"
+>     }
+>   ]
+> }
+> ```
+>
+> **Working**
+>
+> 1. EC2 calls **STS AssumeRole**.
+> 2. STS verifies the Trust Policy.
+> 3. Temporary credentials are returned.
+> 4. EC2 accesses S3 and DynamoDB using those credentials.
+>
+> ```text
+> EC2 (Account A)
+>         │
+> sts:AssumeRole
+>         ▼
+> CrossAccountAccessRole (Account B)
+>         │
+> Temporary Credentials
+>         ▼
+> S3 + DynamoDB
+> ```
+>
+> **Use When**
+>
+> - Accessing multiple resources.
+> - Temporary credentials are preferred.
+>
+> ---
+>
+> ### 2. Resource-Based Policy
+>
+> **Example**
+>
+> - **Account A** → EC2 instance
+> - **Account B** → S3 Bucket
+> - EC2 only needs access to one S3 bucket.
+>
+> **Configuration**
+>
+> **Step 1 (Account B)** – Attach the following Bucket Policy:
+>
+> ```json
+> {
+>   "Version": "2012-10-17",
+>   "Statement": [
+>     {
+>       "Effect": "Allow",
+>       "Principal": {
+>         "AWS": "arn:aws:iam::<AccountA-ID>:role/EC2Role"
+>       },
+>       "Action": "s3:GetObject",
+>       "Resource": "arn:aws:s3:::reports-bucket/*"
+>     }
+>   ]
+> }
+> ```
+>
+> **Step 2 (Account A)** – Attach the following IAM Policy:
+>
+> ```json
+> {
+>   "Version": "2012-10-17",
+>   "Statement": [
+>     {
+>       "Effect": "Allow",
+>       "Action": "s3:GetObject",
+>       "Resource": "arn:aws:s3:::reports-bucket/*"
+>     }
+>   ]
+> }
+> ```
+>
+> **Working**
+>
+> 1. EC2 directly calls S3.
+> 2. IAM policy is evaluated.
+> 3. Bucket policy is evaluated.
+> 4. Access is granted only if **both allow**.
+>
+> ```text
+> EC2 (Account A)
+>         │
+> GetObject
+>         ▼
+> IAM Policy (Account A)
+>         │
+> Allowed
+>         ▼
+> Bucket Policy (Account B)
+>         │
+> Allowed
+>         ▼
+> Read S3 Object
+> ```
+>
+> **Use When**
+>
+> - Sharing one resource.
+> - Common for S3, SQS, SNS, KMS, Lambda, and Secrets Manager.
+>
+> ---
+>
+> ### Assume Role vs Resource-Based Policy
+>
+> | Feature | IAM Assume Role | Resource-Based Policy |
+> |---------|------------------|-----------------------|
+> | Access | Multiple resources | Single resource |
+> | Temporary Credentials | ✅ | ❌ |
+> | Best For | Cross-account access to many resources | Sharing one resource |
+>
+> ---
+>
+> - Assume Role requires **Trust Policy + Permission Policy + sts:AssumeRole permission**.
+> - Resource-Based access requires **Resource Policy + IAM Policy**, and **both must allow** access.
 
 
 #### Different types of IAM policies
