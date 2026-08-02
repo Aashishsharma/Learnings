@@ -99,3 +99,17 @@ Amazon S3 (CSV, JSON, Parquet, ORC, Avro, etc.)
 3. **AWS Glue Crawlers** scan the data and create metadata in the **AWS Glue Data Catalog**.
 4. **AWS Lake Formation** centrally manages permissions (database, table, column, and row-level access) for the data lake.
 5. Analytics services such as **Amazon Athena**, **Amazon EMR**, **Amazon Redshift Spectrum**, and **AWS Glue ETL** use the Glue Data Catalog to discover the data and query or process it directly from S3.
+
+![alt text](PNG/DL.PNG "Title")  
+
+## 7. Managed service for Apache Flink
+![alt text](PNG/flink.PNG "Title")  
+
+## 8. Managed service for Apache Kafka (MSK)
+![alt text](PNG/kafka.PNG "Title")  
+![alt text](PNG/kafka1.PNG "Title")  
+
+## 9. Bigdata ingestion pipeline
+-task -  
+![alt text](PNG/bd.PNG "Title")  
+![alt text](PNG/bd1.PNG "Title")  
