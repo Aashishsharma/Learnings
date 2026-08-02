@@ -14,12 +14,34 @@
 - Uses **columnar storage**.
 - Uses **Massively Parallel Processing (MPP)**.
 - Leader node coordinates queries; compute nodes execute them.
-- **Spectrum** queries data directly in S3 without loading it.
-- Use **COPY** to load data into Redshift.
-- Use **UNLOAD** to export data to S3.
 - Supports **automatic and manual snapshots**.
 - Supports **cross-region snapshot copy** for disaster recovery.
 - Supports **KMS encryption** and **SSL/TLS**.
 - Runs inside a **VPC** and uses **Security Groups**.
 - **Concurrency Scaling** adds temporary clusters during heavy query loads.
-- Best suited for **BI, reporting, dashboards, and analytics**, not OLTP.
+- Best suited for **BI, reporting, dashboards, and analytics**, not OLTP.  
+
+#### Amazon Redshift Integrations  
+
+- **Amazon Data Firehose → Redshift** – Continuously streams real-time data into Redshift (typically via an intermediate S3 bucket using the `COPY` command).
+- **Amazon S3 ↔ Redshift** – Imports data into Redshift using `COPY`, exports data using `UNLOAD`, and enables querying S3 data directly with **Redshift Spectrum**.
+- **Amazon EC2 → Redshift** – Applications or analytics tools running on EC2 connect to Redshift over JDBC/ODBC or PostgreSQL-compatible drivers to execute SQL queries.  
+
+#### Amazon Redshift Spectrum
+
+- **Amazon Redshift Spectrum** lets you **query data stored directly in Amazon S3 using standard SQL without loading it into Redshift tables**.
+
+#### How it works
+
+```text
+Application
+      │
+SQL Query
+      ▼
+Redshift Cluster
+      │
+Redshift Spectrum
+      │
+      ▼
+Amazon S3 (CSV, JSON, Parquet, ORC, Avro, etc.)
+```
