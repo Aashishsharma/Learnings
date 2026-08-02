@@ -22,8 +22,35 @@
 - A company can create account per department or per cost center or even per project
 - instead of mult account, we can have one single account and create multiple VPCs which acts like a separate   
 
+#### AWS Organization Units (OU)
+
+- An **Organizational Unit (OU)** is a logical group of AWS accounts within **AWS Organizations**.
+- It is used to **manage multiple accounts together** by applying the same policies (SCPs) and governance.
+
+##### Why is it needed?
+
+Instead of configuring each account individually, you can group similar accounts into an OU and manage them centrally.
+
+**Example:**
+
+```text
+AWS Organization
+│
+├── Production OU
+│   ├── Account A
+│   └── Account B
+│
+├── Development OU
+│   ├── Account C
+│   └── Account D
+```
+
+- Applying one **Service Control Policy (SCP)** to the **Production OU** → affects all production accounts  
+
+![alt text](PNG/ou.PNG "Title")  
+
 #### AWS Org SCP Hierarchy
-![alt text](PNG/Org.PNG "Title") 
+![alt text](PNG/Org.PNG "Title")  
 
 ## AWS contorl tower
 - Instead of we manually create AWS org, and adding AWS acc, we can use this service
