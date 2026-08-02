@@ -1,14 +1,15 @@
 # Machine Learning
 
 ## Amazon Rekognition
-- Finds objs, text, faces inside images using ML
+- ![alt text](PNG/Rekognition.PNG "Title")  
+- ![alt text](PNG/Rekognition1.PNG "Title")  
 
 ## Transcribe
-- speech to text
-- has features like it auto removes PII data from speech while converting it to text
+- ![alt text](PNG/transcribe.PNG "Title") 
 
 ## Poly
-- text to speech
+- text to speech  
+- ![alt text](PNG/polly.PNG "Title") 
 
 ## Translate
 - convert one language to another language (convert English to french)
