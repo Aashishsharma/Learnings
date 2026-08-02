@@ -20,7 +20,10 @@
 
 ### Multi account strategies
 - A company can create account per department or per cost center or even per project
-- instead of mult account, we can have one single account and create multiple VPCs which acts like a separate account
+- instead of mult account, we can have one single account and create multiple VPCs which acts like a separate   
+
+#### AWS Org SCP Hierarchy
+![alt text](PNG/Org.PNG "Title") 
 
 ## AWS contorl tower
 - Instead of we manually create AWS org, and adding AWS acc, we can use this service
