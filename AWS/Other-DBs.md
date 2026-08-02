@@ -14,7 +14,6 @@
 - Uses **columnar storage**.
 - Uses **Massively Parallel Processing (MPP)**.
 - Leader node coordinates queries; compute nodes execute them.
-- **RA3** nodes separate compute from managed storage.
 - **Spectrum** queries data directly in S3 without loading it.
 - Use **COPY** to load data into Redshift.
 - Use **UNLOAD** to export data to S3.
@@ -23,9 +22,4 @@
 - Supports **KMS encryption** and **SSL/TLS**.
 - Runs inside a **VPC** and uses **Security Groups**.
 - **Concurrency Scaling** adds temporary clusters during heavy query loads.
-- **Elastic Resize** is faster than **Classic Resize**.
-- **Serverless** eliminates cluster management.
-- **AUTO** distribution style is the recommended default.
-- **ALL** distribution replicates small dimension tables to every compute node.
-- **KEY** distribution keeps related rows together for efficient joins.
 - Best suited for **BI, reporting, dashboards, and analytics**, not OLTP.
