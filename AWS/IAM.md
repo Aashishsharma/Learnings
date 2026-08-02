@@ -286,7 +286,7 @@ there are 2 types of IAM policies
 > | Feature | IAM Assume Role | Resource-Based Policy |
 > |---------|------------------|-----------------------|
 > | Access | Multiple resources | Single resource |
-> | Temporary Credentials | ✅ | ❌ |
+> | Temporary Credentials | ✅ (**Note, when a user / role assumes a new role, it's existing permissions are lost**) | ❌ |
 > | Best For | Cross-account access to many resources | Sharing one resource |
 >
 > ---
