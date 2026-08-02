@@ -13,24 +13,26 @@
 
 ## Translate
 - convert one language to another language (convert English to french)
+- usecase - localization for webapps
 
 ## Amazon Lex and connect
 - similar to Alexa
-- helps build chatbot (e.g call center bots)
+- helps build chatbot (e.g call center bots)  
 ![alt text](PNG/Lex.PNG "Title") 
 
 ## Amazon comprehend
-- natural language processing (NLP) service by Amazon Web Services that uses machine learning to extract insights, sentiment, entities, and key phrases from text automatically
+- natural language processing (NLP) service by Amazon Web Services that uses machine learning to extract insights, sentiment, entities, and key phrases from text automatically  
+![alt text](PNG/comprehend.PNG "Title")  
 
 ## Sagemaker
 - managed service to build ML models
 
 ## Kendra
-- managed document search service using ML
+- managed document search service using ML  
+![alt text](PNG/kendra.PNG "Title") 
 
 ## Amazon Personalize
-- Managed service to build apps with real-time personalized recommendation
-- same technology is used in Amazon.com when we buy products
+![alt text](PNG/per.PNG "Title") 
 
 ## Amazon textract
-- extract text, handwritten and other data from scanned documents
+![alt text](PNG/tex.PNG "Title") 
