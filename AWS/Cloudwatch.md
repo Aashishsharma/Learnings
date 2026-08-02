@@ -140,17 +140,6 @@ Log Group
             └── Log Events
 ```
 
-### Important Concepts
-
-| Term | Meaning |
-|---|---|
-| **Log Group** | Collection of log streams for an application or service |
-| **Log Stream** | Sequence of log events from a specific source (e.g., Lambda instance, ECS task) |
-| **Log Event** | Individual log entry containing message + timestamp |
-| **Retention Period** | How long logs are kept before deletion |
-| **Subscription Filter** | Continuously forwards logs to Lambda, Kinesis, Firehose, etc. |
-| **Insights** | SQL-like querying capability for analyzing logs |
-
 #### Example (EC2 behind an ALB)
 
 ```text
@@ -275,7 +264,11 @@ E.g. - create alarm on CPU utilization
 - configure action
 ![alt text](PNG/CW10.PNG "Title")  
 - for this demo we have choosen EC2 action
-![alt text](PNG/CW11.PNG "Title")  
+![alt text](PNG/CW11.PNG "Title") 
+
+> [!NOTE]
+> - We can create composite alarms like (if CPU utilization > threshold AND IOPS > threshold), only then trigger alarm
+> - To monitor network issues between AWS and your on-prem use Cloudwatch Newtwork Synthetic Monitor
 
 ## 4. Events via Eventbridge
 - when some action happens trigger action
@@ -401,6 +394,9 @@ Modify Security Group    ✓
 | **Data Events** | Resource-level operations on data within resources | `S3 GetObject`, `S3 PutObject`, `Lambda Invoke` |
 | **Insights Events** | Unusual API activity detected by CloudTrail | Sudden spike in `DeleteBucket` or `RunInstances` calls |
 | **Network Activity Events** | Network-related API activity for supported services | Access to services through VPC endpoints |
+
+> [!NOTE]
+> - Logs in Cloudtrail are stored upto 90 days, if needed longer then store in S3 and use Athena to query logs
 
 ## 5. AWS X-Ray
 - you can do visual analysis of your app
