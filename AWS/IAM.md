@@ -105,6 +105,16 @@ there are 2 types of IAM policies
 ![alt text](PNG/IAM2.PNG "Title")  
 ![alt text](PNG/IAM3.PNG "Title")   
 
+#### IAM Permission Boundary
+- in IAM console, there is an option to create a permission boundary
+- this sets a boundary to that particular user / role, which states that user cannot do anything outside of this boundary, even if the user / role has different policies attached that allowpermissions 
+![alt text](PNG/PB.PNG "Title")   
+- for above scenario, since the permission boundary allows access only to s3, ec2, and cloudwatch, even if the IAM policy allows iam:CreateUser - it will not work, because it is outside of that permission boundary
+
+> [!NOTE]
+> ### IAM policy evaluation
+> ![alt text](PNG/EL.PNG "Title")   
+
 > [!NOTE]
 > ## AWS Cross-Account Access
 >
@@ -506,4 +516,5 @@ Response:
 ### AWS Identity center
 - service that provides centralized access management and Single Sign-On (SSO) for multiple AWS accounts and business applications.
 - Let's say you have 4 different AWS accounts. then instead of remembering creds for all 4 accounts, create login under AWS Identity center, so you always login to AWS Identity cetner, from there you can login directly to any management console using only one login creds
-![alt text](PNG/Identity-center.PNG "Title") 
+![alt text](PNG/Identity-center.PNG "Title")  
+- Note - not just AWS accounts, when you login to AWS Identity centre, you can even SSO to 3rd party apps like Salesforce or others, for that we need to ensure SAML2.0 is configured in both AWS and Salesforce 
