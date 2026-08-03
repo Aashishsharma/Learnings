@@ -557,6 +557,10 @@ Response:
 >
 > **Key Point:** AWS Managed Microsoft AD eliminates the need to deploy and manage your own Windows Domain Controllers on EC2.
 
+> [!NOTE]
+> ### Connecting Identity Center with AD
+> ![alt text](PNG/IAM10.PNG "Title")  
+> Now with this setup - Instead of creating separate IAM users or AWS accounts for every employee, users log in once and then access everything they've been assigned.
 
 ### AWS Identity center
 - service that provides centralized access management and Single Sign-On (SSO) for multiple AWS accounts and business applications.
