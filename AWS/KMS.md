@@ -1,6 +1,15 @@
 # KMS - Key Management Service
-- AWS will manage encryption keys for us
-- fully intergated with IAM
+
+AWS Key Management Service (KMS) is a managed service used to **create, store, manage, and control cryptographic keys** that are used to encrypt and decrypt data.
+
+### What KMS does
+
+- ✅ Creates encryption keys (KMS Keys)
+- ✅ Securely stores and protects the keys (HSM-backed)
+- ✅ Controls who can use the keys (IAM & Key Policies)
+- ✅ Encrypts/decrypts **small amounts of data** (up to 4 KB)
+- ✅ Generates Data Encryption Keys (DEKs) for encrypting large data
+- ✅ Seemless integration with (EBS, S3, RDS, SSM), just enable KMS encrytion on these services, and your data is now encrypted at rest
 
 ## KMS key types
 
@@ -9,8 +18,6 @@
 | **AWS Owned Key** | AWS | ❌ No | **Free** | Default encryption for many AWS services | Used automatically by AWS; not visible or manageable by customers. |
 | **AWS Managed Key** (`aws/service-name`) | AWS (per account/service) | ❌ No | **Free** (pay only for KMS API requests) | Simple encryption for a specific AWS service (e.g., S3, EBS, RDS) | Automatically created and rotated by AWS. |
 | **Customer Managed Key (CMK)** | Customer | ❌ No (unless imported or external) | **Paid** (monthly key fee + API requests) | Full control over encryption, permissions, rotation, auditing | Recommended for production workloads requiring fine-grained control. |
-| **Imported Key Material** | Customer | ✅ Yes (you generate and import it) | **Paid** | Bring Your Own Key (BYOK), compliance requirements | If imported key material expires or is deleted, the CMK becomes unusable until re-imported. |
-| **External Key Store (XKS)** | Customer (external HSM) | ✅ Yes (stored outside AWS) | **Paid** (KMS charges + external HSM costs) | Strict compliance where keys must never reside in AWS | Key operations are performed by your external HSM. |
 
 ## KMS Key policy
 - similar to bucket policy
