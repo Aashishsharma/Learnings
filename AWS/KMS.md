@@ -13,11 +13,12 @@ AWS Key Management Service (KMS) is a managed service used to **create, store, m
 
 ## KMS key types
 
-| Key Type | Who Owns & Manages the Key | Can You View the Key Material? | Pricing | Best Use Case | Notes |
-|----------|-----------------------------|--------------------------------|---------|---------------|------|
-| **AWS Owned Key** | AWS | ❌ No | **Free** | Default encryption for many AWS services | Used automatically by AWS; not visible or manageable by customers. |
-| **AWS Managed Key** (`aws/service-name`) | AWS (per account/service) | ❌ No | **Free** (pay only for KMS API requests) | Simple encryption for a specific AWS service (e.g., S3, EBS, RDS) | Automatically created and rotated by AWS. |
-| **Customer Managed Key (CMK)** | Customer | ❌ No (unless imported or external) | **Paid** (monthly key fee + API requests) | Full control over encryption, permissions, rotation, auditing | Recommended for production workloads requiring fine-grained control. |
+| Key Type | Who Can Use/Control It? | Pricing | When to Use | Key Difference |
+|----------|--------------------------|---------|-------------|----------------|
+| **AWS Owned Key** | AWS only (customer cannot see or select it) | **Free** | Default encryption performed internally by AWS services | Completely hidden from customers; you cannot manage, audit, or choose it. |
+| **AWS Managed Key** (`aws/service-name`) | Customer can choose it, but AWS manages it | **Free** (pay only for KMS API requests) | When you want simple KMS encryption without managing keys (e.g., S3, EBS, RDS) | Visible in your account and selectable, but AWS controls the key policy and rotation. |
+| **Customer Managed Key (CMK)** | Customer has full control | **Paid** (monthly key fee + API requests) | When you need custom permissions, cross-account access, manual/automatic rotation, or compliance requirements | Full control over key policy, IAM access, auditing, rotation, disable/delete, and cross-account sharing. |
+
 
 ## KMS Key policy
 - similar to bucket policy
