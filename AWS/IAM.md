@@ -498,20 +498,65 @@ Response:
 | `AssumeRoleWithSAML` | Authenticate using a SAML assertion | SAML assertion from an Identity Provider | Enterprise SSO (ADFS, Okta, Azure AD, etc.) | Temporary credentials |
 | `GetFederationToken` | Temporary credentials for federated users | IAM User credentials | Legacy federation scenarios with custom identity brokers | Temporary credentials |
 
-### AWS Managed Active Directory
-**Types**  
-| Directory Type | Managed By | Connects To | Best Use Case | Supports Trust | Internet Required |
-|----------------|------------|-------------|---------------|----------------|-------------------|
-| **AWS Managed Microsoft AD** | AWS | Native Microsoft Active Directory | Enterprise workloads on AWS (EC2, FSx, WorkSpaces, RDS SQL Server) | ✅ Yes | ❌ No |
-| **AD Connector** | Your on-premises AD | Existing on-premises Active Directory | Use existing AD without storing directory data in AWS | N/A (Proxy only) | Connectivity to on-prem (VPN/Direct Connect) |
-| **Simple AD** | AWS | Samba-based directory | Small applications, development, testing | ❌ No | ❌ No |
+> [!NOTE]
+> #### Microsoft Active Directory (AD)
+>
+> - **Microsoft Active Directory (AD)** is a centralized directory service that stores **users, groups, computers, and permissions**, enabling authentication and authorization across an organization.
+> - A **Domain Controller (DC)** is the server running AD. When a user logs in, the request goes to the DC, which verifies the credentials and returns the user's permissions.
+>
+> ---
+>
+> #### AWS Directory Service
+>
+> - **AWS Directory Service** provides managed directory services so AWS resources (EC2, WorkSpaces, FSx, etc.) can authenticate users without managing domain controller infrastructure yourself.
+>
+> ---
+>
+> #### Types of AWS Directory Service
+>
+> | Directory Type | How it Works | When to Use |
+> |----------------|--------------|-------------|
+> | **AWS Managed Microsoft AD** | AWS deploys and manages Microsoft Domain Controllers in your VPC. You can also connect to on-prem AD with this. So user's exists both in on-prem AD and in AWS | Need a fully managed Microsoft Active Directory in AWS. |
+> | **AD Connector** | Acts as a **proxy** that forwards authentication requests from AWS to your existing on-premises Active Directory. No directory data is stored in AWS. So user's sit only in on-prem | Already have an on-premises AD and want AWS resources to use it. |
+> | **Simple AD** | AWS creates a lightweight **Samba-based** directory for basic authentication and user management. | When your on-prem does not have any AD. |
+>
+> #### AWS Managed Microsoft AD (EC2 Example)
+>
+> **Example:** A company has a **Windows EC2** instance joined to an Active Directory domain. An employee wants to log in using their company credentials.
+>
+> ```text
+> Employee
+> (on local laptop)
+>        │
+> Remote Desktop (RDP)
+>        │
+>        ▼
+> Windows EC2
+> (Domain Joined)
+>        │
+> Authentication Request
+>        ▼
+> AWS Managed Microsoft AD
+> (Managed Domain Controllers)
+>        │
+> Verify Username & Password
+>        │
+> Return User Groups & Permissions
+>        ▼
+> Windows EC2 Allows Login
+> ```
+>
+> **Working**
+>
+> 1. The Windows EC2 instance is **joined to AWS Managed Microsoft AD**.
+> 2. The employee connects to the EC2 instance using **Remote Desktop (RDP)**.
+> 3. The employee enters their **domain credentials** (e.g., `CORP\john.doe`) instead of a local Windows account.
+> 4. Windows EC2 forwards the authentication request to the **AWS Managed Microsoft AD**.
+> 5. The managed **Domain Controller** verifies the username and password.
+> 6. If the credentials are valid, it returns the user's groups and permissions, and Windows allows the login.
+>
+> **Key Point:** AWS Managed Microsoft AD eliminates the need to deploy and manage your own Windows Domain Controllers on EC2.
 
-
-| Requirement | Recommended Option |
-|------------|--------------------|
-| Need a fully managed Microsoft Active Directory in AWS | **AWS Managed Microsoft AD** |
-| Already have an on-premises Active Directory and don't want to duplicate it | **AD Connector** |
-| Need a low-cost directory for development or testing | **Simple AD** |
 
 ### AWS Identity center
 - service that provides centralized access management and Single Sign-On (SSO) for multiple AWS accounts and business applications.
