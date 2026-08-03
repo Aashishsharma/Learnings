@@ -341,11 +341,14 @@ console.log(Parameter.Value);
 
 ---
 
-# What can it store?
+### What can it store?
 - same as parameter SSM
 
 #### Features
-- mostly same as SSM parameters, only key rotation is new here
+- mostly same as SSM parameters
+- only key rotation is new here
+- also we can have multi-region secrets as well
+
 #### How Secret Rotation Works
 
 ```text
