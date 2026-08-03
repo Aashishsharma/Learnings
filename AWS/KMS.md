@@ -25,6 +25,15 @@ AWS Key Management Service (KMS) is a managed service used to **create, store, m
 > - **Multi-Region Keys (MRKs)** are KMS keys that can be **replicated across AWS Regions** while sharing the **same key material and key ID**.
 > - They enable encryption in one Region and decryption in another without re-encrypting the data.
 > - Not recommended for security and compliance reasons to use multi-region keys unless necessary
+> - **Multi-region keys usecase - Using with DynamoDB global tables or with Aurora global**
+> - STEP 1 - **Encrypt specific DynamoDB attributes (like SSN) on the client side** using the DynamoDB Encryption Client before storing them in the table.
+> - STEP 2 - **DynamoDB Global Tables replicate the already encrypted data** across Regions, keeping sensitive attributes encrypted during replication.
+> - STEP 3 - **KMS Multi-Region Keys (MRKs)** allow applications in each Region to **decrypt the replicated data locally**, reducing latency and avoiding cross-Region KMS calls.
+
+> [!NOTE]
+> - #### S3 replications with Encryption
+> - S3 buckets which are unencrypted or are encrypted with SSE-S3 can be replicated directly
+> - S3 buckets which are encrypted using SSE-KMS - need more config to replication
 
 ## KMS Key policy
 - similar to bucket policy
@@ -181,14 +190,9 @@ S3 stores Bucket Key securely
 
 #### What can it store?
 
-- Database passwords
-- API keys
-- JWT secrets
 - Connection strings
 - Environment variables
 - Feature flags
-- Application configuration
-
 
 #### Types of Parameters
 
@@ -209,7 +213,6 @@ S3 stores Bucket Key securely
 | Versioning | Every update creates a new version |
 | IAM integration | Control access using IAM policies |
 | Hierarchical paths | Organize parameters like folders (`/prod/db/password`) |
-| No servers | Fully managed service |
 
 ---
 
