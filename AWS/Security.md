@@ -1,18 +1,45 @@
 # Security
 - To protect app from DDoS attack - use 
-### AWS shield
+### AWS shield (works on Layer 3 and Layer 4)
 - provided protection from DDoS, Layer4/L5 attacks for free and is enabled by default
 - AWS Shield advanced - 24/7 premium DDoS protection
 - for best security attach shield to R53, Cloudfront, and ELB, all three
 
-### AWS WAF
-![alt text](PNG/Security2.PNG "Title") 
+### AWS WAF (only for Layer 7)
+![alt text](PNG/Security2.PNG "Title")  
+
+> [!NOTE]
+> #### How it Works
+>
+> ```text
+> Client Request
+>        │
+>        ▼
+> AWS WAF
+> (Evaluate Rules)
+>        │
+>        ├── Allow
+>        ├── Block
+>        ├── Count
+>        └── Rate Limit
+>        │
+>        ▼
+> ALB / API Gateway / CloudFront / AppSync
+>        │
+>        ▼
+> Application
+> 
 
 ### Network Firewall
 ![alt text](PNG/Security3.PNG "Title") 
 
 ### Firewall manager
-![alt text](PNG/Firewall.PNG "Title") 
+![alt text](PNG/Firewall.PNG "Title")  
+
+> [!NOTE]
+> - WAF is to protect individual resource
+> - Shield - to protect entire AWS account
+> - Firewall Manager - manage security rules for new resources as they are created
 
 ### Penetration testing
 - we can this testing perform without AWS's approval 
