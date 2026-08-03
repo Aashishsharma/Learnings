@@ -19,6 +19,12 @@ AWS Key Management Service (KMS) is a managed service used to **create, store, m
 | **AWS Managed Key** (`aws/service-name`) | Customer can choose it, but AWS manages it | **Free** (pay only for KMS API requests) | When you want simple KMS encryption without managing keys (e.g., S3, EBS, RDS) | Visible in your account and selectable, but AWS controls the key policy and rotation. |
 | **Customer Managed Key (CMK)** | Customer has full control | **Paid** (monthly key fee + API requests) | When you need custom permissions, cross-account access, manual/automatic rotation, or compliance requirements | Full control over key policy, IAM access, auditing, rotation, disable/delete, and cross-account sharing. |
 
+> [!NOTE]
+> - KMS keys are region specific only
+> ### AWS KMS Multi-Region Keys
+> - **Multi-Region Keys (MRKs)** are KMS keys that can be **replicated across AWS Regions** while sharing the **same key material and key ID**.
+> - They enable encryption in one Region and decryption in another without re-encrypting the data.
+> - Not recommended for security and compliance reasons to use multi-region keys unless necessary
 
 ## KMS Key policy
 - similar to bucket policy
