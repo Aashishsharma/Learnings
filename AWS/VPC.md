@@ -89,6 +89,18 @@
 >
 > - ![alt text](PNG/VPC11.PNG "Title")   
 
+### Creating subnet
+![alt text](PNG/Sub1.PNG "Title")  
+- after selecting VPC, we need to select - CIDR range and to which AZ, then subnet will cater to
+- generally for public subnets - the IP ranges are kept smaller (since public IPs are need for only few services like ALB), and for private subnets, the range should be more
+![alt text](PNG/Sub2.PNG "Title")    
+- create multiple subnets inside the same VPC, catering to different AZs  
+![alt text](PNG/Sub3.PNG "Title")   
+
+![alt text](PNG/Sub1.PNG "Title")  
+![alt text](PNG/Sub1.PNG "Title")  
+![alt text](PNG/Sub1.PNG "Title")  
+
 
 ![alt text](PNG/VPC1.PNG "Title") 
 
