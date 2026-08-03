@@ -44,8 +44,50 @@
 - Default VPC has 3 subnets (each subnet for each AZ within the region), and each subnet will get CIDR assigned  
 - These subnet CIDRs will determine IP address of EC2 launched inside this VPC / subnet  
 ![alt text](PNG/DVPC1.PNG "Title")  
-- the default VPC attaches Internet gateway to routing rules so all instances within that VPC / subnet will have access to the internet  
+- the default VPC attaches Internet gateway to routing rules so all EC2 instances within that VPC / subnet will have access to the internet  
  ![alt text](PNG/DVPC2.PNG "Title")  
+- Note - EC2 can access intennet means, from EC2 instnance we can access internet, and it is not the other way around, for EC2 to be accessed over the internet, EC2 must be (in public subnet, have public IPv4, appropriate sec grp and NACL rules configured)
+
+## VPC
+![alt text](PNG/VPC9.PNG "Title")  
+
+#### Creating VPC
+![alt text](PNG/VPC10.PNG "Title")  
+- Note the CIDR block cannot go beyond 10.0.0.0/15 - because max limit is /16 in AWS
+
+> [!NOTE]
+> ## Subnets
+>
+> - A **Subnet** is a **portion of a VPC's IP address range (CIDR block)** where AWS resources (EC2, RDS, Lambda ENIs, etc.) are deployed.
+> - Every resource launched in a subnet receives a **private IP address** from that subnet's CIDR range.
+>
+> ---
+>
+> ### How it Works
+>
+> ```text
+> VPC
+> CIDR: 10.0.0.0/16
+>         │
+>         ├──────────────┐
+>         ▼              ▼
+> Public Subnet     Private Subnet
+> 10.0.1.0/24       10.0.2.0/24
+>      │                 │
+>      ▼                 ▼
+> EC2: 10.0.1.10    EC2: 10.0.2.15
+> ```
+>
+> ---
+>
+> ### Why are Subnets Needed?
+>
+> - Divide a VPC into **smaller networks**.
+> - Organize resources (e.g., Public and Private).
+> - Control network routing and security.
+> - Each subnet exists in **one Availability Zone (AZ)**.
+>
+> - ![alt text](PNG/VPC11.PNG "Title")   
 
 
 ![alt text](PNG/VPC1.PNG "Title") 
