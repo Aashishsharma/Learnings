@@ -241,13 +241,6 @@
 - So for any desitination initiated by any resource from this private subnet, the request will go through NAT instances, and they we re-write packets and send to the actual intert server
 - Now we can ssh to bastion host, then ssh to private EC2, now if we do ping www.google.com, now the command should work prooving that private EC2s can access the internet
 
-> [!NOTE]
-> # Summary
->
-> - **Internet Gateway (IGW):** Enables **Internet connectivity** for resources in a **public subnet** (supports both inbound and outbound Internet traffic, provided the resource has a Public IP and security rules allow it).
-> - **Bastion Host:** Use Bastion Host to allow internet users to connect to resources inside private subnets
-> - **NAT Gateway:** Allows resources in **private subnets** to **initiate outbound Internet connections**, while **preventing inbound connections initiated from the Internet**.
-
 ### NAT Gateways
 - These are AWS managed NAT instances
 - so highly available / scalable, no administration needed
@@ -261,6 +254,16 @@
 2. Then edit the rules inside route table associated with the subnet and add the newly created NAT gateway as target  
 ![alt text](PNG/NAT3.PNG "Title")   
 
+#### Regional NAT
+![alt text](PNG/NAT4.PNG "Title")   
+- Normal NAT gateways were associated with subnets, RNAT is assoicated at VPC level
+
+> [!NOTE]
+> # Summary
+>
+> - **Internet Gateway (IGW):** Enables **Internet connectivity** for resources in a **public subnet** (supports both inbound and outbound Internet traffic, provided the resource has a Public IP and security rules allow it).
+> - **Bastion Host:** Use Bastion Host to allow internet users to connect to resources inside private subnets
+> - **NAT Gateway:** Allows resources in **private subnets** to **initiate outbound Internet connections**, while **preventing inbound connections initiated from the Internet**.
 
 #### Now once VPC and subnets are configured, we can launch EC2 instances inside a specific VPC / subnets we created above  
 ![alt text](PNG/VPC13.PNG "Title")  
