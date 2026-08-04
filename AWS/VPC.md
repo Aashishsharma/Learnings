@@ -190,7 +190,7 @@
 >
 > #### So what does `0.0.0.0/0 → Internet Gateway` actually do?
 >
-> **It provides Internet connectivity for the subnet.**
+> **It provides Internet connectivity (ONLY FOR resources in PUBLIC SUBNET) for the subnet.**
 >
 > - ✅ Allows resources in the subnet to **send traffic to the Internet**.
 > - ✅ Allows **return traffic** from the Internet back to the EC2.
@@ -204,6 +204,10 @@
 > - Security Group allows inbound
 > - NACL allows inbound
 
+### Giving Internet access to resources inside PRIVATE SUBNETs
+#### Bastion Host  
+![alt text](PNG/BH.PNG "Title")  
+  
 
 #### Now once VPC and subnets are configured, we can launch EC2 instances inside a specific VPC / subnets we created above  
 ![alt text](PNG/VPC13.PNG "Title")  
