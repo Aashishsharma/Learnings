@@ -223,7 +223,23 @@
 - Soultion - use **NAT instances**   
 
 ### NAT instances
+![alt text](PNG/NAT.PNG "Title")  
+- NAT is another EC2 living in public subnet
+- It re-writes the Source and Dest IP at packet levels hence Source / Destination check of IPs at EC2 level must be disabled  
+- NAT instances are getting decommissioned
+- There is a pre-configured AMI available for NAT instances
+- **Disadvantages**
+- 1. It is not highly available / scalable
+- 2. Traffic bandwidth depends on your EC2 instance type
 
+#### Configuring NAT instances
+1. Launch EC2 - select NAT AMI from AWS or Marketplace
+2. In the launch console, configure Network settings to allow traffic only from VPC resources (configure CIDR range of the VPC we have created). NAT is used to allow resources from private subnet to access the internet. It does not allow outside resources to connect to your private EC2s
+3. Once NAT instance is created, edit it's settings to disable source / destination IP check (becuase NAT will re-write the IPs)
+4. Now goto Route tables, which caters to private subnets, and add a second rule  
+![alt text](PNG/NAT1.PNG "Title")  
+- So for any desitination initiated by any resource from this private subnet, the request will go through NAT instances, and they we re-write packets and send to the actual intert server
+- Now we can ssh to bastion host, then ssh to private EC2, now if we do ping www.google.com, now the command should work prooving that private EC2s can access the internet
 
 > [!NOTE]
 > # Summary
