@@ -218,7 +218,19 @@
 1. We create BH in public subnet and 1 EC2 in private subnet
 2. Then we SSH into BH, and then from that BH, we SSH into the private EC2  
 ![alt text](PNG/BH1.PNG "Title")  
-- 10.0.0.72 is IP of BH and we SSH and 10.0.22.82 is IP of private EC2 
+- 10.0.0.72 is IP of BH and we SSH and 10.0.22.82 is IP of private EC2
+- So we can access private EC2 from BH, but still private EC2 cannot access internet - see in the image - the ping command failed
+- Soultion - use **NAT instances**   
+
+### NAT instances
+
+
+> [!NOTE]
+> # Summary
+>
+> - **Internet Gateway (IGW):** Enables **Internet connectivity** for resources in a **public subnet** (supports both inbound and outbound Internet traffic, provided the resource has a Public IP and security rules allow it).
+> - **Bastion Host:** Use Bastion Host to allow internet users to connect to resources inside private subnets
+> - **NAT Gateway:** Allows resources in **private subnets** to **initiate outbound Internet connections**, while **preventing inbound connections initiated from the Internet**.
 
 #### Now once VPC and subnets are configured, we can launch EC2 instances inside a specific VPC / subnets we created above  
 ![alt text](PNG/VPC13.PNG "Title")  
