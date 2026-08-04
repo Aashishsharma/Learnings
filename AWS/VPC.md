@@ -96,6 +96,17 @@
 ![alt text](PNG/Sub2.PNG "Title")    
 - create multiple subnets inside the same VPC, catering to different AZs  
 ![alt text](PNG/Sub3.PNG "Title")   
+- above we have created 4 subnets inside 1 VPC, only the names are public and private subnets, they are not yet configured to be public / private subnets
+- **We need to create Internet Gateway to**  
+- 1. allow resources (like EC2, Lambda) to access internet
+- **Internet gateway needs to be** - 
+- 1. Created separately from VPC
+- 2. Then must be attached to VPC - only one IGW can be attached to 1 VPC
+- 3. Attaching IGW to VPC alone will not give intert access, we must edit route tables to allow internet access  
+
+![alt text](PNG/VPC12.PNG "Title")  
+- 1. Edit route table to connect to EC2 instance inside public subnet
+- 2. Route table connects to IGW which then connectes to internet   
 
 ![alt text](PNG/Sub1.PNG "Title")  
 ![alt text](PNG/Sub1.PNG "Title")  
