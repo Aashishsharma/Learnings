@@ -310,6 +310,12 @@
 - here the destination IP is the CIDR of the other VPC we want to peer with
 - we need to do the same thing in the other VPC's route table and add current VPC's CIDR in the routing rules
 
+## VPC endpoints
+- since all AWS services like SNS, DynamoDB are publicly available, if our EC2s inside private subnet needs to connect to SNS / DynamoDB, then the flow us from EC2 -> NAT -> IGW -> SNS / DynamoDB, (see below image) and connection between IGW to SNS / DynamoDB is over the public internet
+- instead use VPC endpoints, which directly and privately connects to AWS services (SNS / DynamoDB)
+- thus providing more security (because of private connection), and improved latency (because of reducing hops and provate connection)  
+![alt text](PNG/VE.PNG "Title")  
+
 ## VPC FLow logs
 ![alt text](PNG/VPC3.PNG "Title") 
 
