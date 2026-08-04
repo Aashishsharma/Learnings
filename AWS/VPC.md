@@ -277,13 +277,21 @@
 #### Ephemeral ports
 - it is a standard TCP/IP networking concept
 - An **Ephemeral Port** is a **temporary, automatically assigned source port** used by the client when initiating a network connection.
-- It exists only for the duration of the connection and is released afterward.  
+- It exists only for the duration of the connection and is released afterward. 
+- ports numbers typically used are from 1024-65535 
 ![alt text](PNG/NACL2.PNG "Title")  
 - The **client** initiates the connection and the OS automatically assigns a temporary **ephemeral source port** (`50105`).
 - The request is sent from **`11.22.33.44:50105`** to the web server **`55.66.77.88:443`** (HTTPS).
 - The web server processes the request and sends the response **from port `443` back to the client's ephemeral port `50105`**.
 - The client uses the ephemeral port to identify **which application/process** should receive the response.
 
+#### NACL with Ephemeral ports
+- since we know NACL are stateless, and Ephemeral ports can be any, to establish a connection we need to whitelist all the ports
+- same issue does not occur with security groups, because they are stateful  
+![alt text](PNG/NACL3.PNG "Title")  
+- The web server sends a request to the database on **port 3306**, so the **Web NACL** must allow **outbound TCP 3306**, and the **DB NACL** must allow **inbound TCP 3306**.
+- The database sends the response back to the web server's **ephemeral port (1024–65535)**, so the **DB NACL** must allow **outbound ephemeral ports**, and the **Web NACL** must allow **inbound ephemeral ports**.
+- This is required because **Network ACLs are stateless**, so both the request and the response must be explicitly allowed.
 
 ![alt text](PNG/VPC1.PNG "Title") 
 
