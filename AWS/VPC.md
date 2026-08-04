@@ -207,7 +207,18 @@
 ### Giving Internet access to resources inside PRIVATE SUBNETs
 #### Bastion Host  
 ![alt text](PNG/BH.PNG "Title")  
-  
+**GOAL** - Allow users from Internet to connect to EC2s which are inside private subnets
+**Working logic**  
+- Bastion host (BH) is nothing but an EC2 instance launched inside public subnet of a VPC
+- Since BH is in same VPC, it can connect to EC2 instances from private VPCs
+- We configure Sec grp of Private EC2s to allows traffic only from BH
+- We configure Sec grp of BH to allow traffic from internet (but only from restricted CIDRs, such that only Corporate IP ranges can access this BH)
+
+**DEMO**  
+1. We create BH in public subnet and 1 EC2 in private subnet
+2. Then we SSH into BH, and then from that BH, we SSH into the private EC2  
+![alt text](PNG/BH1.PNG "Title")  
+- 10.0.0.72 is IP of BH and we SSH and 10.0.22.82 is IP of private EC2 
 
 #### Now once VPC and subnets are configured, we can launch EC2 instances inside a specific VPC / subnets we created above  
 ![alt text](PNG/VPC13.PNG "Title")  
