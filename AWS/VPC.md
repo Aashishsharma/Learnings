@@ -253,7 +253,14 @@
 - so highly available / scalable, no administration needed
 - hence can manage large traffic networks, can autoscale
 - it is created in specific AZ and will have an elastic IP
-- we should create multiple NAT gateways in multiple AZs for fault tolerance (**remember? while creating subnets, we choose AZ? so for each AZ, in this case subnet, create a NAT gateway**)
+- we should create multiple NAT gateways in multiple AZs for fault tolerance (**remember? while creating subnets, we choose AZ? so for each AZ, in this case subnet, create a NAT gateway**)  
+
+#### Configuring NAT Gatways
+1. Click create, choose subnet to which NAT gateway will cater to and allocate Elastic IP  
+![alt text](PNG/NAT2.PNG "Title")   
+2. Then edit the rules inside route table associated with the subnet and add the newly created NAT gateway as target  
+![alt text](PNG/NAT3.PNG "Title")   
+
 
 #### Now once VPC and subnets are configured, we can launch EC2 instances inside a specific VPC / subnets we created above  
 ![alt text](PNG/VPC13.PNG "Title")  
