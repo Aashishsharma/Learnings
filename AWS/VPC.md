@@ -129,6 +129,81 @@
 - this rules states that any source IP within the CIDR (10.0.0.0/16) - (this CIDR is of our VPC which we gave while creating), can connect directly 
 - the second rule is what we crated which states, any IP over the world will connect to IGW, and can connect to VPC resources
 
+### Now with the above setting we have 
+> [!NOTE]
+> #### Outbound Flow (EC2 → Internet)
+>
+> ```text
+> EC2
+> (10.0.1.10)
+>        │
+> Wants to access google.com
+> (142.x.x.x)
+>        │
+>        ▼
+> Route Table checks destination
+>        │
+> Destination NOT in 10.0.0.0/16
+>        │
+>        ▼
+> Match:
+> 0.0.0.0/0 → Internet Gateway
+>        │
+>        ▼
+> Internet Gateway
+>        │
+>        ▼
+> Internet
+> ```
+>
+> **Meaning:** The route tells AWS **how to send outgoing traffic** to the Internet.
+>
+> ---
+>
+> #### Inbound Flow (Internet → EC2)
+>
+> ```text
+> Internet User
+>        │
+> Sends request to EC2 Public IP
+>        │
+>        ▼
+> Internet Gateway
+>        │
+> Delivers packet into the VPC
+>        │
+>        ▼
+> EC2
+> (Security Group + NACL checked)
+> ```
+>
+> **Notice:** The route table is **not consulted** for the incoming packet.
+>
+> AWS already knows:
+>
+> - this Public IP belongs to this EC2
+> - this EC2 is inside this subnet
+>
+> so it delivers the packet directly.
+>
+> ---
+>
+> #### So what does `0.0.0.0/0 → Internet Gateway` actually do?
+>
+> **It provides Internet connectivity for the subnet.**
+>
+> - ✅ Allows resources in the subnet to **send traffic to the Internet**.
+> - ✅ Allows **return traffic** from the Internet back to the EC2.
+> - ✅ Allows SSH connection to EC2, because SSH is 2 way communication and this rule must be present
+> - ❌ Does **not** by itself allow Internet users to connect to EC2.
+>
+> Internet users can connect only if **all** of these exist:
+>
+> - Public IP / Elastic IP
+> - Internet Gateway
+> - Security Group allows inbound
+> - NACL allows inbound
+
 
 #### Now once VPC and subnets are configured, we can launch EC2 instances inside a specific VPC / subnets we created above  
 ![alt text](PNG/VPC13.PNG "Title")  
