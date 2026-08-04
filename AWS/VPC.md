@@ -106,7 +106,32 @@
 
 ![alt text](PNG/VPC12.PNG "Title")  
 - 1. Edit route table to connect to EC2 instance inside public subnet
-- 2. Route table connects to IGW which then connectes to internet   
+- 2. Route table connects to IGW which then connectes to internet
+
+#### Creating Internet Gateway (IGW)
+1. goto VPC, select IGW
+2. give name and click on create
+3. attach the created IGW to the VPC we created above
+4. this still does not give access to internet for resources (like EC2 created inside the VPC we created above)
+5. We need to edit route tables
+
+#### Creating Route tables
+1.  Create Route tables, select VPC to which this Route table will be assinged  
+![alt text](PNG/RT1.PNG "Title")  
+2. Once Route table is created, then associate the subnets within the VPC (we attached in step 1)  
+![alt text](PNG/RT2.PNG "Title")  
+3. We created 2 Route tables (for public and provate subnets), and associated those subnets to resp. Route tables  
+![alt text](PNG/RT3.PNG "Title")  
+4. So 2 public subnets attached to 1 public route table, and 2 private subntes are attched to 1 private Route table (Note - still the public / private Route tables and public / private subnets are still names, nothing differentiates public and private yet)
+5. Now the IMP part - editing route tables  
+![alt text](PNG/RT4.PNG "Title")  
+- the frst rule is autocreated when route table is created
+- this rules states that any source IP within the CIDR (10.0.0.0/16) - (this CIDR is of our VPC which we gave while creating), can connect directly 
+- the second rule is what we crated which states, any IP over the world will connect to IGW, and can connect to VPC resources
+
+
+#### Now once VPC and subnets are configured, we can launch EC2 instances inside a specific VPC / subnets we created above  
+![alt text](PNG/VPC13.PNG "Title")  
 
 ![alt text](PNG/Sub1.PNG "Title")  
 ![alt text](PNG/Sub1.PNG "Title")  
