@@ -360,6 +360,16 @@
 >
 > - **Interface Endpoint:** Uses an **ENI + Security Group**.
 > - **Gateway Endpoint:** Uses a **Route Table** (no Security Group).
+
+### VPC Endpoint DEMO
+- our EC2 inside private subnet is able to access the internet because of the 2nd rule in the below image  
+![alt text](PNG/VE2.PNG "Title")  
+- the rule 0.0.0.0/0 -> NAT instance basically lets EC2s to access internet
+- so if we SSH into our private EC2 (obviously via Baistion Host), and if we do ```aws s3 ls``` (the connection is eastablished via NAT -> publick internet -> S3), we will get the list of buckets
+- if we remove that rule, then internet connection is lost and ```aws s3 ls``` fails
+- Now we will establish the connection via VPC endpoint
+
+
 ## VPC FLow logs
 ![alt text](PNG/VPC3.PNG "Title") 
 
