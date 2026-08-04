@@ -295,10 +295,22 @@
 - see below default inbound rules for Default NACL created for Default VPC (it associates with all the subnets by default in a given VPC)  
 ![alt text](PNG/NACL4.PNG "Title")  
 
-![alt text](PNG/VPC1.PNG "Title") 
+## VPC peering
+- Connects 1 VPC with another VPC **privately**
+- VPC peering connection is not transitive (if VPC A and B are connected, and B and C are connected, that does not mean that A and C can connect, they still need a separate VPC peering)
+- VPCs that needs to be connected must not have overlapping CIDRs  
+- without VPC peering, we cannot 2 EC2s from different VPCs cannot talk to each other
+**Creating VPC peering**
+1. Create VPC peering
+![alt text](PNG/VPC14.PNG "Title")  
+2.  Once VPC peering connection is created, the non local VPC (see above image), needs to accept the VPC peering connection  
+![alt text](PNG/VPC15.PNG "Title")  
+3. Now we need to edit route tables to send traffic to that other VPC
+![alt text](PNG/VPC16.PNG "Title")  
+- here the destination IP is the CIDR of the other VPC we want to peer with
+- we need to do the same thing in the other VPC's route table and add current VPC's CIDR in the routing rules
 
-![alt text](PNG/VPC2.PNG "Title") 
-
+## VPC FLow logs
 ![alt text](PNG/VPC3.PNG "Title") 
 
 **AWS Private link** - allows us to connect a service running in our VCP to a service running in another VPC
