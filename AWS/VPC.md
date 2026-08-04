@@ -316,6 +316,50 @@
 - thus providing more security (because of private connection), and improved latency (because of reducing hops and provate connection)  
 ![alt text](PNG/VE.PNG "Title")  
 
+
+> [!NOTE]
+> ### Endpoint types
+> ![alt text](PNG/VE1.PNG "Title")  
+>
+> ### Interface Endpoint (AWS PrivateLink)
+>
+> **Configuration**
+>
+> 1. Create an **Interface VPC Endpoint** for an AWS service (e.g., SNS, SQS, Secrets Manager).
+> 2. AWS creates an **ENI (private IP)** in your selected subnet.
+> 3. Attach a **Security Group** to the endpoint ENI.
+>    - **Inbound:** Allow traffic **from your EC2/application** (e.g., TCP 443).
+>    - **Outbound:** Allow all (default), so the endpoint can communicate with the AWS service.
+> 4. (Optional) Enable **Private DNS** so the normal AWS service endpoint resolves to the endpoint's private IP.
+>
+> **Working**
+>
+> - EC2 sends an HTTPS request to the AWS service.
+> - DNS resolves the service name to the **endpoint's private IP**.
+> - The request first reaches the **endpoint ENI**, whose **Security Group** verifies that the EC2 is allowed.
+> - The endpoint privately forwards the request to the AWS service over the AWS network (no Internet Gateway or NAT Gateway required).
+>
+> ---
+>
+> ### Gateway Endpoint
+>
+> **Configuration**
+>
+> 1. Create a **Gateway Endpoint** for **S3** or **DynamoDB**.
+> 2. Associate the required **route table(s)**.
+> 3. AWS automatically adds a route to the Gateway Endpoint.
+> 4. (Optional) Attach an **Endpoint Policy** to restrict access.
+>
+> **Working**
+>
+> - EC2 sends a request to S3/DynamoDB.
+> - The route table directs the traffic to the **Gateway Endpoint**.
+> - The request reaches S3/DynamoDB privately without using an Internet Gateway or NAT Gateway.
+>
+> **Key Difference**
+>
+> - **Interface Endpoint:** Uses an **ENI + Security Group**.
+> - **Gateway Endpoint:** Uses a **Route Table** (no Security Group).
 ## VPC FLow logs
 ![alt text](PNG/VPC3.PNG "Title") 
 
