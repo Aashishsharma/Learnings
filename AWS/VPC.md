@@ -291,7 +291,9 @@
 ![alt text](PNG/NACL3.PNG "Title")  
 - The web server sends a request to the database on **port 3306**, so the **Web NACL** must allow **outbound TCP 3306**, and the **DB NACL** must allow **inbound TCP 3306**.
 - The database sends the response back to the web server's **ephemeral port (1024–65535)**, so the **DB NACL** must allow **outbound ephemeral ports**, and the **Web NACL** must allow **inbound ephemeral ports**.
-- This is required because **Network ACLs are stateless**, so both the request and the response must be explicitly allowed.
+- This is required because **Network ACLs are stateless**, so both the request and the response must be explicitly allowed.  
+- see below default inbound rules for Default NACL created for Default VPC (it associates with all the subnets by default in a given VPC)  
+![alt text](PNG/NACL4.PNG "Title")  
 
 ![alt text](PNG/VPC1.PNG "Title") 
 
