@@ -268,9 +268,21 @@
 #### Now once VPC and subnets are configured, we can launch EC2 instances inside a specific VPC / subnets we created above  
 ![alt text](PNG/VPC13.PNG "Title")  
 
-![alt text](PNG/Sub1.PNG "Title")  
-![alt text](PNG/Sub1.PNG "Title")  
-![alt text](PNG/Sub1.PNG "Title")  
+## NACL - Network Access Control List
+- Allow / Block traffic (firewall) at subnet level
+- NACLs are stateless (so an incoming request will also need it's corresponding outbound rule), where as security groups are stateful, which means any traffic that comes, the security group will allow it to go out 
+![alt text](PNG/NACL.PNG "Title")  
+![alt text](PNG/NACL1.PNG "Title")  
+
+#### Ephemeral ports
+- it is a standard TCP/IP networking concept
+- An **Ephemeral Port** is a **temporary, automatically assigned source port** used by the client when initiating a network connection.
+- It exists only for the duration of the connection and is released afterward.  
+![alt text](PNG/NACL2.PNG "Title")  
+- The **client** initiates the connection and the OS automatically assigns a temporary **ephemeral source port** (`50105`).
+- The request is sent from **`11.22.33.44:50105`** to the web server **`55.66.77.88:443`** (HTTPS).
+- The web server processes the request and sends the response **from port `443` back to the client's ephemeral port `50105`**.
+- The client uses the ephemeral port to identify **which application/process** should receive the response.
 
 
 ![alt text](PNG/VPC1.PNG "Title") 
