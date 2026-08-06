@@ -486,4 +486,6 @@
 ![alt text](PNG/DX3.PNG "Title")   
 
 managing and communicating between VPC can become complicated, solution - **Transit Gateway** 
-![alt text](PNG/VPC5.PNG "Title")  
+![alt text](PNG/VPC5.PNG "Title")   
+- Transit gateway is the only service that uses IP Multicast  
+
