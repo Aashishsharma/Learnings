@@ -330,7 +330,6 @@
 > 3. Attach a **Security Group** to the endpoint ENI.
 >    - **Inbound:** Allow traffic **from your EC2/application** (e.g., TCP 443).
 >    - **Outbound:** Allow all (default), so the endpoint can communicate with the AWS service.
-> 4. (Optional) Enable **Private DNS** so the normal AWS service endpoint resolves to the endpoint's private IP.
 >
 > **Working**
 >
@@ -368,6 +367,17 @@
 - so if we SSH into our private EC2 (obviously via Baistion Host), and if we do ```aws s3 ls``` (the connection is eastablished via NAT -> publick internet -> S3), we will get the list of buckets
 - if we remove that rule, then internet connection is lost and ```aws s3 ls``` fails
 - Now we will establish the connection via VPC endpoint
+1. Click on create endpoint
+2. select the service to which this endpoint (Interface / Gateway endpoint) will cater to s3, SNS?  
+![alt text](PNG/VE3.PNG "Title")  
+3. Then select the VPC and AZ to which the endpoint needs to be deplyed  
+![alt text](PNG/VE4.PNG "Title")  
+4. Then select secgrp (if it is interface endpoint) for this VPC endpoint (so when req. comes from EC2 to access outside internet, it can accept / block the req. based on thsi rule)  
+![alt text](PNG/VE5.PNG "Title")  
+4. b. if it is a gateway endpoint, then select the route table which needs to be modified for this endpoint (so that AWS behind the scene will update the routing rules so that any req made within the selected VPC and subnet will route the reqs to this VPC endpoint)  
+![alt text](PNG/VE6.PNG "Title")  
+
+- **so key advantage of VPC - we can access s3 service, and our EC2 still does not have access to the internet**
 
 
 ## VPC FLow logs
