@@ -377,11 +377,93 @@
 4. b. if it is a gateway endpoint, then select the route table which needs to be modified for this endpoint (so that AWS behind the scene will update the routing rules so that any req made within the selected VPC and subnet will route the reqs to this VPC endpoint)  
 ![alt text](PNG/VE6.PNG "Title")  
 
-- **so key advantage of VPC - we can access s3 service, and our EC2 still does not have access to the internet**
+- **so key advantage of VPC - we can access s3 service, and our EC2 still does not have access to the internet**  
+
+> [!NOTE]
+> #### Interface VPC Endpoint Flow
+>
+> **Example:** EC2 in a private subnet needs to access **Secrets Manager**.
+>
+> ### Step 1
+>
+> Create an **Interface VPC Endpoint** for Secrets Manager in your subnet.
+>
+> ---
+>
+> ### Step 2
+>
+> AWS creates an **ENI** inside the subnet.
+>
+> Example:
+>
+> ```text
+> EC2             : 10.0.1.10
+> VPC Endpoint ENI: 10.0.1.100
+> ```
+>
+> ---
+>
+> ### Step 3
+>
+> Attach a **Security Group** to the endpoint ENI.
+>
+> Example:
+>
+> ```text
+> Inbound:
+> Allow TCP 443
+> Source = EC2 Security Group
+> ```
+>
+> This means **only your EC2 instances are allowed to connect to the endpoint.**
+>
+> ---
+>
+> ### Step 4
+>
+> EC2 makes an HTTPS request to Secrets Manager.
+>
+> If **Private DNS** is enabled:
+>
+> ```text
+> secretsmanager.amazonaws.com
+>        │
+>        ▼
+> Resolves to
+> 10.0.1.100 (Endpoint ENI)
+> ```
+>
+> ---
+>
+> ### Step 5
+>
+> The request reaches the **Endpoint ENI**.
+>
+> The endpoint's **Security Group** checks whether the EC2 is allowed to connect.
+>
+> ---
+>
+> ### Step 6
+>
+> If allowed, AWS privately forwards the request from the endpoint to **Secrets Manager** over the AWS network.
+>
+> ---
+>
+> ### Result
+>
+> - No Internet Gateway required.
+> - No NAT Gateway required.
+> - Traffic never leaves the AWS private network.
 
 
 ## VPC FLow logs
-![alt text](PNG/VPC3.PNG "Title") 
+- captures info about IP traffic going through (VPC, Subnet, ENI)  
+- log data gets stored in S3, Cloudwatch, KDS
+- can also capture logs for ELB, RDS, Redshift  
+![alt text](PNG/VPCFL.PNG "Title")  
+
+#### Creating VPC FLow logs
+![alt text](PNG/VPCFL1.PNG "Title")  
 
 **AWS Private link** - allows us to connect a service running in our VCP to a service running in another VPC
 
@@ -389,13 +471,19 @@
 - this is true for all the resoruces in AWS that talk to each other
 - if we wan't AWS services to connect over private connection, then we use VPC endpoints
 
-![alt text](PNG/VPC6.PNG "Title") 
-- note in e.g. above EC2 is inside provate subnet, howevrer we could have used NAT, to give EC2 access to the internet and then eventally talk to s3 / dynamo db, but using IGW, but then this gives our EC2 access to all of the internet, so to enhance security, we can use VPC endpoints 
-
 #### Connecting on-prem datacenter with cloud - 
-1. using site-to-site VPN
-![alt text](PNG/VPC4.PNG "Title") 
-2. Direct connect (DX) - a private phical network needs to be build, which takes upto months, adv - private so secure, and fast
+1. using site-to-site VPN  
+![alt text](PNG/STSVPN.PNG "Title")   
+![alt text](PNG/STSVPN2.PNG "Title")   
+
+2. Direct connect (DX)  
+![alt text](PNG/DX.PNG "Title")   
+- if we want to setup direct connect with multiple VPCs, then we use DX-Gateway  
+- Connection in DX is not encrypted, because it is private conn, if still want encryted conn - use DX + VPN
+![alt text](PNG/DX1.PNG "Title")   
+![alt text](PNG/DX2.PNG "Title")   
+
+![alt text](PNG/DX3.PNG "Title")   
 
 managing and communicating between VPC can become complicated, solution - **Transit Gateway** 
 ![alt text](PNG/VPC5.PNG "Title")  
