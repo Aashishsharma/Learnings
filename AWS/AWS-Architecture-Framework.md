@@ -34,10 +34,8 @@
 
 ### AWS Well-Architected Tool
 
-- A service which evaluates workloads against AWS best practices, identifies risks, and provides recommendations for improvement.
-- Identifies architectural risks and provides recommendations to improve cloud workloads.
-- Generates improvement plans and tracks remediation progress over time.
-- Useful for validating whether an application follows AWS best practices.
+- A service which evaluates workloads against AWS best practices, identifies risks, and provides recommendations for improvement.  
+![alt text](PNG/Tool.PNG "Title")  
 
 **Example:** An e-commerce application is reviewed using the Well-Architected Tool. The tool identifies that the database is deployed in a single Availability Zone and recommends Multi-AZ deployment to improve reliability.
 

@@ -111,11 +111,3 @@ AWS Organization
 ### AWS service quotas
 - notify when a service reached quota value threshold
 - for e.g. if lambda can run 1000 req / sec, then service quota will notify if lambda is reaching that limit
-
-### AWS trusted advisor
-- high level AWS account management assessment
-- analyse your AWS acc, and provide recommendation on 
-- 1. cost optimization
-- 2. Performance, 
-- 3. Security, 
-- 4. Fault tolerance
