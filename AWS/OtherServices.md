@@ -181,3 +181,21 @@ Uses New Settings
 | Safe gradual deployment | ✅ | ❌ | ❌ |
 | Automatic rollback | ✅ | ❌ | ❌ |
 | Runtime configuration updates | ✅ | Limited | ❌ |
+
+> [!NOTE]
+> ## AWS AppFlow
+>
+> - **AWS AppFlow** is a **fully managed integration service** that securely transfers data between **SaaS applications** and **AWS services** without writing code.
+> - Supports **scheduled**, **event-based**, or **on-demand** data transfers.
+>
+> ---
+>
+> ### How it Works
+>
+> 1. Connect AppFlow to the source application using its **API** (OAuth/API credentials).
+> 2. Select the data (e.g., Salesforce **Accounts** table).
+> 3. AppFlow reads the data using the application's **REST/API endpoints**.
+> 4. (Optional) Filter or transform the data.
+> 5. Write the data to the destination (e.g., S3, Redshift).
+>
+> ---

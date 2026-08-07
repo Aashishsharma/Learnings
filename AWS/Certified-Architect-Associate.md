@@ -249,6 +249,7 @@ Team A Custom AMI          Team B Custom AMI
 > - 6. With SNS Lambda is invoked async and DLQ is set on Lambda, with SQS Lambda is invoked synchronously, and DLQ is set on SQS only
 > - 7. Elastic Network Adaptor (ENA) - is an enhanced EC2 networking which delivers network speed upto 100Gbps (Used for High Performance Computing)
 > - 8. For HPC usecases, use Amazon FSx for Luster to store data which procides millions of IOPS
+> - 9. On billing services, mostly cost explorer is going to be answer for SSA exam
 
 > [!NOTE] 
 > - ### Soultion Architectures

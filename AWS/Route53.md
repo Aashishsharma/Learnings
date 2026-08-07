@@ -389,6 +389,8 @@ Geoproximity → "Users are routed to the nearest region, but I can adjust traff
 ### AWS outpost
 - All AWS infra on prem
 - infra will have prebuilt AWS services
+- so now physical security of infra is on us and not on AWS
+- then why use? - low latency
 
 ### AWS wavelength
 - AWS will install the infra inside telecome provider's data centers
