@@ -31,18 +31,6 @@
 ![alt text](PNG/backup.PNG "Title") 
 ![alt text](PNG/backup2.PNG "Title") 
 
-## AWS Disaster recovery strategies
-| DR Strategy                    | How It Works                                                                                              | Recovery Time                                 | Cost        |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------- | --------------------------------------------- | ----------- |
-| **Backup & Restore**           | Data is backed up and infrastructure is recreated during a disaster.                                      | Slowest (hours–days)                          | Lowest      |
-| **Pilot Light**                | Critical components (e.g., database) run continuously; remaining resources are started during a disaster. | Faster (hours)                                | Low–Medium  |
-| **Warm Standby**               | A scaled-down version of the full application runs in the DR region and is scaled up when needed.         | Fast (minutes–hours)                          | Medium–High |
-| **Multi-Site (Active-Active)** | Full production environments run simultaneously in multiple regions and serve traffic.                    | Fastest (seconds–minutes, near-zero downtime) | Highest     |
-
-## AWS Elastic Disaster recovery
-- bring your on-prem data to AWS cloud for disaster recovery
-![alt text](PNG/DR.PNG "Title") 
-
 ## AWS Data sync
 - bring large data on-prem data to AWS
 
