@@ -158,3 +158,33 @@
 ![alt text](PNG/backup6.PNG "Title")   
 - or choose resources based on a specific tag (only backup production resources)  
 ![alt text](PNG/backup7.PNG "Title")   
+
+> [!NOTE]
+> ## AWS Application Discovery Service
+>
+> - **AWS Application Discovery Service** helps **discover on-premises servers, applications, and their dependencies** before migrating them to AWS.
+> - It collects infrastructure information to help **plan and size migrations**.
+>
+> ---
+>
+> ### How it Works
+>
+> 1. Install the **Discovery Agent** (or use the Agentless Collector for VMware).
+> 2. AWS collects server configuration, utilization, and dependency data.
+> 3. View the collected information in AWS Migration Hub.
+> 4. Use the data to plan and execute the migration.
+>
+> ---
+>
+
+> [!NOTE]
+> ## AWS Application Migration Service (MGN)
+>
+> - **AWS Application Migration Service (MGN)** helps **lift and shift** on-premises or cloud servers to AWS with minimal downtime.
+> - It continuously replicates source servers and launches them as **EC2 instances** in AWS.
+>
+> ---
+>
+![alt text](PNG/DS2.PNG "Title")  
+
+![alt text](PNG/Transfer.PNG "Title")

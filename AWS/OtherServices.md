@@ -63,10 +63,7 @@
 
 
 ## Migrating projects to cloud
-1. AWS Application Discovery service - understand what all needs to be migrated, and there counterpart AWS service
-![alt text](PNG/DS.PNG "Title")  
-2. AWS Application Migration Service - Do the actual migration 
-![alt text](PNG/DS2.PNG "Title")
+ (see Disaster recovery section)
 3. AWS Migration Evaluator 
 - Used **before migration planning** to estimate costs and build a business case for migrating to AWS.
 - Analyzes on-premises infrastructure and provides **TCO (Total Cost of Ownership)** comparisons.
