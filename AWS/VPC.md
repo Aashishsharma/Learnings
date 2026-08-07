@@ -524,3 +524,31 @@ managing and communicating between VPC can become complicated, solution - **Tran
     - **IPv4** → Route traffic to a **NAT Gateway**.
     - **IPv6** → Route traffic to an **Egress-Only Internet Gateway**.
   - **Instances in a private subnet cannot receive unsolicited inbound connections from the Internet.**
+
+## VPC Networking cost
+![alt text](PNG/NC.PNG "Title")   
+- all the price is per Gbps
+> [!NOTE]
+> ## EC2 to EC2 Communication (Different AZs)
+> In above image use see 2 EC2s connecting via public and private IP
+> How can we achieve that?
+> If both EC2 are connected privately, then they use private IPv4
+> If they are conneted over the internet, then public IPv4 is used
+> so If both EC2 instances are:
+> - In the **same VPC** (or connected VPCs via VPC Peering/Transit Gateway), and
+> - You connect using the **private IP** or a DNS name that resolves to the private IP,
+>
+> then the traffic **stays on the AWS private network**.
+>
+> No Internet Gateway, NAT Gateway, or public IP is used.
+
+![alt text](PNG/VC.PNG "Title")   
+**Key thing to remember** - To minimze networking cost, try and transfer data within AWS network only wherever possible  
+- also, keep communicating EC2s in same AZ to reduce cost related to inter-region commuincation (but this will hamper disaster recovery)  
+
+![alt text](PNG/VC1.PNG "Title")   
+
+![alt text](PNG/VC2.PNG "Title")   
+- we know 2 ways to connect EC2s from private Subnet to s3/dynamoDB or any other AWS service
+1. Using NAT gateway - higher cost, goes over the internet
+2. Using VPC endpoint - very cheap, goes over AWS private 
