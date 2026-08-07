@@ -150,4 +150,9 @@
 > 3. AWS automatically performs backups based on the schedule.
 > 4. Restore resources when needed.
 >  
-![alt text](PNG/backup.PNG "Title") 
+![alt text](PNG/backup3.PNG "Title")   
+![alt text](PNG/backup4.PNG "Title")   
+- once the backup plan is created, we need to assign resources (which will let the backup know which resources to backup)  
+![alt text](PNG/backup5.PNG "Title")   
+- then either select all resources, or only specific resources that you need to backup  
+![alt text](PNG/backup6.PNG "Title")   
