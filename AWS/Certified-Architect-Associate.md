@@ -246,6 +246,9 @@ Team A Custom AMI          Team B Custom AMI
 > - 4. S3 Express One Zone - this is another storage class, here objs are not stored in normal buckets, but are stored in directory bucket, highest performance, slightly low availability (Use case - Media processing, AI/ML apps)
 > - 5. S3 Select - to only retrieve partial data from a specific S3 object
 > - DynamoDB is very very fast, low cost, NoSQL with transaction support, and no need to patch / snapshot data since it is always available and serverless. Each table can have infinite rows
+> - 6. With SNS Lambda is invoked async and DLQ is set on Lambda, with SQS Lambda is invoked synchronously, and DLQ is set on SQS only
+> - 7. Elastic Network Adaptor (ENA) - is an enhanced EC2 networking which delivers network speed upto 100Gbps (Used for High Performance Computing)
+> - 8. For HPC usecases, use Amazon FSx for Luster to store data which procides millions of IOPS
 
 > [!NOTE] 
 > - ### Soultion Architectures
