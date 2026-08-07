@@ -134,3 +134,20 @@
 - working - we create an EC2 instance which will continuously perform replication from on-prem to AWS
 - In case of Hetrogeneous migration, we need to use **AWS Schema Conversion Tool (SCT)** - to convert DB's schema from one engine to another  
 ![alt text](PNG/DMS1.PNG "Title")  
+
+> [!NOTE]
+> ## AWS Backup
+>
+> - **AWS Backup** is a **fully managed service** that **centrally automates and manages backups** across multiple AWS services.
+> - It uses **backup plans** to define **when**, **how often**, and **how long** backups are retained.
+>
+> ---
+>
+> ### How it Works
+>
+> 1. Create a **Backup Plan** (schedule + retention).
+> 2. Assign AWS resources (EBS, RDS, EFS, DynamoDB, etc.).
+> 3. AWS automatically performs backups based on the schedule.
+> 4. Restore resources when needed.
+>  
+![alt text](PNG/backup.PNG "Title") 

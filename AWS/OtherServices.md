@@ -27,10 +27,6 @@
 - lets us run web application on different browsers / mobiles/ tabs, to test how app is rendered on different devices
 - similar to browserstack
 
-## AWS backup
-![alt text](PNG/backup.PNG "Title") 
-![alt text](PNG/backup2.PNG "Title") 
-
 ## AWS Data sync
 - bring large data on-prem data to AWS
 
