@@ -113,12 +113,12 @@
 ## AWS Elastic Disaster recovery
 > [!NOTE]
 > ## AWS Elastic Disaster Recovery (AWS DRS)
-> ![alt text](PNG/DR2.PNG "Title")  
 > - **AWS Elastic Disaster Recovery (DRS)** is a managed AWS service that continuously replicates your on-premises or cloud servers to AWS.
 > - During a disaster, it automatically launches fully functional EC2 instances from the replicated data, providing **low RPO and low RTO**.
 >
 > ---
 >
+> ![alt text](PNG/DR2.PNG "Title")  
 > ### How it Works
 >
 > 1. Install the **AWS Replication Agent** on the source server.
