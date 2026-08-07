@@ -127,3 +127,10 @@
 > 4. During a disaster, AWS automatically launches EC2 instances from the replicated data.
 > 5. Redirect users to the recovered application.
 >
+
+## Database Migratation Service (Service)
+- Migrate Data from on-prem to AWS  
+- 1. Homogenous Migration (Oracle to Oracle), 2. Hetrogeneous Migration (MS SQL server to Aurora)  
+- working - we create an EC2 instance which will continuously perform replication from on-prem to AWS
+- In case of Hetrogeneous migration, we need to use **AWS Schema Conversion Tool (SCT)** - to convert DB's schema from one engine to another  
+![alt text](PNG/DMS1.PNG "Title")  
