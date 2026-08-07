@@ -199,3 +199,21 @@ Uses New Settings
 > 5. Write the data to the destination (e.g., S3, Redshift).
 >
 > ---
+
+> [!NOTE]
+> ## AWS Instance Scheduler
+>
+> - **AWS Instance Scheduler** is a solution that **automatically starts and stops EC2 instances and RDS databases** based on a predefined schedule.
+> - It helps **reduce costs** by running resources only when needed.
+>
+> ---
+>
+> ### How it Works
+>
+> 1. Define a **schedule** (e.g., Mon–Fri, 9 AM–6 PM).
+> 2. Tag the EC2 instance or RDS database with the schedule name.
+> 3. The scheduler periodically checks resource tags.
+> 4. It automatically starts or stops the resources according to the schedule.
+>
+> ---
+>
