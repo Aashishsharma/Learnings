@@ -510,3 +510,12 @@ managing and communicating between VPC can become complicated, solution - **Tran
 - IPV4 only provides 4.3 Billion IP address, which will exhaust soon
 - Every IPv6 in AWS is public and Internet routable
 - Resources inside our VPC can have both IPv4 and IPv6 address (IPv4 for public / private IP and IPv6 for public address)
+
+### Egress-only Internet gateway
+![alt text](PNG/EIG.PNG "Title")   
+- FLow for IPv6  
+![alt text](PNG/EIG1.PNG "Title")   
+- Info - In route tables - 0.0.0.0/0 is for IPv4 and ::/0 is for IPv6  
+- Scenario 1 - Web server in public subnet connects to IGW and access internet, and also intenret can initiate the connetion
+- Scenario 2 - Web server from private subnet connects to NAT gateway, and can access Internet **(over IPv4)**, however internet cannot initiate connection to this server
+- Scenario 3 - Web server from private subnet connects to Egress only IG, and can access Internet (**(over IPv6)**), however internet cannot initiate connection to this server
