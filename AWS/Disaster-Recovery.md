@@ -77,3 +77,37 @@
 > 4. If a failure occurs, launch the remaining application infrastructure.
 > 5. Connect the application to the already-running database and resume service.
 >
+
+> [!NOTE]
+> ## 3. Warm Standby
+>
+> - **Warm Standby** is a disaster recovery strategy where a **fully functional but scaled-down copy** of the production environment is always running in the DR region.
+> - It provides **lower RPO and RTO** than Pilot Light, but at a **higher cost**.
+>
+> ---
+>
+> ### How it Works
+>
+> 1. Keep a **scaled-down version** of the entire application running in the DR region.
+> 2. Continuously replicate production data to the DR database.
+> 3. The standby environment serves little or no production traffic.
+> 4. If a failure occurs, scale up the application servers and database.
+> 5. Redirect users to the DR environment.
+>
+
+> [!NOTE]
+> ## 4. Multi-Site / Hot Standby (Active-Active)
+>
+> - **Multi-Site (Hot Standby)** is a disaster recovery strategy where **two or more fully functional production environments** run simultaneously in different regions.
+> - It provides the **lowest RPO and RTO**, but has the **highest cost**.
+>
+> ---
+>
+> ### How it Works
+>
+> 1. Deploy **identical production environments** in multiple AWS Regions.
+> 2. Continuously replicate data between regions.
+> 3. Both environments are **active** and can serve user traffic.
+> 4. If one region fails, traffic is automatically routed to the healthy region.
+> 5. Users experience little or no downtime.
+>
