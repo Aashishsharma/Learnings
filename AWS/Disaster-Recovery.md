@@ -39,10 +39,6 @@
 > - **RPO = Data Loss** ("How much data can I lose?")
 > - **RTO = Downtime** ("How quickly must I recover?")
 
-## AWS Elastic Disaster recovery
-- bring your on-prem data to AWS cloud for disaster recovery
-![alt text](PNG/DR.PNG "Title") 
-
 ## DR Strategies
 > [!NOTE]
 > ## 1. Backup and Restore
@@ -110,4 +106,24 @@
 > 3. Both environments are **active** and can serve user traffic.
 > 4. If one region fails, traffic is automatically routed to the healthy region.
 > 5. Users experience little or no downtime.
+>
+
+![alt text](PNG/DR1.PNG "Title") 
+
+## AWS Elastic Disaster recovery
+> [!NOTE]
+> ## AWS Elastic Disaster Recovery (AWS DRS)
+> ![alt text](PNG/DR2.PNG "Title")  
+> - **AWS Elastic Disaster Recovery (DRS)** is a managed AWS service that continuously replicates your on-premises or cloud servers to AWS.
+> - During a disaster, it automatically launches fully functional EC2 instances from the replicated data, providing **low RPO and low RTO**.
+>
+> ---
+>
+> ### How it Works
+>
+> 1. Install the **AWS Replication Agent** on the source server.
+> 2. The agent continuously replicates changed disk blocks to AWS.
+> 3. AWS stores the replicated data in a **low-cost staging area**.
+> 4. During a disaster, AWS automatically launches EC2 instances from the replicated data.
+> 5. Redirect users to the recovered application.
 >
