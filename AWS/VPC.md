@@ -46,6 +46,7 @@
 ![alt text](PNG/DVPC1.PNG "Title")  
 - the default VPC attaches Internet gateway to routing rules so all EC2 instances within that VPC / subnet will have access to the internet  
  ![alt text](PNG/DVPC2.PNG "Title")  
+- The first rule - where destination = local - indicates that any traffic originating from 172.31.0.0/16 will remain local (i.e, traffic will remain inside the subnet only)
 - Note - EC2 can access intennet means, from EC2 instnance we can access internet, and it is not the other way around, for EC2 to be accessed over the internet, EC2 must be (in public subnet, have public IPv4, appropriate sec grp and NACL rules configured)
 
 ## VPC
@@ -504,3 +505,8 @@ managing and communicating between VPC can become complicated, solution - **Tran
 > 3. Configure a **Traffic Mirror Target** (e.g., EC2 running Wireshark, IDS/IPS, or a Network Load Balancer).
 > 4. AWS copies matching packets and sends them to the target, while the original traffic continues normally.
 >
+
+### IPv6 in VPC
+- IPV4 only provides 4.3 Billion IP address, which will exhaust soon
+- Every IPv6 in AWS is public and Internet routable
+- Resources inside our VPC can have both IPv4 and IPv6 address (IPv4 for public / private IP and IPv6 for public address)
