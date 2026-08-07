@@ -489,3 +489,18 @@ managing and communicating between VPC can become complicated, solution - **Tran
 ![alt text](PNG/VPC5.PNG "Title")   
 - Transit gateway is the only service that uses IP Multicast  
 
+> [!NOTE]
+> ### VPC Traffic Mirroring
+>
+> - **VPC Traffic Mirroring** copies **network packets** from an EC2 instance's **Elastic Network Interface (ENI)** to another destination for monitoring and analysis.
+> - It is used for **packet inspection, security monitoring, troubleshooting, and intrusion detection** without affecting the original traffic.
+>
+> ---
+>
+> #### How it Works
+>
+> 1. Choose the **source ENI** whose traffic you want to monitor.
+> 2. (Optional) Apply **Traffic Mirror Filters** to capture only specific traffic (e.g., TCP 443).
+> 3. Configure a **Traffic Mirror Target** (e.g., EC2 running Wireshark, IDS/IPS, or a Network Load Balancer).
+> 4. AWS copies matching packets and sends them to the target, while the original traffic continues normally.
+>
