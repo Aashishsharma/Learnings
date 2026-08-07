@@ -518,4 +518,9 @@ managing and communicating between VPC can become complicated, solution - **Tran
 - Info - In route tables - 0.0.0.0/0 is for IPv4 and ::/0 is for IPv6  
 - Scenario 1 - Web server in public subnet connects to IGW and access internet, and also intenret can initiate the connetion
 - Scenario 2 - Web server from private subnet connects to NAT gateway, and can access Internet **(over IPv4)**, however internet cannot initiate connection to this server
-- Scenario 3 - Web server from private subnet connects to Egress only IG, and can access Internet (**(over IPv6)**), however internet cannot initiate connection to this server
+- Scenario 3 - Web server from private subnet connects to Egress only IG, and can access Internet (**(over IPv6)**), however internet cannot initiate connection to this server  
+- **Summary**
+  - To allow **EC2 instances in a private subnet** to access the Internet:
+    - **IPv4** → Route traffic to a **NAT Gateway**.
+    - **IPv6** → Route traffic to an **Egress-Only Internet Gateway**.
+  - **Instances in a private subnet cannot receive unsolicited inbound connections from the Internet.**
