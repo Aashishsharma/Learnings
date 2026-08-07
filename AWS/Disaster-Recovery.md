@@ -156,3 +156,5 @@
 ![alt text](PNG/backup5.PNG "Title")   
 - then either select all resources, or only specific resources that you need to backup  
 ![alt text](PNG/backup6.PNG "Title")   
+- or choose resources based on a specific tag (only backup production resources)  
+![alt text](PNG/backup7.PNG "Title")   
