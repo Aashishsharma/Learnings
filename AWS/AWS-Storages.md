@@ -162,7 +162,7 @@
 ## 5. AWS DataSync
 
 - Managed service to **transfer large amounts of data** between **on-premises storage and AWS**
-- it can also transfer data from AWS to AWS
+- **it can also transfer data from AWS to AWS**
 - Supports **NFS, SMB, HDFS, S3, EFS, and FSx**
 - Faster and simpler than manually copying data over the network
 - Used for **data migration, backup, and ongoing data synchronization**
