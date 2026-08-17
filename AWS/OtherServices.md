@@ -27,9 +27,6 @@
 - lets us run web application on different browsers / mobiles/ tabs, to test how app is rendered on different devices
 - similar to browserstack
 
-## AWS Data sync
-- bring large data on-prem data to AWS
-
 ## Cloud migration strategy
 ### AWS Cloud Migration – 7 Rs (with Examples)
 

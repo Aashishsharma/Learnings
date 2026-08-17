@@ -140,3 +140,40 @@
 ### Storage Gateways summarized
 - Note that all the 2 types of gatways need to be configured on-prem  
 ![alt text](PNG/GW.PNG "Title")  
+
+## 4. AWS File transfer family
+
+- Managed service to **transfer files into and out of AWS storage**
+- Supports **SFTP, FTPS, FTP, and AS2**
+- Mainly used when existing applications/users need **traditional file-transfer protocols**
+- Stores transferred files in **Amazon S3 or Amazon EFS**
+- Fully managed — no need to maintain your own FTP/SFTP server
+
+**Flow:**  
+`User / Application → SFTP / FTPS / FTP → AWS Transfer Family → S3 / EFS`
+
+**Key point:**  
+**Transfer Family = Move files using traditional protocols → S3/EFS**  
+
+> [!NOTE]
+> - **Storage Gateway** → Makes **AWS storage look like local storage**, by moving data to on-prem  
+> - **Transfer Family** → **Transfers files** between users/apps and AWS
+
+## 5. AWS DataSync
+
+- Managed service to **transfer large amounts of data** between **on-premises storage and AWS**
+- it can also transfer data from AWS to AWS
+- Supports **NFS, SMB, HDFS, S3, EFS, and FSx**
+- Faster and simpler than manually copying data over the network
+- Used for **data migration, backup, and ongoing data synchronization**
+- Uses a **DataSync Agent** when transferring data from on-premises storage
+
+**Flow:**  
+`On-prem Storage → DataSync Agent → AWS DataSync → S3 / EFS / FSx`
+
+> **DataSync = Fast, automated data transfer/synchronization between storage systems** 
+
+> [!NOTE]
+> - **DataSync** → Designed for **scheduled/automated data synchronization**
+> - **Transfer Family** → Data is transferred when a **user/application uploads or downloads files**
+> - **Storage Gateway** → Provides **ongoing access** to AWS storage; data can be transferred automatically as the application reads/writes data
