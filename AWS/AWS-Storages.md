@@ -7,7 +7,7 @@
 - **Another usecase is for Edge computing** - Processing data closer to where it is generated instead of sending everything to cloud, reducing latency and bandwidth usage. E.g. process data at the mining site itself, rather then uploading it to AWS
 
 #### Ordering a snowball device  
-- select snowball device type (210TB or 28TB)  
+- select snowball device type (210TB or 28TB)   
 - select if you want to tranfer data to AWS S3 or get data from AWS S3 to on-prem, or if you need this device to transfer data from on-prem to on-prem
 - If we select bring data from AWS S3 to on-prem, then select buckets, whose data needs to be exported into snoball device  
 ![alt text](PNG/snowball.PNG "Title")   
