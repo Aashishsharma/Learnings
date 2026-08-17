@@ -121,3 +121,22 @@
 → **Lifecycle Policy** can move older data to **S3 Glacier**
 
 > **Key point:** The application sees a **normal file system**, while the actual data is stored in **S3**.
+
+### 2. Volume Gateway
+- Provides block storage to on-premises applications using iSCSI.
+![alt text](PNG/VG.PNG "Title")  
+
+### 3. Tape Gateway
+
+- Provides **virtual tapes** to on-premises backup applications using **iSCSI**
+- Acts like a **physical tape library**, but stores data in **AWS S3**
+- Frequently accessed tape data is **cached locally**
+- Virtual tapes are stored in **S3** and can be archived to **S3 Glacier**
+- Used mainly for **backup and archival** without physical tape infrastructure
+
+**Flow:**  
+`Backup App → iSCSI → Tape Gateway → S3 → S3 Glacier (Archive)`
+
+### Storage Gateways summarized
+- Note that all the 2 types of gatways need to be configured on-prem  
+![alt text](PNG/GW.PNG "Title")  
