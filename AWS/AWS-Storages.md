@@ -84,3 +84,40 @@
 - select type
 - then select the storage type SSD, HDD, and total storage needed like 100GB or whatever  
 ![alt text](PNG/FSx.PNG "Title")   
+
+## 3. Storage Gatweay
+
+- **Hybrid Cloud** = part of the infrastructure runs **on-premises** and part runs in the **AWS Cloud**
+- Organizations may choose hybrid cloud because of:
+  - **Long / gradual cloud migration**
+  - **Security requirements**
+  - **Compliance requirements**
+  - Existing **IT strategy / infrastructure**
+
+#### The Challenge with S3
+
+- **S3 uses AWS's proprietary object storage protocol**
+- On-premises applications may expect traditional **file storage** such as **NFS/SMB**
+- So, how can on-premises applications access **S3 storage** as if it were local storage?
+
+#### Solution: AWS Storage Gateway
+
+- **AWS Storage Gateway** connects **on-premises applications** to **AWS cloud storage**
+- It provides standard storage interfaces such as **NFS/SMB** while storing data in AWS services like **S3**
+
+> **On-premises application → NFS/SMB → Storage Gateway → AWS S3** 
+
+![alt text](PNG/SG.PNG "Title")  
+
+### 1. S3 File gateway
+![alt text](PNG/S3FG.PNG "Title")  
+
+**FLOW**  
+**On-premises Application Server**  
+→ accesses files using **NFS/SMB**  
+→ **S3 File Gateway**  
+→ sends data to **S3 over HTTPS**  
+→ data is stored in **S3**  
+→ **Lifecycle Policy** can move older data to **S3 Glacier**
+
+> **Key point:** The application sees a **normal file system**, while the actual data is stored in **S3**.
