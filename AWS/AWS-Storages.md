@@ -80,3 +80,7 @@
 | **Persistent** | File system survives when compute resources are stopped/removed | **Store application data that needs to be available after restart** |
 | **Scratch** | File system is temporary and data can be lost when compute resources are stopped/removed | **Store temporary/intermediate data during HPC or ML processing** |  
 
+**Creating FSx**  
+- select type
+- then select the storage type SSD, HDD, and total storage needed like 100GB or whatever  
+![alt text](PNG/FSx.PNG "Title")   
