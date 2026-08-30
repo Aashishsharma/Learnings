@@ -555,3 +555,8 @@ managing and communicating between VPC can become complicated, solution - **Tran
 - we know 2 ways to connect EC2s from private Subnet to s3/dynamoDB or any other AWS service
 1. Using NAT gateway - higher cost, goes over the internet
 2. Using VPC endpoint - very cheap, goes over AWS private 
+
+## Shared VPCs
+- AWS Resource Access Manager (RAM) allows us to share resource across AWS accounts
+- VPCs can be shared with different accounts **and both the accounts must be in the same region**
+- 
