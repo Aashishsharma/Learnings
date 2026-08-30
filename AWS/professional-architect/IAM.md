@@ -92,28 +92,28 @@ there are 2 types of IAM policies
 - if ALLOW is present, then only access is granted to that service
 - if BOTH ALLOW and DENY is there, then DENY will take precedence
 
-![alt text](PNG/IAM1.PNG "Title")  
+![alt text](../PNG/IAM1.PNG "Title")  
 - e.g. if IAM role from EC2 to access s3 is removed, EC2 instance can still access s3 if access is given via bucket policy (ARN of EC2 instance is added in the bucket policy, or ARN of role (which is attched to EC2) is added in the bucket policy)  
 - similarly if IAM gives access to EC2 to ready s3 obj, but bucket policy is configured to deny read access, then even if EC2 has correct IAM, but still cannot access s3, because DNEY takes precedence
 
 #### IAM policy conditions
-![alt text](PNG/IAM7.PNG "Title")  
-![alt text](PNG/IAM8.PNG "Title")    
-![alt text](PNG/IAM9.PNG "Title")    
+![alt text](../PNG/IAM7.PNG "Title")  
+![alt text](../PNG/IAM8.PNG "Title")    
+![alt text](../PNG/IAM9.PNG "Title")    
 
 #### Dynamic policies in IAM
-![alt text](PNG/IAM2.PNG "Title")  
-![alt text](PNG/IAM3.PNG "Title")   
+![alt text](../PNG/IAM2.PNG "Title")  
+![alt text](../PNG/IAM3.PNG "Title")   
 
 #### IAM Permission Boundary
 - in IAM console, there is an option to create a permission boundary
 - this sets a boundary to that particular user / role, which states that user cannot do anything outside of this boundary, even if the user / role has different policies attached that allowpermissions 
-![alt text](PNG/PB.PNG "Title")   
+![alt text](../PNG/PB.PNG "Title")   
 - for above scenario, since the permission boundary allows access only to s3, ec2, and cloudwatch, even if the IAM policy allows iam:CreateUser - it will not work, because it is outside of that permission boundary
 
 > [!NOTE]
 > ### IAM policy evaluation
-> ![alt text](PNG/EL.PNG "Title")   
+> ![alt text](../PNG/EL.PNG "Title")   
 
 > [!NOTE]
 > ## AWS Cross-Account Access
@@ -325,9 +325,9 @@ there are 2 types of IAM policies
 | Inline | Permissions are unique to a single user, role, or group and should not be reused. |
 
 - AWS managed policy
-![alt text](PNG/IAM4.PNG "Title")  
+![alt text](../PNG/IAM4.PNG "Title")  
 - Customer managed policy
-![alt text](PNG/IAM5.PNG "Title")  
+![alt text](../PNG/IAM5.PNG "Title")  
 - inline policy, is created under specific user, and can only be attched that that user
 
 **iam:PassRole** - 
@@ -335,7 +335,7 @@ there are 2 types of IAM policies
 - however, doing this action also requires access, it's not just that anyone can attch any policy to any AWS service
 - this access is granted by iam:PassRole
 - see below, with below polciy attched to my user, then I can only attach s3 policies to EC2 instances, I cannot attach any other policy like lambda / dynamoDB to EC2 instances
-![alt text](PNG/IAM6.PNG "Title")  
+![alt text](../PNG/IAM6.PNG "Title")  
 
 **Trusted relationships** - Specifies **who is allowed to assume this role**.
 
@@ -559,13 +559,13 @@ Response:
 
 > [!NOTE]
 > ### Connecting Identity Center with AD
-> ![alt text](PNG/IAM10.PNG "Title")  
+> ![alt text](../PNG/IAM10.PNG "Title")  
 > Now with this setup - Instead of creating separate IAM users or AWS accounts for every employee, users log in once and then access everything they've been assigned.
 
 ### AWS Identity center
 - service that provides centralized access management and Single Sign-On (SSO) for multiple AWS accounts and business applications.
 - Let's say you have 4 different AWS accounts. then instead of remembering creds for all 4 accounts, create login under AWS Identity center, so you always login to AWS Identity cetner, from there you can login directly to any management console using only one login creds
-![alt text](PNG/Identity-center.PNG "Title")  
+![alt text](../PNG/Identity-center.PNG "Title")  
 - Note - not just AWS accounts, when you login to AWS Identity centre, you can even SSO to 3rd party apps like Salesforce or others, for that we need to ensure SAML2.0 is configured in both AWS and Salesforce  
 
 > [!NOTE]
