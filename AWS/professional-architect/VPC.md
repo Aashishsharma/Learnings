@@ -3,8 +3,8 @@
 - divided into public and private subnets
 - EC2 instances inside public subnets are accessible over the internet
 - Under private subnets, EC2's are not reachable from internet, however EC2's can access internet using NAT
-- Internet gateways allows EC2 instances from VPC to be publicly available
 - even if we don't create any VPC, all our resources are added into default VPC by AWS
+- VPCs are region specific
 
 > [!NOTE]
 > ## CIDR (Classless Inter-Domain Routing)
@@ -127,8 +127,11 @@
 5. Now the IMP part - editing route tables  
 ![alt text](../PNG/RT4.PNG "Title")  
 - the frst rule is autocreated when route table is created
-- this rules states that any source IP within the CIDR (10.0.0.0/16) - (this CIDR is of our VPC which we gave while creating), can connect directly 
-- the second rule is what we crated which states, any IP over the world will connect to IGW, and can connect to VPC resources
+- this rules states that any resource within the associated Subnet wnats to connect to (10.0.0.0/16) - then reroute that connection to the same VPC, (hence local), so the traffic stays within local, and never leaves VPC
+- the second rule states that any resource from our VPC want to connect to (0.0.0.0/0, which is internet), then reroute the traffic to the internet gateway (which will then send the traffic to the internet)
+- so the second rule only allows inititating connection to the intenret from our VPC resources (like EC2)
+- for the intenret to inititate connection to our VPC resources like EC2, the connection is reouted through internet gateway (and for this, or EC2 needs to have piblic IP, allows security and NACL rules from anywhere)
+- **Remember - the route table rules are only for the resources within that subnet, to which the route table is attached to**
 
 ### Now with the above setting we have 
 > [!NOTE]
