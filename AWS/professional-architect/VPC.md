@@ -27,7 +27,7 @@
 > - **Larger prefix** → Fewer IP addresses.
 >
 > ---
-> ![alt text](PNG/VPC7.PNG "Title") 
+> ![alt text](../PNG/VPC7.PNG "Title") 
 > 
 > ---
 > - A **VPC** is assigned a CIDR block (e.g., `10.0.0.0/16`).
@@ -35,25 +35,25 @@
 > - Subnet CIDRs **cannot overlap**.
 
 > [!NOTE]
-> - ![alt text](PNG/VPC8.PNG "Title") 
+> - ![alt text](../PNG/VPC8.PNG "Title") 
 
 ## Default VPC
 - All new AWS accounts have a default VPC, and this VPC has access to internet
 - New EC2 instances are launched into this default VPC by default  
-![alt text](PNG/DVPC.PNG "Title")  
+![alt text](../PNG/DVPC.PNG "Title")  
 - Default VPC has 3 subnets (each subnet for each AZ within the region), and each subnet will get CIDR assigned  
 - These subnet CIDRs will determine IP address of EC2 launched inside this VPC / subnet  
-![alt text](PNG/DVPC1.PNG "Title")  
+![alt text](../PNG/DVPC1.PNG "Title")  
 - the default VPC attaches Internet gateway to routing rules so all EC2 instances within that VPC / subnet will have access to the internet  
- ![alt text](PNG/DVPC2.PNG "Title")  
+ ![alt text](../PNG/DVPC2.PNG "Title")  
 - The first rule - where destination = local - indicates that any traffic originating from 172.31.0.0/16 will remain local (i.e, traffic will remain inside the subnet only)
 - Note - EC2 can access intennet means, from EC2 instnance we can access internet, and it is not the other way around, for EC2 to be accessed over the internet, EC2 must be (in public subnet, have public IPv4, appropriate sec grp and NACL rules configured)
 
 ## VPC
-![alt text](PNG/VPC9.PNG "Title")  
+![alt text](../PNG/VPC9.PNG "Title")  
 
 #### Creating VPC
-![alt text](PNG/VPC10.PNG "Title")  
+![alt text](../PNG/VPC10.PNG "Title")  
 - Note the CIDR block cannot go beyond 10.0.0.0/15 - because max limit is /16 in AWS
 
 > [!NOTE]
@@ -88,15 +88,15 @@
 > - Control network routing and security.
 > - Each subnet exists in **one Availability Zone (AZ)**.
 >
-> - ![alt text](PNG/VPC11.PNG "Title")   
+> - ![alt text](../PNG/VPC11.PNG "Title")   
 
 ### Creating subnet
-![alt text](PNG/Sub1.PNG "Title")  
+![alt text](../PNG/Sub1.PNG "Title")  
 - after selecting VPC, we need to select - CIDR range and to which AZ, then subnet will cater to
 - generally for public subnets - the IP ranges are kept smaller (since public IPs are need for only few services like ALB), and for private subnets, the range should be more
-![alt text](PNG/Sub2.PNG "Title")    
+![alt text](../PNG/Sub2.PNG "Title")    
 - create multiple subnets inside the same VPC, catering to different AZs  
-![alt text](PNG/Sub3.PNG "Title")   
+![alt text](../PNG/Sub3.PNG "Title")   
 - above we have created 4 subnets inside 1 VPC, only the names are public and private subnets, they are not yet configured to be public / private subnets
 - **We need to create Internet Gateway to**  
 - 1. allow resources (like EC2, Lambda) to access internet
@@ -105,7 +105,7 @@
 - 2. Then must be attached to VPC - only one IGW can be attached to 1 VPC
 - 3. Attaching IGW to VPC alone will not give intert access, we must edit route tables to allow internet access  
 
-![alt text](PNG/VPC12.PNG "Title")  
+![alt text](../PNG/VPC12.PNG "Title")  
 - 1. Edit route table to connect to EC2 instance inside public subnet
 - 2. Route table connects to IGW which then connectes to internet
 
@@ -118,14 +118,14 @@
 
 #### Creating Route tables
 1.  Create Route tables, select VPC to which this Route table will be assinged  
-![alt text](PNG/RT1.PNG "Title")  
+![alt text](../PNG/RT1.PNG "Title")  
 2. Once Route table is created, then associate the subnets within the VPC (we attached in step 1)  
-![alt text](PNG/RT2.PNG "Title")  
+![alt text](../PNG/RT2.PNG "Title")  
 3. We created 2 Route tables (for public and provate subnets), and associated those subnets to resp. Route tables  
-![alt text](PNG/RT3.PNG "Title")  
+![alt text](../PNG/RT3.PNG "Title")  
 4. So 2 public subnets attached to 1 public route table, and 2 private subntes are attched to 1 private Route table (Note - still the public / private Route tables and public / private subnets are still names, nothing differentiates public and private yet)
 5. Now the IMP part - editing route tables  
-![alt text](PNG/RT4.PNG "Title")  
+![alt text](../PNG/RT4.PNG "Title")  
 - the frst rule is autocreated when route table is created
 - this rules states that any source IP within the CIDR (10.0.0.0/16) - (this CIDR is of our VPC which we gave while creating), can connect directly 
 - the second rule is what we crated which states, any IP over the world will connect to IGW, and can connect to VPC resources
@@ -207,7 +207,7 @@
 
 ### Giving Internet access to resources inside PRIVATE SUBNETs
 #### Bastion Host  
-![alt text](PNG/BH.PNG "Title")  
+![alt text](../PNG/BH.PNG "Title")  
 **GOAL** - Allow users from Internet to connect to EC2s which are inside private subnets
 **Working logic**  
 - Bastion host (BH) is nothing but an EC2 instance launched inside public subnet of a VPC
@@ -218,13 +218,13 @@
 **DEMO**  
 1. We create BH in public subnet and 1 EC2 in private subnet
 2. Then we SSH into BH, and then from that BH, we SSH into the private EC2  
-![alt text](PNG/BH1.PNG "Title")  
+![alt text](../PNG/BH1.PNG "Title")  
 - 10.0.0.72 is IP of BH and we SSH and 10.0.22.82 is IP of private EC2
 - So we can access private EC2 from BH, but still private EC2 cannot access internet - see in the image - the ping command failed
 - Soultion - use **NAT instances**   
 
 ### NAT instances
-![alt text](PNG/NAT.PNG "Title")  
+![alt text](../PNG/NAT.PNG "Title")  
 - NAT is another EC2 living in public subnet
 - It re-writes the Source and Dest IP at packet levels hence Source / Destination check of IPs at EC2 level must be disabled  
 - NAT instances are getting decommissioned
@@ -238,7 +238,7 @@
 2. In the launch console, configure Network settings to allow traffic only from VPC resources (configure CIDR range of the VPC we have created). NAT is used to allow resources from private subnet to access the internet. It does not allow outside resources to connect to your private EC2s
 3. Once NAT instance is created, edit it's settings to disable source / destination IP check (becuase NAT will re-write the IPs)
 4. Now goto Route tables, which caters to private subnets, and add a second rule  
-![alt text](PNG/NAT1.PNG "Title")  
+![alt text](../PNG/NAT1.PNG "Title")  
 - So for any desitination initiated by any resource from this private subnet, the request will go through NAT instances, and they we re-write packets and send to the actual intert server
 - Now we can ssh to bastion host, then ssh to private EC2, now if we do ping www.google.com, now the command should work prooving that private EC2s can access the internet
 
@@ -251,12 +251,12 @@
 
 #### Configuring NAT Gatways
 1. Click create, choose subnet to which NAT gateway will cater to and allocate Elastic IP  
-![alt text](PNG/NAT2.PNG "Title")   
+![alt text](../PNG/NAT2.PNG "Title")   
 2. Then edit the rules inside route table associated with the subnet and add the newly created NAT gateway as target  
-![alt text](PNG/NAT3.PNG "Title")   
+![alt text](../PNG/NAT3.PNG "Title")   
 
 #### Regional NAT
-![alt text](PNG/NAT4.PNG "Title")   
+![alt text](../PNG/NAT4.PNG "Title")   
 - Normal NAT gateways were associated with subnets, RNAT is assoicated at VPC level
 
 > [!NOTE]
@@ -267,20 +267,20 @@
 > - **NAT Gateway:** Allows resources in **private subnets** to **initiate outbound Internet connections**, while **preventing inbound connections initiated from the Internet**.
 
 #### Now once VPC and subnets are configured, we can launch EC2 instances inside a specific VPC / subnets we created above  
-![alt text](PNG/VPC13.PNG "Title")  
+![alt text](../PNG/VPC13.PNG "Title")  
 
 ## NACL - Network Access Control List
 - Allow / Block traffic (firewall) at subnet level
 - NACLs are stateless (so an incoming request will also need it's corresponding outbound rule), where as security groups are stateful, which means any traffic that comes, the security group will allow it to go out 
-![alt text](PNG/NACL.PNG "Title")  
-![alt text](PNG/NACL1.PNG "Title")  
+![alt text](../PNG/NACL.PNG "Title")  
+![alt text](../PNG/NACL1.PNG "Title")  
 
 #### Ephemeral ports
 - it is a standard TCP/IP networking concept
 - An **Ephemeral Port** is a **temporary, automatically assigned source port** used by the client when initiating a network connection.
 - It exists only for the duration of the connection and is released afterward. 
 - ports numbers typically used are from 1024-65535 
-![alt text](PNG/NACL2.PNG "Title")  
+![alt text](../PNG/NACL2.PNG "Title")  
 - The **client** initiates the connection and the OS automatically assigns a temporary **ephemeral source port** (`50105`).
 - The request is sent from **`11.22.33.44:50105`** to the web server **`55.66.77.88:443`** (HTTPS).
 - The web server processes the request and sends the response **from port `443` back to the client's ephemeral port `50105`**.
@@ -289,12 +289,12 @@
 #### NACL with Ephemeral ports
 - since we know NACL are stateless, and Ephemeral ports can be any, to establish a connection we need to whitelist all the ports
 - same issue does not occur with security groups, because they are stateful  
-![alt text](PNG/NACL3.PNG "Title")  
+![alt text](../PNG/NACL3.PNG "Title")  
 - The web server sends a request to the database on **port 3306**, so the **Web NACL** must allow **outbound TCP 3306**, and the **DB NACL** must allow **inbound TCP 3306**.
 - The database sends the response back to the web server's **ephemeral port (1024–65535)**, so the **DB NACL** must allow **outbound ephemeral ports**, and the **Web NACL** must allow **inbound ephemeral ports**.
 - This is required because **Network ACLs are stateless**, so both the request and the response must be explicitly allowed.  
 - see below default inbound rules for Default NACL created for Default VPC (it associates with all the subnets by default in a given VPC)  
-![alt text](PNG/NACL4.PNG "Title")  
+![alt text](../PNG/NACL4.PNG "Title")  
 
 ## VPC peering
 - Connects 1 VPC with another VPC **privately**
@@ -303,11 +303,11 @@
 - without VPC peering, we cannot 2 EC2s from different VPCs cannot talk to each other
 **Creating VPC peering**
 1. Create VPC peering
-![alt text](PNG/VPC14.PNG "Title")  
+![alt text](../PNG/VPC14.PNG "Title")  
 2.  Once VPC peering connection is created, the non local VPC (see above image), needs to accept the VPC peering connection  
-![alt text](PNG/VPC15.PNG "Title")  
+![alt text](../PNG/VPC15.PNG "Title")  
 3. Now we need to edit route tables to send traffic to that other VPC
-![alt text](PNG/VPC16.PNG "Title")  
+![alt text](../PNG/VPC16.PNG "Title")  
 - here the destination IP is the CIDR of the other VPC we want to peer with
 - we need to do the same thing in the other VPC's route table and add current VPC's CIDR in the routing rules
 
@@ -315,12 +315,12 @@
 - since all AWS services like SNS, DynamoDB are publicly available, if our EC2s inside private subnet needs to connect to SNS / DynamoDB, then the flow us from EC2 -> NAT -> IGW -> SNS / DynamoDB, (see below image) and connection between IGW to SNS / DynamoDB is over the public internet
 - instead use VPC endpoints, which directly and privately connects to AWS services (SNS / DynamoDB)
 - thus providing more security (because of private connection), and improved latency (because of reducing hops and provate connection)  
-![alt text](PNG/VE.PNG "Title")  
+![alt text](../PNG/VE.PNG "Title")  
 
 
 > [!NOTE]
 > ### Endpoint types
-> ![alt text](PNG/VE1.PNG "Title")  
+> ![alt text](../PNG/VE1.PNG "Title")  
 >
 > ### Interface Endpoint (AWS PrivateLink)
 >
@@ -363,20 +363,20 @@
 
 ### VPC Endpoint DEMO
 - our EC2 inside private subnet is able to access the internet because of the 2nd rule in the below image  
-![alt text](PNG/VE2.PNG "Title")  
+![alt text](../PNG/VE2.PNG "Title")  
 - the rule 0.0.0.0/0 -> NAT instance basically lets EC2s to access internet
 - so if we SSH into our private EC2 (obviously via Baistion Host), and if we do ```aws s3 ls``` (the connection is eastablished via NAT -> publick internet -> S3), we will get the list of buckets
 - if we remove that rule, then internet connection is lost and ```aws s3 ls``` fails
 - Now we will establish the connection via VPC endpoint
 1. Click on create endpoint
 2. select the service to which this endpoint (Interface / Gateway endpoint) will cater to s3, SNS?  
-![alt text](PNG/VE3.PNG "Title")  
+![alt text](../PNG/VE3.PNG "Title")  
 3. Then select the VPC and AZ to which the endpoint needs to be deplyed  
-![alt text](PNG/VE4.PNG "Title")  
+![alt text](../PNG/VE4.PNG "Title")  
 4. Then select secgrp (if it is interface endpoint) for this VPC endpoint (so when req. comes from EC2 to access outside internet, it can accept / block the req. based on thsi rule)  
-![alt text](PNG/VE5.PNG "Title")  
+![alt text](../PNG/VE5.PNG "Title")  
 4. b. if it is a gateway endpoint, then select the route table which needs to be modified for this endpoint (so that AWS behind the scene will update the routing rules so that any req made within the selected VPC and subnet will route the reqs to this VPC endpoint)  
-![alt text](PNG/VE6.PNG "Title")  
+![alt text](../PNG/VE6.PNG "Title")  
 
 - **so key advantage of VPC - we can access s3 service, and our EC2 still does not have access to the internet**  
 
@@ -461,10 +461,10 @@
 - captures info about IP traffic going through (VPC, Subnet, ENI)  
 - log data gets stored in S3, Cloudwatch, KDS
 - can also capture logs for ELB, RDS, Redshift  
-![alt text](PNG/VPCFL.PNG "Title")  
+![alt text](../PNG/VPCFL.PNG "Title")  
 
 #### Creating VPC FLow logs
-![alt text](PNG/VPCFL1.PNG "Title")  
+![alt text](../PNG/VPCFL1.PNG "Title")  
 
 **AWS Private link** - allows us to connect a service running in our VCP to a service running in another VPC
 
@@ -474,20 +474,20 @@
 
 #### Connecting on-prem datacenter with cloud - 
 1. using site-to-site VPN  
-![alt text](PNG/STSVPN.PNG "Title")   
-![alt text](PNG/STSVPN2.PNG "Title")   
+![alt text](../PNG/STSVPN.PNG "Title")   
+![alt text](../PNG/STSVPN2.PNG "Title")   
 
 2. Direct connect (DX)  
-![alt text](PNG/DX.PNG "Title")   
+![alt text](../PNG/DX.PNG "Title")   
 - if we want to setup direct connect with multiple VPCs, then we use DX-Gateway  
 - Connection in DX is not encrypted, because it is private conn, if still want encryted conn - use DX + VPN
-![alt text](PNG/DX1.PNG "Title")   
-![alt text](PNG/DX2.PNG "Title")   
+![alt text](../PNG/DX1.PNG "Title")   
+![alt text](../PNG/DX2.PNG "Title")   
 
-![alt text](PNG/DX3.PNG "Title")   
+![alt text](../PNG/DX3.PNG "Title")   
 
 managing and communicating between VPC can become complicated, solution - **Transit Gateway** 
-![alt text](PNG/VPC5.PNG "Title")   
+![alt text](../PNG/VPC5.PNG "Title")   
 - Transit gateway is the only service that uses IP Multicast  
 
 > [!NOTE]
@@ -512,9 +512,9 @@ managing and communicating between VPC can become complicated, solution - **Tran
 - Resources inside our VPC can have both IPv4 and IPv6 address (IPv4 for public / private IP and IPv6 for public address)
 
 ### Egress-only Internet gateway
-![alt text](PNG/EIG.PNG "Title")   
+![alt text](../PNG/EIG.PNG "Title")   
 - FLow for IPv6  
-![alt text](PNG/EIG1.PNG "Title")   
+![alt text](../PNG/EIG1.PNG "Title")   
 - Info - In route tables - 0.0.0.0/0 is for IPv4 and ::/0 is for IPv6  
 - Scenario 1 - Web server in public subnet connects to IGW and access internet, and also intenret can initiate the connetion
 - Scenario 2 - Web server from private subnet connects to NAT gateway, and can access Internet **(over IPv4)**, however internet cannot initiate connection to this server
@@ -526,7 +526,7 @@ managing and communicating between VPC can become complicated, solution - **Tran
   - **Instances in a private subnet cannot receive unsolicited inbound connections from the Internet.**
 
 ## VPC Networking cost
-![alt text](PNG/NC.PNG "Title")   
+![alt text](../PNG/NC.PNG "Title")   
 - all the price is per Gbps
 > [!NOTE]
 > ## EC2 to EC2 Communication (Different AZs)
@@ -542,13 +542,13 @@ managing and communicating between VPC can become complicated, solution - **Tran
 >
 > No Internet Gateway, NAT Gateway, or public IP is used.
 
-![alt text](PNG/VC.PNG "Title")   
+![alt text](../PNG/VC.PNG "Title")   
 **Key thing to remember** - To minimze networking cost, try and transfer data within AWS network only wherever possible  
 - also, keep communicating EC2s in same AZ to reduce cost related to inter-region commuincation (but this will hamper disaster recovery)  
 
-![alt text](PNG/VC1.PNG "Title")   
+![alt text](../PNG/VC1.PNG "Title")   
 
-![alt text](PNG/VC2.PNG "Title")   
+![alt text](../PNG/VC2.PNG "Title")   
 - we know 2 ways to connect EC2s from private Subnet to s3/dynamoDB or any other AWS service
 1. Using NAT gateway - higher cost, goes over the internet
 2. Using VPC endpoint - very cheap, goes over AWS private 
