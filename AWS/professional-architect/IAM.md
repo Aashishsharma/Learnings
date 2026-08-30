@@ -656,3 +656,15 @@ Response:
 > - Configures SSO through IAM Identity Center.
 >
 > ---
+
+## Service endpoints
+![alt text](../PNG/piam1.PNG "Title")  
+- note then same service can have multiple endpoint urls, so we can defined which endpoint url we want to use  
+- sdk / cli will use the default endpoint url for a given service
+![alt text](../PNG/piam2.PNG "Title")  
+- see how we pass the endpoint-url as a parameter to change the endpoint, using which we want to communicate with a service
+
+### API actions
+![alt text](../PNG/papiaction.PNG "Title")  
+
+##### Notes

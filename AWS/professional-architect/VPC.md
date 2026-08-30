@@ -1,5 +1,5 @@
 # VPC
-- Virtual Private Cloud
+- logically isolated virtual network
 - divided into public and private subnets
 - EC2 instances inside public subnets are accessible over the internet
 - Under private subnets, EC2's are not reachable from internet, however EC2's can access internet using NAT
