@@ -559,4 +559,8 @@ managing and communicating between VPC can become complicated, solution - **Tran
 ## Shared VPCs
 - AWS Resource Access Manager (RAM) allows us to share resource across AWS accounts
 - VPCs can be shared with different accounts **and both the accounts must be in the same region**
-- 
+- You din't share a VPC, but you share a subnet
+- Goto RAM, click on share resource, select subnet, which you want to share
+- then enter the account ID of the terget AWS account with whome this needs to be shared
+- the target account will now directly see the VPC as any other VPC
+- note that only subnet is shared, any resources created inside that subnet (EC2 / RDS) will NOT get shared
