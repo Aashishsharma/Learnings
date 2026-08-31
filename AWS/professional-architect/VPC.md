@@ -275,6 +275,9 @@
 ## NACL - Network Access Control List
 - Allow / Block traffic (firewall) at subnet level
 - NACLs are stateless (so an incoming request will also need it's corresponding outbound rule), where as security groups are stateful, which means any traffic that comes, the security group will allow it to go out 
+- NACLs have deny rules, which security groups do not have, SGs only have allow rule
+- So to block just a single IP, we have to use NACL, SG won't work  
+
 ![alt text](../PNG/NACL.PNG "Title")  
 ![alt text](../PNG/NACL1.PNG "Title")  
 
