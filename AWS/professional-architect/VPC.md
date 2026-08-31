@@ -108,7 +108,10 @@
 
 ![alt text](../PNG/VPC12.PNG "Title")  
 - 1. Edit route table to connect to EC2 instance inside public subnet
-- 2. Route table connects to IGW which then connectes to internet
+- 2. Route table connects to IGW which then connectes to internet  
+
+### Different types of Gateways in AWS
+![alt text](../PNG/pgw.PNG "Title")   
 
 #### Creating Internet Gateway (IGW)
 1. goto VPC, select IGW
@@ -530,7 +533,50 @@ managing and communicating between VPC can become complicated, solution - **Tran
   - To allow **EC2 instances in a private subnet** to access the Internet:
     - **IPv4** → Route traffic to a **NAT Gateway**.
     - **IPv6** → Route traffic to an **Egress-Only Internet Gateway**.
-  - **Instances in a private subnet cannot receive unsolicited inbound connections from the Internet.**
+  - **Instances in a private subnet cannot receive unsolicited inbound connections from the Internet.**, which means internet cannot initiate connection requests to resources in private subnets
+
+### Managed Prefix list
+- **What:** A managed collection of **CIDR blocks (IP ranges)** that can be referenced as a single object in VPC rules.  
+![alt text](../PNG/pmpl.PNG "Title")   
+
+
+#### Managed Prefix List is needed
+Suppose an EC2 instance in a private subnet needs to access **DynamoDB**.
+
+#### Without Managed Prefix List
+
+You would need to maintain the DynamoDB IP ranges yourself:
+
+EC2 → Route Table → DynamoDB IP ranges
+
+AWS can change these DynamoDBIP ranges, so manually maintaining them would be difficult.
+
+#### With AWS-Managed Prefix List
+
+AWS provides a managed prefix list for DynamoDB, for example:
+
+`com.amazonaws.<region>.dynamodb`
+
+You can reference it directly in the Route Table:
+
+Destination: DynamoDB Prefix List
+Target: DynamoDB Gateway Endpoint
+
+So the routing becomes:
+
+EC2 → Route Table → DynamoDB Prefix List → DynamoDB
+
+AWS maintains the CIDRs inside the prefix list.
+
+#### Why useful?
+
+If AWS changes DynamoDB's IP ranges:
+
+AWS updates the prefix list → your route automatically uses the updated ranges.
+
+> **You reference the DynamoDB service as a prefix list instead of maintaining its individual IP ranges yourself.**
+
+##### But we use VPC gateway endpoint for DynamoDB, so why do we need managed prefix list. That is correct, because reqs well go through that endpoint, However, AWS-managed prefix lists **can still be used with DynamoDB** in Security Groups.
 
 ## VPC Networking cost
 ![alt text](../PNG/NC.PNG "Title")   
