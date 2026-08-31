@@ -578,6 +578,128 @@ AWS updates the prefix list → your route automatically uses the updated ranges
 
 ##### But we use VPC gateway endpoint for DynamoDB, so why do we need managed prefix list. That is correct, because reqs well go through that endpoint, However, AWS-managed prefix lists **can still be used with DynamoDB** in Security Groups.
 
+#### Usecase for managed prefix list
+![alt text](../PNG/pmpl1.PNG "Title")   
+
+##### What is the use case?
+
+> **Allow only CloudFront to access your ALB instead of allowing direct access from the entire internet.**
+
+##### Architecture
+
+Internet  
+↓  
+CloudFront  
+↓  
+CloudFront Managed Prefix List  
+↓  
+ALB  
+↓  
+EC2
+
+---
+
+##### The problem
+
+Suppose your ALB Security Group has:
+
+    Inbound:
+    TCP 443
+    Source: 0.0.0.0/0
+
+This allows **any internet source** to directly access the ALB.
+
+But your requirement is:
+
+> Users should access the application through **CloudFront only**.
+
+You don't want users to bypass CloudFront and directly access the ALB.
+
+---
+
+##### Solution — CloudFront Managed Prefix List
+
+AWS provides an **AWS-managed prefix list containing CloudFront IP ranges**.
+
+Instead of:
+
+    ALB Security Group
+
+    Source: 0.0.0.0/0
+    Port: 443
+
+Configure:
+
+    ALB Security Group
+
+    Source: CloudFront Managed Prefix List
+    Port: 443
+
+Now:
+
+    CloudFront IP
+        ↓
+    Matches CloudFront Prefix List
+        ↓
+    ALB → Allowed
+
+But:
+
+    Random Internet IP
+        ↓
+    Doesn't match Prefix List
+        ↓
+    ALB → Denied
+
+---
+
+##### What is `pl-3b927c52`?
+
+`pl-3b927c52` is the **Prefix List ID**.
+
+Instead of manually adding all CloudFront CIDR ranges to the Security Group, you reference the prefix list:
+
+    Source:
+    pl-3b927c52
+
+AWS manages the CIDRs inside the prefix list.
+
+If CloudFront IP ranges change:
+
+    AWS updates Prefix List
+            ↓
+    Security Group automatically uses
+    the updated IP ranges
+
+---
+
+##### Important SAP-C02 point
+
+The CloudFront prefix list represents **CloudFront's AWS-managed IP ranges**.
+
+It does **not inherently identify your specific CloudFront distribution**.
+
+Therefore:
+
+    CloudFront Prefix List
+            ↓
+    CloudFront IP ranges
+            ↓
+    ALB
+
+This means the rule allows traffic originating from **any AWS owned CloudFront IP ranges**, that means any other accounts CLoudfront's dstiro can access it, but it is still secure as opposed to opening it to the entire public 
+
+##### Key takeaway
+
+> **Managed Prefix List = a centrally maintained collection of IP ranges that can be referenced as a single source/destination in VPC networking rules.**
+
+For this example:
+
+> **CloudFront Managed Prefix List → ALB Security Group → allow traffic from CloudFront IP ranges without manually maintaining CloudFront CIDRs.**
+
+**if we are anyways going make the app public, then why to force traffic from cloudfront?**  
+- cahcing at the edge, TLS termination at the edge
+
 ## VPC Networking cost
 ![alt text](../PNG/NC.PNG "Title")   
 - all the price is per Gbps
