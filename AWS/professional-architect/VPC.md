@@ -736,3 +736,49 @@ For this example:
 - then enter the account ID of the terget AWS account with whome this needs to be shared
 - the target account will now directly see the VPC as any other VPC
 - note that only subnet is shared, any resources created inside that subnet (EC2 / RDS) will NOT get shared
+
+### Network Address Usage (NAU)
+
+**NAU** is an AWS VPC tool that monitors **how many network addresses/resources you're using** in a VPC and helps identify whether you're approaching **VPC network-address limits**.  
+- Since we have provided CIDRs in subnet, so there are limited range of IP address that can be assigned to a resource,  
+- For example, if the subnet CIDR is **172.0.0.0/20**:
+  - Total IP addresses = `2^(32 - 20)`
+  - = `2^12`
+  - = **4,096 IP addresses**
+- so if number of resources we create inside the subnet comes closer to 4096, then NAU will let us know
+
+#### What does it monitor?
+
+It tracks network-related resource usage such as:
+
+- ENIs
+- Private IPv4 addresses
+- Public IPv4 addresses
+- Other VPC networking resources
+
+#### Example
+
+Suppose:
+
+    VPC
+    └── Private IPv4 address usage: 90%
+
+NAU can show the usage and help you determine which resources are consuming the addresses.
+
+#### NAU units
+- below is the NAU unit each resource consumes  
+| VPC Resource | NAU Units |
+|---|---:|
+| **EC2 IPv4 address** (private or public) | **1** |
+| **EC2 IPv6 address** | **1** |
+| **Additional ENI attached to EC2** | **1** |
+| **Network Load Balancer (NLB) — per AZ** | **6** |
+| **Gateway Load Balancer (GWLB) — per AZ** | **6** |
+| **VPC Interface Endpoint — per AZ** | **6** |
+| **Transit Gateway attachment** | **6** |
+| **Lambda function** | **6** |
+| **NAT Gateway** | **6** |
+| **EKS Pod** | **1** |  
+
+- **we can measure NAU usage using Cloudwatch metrics - AWS/EC2/NetworkAddressUsage**  
+
