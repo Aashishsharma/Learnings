@@ -104,6 +104,7 @@
 - 1. Created separately from VPC
 - 2. Then must be attached to VPC - only one IGW can be attached to 1 VPC
 - 3. Attaching IGW to VPC alone will not give intert access, we must edit route tables to allow internet access  
+- **NOTE** - IGW is attched to VPC level, not at subnet level
 
 ![alt text](../PNG/VPC12.PNG "Title")  
 - 1. Edit route table to connect to EC2 instance inside public subnet
@@ -277,7 +278,7 @@
 - NACLs are stateless (so an incoming request will also need it's corresponding outbound rule), where as security groups are stateful, which means any traffic that comes, the security group will allow it to go out 
 - NACLs have deny rules, which security groups do not have, SGs only have allow rule
 - So to block just a single IP, we have to use NACL, SG won't work  
-
+- NACL cannot span across multiple subnets, they cater to only one subnet, where as sec groups can be attched to multiple EC2s from different subnets, but not in different VPCs  
 ![alt text](../PNG/NACL.PNG "Title")  
 ![alt text](../PNG/NACL1.PNG "Title")  
 
