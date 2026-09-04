@@ -332,8 +332,10 @@
 > ### Endpoint types
 > ![alt text](../PNG/VE1.PNG "Title")  
 >
-> ### Interface Endpoint (AWS PrivateLink)
->
+> ### Interface Endpoint (PrivateLink)
+> Interface endpoint !== Private link
+> Interface underneath uses private link
+> Gateway endpoints is only available for DynamoDB, where as Interface endpoint is for all AWS services
 > **Configuration**
 >
 > 1. Create an **Interface VPC Endpoint** for an AWS service (e.g., SNS, SQS, Secrets Manager).
@@ -481,6 +483,47 @@
 - **Note - if EC2, connects with S3, the connetion and all the HTTP calls are made via Public internet**  
 - this is true for all the resoruces in AWS that talk to each other
 - if we wan't AWS services to connect over private connection, then we use VPC endpoints
+
+### VPN
+- Connects 2 networks securly (encrypted)
+# VPC vs VPN
+
+| | **VPC** | **VPN** |
+|---|---|---|
+| What it is | A **private network** in AWS | An **encrypted connection/tunnel** between networks |
+| Purpose | Provides network isolation for AWS resources | Provides secure connectivity over another network, usually the internet |
+| Contains | Subnets, route tables, security groups, NACLs, etc. | VPN tunnel, encryption, VPN gateway |
+| Key idea | **Where resources live** | **How networks connect securely** |
+
+## Simple Example
+
+```text
+                    AWS
+              ┌──────────────┐
+              │     VPC      │
+              │              │
+              │  EC2    RDS  │
+              │              │
+              └──────┬───────┘
+                     │
+                  VPN Tunnel
+                     │
+                     │ Encrypted
+                     │
+              ┌──────┴───────┐
+              │ Office       │
+              │ Network      │
+              └──────────────┘
+```
+
+Office VPN Gateway                    AWS VPN Gateway
+       │                                     │
+       │  "Prove who you are"                │
+       │◄──────── Authentication ───────────►│
+       │                                     │
+       │      Shared secret / certificates   │
+       │                                     │
+       └────────── VPN Tunnel ───────────────┘
 
 #### Connecting on-prem datacenter with cloud - 
 1. using site-to-site VPN  
