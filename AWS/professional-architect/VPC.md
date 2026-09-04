@@ -486,7 +486,7 @@
 
 ### VPN
 - Connects 2 networks securly (encrypted)
-# VPC vs VPN
+#### VPC vs VPN
 
 | | **VPC** | **VPN** |
 |---|---|---|
@@ -495,7 +495,7 @@
 | Contains | Subnets, route tables, security groups, NACLs, etc. | VPN tunnel, encryption, VPN gateway |
 | Key idea | **Where resources live** | **How networks connect securely** |
 
-## Simple Example
+#### Simple Example
 
 ```text
                     AWS
@@ -527,7 +527,10 @@ Office VPN Gateway                    AWS VPN Gateway
 
 #### Connecting on-prem datacenter with cloud - 
 1. using site-to-site VPN  
-![alt text](../PNG/STSVPN.PNG "Title")   
+![alt text](../PNG/pstsvpn.PNG "Title")   
+- Note that on AWS site we are using VPN Gateway to establish VPN connection, but it only supports IPv4, to support IPv6, replace the VPN gateway with Transit Gateway
+- Transit Gateway will aslo allows connection to multiple VPCs  
+
 ![alt text](../PNG/STSVPN2.PNG "Title")   
 
 2. Direct connect (DX)  
@@ -542,6 +545,12 @@ Office VPN Gateway                    AWS VPN Gateway
 managing and communicating between VPC can become complicated, solution - **Transit Gateway** 
 ![alt text](../PNG/VPC5.PNG "Title")   
 - Transit gateway is the only service that uses IP Multicast  
+
+#### AWS client-VPN
+![alt text](../PNG/pcvpn.PNG "Title")   
+- Note that how we can use this AWS client VPN to connect to resources (like RDS) inside private subnet
+- without AWS client-vpn, we had to use **bastion hosts**
+- so now we have 2 ways to connect to resources in private subnets
 
 > [!NOTE]
 > ### VPC Traffic Mirroring
